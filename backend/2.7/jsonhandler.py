@@ -27,47 +27,47 @@ def parseData(queue, jdata):
 	args = jdata["args"]
 	if jdata["action"] == "move":
 		if len(jdata["args"]) != 4:
-			print "Expected 4 arguments, recieved "+len(jdata["args"])
+			print("Expected 4 arguments, recieved "+len(jdata["args"]))
 			return
 
 		queue.move(args[0],args[1],args[2],args[3])
 
 	elif jdata["action"] == "remove":
 		if len(jdata["args"]) != 2:
-			print "Expected 2 arguments, recieved "+len(jdata["args"])
+			print("Expected 2 arguments, recieved "+len(jdata["args"]))
 			return
 
 		queue.remove(args[0],args[1])
 
 	elif jdata["action"] == "sremove":
 		if len(jdata["args"]) != 1:
-			print "Expected 1 argument, recieved "+len(jdata["args"])
+			print("Expected 1 argument, recieved "+len(jdata["args"]))
 			return
 
 		queue.sremove(args[0])
 
 	elif jdata["action"] == "pass":
 		if len(jdata["args"]) not in [1, 2]:
-			print "Expected at most 2 arguments, recieved "+len(jdata["args"])
+			print("Expected at most 2 arguments, recieved "+len(jdata["args"]))
 			return
 
 		queue.passoff(args[0], args[1] if len(args)>1 else 0)
 
 	elif jdata["action"] == "spass":
 		if len(jdata["args"]) != 1:
-			print "Expected 1 argument, recieved "+len(jdata["args"])
+			print("Expected 1 argument, recieved "+len(jdata["args"]))
 			return
 
 		queue.spass(args[0])
 
 	elif jdata["action"] == "add":
 		if len(jdata["args"]) != 4:
-			print "Expected 4 arguments, recieved "+len(jdata["args"])
+			print("Expected 4 arguments, recieved "+len(jdata["args"]))
 			return
 
 		queue.append(args[0],args[1],args[2],args[3])
 	else:
-		print "Bad action name"
+		print("Bad action name")
 
 
 """
