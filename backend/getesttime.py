@@ -7,7 +7,7 @@ worktime = re.compile(r"\d{2}:\d{2}:\d{2}", 0)
 maintitle = "Laser system 5.3[Jinan King Rabbit Technology Development Co.,Ltd. www.rabbitlaser.com]"
 calctitle = "Laser output"
 filetitle = "Stand-alone file manager"
-downloadtitle = "Donwload [{0}%]"
+downloadtitle = "Download [{0}%]"
 
 def gettime():
 	# Clear all previous calculate windows
