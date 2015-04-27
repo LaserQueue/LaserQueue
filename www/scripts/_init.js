@@ -15,5 +15,5 @@ $(function () {
 	$('[data-toggle="tooltip"]').tooltip()
 });
 
-// initialize the slider
-$('.slider').slider();
+// initialize the modal by changing the title
+$('.notify-modal-title').html("Notification");

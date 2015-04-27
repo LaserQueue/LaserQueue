@@ -40,5 +40,7 @@ function populateActions() {
 
 // displays message in modal
 function modalMessage() {
+	$('.notify-modal-title').html("Error");
+	$('.notify-modal-body').html("Error message");
 	$('#notify-modal').modal();
 }
