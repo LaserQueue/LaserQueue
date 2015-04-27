@@ -75,3 +75,5 @@ target/
 # sftp configuration file
 sftp-config.json
 
+### Sass ###
+.sass-cache
