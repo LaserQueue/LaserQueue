@@ -10,6 +10,13 @@ def _calcpriority(priority, time):
 			priority -= 1
 	return max(priority, 0)
 
+def _concatlist(lists):
+	masterlist = []
+	for i in lists: 
+		for j in i:
+			masterlist.append(j)
+	return masterlist
+
 class Queue:
 	def __init__(self):
 		self.queue = [[] for i in config["priority"]]
@@ -52,20 +59,19 @@ class Queue:
 
 		del self.queue[lpri-priority][index]
 	def sremove(self, index):
-		gi = 0
-		for ii in xrange(len(self.queue)):
-			if index+1 <= gi+len(self.queue[ii]):
-				del self.queue[ii][index-gi]
-				return
-			gi += len(self.queue[ii])
+		masterqueue = _concatlist(self.queue)
+		target = masterqueue[index] 
+		for i in self.queue:
+			if target in i:
+				i.remove(target)
 	def spass(self, oindex):
-		gi = 0
-		for ii in xrange(len(self.queue)):
-			if oindex+1 <= gi+len(self.queue[ii]):
-				index = oindex-gi
+		masterqueue = _concatlist(self.queue)
+		target = masterqueue[oindex] 
+		for ii in range(len(self.queue)):
+			i = self.queue[ii]
+			if target in i:
+				index = i.index(target)
 				priority = lpri-ii
-				break
-			gi += len(self.queue[ii])
 
 
 		if not priority and len(self.queue[lpri-priority]) < index:
