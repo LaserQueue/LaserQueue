@@ -1,0 +1,24 @@
+#log-checkbox { display: none }
+
+#log-checkbox + pre {
+	opacity: 1;
+	transition: opacity 0.3s linear;
+}
+
+#log-checkbox:not(:checked) + pre {
+	display: none;
+	opacity: 0;
+}
+
+label[for=log-checkbox]:hover {
+	transition: transform 0.1s linear;
+	transform: scale(1.4);
+}
+
+.log {
+	margin-bottom: 20px;
+}
+
+.log-time {
+	color: $nuvu-pink;
+}

@@ -1,0 +1,22 @@
+table tr:nth-child(1) td {
+	border: none;
+	font-size: 1.3em;
+	background: $nuvu-pink;
+	color: white;
+}
+
+td {
+	text-align: center;
+}
+
+.cutting-table tr:not(.table-first-row) td:nth-child(1), .cutting-table tr:not(.table-first-row) td:nth-child(1) * {
+	user-select: none;
+}
+
+.cutting-table {
+	width: 99%;
+}
+
+.coach-modified {
+	color: $nuvu-pink;
+}
