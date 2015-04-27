@@ -17,12 +17,12 @@
 	],
 	"materials": {
 		"w": "Thin Wood",
-  	"tw": "Thick Wood",
-  	"c": "Cardboard",
-  	"4a": "1/4\" Acrylic",
-  	"8a": "1/8\" Acrylic",
-  	"p": "Paper",
-  	"f": "Fabric",
-  	"o": "Other"
+		"tw": "Thick Wood",
+		"c": "Cardboard",
+		"4a": "1/4\" Acrylic",
+		"8a": "1/8\" Acrylic",
+		"p": "Paper",
+		"f": "Fabric",
+		"o": "Other"
 	}
 }
