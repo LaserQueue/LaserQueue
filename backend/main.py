@@ -1,5 +1,9 @@
-import os, mainux, mainwin
+import os
 def main():
-  if os.name is "nt": mainwin.main()
-  else:                mainux.main()
+  if os.name == "nt": 
+  	import mainwin
+  	mainwin.main()
+  else:           
+  	import mainux     
+  	mainux.main()
 if __name__ == "__main__":    main()
