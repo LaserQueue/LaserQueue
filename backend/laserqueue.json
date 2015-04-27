@@ -1,0 +1,28 @@
+{
+	"priority_thresh": [
+		10,
+		20,
+		30,
+		40,
+		50,
+		60
+	],
+	"priority": [
+		"Lunch/After NuVu",
+		"Low Priority", 
+		"Medium Priority",
+		"High Priority",
+		"Urgent",
+		"Absolutely Required"
+	],
+	"materials": {
+		"w": "Thin Wood",
+  	"tw": "Thick Wood",
+  	"c": "Cardboard",
+  	"4a": "1/4\" Acrylic",
+  	"8a": "1/8\" Acrylic",
+  	"p": "Paper",
+  	"f": "Fabric",
+  	"o": "Other"
+	}
+}
