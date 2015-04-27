@@ -1,5 +1,5 @@
 // WebSockets host
-var host = "ws://yrsegal.local:8765";
+var host = "ws://yrsegal.local:8001";
 
 // pull table's first row out for insertion later
 var tableFirstRow = $(".cutting-table").html();

@@ -33,7 +33,7 @@ def hello(websocket, path):
 			
 		
 
-start_server = websockets.serve(hello, 'yrsegal.local', 8765)
+start_server = websockets.serve(hello, 'yrsegal.local', 8001)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
