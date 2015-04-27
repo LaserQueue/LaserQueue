@@ -1,5 +1,6 @@
 // put any utilities and functions here
 
+// logs text to devlog on page
 function logText(text) {
 
 	$(function() {
@@ -36,3 +37,5 @@ function populateActions() {
 		}));
 	});
 }
+
+// displays message in modal
