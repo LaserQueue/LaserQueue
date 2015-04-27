@@ -1,0 +1,114 @@
+$nuvu-pink: rgb(245, 71, 153);
+
+.top-header {
+	height: 120px;
+	padding: 20px;
+}
+
+.nuvu-logo {
+	width: 175px;
+	margin: 20px;
+}
+
+form input, form select {
+	margin-bottom: 15px;
+	width: 250px;
+}
+
+.btn {
+	outline: none !important;
+}
+
+table tr:nth-child(1) td {
+	border: none;
+	font-size: 1.3em;
+	background: $nuvu-pink;
+	color: white;
+}
+
+td {
+	text-align: center;
+}
+
+.cutting-table tr:not(.table-first-row) td:nth-child(1), .cutting-table tr:not(.table-first-row) td:nth-child(1) * {
+	user-select: none;
+}
+
+.cutting-table {
+	width: 99%;
+}
+
+.coach-modified {
+	color: $nuvu-pink;
+}
+
+.glyphicon-remove, .glyphicon-triangle-bottom {
+	cursor: pointer;
+	transition: transform 0.1s linear;
+	&:hover { transform: scale(1.2); }
+	&:active { transform: scale(0.9); }
+}
+
+.glyphicon-remove {
+	color: firebrick;
+	&:hover { color: darken(firebrick, 10%); }
+	&:active { color: darken(firebrick, 25%); }
+}
+
+.cut-form-group * {
+	display: inline !important;
+	width: 172px !important;
+}
+
+#cut-material, #priority-dropdown {
+	width: 172px;
+}
+
+#log-checkbox { display: none }
+
+#log-checkbox + pre {
+	opacity: 1;
+	transition: opacity 0.3s linear;
+}
+
+#log-checkbox:not(:checked) + pre {
+	display: none;
+	opacity: 0;
+}
+
+label[for=log-checkbox]:hover {
+	transition: transform 0.1s linear;
+	transform: scale(1.4);
+}
+
+.log {
+	margin-bottom: 20px;
+}
+
+.log-time {
+	color: $nuvu-pink;
+}
+
+.new-cut-form {
+	float: right;
+}
+
+::selection {
+	background: rgba(245, 71, 153, 1);
+	color: white;
+}
+
+::-webkit-scrollbar              {
+	background: rgba($nuvu-pink, 0);
+	width: 5px;
+}
+::-webkit-scrollbar-track        {}
+::-webkit-scrollbar-track-piece  {}
+::-webkit-scrollbar-thumb        {
+	background: rgba($nuvu-pink, 1);
+	border-radius: 25px;
+	margin: 0 5px;
+}
+
+::-webkit-scrollbar-corner       { /* 6 */ }
+::-webkit-resizer                { /* 7 */ }
