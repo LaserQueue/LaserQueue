@@ -4,8 +4,8 @@ import jsonhandler as comm
 import json
 import os.path
 
-calculated_time = 0 # Compat with windows version
-elapsed_time = 0    # Compat with windows version
+calculated_time = -1 # Compat with windows version
+elapsed_time = -1    # Compat with windows version
 
 def main():
 	global calculated_time, elapsed_time
