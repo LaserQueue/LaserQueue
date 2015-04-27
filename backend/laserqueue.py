@@ -73,7 +73,6 @@ class Queue:
 				index = i.index(target)
 				priority = lpri-ii
 
-
 		if not priority and len(self.queue[lpri-priority]) < index:
 			return
 		item = self.queue[lpri-priority].pop(index)
@@ -82,4 +81,14 @@ class Queue:
 			priority -= 1
 			index = 0
 		self.queue[min(lpri-priority, 5)].insert(max(index, 0),item)
+
+	def smove(self, oi, ni, np):
+		masterqueue = _concatlist(self.queue)
+		target = masterqueue[oi]
+		for i in self.queue:
+			if target in i:
+				self.queue.remove(target)
+		target["coachmodified"] = True
+		self.queue[lpri-np].insert(ni, target)
+
 
