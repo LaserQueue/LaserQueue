@@ -11,7 +11,6 @@ def main():
 	global calculated_time, elapsed_time
 	queue = Queue()
 	temppath = os.path.join(os.path.sep, "tmp")
-	lelap, lcalc = elapsed_time, calculated_time # Compat with windows version
 
 	json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"))
 
@@ -34,8 +33,6 @@ def main():
 				json.dump(comm.generateData(queue, calculated_time, elapsed_time), open(os.path.join(temppath, "topage.json"), "w"))
 				json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"), {})
 				if data["action"] != "null": print(queue.queue)
-		elif lelap != elapsed_time or lcalc != calculated_time:
-			json.dump(open(os.path.join(temppath, "topage.json"), "w"), comm.generateData(queue, calculated_time, elapsed_time))
 
 	
 
