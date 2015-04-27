@@ -1,4 +1,4 @@
-import os, serverux, serverwin
+import os
 def main():
   if os.name == "nt": 
   	import serverwin
