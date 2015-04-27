@@ -29,14 +29,16 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
-	"\/index.html": {
-		"fileType": 8192,
+	"\/img\/laserQueue.png": {
+		"fileType": 32768,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/index.html",
-		"outputAbbreviatedPath": "No Output Path",
+		"initialSize": 57177,
+		"inputAbbreviatedPath": "\/img\/laserQueue.png",
+		"outputAbbreviatedPath": "\/img\/laserQueue.png",
 		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
+		"outputPathIsSetByUser": 0,
+		"processed": 0
 		},
 	"\/scripts\/_config.js": {
 		"fileType": 64,

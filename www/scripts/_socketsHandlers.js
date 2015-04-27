@@ -43,6 +43,6 @@ socket.onmessage = function(msg){
 // when websockets error
 socket.onerror = function(error) {
 	// go tell a nerd
-	$('#notify-modal').modal();
+	modalMessage();
 };
 

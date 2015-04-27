@@ -39,3 +39,6 @@ function populateActions() {
 }
 
 // displays message in modal
+function modalMessage() {
+	$('#notify-modal').modal();
+}
