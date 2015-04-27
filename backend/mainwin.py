@@ -1,5 +1,5 @@
 from queue import Queue, config
-# import getesttime as estimate
+import getesttime as estimate
 # import getlasertime as elapsed
 import jsonhandler as comm
 
@@ -9,11 +9,11 @@ import threading
 import os.path
 
 calculated_time = 0
-# def getestimate():
-# 	global calculated_time
-# 	while True:
-# 		if estimate._dlexists():
-# 			calculated_time = estimate.ondownloadpressed()
+def getestimate():
+	global calculated_time
+	while True:
+		if estimate._dlexists():
+			calculated_time = estimate.ondownloadpressed()
 
 elapsed_time = 0
 # def getelapsed():
@@ -24,10 +24,10 @@ elapsed_time = 0
 def main():
 	global calculated_time, elapsed_time
 	queue = Queue()
-	# estimateT = threading.Thread(target=getestimate)
+	estimateT = threading.Thread(target=getestimate)
 	# elapsedT = threading.Thread(target=getelapsed)
-	# estimateT.start()
-	# elapsedT.start()
+	estimateT.start()
+	# elapsedåT.start()
 	temppath = os.path.expanduser(os.path.join("~", "AppData", "Local", "Temp"))
 	lelap, lcalc = elapsed_time, calculated_time
 
