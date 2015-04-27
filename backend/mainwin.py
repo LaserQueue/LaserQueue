@@ -1,4 +1,4 @@
-from queue import Queue, config
+from laserqueue import Queue, config
 import getesttime as estimate
 # import getlasertime as elapsed
 import jsonhandler as comm

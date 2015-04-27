@@ -1,4 +1,4 @@
-from queue import Queue, config
+from laserqueue import Queue, config
 import jsonhandler as comm
 
 import json
