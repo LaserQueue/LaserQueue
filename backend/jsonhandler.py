@@ -33,12 +33,12 @@ def parseData(queue, jdata):
 
 		queue.move(args[0],args[1],args[2],args[3])
 
-	if jdata["action"] == "smove":
+	elif jdata["action"] == "smove":
 		if len(jdata["args"]) != 3:
 			print("Expected 3 arguments, recieved "+len(jdata["args"]))
 			return
 
-		queue.move(args[0],args[1],args[2])
+		queue.smove(args[0],args[1],args[2])
 
 	elif jdata["action"] == "remove":
 		if len(jdata["args"]) != 2:

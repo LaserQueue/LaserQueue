@@ -87,7 +87,7 @@ class Queue:
 		target = masterqueue[oi]
 		for i in self.queue:
 			if target in i:
-				self.queue.remove(target)
+				i.remove(target)
 		target["coachmodified"] = True
 		self.queue[lpri-np].insert(ni, target)
 
