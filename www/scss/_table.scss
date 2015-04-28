@@ -13,6 +13,10 @@ td {
 	user-select: none;
 }
 
+.cutting-table tr:last-child td:nth-child(1) .lower-priority {
+	display: none;
+}
+
 .cutting-table {
 	width: 99%;
 }
