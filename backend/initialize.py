@@ -8,7 +8,9 @@ def copyconf():
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
 
 def main():
-	copyconf()
+	if not os.path.exists(os.path.join("..", "www", "config.json")):
+		copyconf()
+
 
 if __name__ == "__main__":
 	main()
