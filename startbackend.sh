@@ -1,5 +1,6 @@
 #!/bin/bash
 cd ${0%/*}
 
-python3 backend/initialize.py
-./backend/start.sh
+cd backend
+python3 initialize.py
+./start.sh
