@@ -69,25 +69,19 @@ class Queue:
 				i.remove(target)
 	def spass(self, oindex):
 		masterqueue = _concatlist(self.queue)
-		target = masterqueue[oindex] 
+		if oindex == len(masterqueue)-1: return
+		target = masterqueue[oindex]
 		for ii in range(len(self.queue)):
 			i = self.queue[ii]
 			if target in i:
-				index = i.index(target)
-				priority = lpri-ii
-
-		if not priority and len(self.queue[lpri-priority]) < index:
-			return
-		item = self.queue[lpri-priority].pop(index)
-		index += 1
-		if len(self.queue[lpri-priority]) < index:
-			priority -= 1
-			if priority < 0:
-				index = len(self.queue[min(lpri-priority, 5)])
-				priority = 0
-			else:
-				index = 0
-		self.queue[min(lpri-priority, 5)].insert(max(index, 0),item)
+				i.remove(target)
+		end = masterqueue[oindex+1]
+		for ii in range(len(self.queue)):
+			i = self.queue[ii]
+			if end in i:
+				tindex = i.index(end)
+				tpri = lpri-ii
+		self.queue[lpri-tpri].insert(tindex+1, target)
 
 	def smove(self, oi, ni, np):
 		masterqueue = _concatlist(self.queue)
