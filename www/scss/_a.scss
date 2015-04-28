@@ -1,0 +1,5 @@
+a {
+	color: $nuvu-pink;
+	&:hover { color: darken($nuvu-pink, 10%); }
+	&:active { color: darken($nuvu-pink, 35%); }
+}
