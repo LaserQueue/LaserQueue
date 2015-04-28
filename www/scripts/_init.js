@@ -2,7 +2,7 @@
 
 // holds old and new JSON
 // for comparison to minimize layout thrashing n stuff
-var oldJsonData;
+var oldJsonData = "uninitialized";
 var jsonData;
 
 // start message & websockets host

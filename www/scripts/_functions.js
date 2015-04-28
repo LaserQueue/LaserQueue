@@ -12,7 +12,7 @@ function logText(text) {
 	var minutesZero = (currentMinutes < 10 ? '0' : '');
 	var secondsZero = (currentSeconds < 10 ? '0' : '');
 	var millisZero = (currentMillis < 10 ? '00' : currentMillis < 100 ? '0' : '');
-	$(".log-pre").prepend("<span class='log-time'>" + hoursZero+currentHours + ":" + minutesZero+currentMinutes + " " + secondsZero+currentSeconds + "s " + millisZero+currentMillis + "ms </span> " + text + "\n");
+	$(".log-pre").prepend("<span class='log-time'> [" + hoursZero + currentHours + ":" + minutesZero + currentMinutes + ":" + secondsZero + currentSeconds + "." + millisZero + currentMillis + "]:</span> " + text + "\n");
 }
 
 // populates actions with buttons
@@ -27,7 +27,7 @@ function populateActions() {
 	
 	// handler to remove a job
 	$(".remove-job").mouseup(function() {
-		console.log("removing attribute " + $(this).attr("data-index"));
+		logText("removing attribute " + $(this).attr("data-index"));
 		socket.send(JSON.stringify({
 			"action": "sremove",
 			"args": [+$(this).attr("data-index")]
@@ -36,7 +36,7 @@ function populateActions() {
 
 	// handler to lower a job
 	$(".lower-priority").mouseup(function() {
-		console.log("removing attribute " + $(this).attr("data-index"));
+		logText("passing attribute " + $(this).attr("data-index"));
 		socket.send(JSON.stringify({
 			"action": "spass",
 			"args": [+$(this).attr("data-index")]

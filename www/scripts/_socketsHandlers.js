@@ -6,7 +6,6 @@ socket.onopen = function() {
 
 	socket.send(JSON.stringify({"action": "null"}));
 	setInterval(function () {
-		logText('Data refreshed');
 		socket.send(JSON.stringify({"action": "null"}));
 	},refreshRate);
 };
