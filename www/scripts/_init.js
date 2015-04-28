@@ -1,5 +1,9 @@
 // initialize the things
 
+// holds old and new JSON
+// for comparison to minimize layout thrashing n stuff
+var oldJsonData;
+var jsonData;
 
 // start message & websockets host
 logText("LaserCutter software is up. Attempting connection to WebSockets host", host);

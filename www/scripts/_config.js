@@ -26,6 +26,3 @@ var priorities = [
 ].reverse();
 
 var refreshRate = 3000;
-
-// holds old JSON data to minimize layout thrashing
-var oldJsonData;
