@@ -2,11 +2,10 @@
 
 // logs text to devlog on page
 function logText(text) {
-	$(function() {
-		var currentTime = new Date();
-		var secondsZero = (currentTime.getSeconds() < 10 ? '0' : '');
-		$(".log").append("<span class='log-time'>" + currentTime.getHours() + ":" + currentTime.getMinutes() + " " + secondsZero + currentTime.getSeconds() + "s " + currentTime.getMilliseconds() + "ms </span> " + text + "\n");
-	});
+	var currentTime = new Date();
+	var secondsZero = (currentTime.getSeconds() < 10 ? '0' : '');
+
+	$(".log-pre").prepend("<span class='log-time'>" + currentTime.getHours() + ":" + currentTime.getMinutes() + " " + secondsZero + currentTime.getSeconds() + "s " + currentTime.getMilliseconds() + "ms </span> " + text + "\n");
 }
 
 // populates actions with buttons

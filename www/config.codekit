@@ -228,13 +228,13 @@
 	"\/scripts\/scripts.js": [
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_config.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_functions.js",
 			"position": 0,
 			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_functions.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_config.js",
 			"position": 1,
 			"type": 0
 			},
