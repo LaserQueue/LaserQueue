@@ -81,7 +81,11 @@ class Queue:
 		index += 1
 		if len(self.queue[lpri-priority]) < index:
 			priority -= 1
-			index = 0
+			if priority < 0:
+				index = len(self.queue[min(lpri-priority, 5)])
+				priority = 0
+			else:
+				index = 0
 		self.queue[min(lpri-priority, 5)].insert(max(index, 0),item)
 
 	def smove(self, oi, ni, np):
