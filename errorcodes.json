@@ -1,5 +1,7 @@
 {
 	"0": "The notifier modal's handler is not working",
 	"1": "Browser frontend does not support JS",
-	"2": "Browser is IE. Please switch to a better browser, i.e. Chrome, Safari, Firefox"
+	"2": "Browser is IE. Please switch to a better browser, i.e. Chrome, Safari, Firefox",
+	"3": "Config.json file could not be found, or could not be parsed. Does it exist? Have you initialized it by calling start.sh?",
+	"4": "Could not connect to WebSockets host. The backend server is likely not running."
 }
