@@ -1,9 +1,18 @@
-.top-header {
-	height: 120px;
-	padding: 20px;
+.nuvu-logo {
+	height: 120px !important;
+	margin: 20px;
 }
 
-.nuvu-logo {
-	width: 175px;
+.control-panel {
 	margin: 20px;
+}
+
+.cut-form-group * {
+	display: inline !important;
+	width: 172px !important;
+}
+
+form input, form select {
+	margin-bottom: 15px;
+	width: 250px;
 }

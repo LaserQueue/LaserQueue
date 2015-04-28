@@ -4,11 +4,6 @@
 @import "header";
 @import "table";
 
-form input, form select {
-	margin-bottom: 15px;
-	width: 250px;
-}
-
 .btn {
 	outline: none !important;
 }
@@ -24,11 +19,6 @@ form input, form select {
 	color: firebrick;
 	&:hover { color: darken(firebrick, 10%); }
 	&:active { color: darken(firebrick, 25%); }
-}
-
-.cut-form-group * {
-	display: inline !important;
-	width: 172px !important;
 }
 
 #cut-material, #priority-dropdown {
