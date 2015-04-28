@@ -35,7 +35,7 @@ class Queue:
 
 		if not inqueue:
 			self.queue[lpri-priority].append({
-				"name": name,
+				"name": name.title().strip().rstrip(),
 				"material": material,
 				"esttime": esttime,
 				"coachmodified": False
