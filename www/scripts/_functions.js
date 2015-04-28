@@ -5,7 +5,8 @@ function logText(text) {
 
 	$(function() {
 		var currentTime = new Date();
-		$(".log").append("<span class='log-time'>" + currentTime.getHours() + ":" + currentTime.getMinutes() + " " + currentTime.getSeconds() + "s " + currentTime.getMilliseconds() + "ms </span> " + text + "\n");
+		var secondszero = (currentTime.getSeconds() < 10 ? '0' : '');
+		$(".log").append("<span class='log-time'>" + currentTime.getHours() + ":" + currentTime.getMinutes() + " " + secondszero + currentTime.getSeconds() + "s " + currentTime.getMilliseconds() + "ms </span> " + text + "\n");
 	});
 }
 
