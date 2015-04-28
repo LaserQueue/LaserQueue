@@ -77,3 +77,5 @@ sftp-config.json
 
 ### Sass ###
 .sass-cache
+
+config.json

@@ -1,6 +1,7 @@
 import json
+import os.path
 
-config = json.load(open("laserqueue.json"))
+config = json.load(open(os.path.join("..", "www", "config.json")))
 
 lpri = len(config["priority"])-1
 
