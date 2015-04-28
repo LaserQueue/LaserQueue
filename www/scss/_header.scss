@@ -1,10 +1,12 @@
 .nuvu-logo {
-	height: 120px;
+	max-height: 120px;
+	max-width: 80vw;
 	margin: 20px;
 }
 
 .control-panel {
 	margin: 20px;
+	display: inline-block;
 }
 
 .cut-form-group * {
