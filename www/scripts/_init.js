@@ -2,7 +2,9 @@
 
 // fetches config file from server
 var configFile = $.getJSON('/config.json', function(json, textStatus) {
-	alert("hello");
+	
+}).fail(function() {
+	modalMessage('Error 3', 'Could not find or parse config file. Have you initialized your configuration using start.sh? See <a href="https://github.com/yrsegal/LaserQueue/blob/master/README.md">the README</a> for more info');
 });
 
 // holds old and new JSON
