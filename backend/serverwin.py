@@ -6,6 +6,8 @@ import json
 import os
 import time
 
+config = json.load(open(os.path.join("..", "www", "config.json")))
+
 @asyncio.coroutine
 def hello(websocket, path):
 	while True:
@@ -36,7 +38,7 @@ def main():
 	temppath = os.path.expanduser(os.path.join("~", "AppData", "Local", "Temp"))
 	open(os.path.join(temppath, "topage.json"), "w").close() # initialize file
 	open(os.path.join(temppath, "toscript.json"), "w").close() # initialize file
-	start_server = websockets.serve(hello, 'yrsegal.local', 8765)
+	start_server = websockets.serve(hello, config["host"], 8765)
 
 	asyncio.get_event_loop().run_until_complete(start_server)
 	asyncio.get_event_loop().run_forever()
