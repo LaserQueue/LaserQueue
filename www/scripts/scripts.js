@@ -1,4 +1,4 @@
-// main program
+// main program with other stuff
 
 // when jquery is here
 $(document).ready(function() {
