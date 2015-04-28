@@ -25,4 +25,4 @@ var priorities = [
 	"Absolutely Required"
 ].reverse();
 
-var refreshRate = 3000;
+var refreshRate = 200;
