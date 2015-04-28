@@ -11,7 +11,7 @@ var configFile = $.getJSON('/config.json', function(json, textStatus) {
 console.log(configFile.responseJSON);
 
 // WebSockets host
-var host = "ws://yrsegal.local:8765";
+var host = "ws://samrmbp.local:8765";
 
 // pull table's first row out for insertion later
 var tableFirstRow = $(".cutting-table").html();
