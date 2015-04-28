@@ -1,5 +1,10 @@
 // initialize the things
 
+// fetches config file from server
+var configFile = $.getJSON('/config.json', function(json, textStatus) {
+	alert("hello");
+});
+
 // holds old and new JSON
 // for comparison to minimize layout thrashing n stuff
 var oldJsonData;
