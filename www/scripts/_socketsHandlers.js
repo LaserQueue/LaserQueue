@@ -44,6 +44,6 @@ socket.onmessage = function(msg){
 // when websockets error
 socket.onerror = function(error) {
 	// go tell a nerd
-	modalMessage();
+	modalMessage("Error 4", "Could not connect to socket at " + host + ". Maybe the backend is not running?");
 };
 
