@@ -104,6 +104,7 @@ def generateData(queue, esttime, currtime):
 	jdata["queue"] = queue.queue
 	jdata["esttime"] = esttime
 	jdata["currtime"] = currtime
+	jdata["action"] = "display"
 	return json.dumps(jdata)
 
 
