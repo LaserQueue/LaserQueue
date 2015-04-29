@@ -17,6 +17,7 @@ socket.onmessage = function(msg){
 
 	// if data is new
 	if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
+		
 		logText("old JSON: " + JSON.stringify(oldJsonData));
 		logText("new JSON received: " + JSON.stringify(jsonData));
 		$('table.cutting-table tbody').html(tableFirstRow);
