@@ -4,7 +4,7 @@ import socket
 
 def copyconf():
 	data = json.load(open(os.path.join("..", "www", "defaultconf.json")))
-	data["host"] = getIps[0]+":8765"
+	data["host"] = getIps()[0]+":8765"
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
 
 def main():
