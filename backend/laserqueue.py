@@ -112,6 +112,7 @@ class Queue:
 				priority = lpri
 			else:
 				index = self.queue[max(lpri-priority, 0)]
+		item["coachmodified"] = True
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
 
 	def sdecrement(self, index):
@@ -134,5 +135,6 @@ class Queue:
 				priority = 0
 			else:
 				index = 0
+		item["coachmodified"] = True
 		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
 
