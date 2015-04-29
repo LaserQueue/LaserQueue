@@ -25,7 +25,6 @@ def main():
 			except:
 				if "action" in data and data["action"] != "null":
 					print(datat)
-					print("not valid packet")
 			if data:
 				try:
 					comm.parseData(queue, data)
