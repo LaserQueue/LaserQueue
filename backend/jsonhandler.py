@@ -74,6 +74,18 @@ def parseData(queue, jdata):
 			return
 
 		queue.append(args[0],args[1],args[2],args[3])
+	elif jdata["action"] == "sdecrement":
+		if len(jdata["args"]) != 1:
+			print("Expected 1 argument, recieved "+len(jdata["args"]))
+			return
+
+		queue.sdecrement(args[0])
+	elif jdata["action"] == "sincrement":
+		if len(jdata["args"]) != 1:
+			print("Expected 1 argument, recieved "+len(jdata["args"]))
+			return
+
+		queue.sincrement(args[0])
 	else:
 		print("Bad action name")
 
