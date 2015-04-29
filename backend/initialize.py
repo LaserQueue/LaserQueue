@@ -17,7 +17,7 @@ def getIps():
 	for ifaceName in interfaces():
 		addresses = [i['addr'] for i in ifaddresses(ifaceName).get(AF_INET, [{"addr":"not found"}])]
 		if "not found" not in addresses and "127.0.0.1" not in addresses:
-			ips += addresses[0]
+			ips += addresses
 	return ips
 
 if __name__ == "__main__":
