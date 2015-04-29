@@ -33,11 +33,19 @@ def getpacks():
 			continue
 		confirm = ("y" if args.all else "")
 		while confirm not in ["y", "n"]:
-			confirm = input("Continue with installation of "+pack+"? (y/n) ").lower().strip().rstrip()
+			confirm = input("Install dependency "+pack+"? (y/n) ").lower().strip().rstrip()
 		if confirm == "n": 
 			print("WARNING: Program may not run without this library.")
 			continue
-		pip.main(["install", pack])
+		if pip.main(["install", pack]) and os.name != "nt":
+			confirm = ("y" if args.all else "")
+			while confirm not in ["y", "n"]:
+				confirm = input("Install failed, try again with elevated permissions? (y/n) ").lower().strip().rstrip()
+			if confirm == "n": 
+				print("WARNING: Program may not run without this library.")
+				continue
+			os.system("sudo pip3 install "+pack)
+
 
 
 
@@ -46,6 +54,7 @@ def main():
 	if not os.path.exists(os.path.join("..", "www", "config.json")) or args.regen:
 		copyconf()
 	getpacks()
+	print("initialization was successful")
 
 def getIps():
 	from netifaces import interfaces, ifaddresses, AF_INET
