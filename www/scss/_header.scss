@@ -24,6 +24,19 @@ form input, form select {
 	width: 250px;
 }
 
+.btn-pink, .btn-pink:hover, .btn-pink:focus {
+	color: white;
+}
+
+.btn-pink {
+	background: $nuvu-pink;
+	border: 1px solid darken($nuvu-pink, 15%);
+	&:hover, &:focus {
+		background: darken($nuvu-pink, 5%);
+		border: 1px solid darken($nuvu-pink, 15%);
+	}
+}
+
 .form-control {
 	box-shadow: none !important;
 	&:focus {
