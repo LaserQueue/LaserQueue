@@ -13,5 +13,15 @@ All dependencies should be met the first time you run the program. The program w
 - netifaces (`#~ pip3 install netifaces`)
 - On Windows: pyautoit, pyserial (installing these manually on Windows is not recommended)
 
+## Calling `startbackend.sh`
+
+To start the server, run `startbackend.sh`. If on Windows, run `startbackend.bat`.
+
+### Flags:
+
+- `-r`, `--regen-config`: Regenerate the config. This is the default option if no config.json file is found in WWW
+- `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
+- `--install-all`: No short option. Installs all dependencies without prompting
+
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yrsegal/laserqueue/trend.png)](https://bitdeli.com/free “Bitdeli Badge”)
 
