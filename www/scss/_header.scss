@@ -2,6 +2,11 @@
 	max-height: 80px;
 	max-width: 80vw;
 	margin: 3%;
+	@media (max-width: 690px) {
+		display: block;
+		width: 240px !important;
+		margin: 45px auto 20px;
+	}
 }
 
 .control-panel {
