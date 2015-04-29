@@ -5,9 +5,12 @@ import pip
 import argparse
 
 parser = argparse.ArgumentParser(prog='startbackend.sh')
-parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen")
-parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip")
-parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all")
+parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
+	action="store_const",const=True,default=False)
+parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
+	action="store_const",const=True,default=False)
+parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
+	action="store_const",const=True,default=False)
 args = parser.parse_args()
 
 def copyconf():
@@ -51,7 +54,7 @@ def getpacks():
 
 def main():
 	getpacks()
-	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json"))n:
+	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json")):
 		copyconf()
 	print("initialization was successful")
 

@@ -6,6 +6,20 @@ import json
 import os
 import time
 
+import argparse
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument("-h", "--help", help="Show help", dest="help",
+	action="store_const",const=True,default=False)
+parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
+	action="store_const",const=True,default=False)
+parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
+	action="store_const",const=True,default=False)
+parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
+	action="store_const",const=True,default=False)
+args = parser.parse_args()
+if args.help:
+	quit()
+
 config = json.load(open(os.path.join("..", "www", "config.json")))
 
 @asyncio.coroutine
