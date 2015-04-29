@@ -1,20 +1,50 @@
 import json
-import os.path
+import os
 import socket
-
+import pip
 import argparse
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen")
+parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip")
+parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all")
+args = parser.parse_args()
 
 def copyconf():
 	data = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	data["host"] = getIps()[0]
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
 
+PACKAGES_UX = [
+	"netifaces"
+]
+PACKAGES_WIN = [
+	"netifaces",
+	"pyserial",
+	"pyautoit"
+]
+def getpacks():
+	if args.skip: return
+	pl = [str(i).split(" ")[0] for i in pip.get_installed_distributions()]
+	packages = (PACKAGES_WIN if os.name == "nt" else PACKAGES_UX)
+	for pack in packages:
+		if pack in pl:
+			continue
+		confirm = ("y" if args.all else "")
+		while confirm not in ["y", "n"]:
+			confirm = input("Continue with installation of "+pack+"? (y/n) ").lower().strip().rstrip()
+		if confirm == "n": 
+			print("WARNING: Program may not run without this library.")
+			continue
+		pip.main(["install", pack])
+
+
+
+
 def main():
-	args = parser.parse_args()
 	if not os.path.exists(os.path.join("..", "www", "config.json")) or args.regen:
 		copyconf()
+	getpacks()
 
 def getIps():
 	from netifaces import interfaces, ifaddresses, AF_INET
