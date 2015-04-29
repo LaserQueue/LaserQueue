@@ -22,6 +22,10 @@
 form input, form select {
 	margin-bottom: 15px;
 	width: 250px;
+	@media (max-width: 400px) {
+		width: 85vw !important;
+		margin: 6px auto;
+	}
 }
 
 .btn-pink, .btn-pink:hover, .btn-pink:focus {
