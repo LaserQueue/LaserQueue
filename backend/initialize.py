@@ -4,8 +4,7 @@ import socket
 import pip
 import argparse
 
-parser = argparse.ArgumentParser(description='A foo that bars',
-                                 prog='startbackend.sh')
+parser = argparse.ArgumentParser(prog='startbackend.sh')
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen")
 parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip")
 parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all")
@@ -51,9 +50,9 @@ def getpacks():
 
 
 def main():
-	if not os.path.exists(os.path.join("..", "www", "config.json")) or args.regen:
-		copyconf()
 	getpacks()
+	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json"))n:
+		copyconf()
 	print("initialization was successful")
 
 def getIps():
