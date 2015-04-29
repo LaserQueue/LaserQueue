@@ -4,7 +4,8 @@ import socket
 import pip
 import argparse
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description='A foo that bars',
+                                 prog='startbackend.sh')
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen")
 parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip")
 parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all")
