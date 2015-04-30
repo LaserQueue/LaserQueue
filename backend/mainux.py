@@ -53,8 +53,12 @@ def main():
 					print(datat)
 			if data:
 				try:
-					comm.parseData(queue, data)
-				except: pass
+					x = comm.parseData(queue, data)
+					if x:
+						json.dump({"action":"notification", "title":"Error occurred", "content":x}, open(os.path.join(temppath, "topage.json"), "w"))
+						time.sleep(0.2)
+				except: 
+					pass
 				json.dump(comm.generateData(queue, calculated_time, elapsed_time), open(os.path.join(temppath, "topage.json"), "w"))
 				json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"), {})
 				if data["action"] != "null": print(queue.queue)
