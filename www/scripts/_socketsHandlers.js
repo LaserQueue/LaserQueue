@@ -5,7 +5,6 @@ function socketSetup() { // god help me
 	// when websockets connects
 	socket.onopen = function() {
 		// print to log and consoles
-		window.console.log("Socket has been opened!");
 		logText('WebSockets connection opened successfully \n');
 
 		socket.send(JSON.stringify({"action": "null"}));
@@ -21,8 +20,6 @@ function socketSetup() { // god help me
 
 		// if data is new
 		if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
-			
-			logText("old JSON: " + JSON.stringify(oldJsonData));
 			logText("new JSON received: " + JSON.stringify(jsonData));
 			$('table.cutting-table tbody').html(tableFirstRow);
 			$(jsonData["queue"]).each(function(index, el) {
