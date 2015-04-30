@@ -55,6 +55,6 @@ function modalMessage(modalTitle, modalBody) {
 // reset a form
 // with thanks to http://stackoverflow.com/questions/680241/resetting-a-multi-stage-form-with-jquery
 function resetForm(form) {
-	form.find('input:text, input:password, input:file, select, textarea').val('');
+	form.find('input:text, input:password, input:file, textarea').val(''); // removed 'select'
 	form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
 }

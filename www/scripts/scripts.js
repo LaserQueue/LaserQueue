@@ -15,6 +15,8 @@ $(document).ready(function() {
 				]
 			}
 		');
+		resetForm($(".new-cut-form"));
+		
 	});
 
 });
