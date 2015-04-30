@@ -1,6 +1,6 @@
 {
 	"host": "",
-	"port": "8765",
+	"port": "8764",
 	"serverRefreshRate": 300000,
 	"refreshRate": 1000,
 	"reconnectRate": 5000,
