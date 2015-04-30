@@ -5,7 +5,7 @@ A queue system for NuVu’s laser cutter, with websockets. [NuVu Studio](https:/
 
 Get the latest version by `git clone`ing the repo or downloading a zip. Auto-updating is planned but not yet implemented.
 
-To start the server, run `startbackend.sh`. If on Windows, run `startbackend.bat`. You'll need Python Python >=3.4.x!
+To start the server, run `startbackend.sh`. If on Windows, run `startbackend.bat`. You'll need Python 3.4.x or greater.
 
 ### Flags:
 
