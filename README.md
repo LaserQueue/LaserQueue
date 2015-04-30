@@ -9,6 +9,8 @@ To start the server, run `startbackend.sh`. If on Windows, run `startbackend.bat
 
 ### Flags:
 
+- `-h`, `--help`: Display a list of these flags. Does not start the backend.
+- `-b`, `--queue-backup`: Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.
 - `-r`, `--regen-config`: Regenerate the config. This is the default option if no config.json file is found in WWW
 - `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
 - `--install-all`: No short option. Installs all dependencies without prompting
