@@ -8,6 +8,8 @@ import time
 
 import argparse
 parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
+	action="store_const",const=True,default=False)
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
 	action="store_const",const=True,default=False)
 parser.add_argument("-h", "--help", help="Show help", dest="help",
@@ -55,7 +57,7 @@ def main():
 	temppath = os.path.join(os.path.sep, "tmp")
 	open(os.path.join(temppath, "topage.json"), "w").close() # initialize file
 	open(os.path.join(temppath, "toscript.json"), "w").close() # initialize file
-	start_server = websockets.serve(hello, config['host'], config['port'])
+	start_server = websockets.serve(hello, "localhost" if args.local else config['host'], config['port'])
 
 	asyncio.get_event_loop().run_until_complete(start_server)
 	asyncio.get_event_loop().run_forever()

@@ -5,6 +5,8 @@ import pip
 import argparse
 
 parser = argparse.ArgumentParser(prog='startbackend.sh')
+parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
+	action="store_const",const=True,default=False)
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
 	action="store_const",const=True,default=False)
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
