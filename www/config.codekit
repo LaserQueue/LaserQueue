@@ -86,16 +86,16 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 0
 		},
-	"\/scripts\/_socketsHandlers.js": {
+	"\/scripts\/_socketSetup.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/scripts\/_socketsHandlers.js",
-		"outputAbbreviatedPath": "\/scripts\/min\/_socketsHandlers-min.js",
+		"inputAbbreviatedPath": "\/scripts\/_socketSetup.js",
+		"outputAbbreviatedPath": "\/scripts\/min\/_socketSetup-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
+		"syntaxCheckerStyle": 1
 		},
 	"\/scripts\/prism.js": {
 		"fileType": 64,
@@ -272,19 +272,19 @@
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_functions.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_socketSetup.js",
 			"position": 1,
 			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_init.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_functions.js",
 			"position": 2,
 			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_socketsHandlers.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_init.js",
 			"position": 3,
 			"type": 0
 			}

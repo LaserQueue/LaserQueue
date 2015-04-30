@@ -1,3 +1,5 @@
+// a function to set up WebSockets
+
 function socketSetup() { // god help me
 
 	socket = new WebSocket(host);
@@ -9,12 +11,14 @@ function socketSetup() { // god help me
 
 		socket.send(JSON.stringify({"action": "null"}));
 		setInterval(function () {
-			socket.send(JSON.stringify({"action": "null"}));
+			if(socket.readyState != socket.CONNECTING) {
+				socket.send(JSON.stringify({"action": "null"}));
+			}
 		},refreshRate);
 	};
 
 	// when websockets message
-	socket.onmessage = function(msg){
+	socket.onmessage = function(msg) {
 		// print to log and consoles
 		var jsonData = JSON.parse($.parseJSON(msg.data));
 
@@ -45,7 +49,12 @@ function socketSetup() { // god help me
 	// when websockets error
 	socket.onerror = function(error) {
 		// go tell a nerd
-		modalMessage("Error 4", "Could not connect to socket at " + host + ". Maybe the backend is not running?");
+		modalMessage("Error 4", "Could not connect to socket at " + host + ". Maybe the backend is not running? <br><br> <button class='btn btn-default btn-pink btn-retry'>Retry</button>");
+
+		// set up retry button
+		$('.btn-retry').click(function() {
+			window.location = window.location.origin + "?foo=" + Math.floor(Math.random()*11000);
+		});
 	};
 };
 

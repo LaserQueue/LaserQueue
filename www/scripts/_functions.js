@@ -1,5 +1,6 @@
 // put any utilities and functions here
 
+
 // logs text to devlog on page
 function logText(text) {
 	var currentTime = new Date();
