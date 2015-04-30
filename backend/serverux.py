@@ -27,7 +27,7 @@ config = json.load(open(os.path.join("..", "www", "config.json")))
 @asyncio.coroutine
 def hello(websocket, path):
 	stamp = time.time()
-	while stamp-time.time()>config["serverRefreshRate"]/1000:
+	while stamp-time.time()<config["serverRefreshRate"]/1000:
 		message = yield from websocket.recv()
 		temppath = os.path.join(os.path.sep, "tmp")
 		try:
