@@ -1,5 +1,13 @@
 import json
-# add other part imports at future point
+
+def _typelist(l):
+	return [type(i) for i in l]
+
+def _comparetypes(args, expected):
+	args = _typelist(args)
+	args = [(int if i == float else i) for i in args]
+	return args == expected
+
 
 """
 Format for site-to-program data:
@@ -20,62 +28,90 @@ exceptions: if move target index is -1, it will append to the bottom of the list
 """
 
 def parseData(queue, jdata):
-	if "args" not in jdata:
-		return
-	if jdata["action"] == "null":
+	if "args" not in jdata or jdata["action"] == "null":
 		return
 	args = jdata["args"]
 
 	if jdata["action"] == "move":
-		if len(jdata["args"]) != 4:
-			print("Expected 4 arguments, recieved "+len(jdata["args"]))
-			return
+		if len(args) != 4:
+			return "Expected 4 arguments, recieved "+str(len(args))
+		expectedtypes = [int, int, int, int]
+		if _typelist(args) != expectedtypes:
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.move(args[0],args[1],args[2],args[3])
 
 	elif jdata["action"] == "smove":
-		if len(jdata["args"]) != 3:
-			print("Expected 3 arguments, recieved "+len(jdata["args"]))
-			return
+		if len(args) != 3:
+			return "Expected 3 arguments, recieved "+str(len(args))
+		expectedtypes = [int, int, int]
+		if _typelist(args) != expectedtypes:
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.smove(args[0],args[1],args[2])
 
 	elif jdata["action"] == "remove":
-		if len(jdata["args"]) != 2:
-			print("Expected 2 arguments, recieved "+len(jdata["args"]))
-			return
+		if len(args) != 2:
+			return "Expected 2 arguments, recieved "+str(len(args))
+		expectedtypes = [int, int]
+		if _typelist(args) != expectedtypes:
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.remove(args[0],args[1])
 
 	elif jdata["action"] == "sremove":
-		if len(jdata["args"]) != 1:
-			print("Expected 1 argument, recieved "+len(jdata["args"]))
-			return
+		if len(args) != 1:
+			return "Expected 1 argument, recieved "+str(len(args))
+		expectedtypes = [int]
+		if _typelist(args) != expectedtypes:
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.sremove(args[0])
 
 	elif jdata["action"] == "pass":
-		if len(jdata["args"]) not in [1, 2]:
-			print("Expected at most 2 arguments, recieved "+len(jdata["args"]))
-			return
+		if len(args) not in [1, 2]:
+			return "Expected at most 2 arguments, recieved "+str(len(args))
+		expectedtypes = [[int], [int, int]]
+		if _typelist(args) not in expectedtypes:
+			return "Expected "+str(expectedtypes[0])+" or "+str(expectedtypes[1])+", recieved "+str(_typelist(args))
 
 		queue.passoff(args[0], args[1] if len(args)>1 else 0)
 
 	elif jdata["action"] == "spass":
-		if len(jdata["args"]) != 1:
-			print("Expected 1 argument, recieved "+len(jdata["args"]))
-			return
+		if len(args) != 1:
+			return "Expected 1 argument, recieved "+str(len(args))
+		expectedtypes = [int]
+		if _typelist(args) != expectedtypes:
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.spass(args[0])
 
 	elif jdata["action"] == "add":
-		if len(jdata["args"]) != 4:
-			print("Expected 4 arguments, recieved "+len(jdata["args"]))
-			return
+		if len(args) != 4:
+			return "Expected 4 arguments, recieved "+str(len(args))
+		expectedtypes = [str, int, int, str]
+		if not _comparetypes(args, expectedtypes):
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.append(args[0],args[1],args[2],args[3])
+	elif jdata["action"] == "sdecrement":
+		if len(args) != 1:
+			return "Expected 1 argument, recieved "+str(len(args))
+		expectedtypes = [int]
+		if _typelist(args) != expectedtypes:
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
+
+		queue.sdecrement(args[0])
+	elif jdata["action"] == "sincrement":
+		if len(args) != 1:
+			return "Expected 1 argument, recieved "+str(len(args))
+		expectedtypes = [int]
+		if _typelist(args) != expectedtypes:
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
+
+		queue.sincrement(args[0])
 	else:
-		print("Bad action name")
+		return "Bad action name"
 
 
 """

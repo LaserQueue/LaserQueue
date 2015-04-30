@@ -1,6 +1,9 @@
 {
 	"host": "",
+	"port": "8765",
+	"serverRefreshRate": 300000,
 	"refreshRate": 1000,
+	"reconnectRate": 5000,
 	"priority_thresh": [
 		10,
 		20,

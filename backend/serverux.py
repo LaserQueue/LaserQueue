@@ -6,11 +6,28 @@ import json
 import os
 import time
 
+import argparse
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
+	action="store_const",const=True,default=False)
+parser.add_argument("-h", "--help", help="Show help", dest="help",
+	action="store_const",const=True,default=False)
+parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
+	action="store_const",const=True,default=False)
+parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
+	action="store_const",const=True,default=False)
+parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
+	action="store_const",const=True,default=False)
+args = parser.parse_args()
+if args.help:
+	quit()
+
 config = json.load(open(os.path.join("..", "www", "config.json")))
 
 @asyncio.coroutine
 def hello(websocket, path):
-	while True:
+	stamp = time.time()
+	while stamp-time.time()<config["serverRefreshRate"]/1000:
 		message = yield from websocket.recv()
 		temppath = os.path.join(os.path.sep, "tmp")
 		try:
@@ -24,7 +41,7 @@ def hello(websocket, path):
 					json.dump(messagedata, messagef)
 					messagef.close()
 
-					time.sleep(0.1)
+					time.sleep(0.05)
 
 					dataf = open(os.path.join(temppath, "topage.json"))
 					data = json.load(dataf)
@@ -38,7 +55,7 @@ def main():
 	temppath = os.path.join(os.path.sep, "tmp")
 	open(os.path.join(temppath, "topage.json"), "w").close() # initialize file
 	open(os.path.join(temppath, "toscript.json"), "w").close() # initialize file
-	start_server = websockets.serve(hello, config['host'], 8765)
+	start_server = websockets.serve(hello, config['host'], config['port'])
 
 	asyncio.get_event_loop().run_until_complete(start_server)
 	asyncio.get_event_loop().run_forever()

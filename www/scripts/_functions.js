@@ -1,5 +1,6 @@
 // put any utilities and functions here
 
+
 // logs text to devlog on page
 function logText(text) {
 	var currentTime = new Date();
@@ -49,4 +50,15 @@ function modalMessage(modalTitle, modalBody) {
 	$('.notify-modal-title').html(modalTitle);
 	$('.notify-modal-body').html(modalBody);
 	$('#notify-modal').modal();
+}
+
+// reset a form
+// with thanks to http://stackoverflow.com/questions/680241/resetting-a-multi-stage-form-with-jquery
+function resetForm(form) {
+	form.find('input:text, input:password, input:file, textarea').val(''); // removed 'select'
+	form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
+	if($(form).selector == ".new-cut-form") {
+		// here is for resetting the form
+		// later. maybe milestone 0.1.0
+	}
 }
