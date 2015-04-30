@@ -49,7 +49,7 @@ function socketSetup() { // god help me
 	// when websockets error
 	socket.onerror = function(error) {
 		// go tell a nerd
-		modalMessage("Error 4", "Could not connect to socket at " + host + ". Maybe the backend is not running? <br><br> <button class='btn btn-default btn-pink btn-retry'>Retry</button>");
+		modalMessage("Error 4", "Could not connect to socket at " + host + ". Maybe the backend is not running? This page will try to reconnect every few seconds. <br><br> <button class='btn btn-default btn-pink btn-retry'>Retry</button>");
 
 		// set up retry button
 		$('.btn-retry').click(function() {
