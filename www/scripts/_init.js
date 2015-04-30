@@ -1,15 +1,26 @@
 // initialize the things
 
+// gets the config file and parses values
+
+var host, socket;
+
+// fetches config file from server
+var getConfigFile = $.getJSON('/config.json', function() {
+	host = String("ws://" + getConfigFile.responseJSON["host"] + ":" + getConfigFile.responseJSON["port"]);
+});
+
+setInterval(function() {
+	if(typeof socket == "undefined" || socket.readyState == socket.CLOSED) {
+		// initialize websockets if closed
+		logText("LaserCutter software is up. Attempting connection to WebSockets host", host);
+		socketSetup();
+	}
+}, refreshRate);
+
 // holds old and new JSON
 // for comparison to minimize layout thrashing n stuff
 var oldJsonData = "uninitialized";
 var jsonData;
-
-// start message & websockets host
-logText("LaserCutter software is up. Attempting connection to WebSockets host", host);
-
-// initialize websockets
-var socket = new WebSocket(host);
 
 // initialize action row
 populateActions();
