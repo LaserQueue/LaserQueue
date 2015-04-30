@@ -40,7 +40,7 @@ def hello(websocket, path):
 					json.dump(messagedata, messagef)
 					messagef.close()
 
-					time.sleep(0.1)
+					time.sleep(0.05)
 
 					dataf = open(os.path.join(temppath, "topage.json"))
 					data = json.load(dataf)
