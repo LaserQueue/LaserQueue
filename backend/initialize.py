@@ -21,9 +21,11 @@ def copyconf():
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
 
 PACKAGES_UX = [
+	"websockets",
 	"netifaces"
 ]
 PACKAGES_WIN = [
+	"websockets",
 	"netifaces",
 	"pyserial",
 	"pyautoit"
