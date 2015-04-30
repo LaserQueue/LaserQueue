@@ -94,7 +94,7 @@ class Queue:
 
 	def sincrement(self, index):
 		masterqueue = _concatlist(self.queue)
-		target = masterqueue[oindex] 
+		target = masterqueue[index] 
 		for ii in range(len(self.queue)):
 			i = self.queue[ii]
 			if target in i:
@@ -108,16 +108,16 @@ class Queue:
 		if index < 0:
 			priority += 1
 			if priority > lpri:
-				index = len(self.queue[max(lpri-priority, 0)])
+				index = 0
 				priority = lpri
 			else:
-				index = self.queue[max(lpri-priority, 0)]
+				index = len(self.queue[max(lpri-priority, 0)])
 		item["coachmodified"] = True
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
 
 	def sdecrement(self, index):
 		masterqueue = _concatlist(self.queue)
-		target = masterqueue[oindex] 
+		target = masterqueue[index] 
 		for ii in range(len(self.queue)):
 			i = self.queue[ii]
 			if target in i:
