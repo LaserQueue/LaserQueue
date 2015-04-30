@@ -5,6 +5,8 @@ import pip
 import argparse
 
 parser = argparse.ArgumentParser(prog='startbackend.sh')
+parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
+	action="store_const",const=True,default=False)
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
 	action="store_const",const=True,default=False)
 parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",

@@ -3,9 +3,12 @@ import jsonhandler as comm
 
 import json
 import os.path
+import time
 
 import argparse
 parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
+	action="store_const",const=True,default=False)
 parser.add_argument("-h", "--help", help="Show help", dest="help",
 	action="store_const",const=True,default=False)
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
@@ -28,7 +31,16 @@ def main():
 
 	json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"))
 
+	if args.backup:
+		if os.path.exists("cache.json"):
+			queue.queue = json.load("")
+
+	stamp = time.time()
 	while True:
+		if time.time()-stamp > 20 and args.backup:
+			stamp = time.time()
+			json.dump(queue.queue, open("cache.json", "w"))
+			print("queue backed up")
 		if os.path.exists(os.path.join(temppath, "toscript.json")):
 			dataf = open(os.path.join(temppath, "toscript.json"))
 			datat = dataf.read()
