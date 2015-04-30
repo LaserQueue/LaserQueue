@@ -33,7 +33,7 @@ def main():
 
 	if args.backup:
 		if os.path.exists("cache.json"):
-			queue.queue = json.load("")
+			queue.queue = json.load(open("cache.json"))
 
 	stamp = time.time()
 	while True:
