@@ -3,7 +3,7 @@ import os.path
 
 config = json.load(open(os.path.join("..", "www", "config.json")))
 
-lpri = len(config["priority"])-1
+lpri = len(config["priorities"])-1
 
 def _calcpriority(priority, time):
 	for i in config["priority_thresh"]:
