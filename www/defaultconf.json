@@ -1,6 +1,6 @@
 {
 	"host": "",
-	"port": "8764",
+	"port": "8763",
 	"serverRefreshRate": 300000,
 	"refreshRate": 1000,
 	"reconnectRate": 5000,
@@ -12,7 +12,7 @@
 		50,
 		60
 	],
-	"priority": [
+	"priorities": [
 		"Lunch/After NuVu",
 		"Low Priority", 
 		"Medium Priority",

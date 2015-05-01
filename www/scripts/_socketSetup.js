@@ -9,6 +9,9 @@ function socketSetup() { // god help me
 		// print to log and consoles
 		logText('WebSockets connection opened successfully \n');
 
+		$('#notify-modal').modal('hide');
+
+		// poll for new data and repeat every refreshRate
 		socket.send(JSON.stringify({"action": "null"}));
 		setInterval(function () {
 			if(socket.readyState != socket.CONNECTING) {
