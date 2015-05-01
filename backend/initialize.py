@@ -24,12 +24,10 @@ def copyconf():
 
 PACKAGES_UX = [
 	"websockets",
-	"Rocket",
 	"netifaces"
 ]
 PACKAGES_WIN = [
 	"websockets",
-	"Rocket",
 	"netifaces",
 	"pyserial",
 	"pyautoit"
