@@ -1,4 +1,6 @@
 #!/bin/bash
 cd ${0%/*}
-
-python3 backend/initialize.py
+cd backend
+python3 initialize.py $*
+cd ../www
+sudo python3 -m http.server 80
