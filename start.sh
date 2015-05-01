@@ -5,4 +5,6 @@ cd backend
 python3 initialize.py $*
 cd ..
 ./startfrontend.sh $* &
-./startbackend.sh $* 
+./startbackend.sh $*
+pkill python3
+pkill Python 
