@@ -1,6 +1,9 @@
 # LaserQueue
 A queue system for NuVu’s laser cutter, with websockets. [NuVu Studio](https://cambridge.nuvustudio.com/discover) has a lasercutter, and *only* one of them. A lot of people want to use it, and managing it is a pain. This software aims to simplify that with a simple web-based frontend accessible locally and on a TV mounted in the wall. It is developed primarily by [@sdaitzman](https://github.com/sdaitzman) and [@yrsegal](https://github.com/yrsegal).
 
+## Getting the software
+Download the latest stable version from [github.com/yrsegal/LaserQueue/releases](https://github.com/yrsegal/LaserQueue/releases) and decompress it.
+
 ## Running the software
 
 Get the latest version by `git clone`ing the repo or downloading a zip. Auto-updating is planned but not yet implemented.
