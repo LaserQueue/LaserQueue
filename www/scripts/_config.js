@@ -12,11 +12,13 @@ var getConfigFile = $.getJSON('/config.json', function() {
 	materials = getConfigFile.responseJSON["materials"];
 	priorities = getConfigFile.responseJSON["priorities"].reverse();
 
+	// set refreshRate and reconnectRate
+	refreshRate = getConfigFile.responseJSON["refreshRate"];
+	reconnectRate = getConfigFile.responseJSON["reconnectRate"];
+
 	// log entire config file
 	logText("Config file follows:" + JSON.stringify(getConfigFile.responseJSON, null, 2));
 });
 
 // pull table's first row out for insertion later
 var tableFirstRow = $(".cutting-table").html();
-
-var refreshRate = 200;
