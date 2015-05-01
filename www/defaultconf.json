@@ -14,9 +14,9 @@
 	],
 	"priorities": [
 		"Lunch/After NuVu",
-		"Low Priority", 
-		"Medium Priority",
-		"High Priority",
+		"Low", 
+		"Medium",
+		"High",
 		"Urgent",
 		"Absolutely Required"
 	],
