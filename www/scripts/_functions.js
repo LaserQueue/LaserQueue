@@ -28,7 +28,7 @@ function populateActions() {
 	
 	// handler to remove a job
 	$(".remove-job").mouseup(function() {
-		logText("removing attribute " + $(this).attr("data-index"));
+		logText("removing item " + $(this).attr("data-index"));
 		socket.send(JSON.stringify({
 			"action": "sremove",
 			"args": [+$(this).attr("data-index")]
@@ -37,7 +37,7 @@ function populateActions() {
 
 	// handler to lower a job
 	$(".lower-priority").mouseup(function() {
-		logText("passing attribute " + $(this).attr("data-index"));
+		logText("passing item " + $(this).attr("data-index"));
 		socket.send(JSON.stringify({
 			"action": "spass",
 			"args": [+$(this).attr("data-index")]
