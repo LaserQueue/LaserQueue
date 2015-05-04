@@ -21,9 +21,7 @@
 		<!--[endif]-->
 	</head>
 	<body>
-
 		<noscript><h1>ERROR 1 JAVASCRIPT NOT SUPPORTED. Go get a better broswer like <a href="https://chrome.com">Chrome</a>, or enable Javascript.</h1><div style="display:none"></noscript>
-
 		<!-- modal for displaying errors -->
 		<div class="modal fade" id="notify-modal" tabindex="-1" role="dialog" aria-labelledby="notify-modal-label" aria-hidden="true">
 			<div class="modal-dialog">
@@ -41,7 +39,6 @@
 				</div>
 			</div>
 		</div>
-
 		<header class="top-header clearfix">
 			<img src="/img/logo.svg" alt="NuVu Logo" class="nuvu-logo">
 			<div class="control-panel clearfix">
@@ -71,7 +68,6 @@
 				</form>
 			</div>
 		</header>
-
 		<div class="table-responsive cutting-table">
 			<table class="table table-striped table-bordered cutting-table">
 				<tbody>
@@ -82,7 +78,16 @@
 						<td class="col-md-1">Est. Length</td>
 						<td class="col-md-1">Priority</td>
 					</tr>
-					<!-- table content goes here -->
+					<tr>
+						<td class="col-md-1">
+							<i data-index="2" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="" data-original-title="Cancel this job"></i>
+							<i data-index="2" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="" data-original-title="Move job down"></i>
+						</td>
+						<td data-bind="name" class="col-md-2">Kjhg</td>
+						<td data-bind="material" class="col-md-2">Paper</td>
+						<td data-bind="esttime" class="col-md-1">49 minutes</td>
+						<td data-bind="" class="col-md-1">Lunch/After NuVu</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -93,14 +98,14 @@
 			<br><br><br>
 			<label class="glyphicon glyphicon-console" for="log-checkbox"></label>
 			<input id="log-checkbox" type="checkbox">
-			<pre class="log-pre"><code class="language-bash log">Log starts here</code></pre><br>	
-			
-		</div>
-		<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="/bower_components/transparency/dist/transparency.min.js"></script>
-		<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="/scripts/scripts.min.js"></script>
-		<script src="/scripts/prism.js"></script>
-		<script>document.addEventListener("touchstart", function(){}, true);</script>
-	</body>
+		<pre class="log-pre"><code class="language-bash log">Log starts here</code></pre><br>
+		
+	</div>
+	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="/bower_components/transparency/dist/transparency.min.js"></script>
+	<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/scripts/scripts.min.js"></script>
+	<script src="/scripts/prism.js"></script>
+	<script>document.addEventListener("touchstart", function(){}, true);</script>
+</body>
 </html>
