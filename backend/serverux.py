@@ -10,6 +10,8 @@ import argparse
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
 	action="store_const",const=True,default=False)
+parser.add_argument("-p", "--port", help="Port to host from", dest="port",
+	default=80, type=int)
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
 	action="store_const",const=True,default=False)
 parser.add_argument("-h", "--help", help="Show help", dest="help",
