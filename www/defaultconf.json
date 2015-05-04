@@ -15,9 +15,9 @@
 	"priorities": [
 		"Lunch/After NuVu",
 		"Low", 
-		"Medium",
+		"Normal",
 		"High",
-		"Urgent",
+		"Important",
 		"Absolutely Required"
 	],
 	"materials": {
