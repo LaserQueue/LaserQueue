@@ -27,7 +27,7 @@ function socketSetup() { // god help me
 
 		// if data is new
 		if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
-			logText("new JSON received: " + JSON.stringify(jsonData));
+			logText("new JSON received: " + JSON.stringify(jsonData, null, 2));
 			$('table.cutting-table tbody').html(tableFirstRow);
 			$(jsonData["queue"]).each(function(index, el) {
 				$(el).each(function(arrayIndex, arrayEl) {
