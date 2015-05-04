@@ -25,7 +25,6 @@ selfpath = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
 	os.system("cd "+selfpath+"; cd backend; python3 initialize.py "+" ".join(sys.argv[1:]))
-	os.system("cd "+selfpath+"; ./startfrontend.sh " + " ".join(sys.argv[1:]) + " &")
 	os.system("cd "+selfpath+"; ./startbackend.sh " + " ".join(sys.argv[1:]) + " &")
 	os.chdir(os.path.join(os.getcwd(), "www"))
 	http.server.test(HandlerClass=SimpleHTTPRequestHandler, port=args.port)
