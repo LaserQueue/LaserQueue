@@ -35,6 +35,7 @@ class Queue:
 
 		if not inqueue:
 			self.queue[lpri-priority].append({
+				"priority": lpri-priority,
 				"name": name.title().strip().rstrip(),
 				"material": material,
 				"esttime": esttime,
