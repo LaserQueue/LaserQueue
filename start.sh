@@ -1,10 +1,9 @@
 #!/bin/bash
-cd ${0%/*}
-
-cd backend
-python3 initialize.py $*
-cd ..
-./startfrontend.sh $* &
-./startbackend.sh $*
+if [[ $EUID -ne 0 ]]; then
+	echo 'start.sh: Permission denied'
+	exit 1
+fi
+cd $(/bin/pwd -P)
+python3 start.py $*
 pkill python3
-pkill Python 
+pkill Python
