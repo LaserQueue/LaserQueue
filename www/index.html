@@ -78,16 +78,19 @@
 						<td class="col-md-1">Est. Length</td>
 						<td class="col-md-1">Priority</td>
 					</tr>
-					<tr>
-						<td class="col-md-1">
-							<i data-index="2" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="" data-original-title="Cancel this job"></i>
-							<i data-index="2" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="" data-original-title="Move job down"></i>
-						</td>
-						<td data-bind="name" class="col-md-2"></td>
-						<td data-bind="material" class="col-md-2"></td>
-						<td data-bind="esttime" class="col-md-1"></td>
-						<td data-bind="priority" class="col-md-1"></td>
-					</tr>
+
+					<section class="table-template">
+						<tr>
+							<td class="col-md-1">
+								<i data-index="2" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="" data-original-title="Cancel this job"></i>
+								<i data-index="2" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="" data-original-title="Move job down"></i>
+							</td>
+							<td data-bind="name" class="col-md-2"></td>
+							<td data-bind="material" class="col-md-2"></td>
+							<td data-bind="esttime" class="col-md-1"></td>
+							<td data-bind="priority" class="col-md-1"></td>
+						</tr>
+					</section>
 				</tbody>
 			</table>
 		</div>

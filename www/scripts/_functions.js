@@ -19,11 +19,9 @@ function logText(text) {
 // populates actions with buttons
 function populateActions() {
 	$(".cutting-table tr:not(.table-first-row) td:nth-child(1)").each(function(index, el) {
-		$(el).html('
-			<i data-index="' + index + '" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="Cancel this job"></i>
-			<i data-index="' + index + '" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="Move job down"></i>
-		');
+		$(el).children('i').prop('data-index', index);
 	});
+
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	// handler to remove a job
