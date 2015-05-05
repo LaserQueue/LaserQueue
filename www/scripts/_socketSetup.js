@@ -27,10 +27,14 @@ function socketSetup() { // god help me
 
 		// if data is new
 		if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
+			// log the data
 			logText("new JSON received: " + JSON.stringify(jsonData, null, 2));
 
+			// for each priority in list
 			$(jsonData["queue"]).each(function(index, el) {
+				// for each cut in priority
 				$(el).each(function(arrayIndex, arrayEl) {
+					// add to full list of cuts
 					allCuts = allCuts.concat(arrayEl);
 				});
 			});

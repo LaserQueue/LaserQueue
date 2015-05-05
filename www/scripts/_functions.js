@@ -16,12 +16,13 @@ function logText(text) {
 	$(".log-pre").prepend("<span class='log-time'> [" + hoursZero + currentHours + ":" + minutesZero + currentMinutes + ":" + secondsZero + currentSeconds + "." + millisZero + currentMillis + "]:</span> " + text + "\n");
 }
 
-// populates actions with buttons
+// repopulate action button index
 function populateActions() {
 	$(".cutting-table tr:not(.table-first-row) td:nth-child(1)").each(function(index, el) {
 		$(el).children('i').prop('data-index', index);
 	});
 
+	// reinitialize bootstrap tooltips
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	// handler to remove a job
