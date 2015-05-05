@@ -21,6 +21,3 @@ getConfigFile = $.getJSON('/config.json', function() {
 	// log entire config file
 	logText("Config file follows:" + JSON.stringify(getConfigFile.responseJSON, null, 2));
 });
-
-// pull table's first row out for insertion later
-var tableFirstRow = $(".cutting-table").html();

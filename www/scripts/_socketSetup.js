@@ -2,6 +2,8 @@
 
 function socketSetup() { // god help me
 
+	// wait until host has a real value
+	while(host == 'undefined') {}
 	socket = new WebSocket(host);
 
 	// when websockets connects
@@ -28,12 +30,19 @@ function socketSetup() { // god help me
 		// if data is new
 		if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
 			// log the data
-			logText("new JSON received: " + JSON.stringify(jsonData, null, 2));
+			logText("new JSON received: " + JSON.stringify(jsonData));
+
+			// reinitialize full list of cuts
+			allCuts = [];
 
 			// for each priority in list
 			$(jsonData["queue"]).each(function(index, el) {
 				// for each cut in priority
 				$(el).each(function(arrayIndex, arrayEl) {
+					// at this point nothing is human-readable
+					// make material human-readable
+					arrayEl.material = materials[arrayEl.material];
+
 					// add to full list of cuts
 					allCuts = allCuts.concat(arrayEl);
 				});
@@ -41,7 +50,7 @@ function socketSetup() { // god help me
 
 
 
-			$('.table-template').render(allCuts);
+			$('.cutting-table-tbody').render(allCuts);
 					//if(arrayEl["coachmodified"]) { modifiedTag = ' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="Coach-modified"></span>'; }
 				// 	$('table.cutting-table tbody').append('
 				// 		<tr>
