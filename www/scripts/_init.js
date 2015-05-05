@@ -18,10 +18,5 @@ var jsonData;
 // initialize action row
 populateActions();
 
-// initialize bootstrap tooltips
-$(function () {
-	$('[data-toggle="tooltip"]').tooltip()
-});
-
 // initialize the modal by changing the title
 $('.notify-modal-title').html("Notification");
