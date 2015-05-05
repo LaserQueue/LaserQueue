@@ -50,7 +50,7 @@ function socketSetup() { // god help me
 
 
 
-			$('.cutting-table-tbody').render(allCuts);
+			$('.cutting-table-template').render(allCuts);
 					//if(arrayEl["coachmodified"]) { modifiedTag = ' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="Coach-modified"></span>'; }
 				// 	$('table.cutting-table tbody').append('
 				// 		<tr>
