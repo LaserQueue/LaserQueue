@@ -23,26 +23,34 @@ function socketSetup() { // god help me
 	// when websockets message
 	socket.onmessage = function(msg) {
 		// print to log and consoles
-		var jsonData = JSON.parse($.parseJSON(msg.data));
+		jsonData = JSON.parse($.parseJSON(msg.data));
 
 		// if data is new
 		if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
 			logText("new JSON received: " + JSON.stringify(jsonData, null, 2));
+
 			$(jsonData["queue"]).each(function(index, el) {
 				$(el).each(function(arrayIndex, arrayEl) {
-					var modifiedTag = "";
-					if(arrayEl["coachmodified"]) { modifiedTag = ' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="Coach-modified"></span>'; }
-					$('table.cutting-table tbody').append('
-						<tr>
-							<td class="col-md-1"></td>
-							<td class="col-md-2">' + arrayEl["name"] + '</td>
-							<td class="col-md-2">' + materials[arrayEl["material"]] + '</td>
-							<td class="col-md-1">' + arrayEl["esttime"] + ' minutes</td>
-							<td class="col-md-1">' + priorities[index] + modifiedTag + '</td>
-						</tr>
-					');
+					fullList = fullList.concat(arrayEl);
 				});
 			});
+
+
+
+			$('.table-template').render(jsonData["queue"]);
+					//if(arrayEl["coachmodified"]) { modifiedTag = ' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="Coach-modified"></span>'; }
+				// 	$('table.cutting-table tbody').append('
+				// 		<tr>
+				// 			<td class="col-md-1"></td>
+				// 			<td class="col-md-2">' + arrayEl["name"] + '</td>
+				// 			<td class="col-md-2">' + materials[arrayEl["material"]] + '</td>
+				// 			<td class="col-md-1">' + arrayEl["esttime"] + ' minutes</td>
+				// 			<td class="col-md-1">' + priorities[index] + modifiedTag + '</td>
+				// 		</tr>
+				// 	');
+			// 	};
+			// });
+
 			populateActions();
 		}
 		oldJsonData = jsonData;

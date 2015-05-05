@@ -1,10 +1,11 @@
 // gets the config file and parses values
 
-
-var host, socket, materials, priorities, refreshRate, reconnectRate;
+// declare almost all globals here
+var getConfigFile, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate;
+var fullList = [];
 
 // fetches config file from server
-var getConfigFile = $.getJSON('/config.json', function() {
+getConfigFile = $.getJSON('/config.json', function() {
 	// set host from host and port
 	host = "ws://" + getConfigFile.responseJSON["host"] + ":" + getConfigFile.responseJSON["port"];
 
