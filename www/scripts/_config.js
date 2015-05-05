@@ -3,6 +3,7 @@
 // declare almost all globals here
 var getConfigFile, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate;
 var allCuts = [];
+var devLog = true;
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {

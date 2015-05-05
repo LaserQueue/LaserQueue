@@ -3,17 +3,19 @@
 
 // logs text to devlog on page
 function logText(text) {
-	var currentTime = new Date();
-	var currentHours = currentTime.getHours();
-	var currentMinutes = currentTime.getMinutes();
-	var currentSeconds = currentTime.getSeconds();
-	var currentMillis = currentTime.getMilliseconds();
+	if(devLog) {
+		var currentTime = new Date();
+		var currentHours = currentTime.getHours();
+		var currentMinutes = currentTime.getMinutes();
+		var currentSeconds = currentTime.getSeconds();
+		var currentMillis = currentTime.getMilliseconds();
 
-	var hoursZero = (currentHours < 10 ? '0' : '');
-	var minutesZero = (currentMinutes < 10 ? '0' : '');
-	var secondsZero = (currentSeconds < 10 ? '0' : '');
-	var millisZero = (currentMillis < 10 ? '00' : currentMillis < 100 ? '0' : '');
-	$(".log-pre").prepend("<span class='log-time'> [" + hoursZero + currentHours + ":" + minutesZero + currentMinutes + ":" + secondsZero + currentSeconds + "." + millisZero + currentMillis + "]:</span> " + text + "\n");
+		var hoursZero = (currentHours < 10 ? '0' : '');
+		var minutesZero = (currentMinutes < 10 ? '0' : '');
+		var secondsZero = (currentSeconds < 10 ? '0' : '');
+		var millisZero = (currentMillis < 10 ? '00' : currentMillis < 100 ? '0' : '');
+		$(".log-pre").prepend("<span class='log-time'> [" + hoursZero + currentHours + ":" + minutesZero + currentMinutes + ":" + secondsZero + currentSeconds + "." + millisZero + currentMillis + "]:</span> " + text + "\n");
+	}
 }
 
 // repopulate action button index
