@@ -28,5 +28,9 @@
 		"p": "Paper",
 		"f": "Fabric",
 		"o": "Other"
-	}
+	},
+	"default_material": "w",
+	"default_priority": 2,
+	"name_input": "Enter name here",
+	"time_input": "Estimated time (min)"
 }
