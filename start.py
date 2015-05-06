@@ -8,6 +8,8 @@ parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
 	action="store_const",const=True,default=False)
 parser.add_argument("-p", "--port", help="Port to host from", dest="port",
 	default=80, type=int)
+parser.add_argument("-q", "--quiet", help="makes the script not give output", dest="shh",
+	action="store_const",const=True,default=False)
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
 	action="store_const",const=True,default=False)
 parser.add_argument("-h", "--help", help="Show help", dest="help",
@@ -22,10 +24,13 @@ args = parser.parse_args()
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 
+if args.shh:
+	newargs = " ".join([i for i in sys.argv[1:] if i != "-q"])
+	os.system("cd "+selfpath+"; python3 start.py {0} >/dev/null".format(newargs))
+	quit()
 
 if __name__ == "__main__":
 	os.system("cd "+selfpath+"; cd backend; python3 initialize.py "+" ".join(sys.argv[1:]))
-	os.system("cd "+selfpath+"; ./startfrontend.sh " + " ".join(sys.argv[1:]) + " &")
 	os.system("cd "+selfpath+"; ./startbackend.sh " + " ".join(sys.argv[1:]) + " &")
 	os.chdir(os.path.join(os.getcwd(), "www"))
 	http.server.test(HandlerClass=SimpleHTTPRequestHandler, port=args.port)

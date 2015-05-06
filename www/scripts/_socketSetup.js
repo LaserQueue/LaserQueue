@@ -2,6 +2,8 @@
 
 function socketSetup() { // god help me
 
+	// wait until host has a real value
+	while(host == 'undefined') {}
 	socket = new WebSocket(host);
 
 	// when websockets connects
@@ -23,30 +25,44 @@ function socketSetup() { // god help me
 	// when websockets message
 	socket.onmessage = function(msg) {
 		// print to log and consoles
-		var jsonData = JSON.parse($.parseJSON(msg.data));
+		jsonData = JSON.parse(JSON.parse(msg.data));
 
 		// if data is new
-		if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
-			logText("new JSON received: " + JSON.stringify(jsonData, null, 2));
-			$('table.cutting-table tbody').html(tableFirstRow);
+		if(JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
+			
+			oldJsonData = $.extend({}, jsonData);
+
+			// log the data
+			logText('new JSON received: ' + JSON.stringify(jsonData));
+
+			// reinitialize full list of cuts
+			allCuts = [];
+
+
+
+
+			// for each priority in list
 			$(jsonData["queue"]).each(function(index, el) {
+				// for each cut in priority
 				$(el).each(function(arrayIndex, arrayEl) {
-					var modifiedTag = "";
-					if(arrayEl["coachmodified"]) { modifiedTag = ' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="Coach-modified"></span>'; }
-					$('table.cutting-table tbody').append('
-						<tr>
-							<td class="col-md-1"></td>
-							<td class="col-md-2">' + arrayEl["name"] + '</td>
-							<td class="col-md-2">' + materials[arrayEl["material"]] + '</td>
-							<td class="col-md-1">' + arrayEl["esttime"] + ' minutes</td>
-							<td class="col-md-1">' + priorities[index] + modifiedTag + '</td>
-						</tr>
-					');
+					// at this point nothing is human-readable
+					// make material human-readable
+					displayEl = $.extend({}, arrayEl); // deepcopy
+					displayEl.material = materials[arrayEl.material];
+					displayEl.priority = priorities[arrayEl.priority];
+					displayEl.esttime = arrayEl.esttime + (arrayEl.esttime == 1 ? ' minute' : ' minutes');
+
+					// add to full list of cuts
+					allCuts = allCuts.concat(displayEl);
 				});
 			});
+
+
+
+
+			$('.cutting-table-template').render(allCuts);
 			populateActions();
 		}
-		oldJsonData = jsonData;
 	};
 
 	// when websockets error

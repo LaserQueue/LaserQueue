@@ -3,31 +3,35 @@
 
 // logs text to devlog on page
 function logText(text) {
-	var currentTime = new Date();
-	var currentHours = currentTime.getHours();
-	var currentMinutes = currentTime.getMinutes();
-	var currentSeconds = currentTime.getSeconds();
-	var currentMillis = currentTime.getMilliseconds();
+	if(devLog) {
+		var currentTime = new Date();
+		var currentHours = currentTime.getHours();
+		var currentMinutes = currentTime.getMinutes();
+		var currentSeconds = currentTime.getSeconds();
+		var currentMillis = currentTime.getMilliseconds();
 
-	var hoursZero = (currentHours < 10 ? '0' : '');
-	var minutesZero = (currentMinutes < 10 ? '0' : '');
-	var secondsZero = (currentSeconds < 10 ? '0' : '');
-	var millisZero = (currentMillis < 10 ? '00' : currentMillis < 100 ? '0' : '');
-	$(".log-pre").prepend("<span class='log-time'> [" + hoursZero + currentHours + ":" + minutesZero + currentMinutes + ":" + secondsZero + currentSeconds + "." + millisZero + currentMillis + "]:</span> " + text + "\n");
+		var hoursZero = (currentHours < 10 ? '0' : '');
+		var minutesZero = (currentMinutes < 10 ? '0' : '');
+		var secondsZero = (currentSeconds < 10 ? '0' : '');
+		var millisZero = (currentMillis < 10 ? '00' : currentMillis < 100 ? '0' : '');
+		$(".log-pre").prepend("<span class='log-time'> [" + hoursZero + currentHours + ":" + minutesZero + currentMinutes + ":" + secondsZero + currentSeconds + "." + millisZero + currentMillis + "]:</span> " + text + "\n");
+	}
 }
 
-// populates actions with buttons
+// repopulate action button index
 function populateActions() {
-	$(".cutting-table tr:not(.table-first-row) td:nth-child(1)").each(function(index, el) {
-		$(el).html('
-			<i data-index="' + index + '" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="Cancel this job"></i>
-			<i data-index="' + index + '" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="Move job down"></i>
-		');
+	$(".cutting-table-template tr td:nth-child(1)").each(function(index, el) {
+		$(el).children('i').each(function(iIndex, iElement) {
+			$(iElement).attr('data-index', index);
+			$(iElement).unbind('click');
+		});
 	});
+
+	// reinitialize bootstrap tooltips
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	// handler to remove a job
-	$(".remove-job").mouseup(function() {
+	$(".remove-job").click(function() {
 		logText("removing item " + $(this).attr("data-index"));
 		socket.send(JSON.stringify({
 			"action": "sremove",
@@ -36,7 +40,7 @@ function populateActions() {
 	});
 
 	// handler to lower a job
-	$(".lower-priority").mouseup(function() {
+	$(".lower-priority").click(function() {
 		logText("passing item " + $(this).attr("data-index"));
 		socket.send(JSON.stringify({
 			"action": "spass",

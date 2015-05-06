@@ -1,10 +1,13 @@
 // gets the config file and parses values
 
-
-var host, socket, materials, priorities, refreshRate, reconnectRate;
+// declare almost all globals here
+var getConfigFile, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate;
+var allCuts = [];
+var displayEl = {}
+var devLog = true;
 
 // fetches config file from server
-var getConfigFile = $.getJSON('/config.json', function() {
+getConfigFile = $.getJSON('/config.json', function() {
 	// set host from host and port
 	host = "ws://" + getConfigFile.responseJSON["host"] + ":" + getConfigFile.responseJSON["port"];
 
@@ -19,6 +22,3 @@ var getConfigFile = $.getJSON('/config.json', function() {
 	// log entire config file
 	logText("Config file follows:" + JSON.stringify(getConfigFile.responseJSON, null, 2));
 });
-
-// pull table's first row out for insertion later
-var tableFirstRow = $(".cutting-table").html();

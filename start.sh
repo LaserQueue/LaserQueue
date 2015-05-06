@@ -1,9 +1,10 @@
 #!/bin/bash
+cd $(/bin/pwd -P)
 if [[ $EUID -ne 0 ]]; then
-	echo 'start.sh: Permission denied'
+	echo 'attempting to elevate permissions'
+	sudo -k ./start.sh $*
 	exit 1
 fi
-cd $(/bin/pwd -P)
 python3 start.py $*
 pkill python3
 pkill Python
