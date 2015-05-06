@@ -157,7 +157,7 @@ class Queue:
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
-					i.remove(target)
+					i.remove(j)
 	def upass(self, u):
 		masterqueue = _concatlist(self.queue)
 		for i in self.queue:
@@ -190,7 +190,7 @@ class Queue:
 		target["priority"] = lpri-np
 		self.queue[lpri-np].insert(ni, target)
 
-	def sincrement(self, u):
+	def uincrement(self, u):
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
@@ -212,7 +212,7 @@ class Queue:
 		item["priority"] = lpri-priority
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
 
-	def sdecrement(self, u):
+	def udecrement(self, u):
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
