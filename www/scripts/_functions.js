@@ -20,29 +20,25 @@ function logText(text) {
 
 // repopulate action button index
 function populateActions() {
-	window.console.trace();
-	$(".cutting-table tr:not(.table-first-row) td:nth-child(1)").each(function(index, el) {
-		$(el).children('i').prop('data-index', index);
-	});
 
 	// reinitialize bootstrap tooltips
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	// handler to remove a job
 	$(".remove-job").mouseup(function() {
-		logText("removing item " + $(this).attr("data-index"));
+		logText("removing item " + $(this).parent().index());
 		socket.send(JSON.stringify({
 			"action": "sremove",
-			"args": [+$(this).attr("data-index")]
+			"args": [+$(this).parent().index()]
 		}));
 	});
 
 	// handler to lower a job
 	$(".lower-priority").mouseup(function() {
-		logText("passing item " + $(this).attr("data-index"));
+		logText("passing item " + $(this).parent().index());
 		socket.send(JSON.stringify({
 			"action": "spass",
-			"args": [+$(this).attr("data-index")]
+			"args": [+$(this).parent().index()]
 		}));
 	});
 }
