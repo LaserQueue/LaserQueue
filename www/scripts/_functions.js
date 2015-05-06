@@ -20,6 +20,7 @@ function logText(text) {
 
 // repopulate action button index
 function populateActions() {
+	window.console.trace();
 	$(".cutting-table tr:not(.table-first-row) td:nth-child(1)").each(function(index, el) {
 		$(el).children('i').prop('data-index', index);
 	});
