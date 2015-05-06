@@ -25,12 +25,13 @@ function socketSetup() { // god help me
 	// when websockets message
 	socket.onmessage = function(msg) {
 		// print to log and consoles
-		jsonData = JSON.parse($.parseJSON(msg.data));
+		jsonData = JSON.parse(JSON.parse(msg.data));
 
 		// if data is new
 		if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
 			// log the data
-			logText("new JSON received: " + JSON.stringify(jsonData));
+			logText('old JSON: ' + JSON.stringify(oldJsonData));
+			logText('new JSON received: ' + JSON.stringify(jsonData));
 
 			// reinitialize full list of cuts
 			allCuts = [];
@@ -48,22 +49,7 @@ function socketSetup() { // god help me
 				});
 			});
 
-
-
 			$('.cutting-table-template').render(allCuts);
-					//if(arrayEl["coachmodified"]) { modifiedTag = ' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="Coach-modified"></span>'; }
-				// 	$('table.cutting-table tbody').append('
-				// 		<tr>
-				// 			<td class="col-md-1"></td>
-				// 			<td class="col-md-2">' + arrayEl["name"] + '</td>
-				// 			<td class="col-md-2">' + materials[arrayEl["material"]] + '</td>
-				// 			<td class="col-md-1">' + arrayEl["esttime"] + ' minutes</td>
-				// 			<td class="col-md-1">' + priorities[index] + modifiedTag + '</td>
-				// 		</tr>
-				// 	');
-			// 	};
-			// });
-
 			populateActions();
 		}
 		oldJsonData = jsonData;
