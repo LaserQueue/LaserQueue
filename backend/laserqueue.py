@@ -1,5 +1,7 @@
 import json
+import uuid
 import os.path
+from copy import deepcopy
 
 config = json.load(open(os.path.join("..", "www", "config.json")))
 
@@ -39,7 +41,8 @@ class Queue:
 				"name": name.title().strip().rstrip(),
 				"material": material,
 				"esttime": esttime,
-				"coachmodified": False
+				"coachmodified": False,
+				"uuid": uuid.uuid1()
 			})
 
 	def passoff(self, priority, index=0):
@@ -84,7 +87,7 @@ class Queue:
 			if end in i:
 				tindex = i.index(end)
 				tpri = lpri-ii
-		target["priority"] = lpri-priority
+		target["priority"] = lpri-tpri
 		self.queue[lpri-tpri].insert(tindex+1, target)
 
 	def smove(self, oi, ni, np):
@@ -94,7 +97,7 @@ class Queue:
 			if target in i:
 				i.remove(target)
 		target["coachmodified"] = True
-		target["priority"] = lpri-priority
+		target["priority"] = lpri-np
 		self.queue[lpri-np].insert(ni, target)
 
 	def sincrement(self, index):
@@ -144,4 +147,89 @@ class Queue:
 		item["coachmodified"] = True
 		item["priority"] = lpri-priority
 		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
+	
+	# uuid update
 
+
+
+
+	def uremove(self, u):
+		for i in self.queue:
+			for j in i:
+				if j["uuid"] == u:
+					i.remove(target)
+	def upass(self, u):
+		masterqueue = _concatlist(self.queue)
+		for i in self.queue:
+			for j in i:
+				if j["uuid"] == u:
+					oindex = masterqueue.index(j)
+
+		if oindex == len(masterqueue)-1: return
+		target = masterqueue[oindex]
+		for ii in range(len(self.queue)):
+			i = self.queue[ii]
+			if target in i:
+				i.remove(target)
+		end = masterqueue[oindex+1]
+		for ii in range(len(self.queue)):
+			i = self.queue[ii]
+			if end in i:
+				tindex = i.index(end)
+				tpri = lpri-ii
+		target["priority"] = lpri-tpri
+		self.queue[lpri-tpri].insert(tindex+1, target)
+
+	def umove(self, u, ni, np):
+		for i in self.queue:
+			for j in i:
+				if j["uuid"] == u:
+					target = deepcopy(j)
+					i.remove(j)
+		target["coachmodified"] = True
+		target["priority"] = lpri-np
+		self.queue[lpri-np].insert(ni, target)
+
+	def sincrement(self, u):
+		for i in self.queue:
+			for j in i:
+				if j["uuid"] == u:
+					index = j.index(i)
+					priority = self.queue.index(i)
+
+		if priority == lpri and not index:
+			return
+		item = self.queue[lpri-priority].pop(index)
+		index -= 1
+		if index < 0:
+			priority += 1
+			if priority > lpri:
+				index = 0
+				priority = lpri
+			else:
+				index = len(self.queue[max(lpri-priority, 0)])
+		item["coachmodified"] = True
+		item["priority"] = lpri-priority
+		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
+
+	def sdecrement(self, u):
+		for i in self.queue:
+			for j in i:
+				if j["uuid"] == u:
+					index = j.index(i)
+					priority = self.queue.index(i)
+
+		if not priority and len(self.queue[lpri-priority]) < index:
+			return
+		item = self.queue[lpri-priority].pop(index)
+		index += 1
+		if len(self.queue[lpri-priority]) < index:
+			priority -= 1
+			if priority < 0:
+				index = len(self.queue[min(lpri-priority, lpri)])
+				priority = 0
+			else:
+				index = 0
+		item["coachmodified"] = True
+		item["priority"] = lpri-priority
+		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
