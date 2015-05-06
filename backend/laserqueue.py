@@ -50,11 +50,13 @@ class Queue:
 		if len(self.queue[lpri-priority]) < index:
 			priority -= 1
 			index = 0
+		item["priority"] = lpri-priority
 		self.queue[lpri-priority].insert(max(index, 0),item)
 		
 	def move(self, in1, in2, pr1, pr2):
 		item = self.queue[lpri-pr1].pop(in1)
 		item["coachmodified"] = True
+		item["priority"] = lpri-priority
 		if in2 >= 0:
 			self.queue[lpri-pr2].insert(in2, item)
 		else:
@@ -82,6 +84,7 @@ class Queue:
 			if end in i:
 				tindex = i.index(end)
 				tpri = lpri-ii
+		target["priority"] = lpri-priority
 		self.queue[lpri-tpri].insert(tindex+1, target)
 
 	def smove(self, oi, ni, np):
@@ -91,6 +94,7 @@ class Queue:
 			if target in i:
 				i.remove(target)
 		target["coachmodified"] = True
+		target["priority"] = lpri-priority
 		self.queue[lpri-np].insert(ni, target)
 
 	def sincrement(self, index):
@@ -114,6 +118,7 @@ class Queue:
 			else:
 				index = len(self.queue[max(lpri-priority, 0)])
 		item["coachmodified"] = True
+		item["priority"] = lpri-priority
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
 
 	def sdecrement(self, index):
@@ -137,5 +142,6 @@ class Queue:
 			else:
 				index = 0
 		item["coachmodified"] = True
+		item["priority"] = lpri-priority
 		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
 
