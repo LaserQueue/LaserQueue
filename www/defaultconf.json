@@ -16,8 +16,8 @@
 		"Lunch/After NuVu",
 		"Low", 
 		"Normal",
-		"High",
 		"Important",
+		"Urgent",
 		"Absolutely Required"
 	],
 	"materials": {
