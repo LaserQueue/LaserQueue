@@ -20,25 +20,31 @@ function logText(text) {
 
 // repopulate action button index
 function populateActions() {
+	$(".cutting-table-template tr td:nth-child(1)").each(function(index, el) {
+		$(el).children('i').each(function(iIndex, iElement) {
+			$(iElement).attr('data-index', index);
+			$(iElement).unbind('click');
+		});
+	});
 
 	// reinitialize bootstrap tooltips
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	// handler to remove a job
-	$(".remove-job").mouseup(function() {
-		logText("removing item " + $(this).parent().index());
+	$(".remove-job").click(function() {
+		logText("removing item " + $(this).attr("data-index"));
 		socket.send(JSON.stringify({
 			"action": "sremove",
-			"args": [+$(this).parent().index()]
+			"args": [+$(this).attr("data-index")]
 		}));
 	});
 
 	// handler to lower a job
-	$(".lower-priority").mouseup(function() {
-		logText("passing item " + $(this).parent().index());
+	$(".lower-priority").click(function() {
+		logText("passing item " + $(this).attr("data-index"));
 		socket.send(JSON.stringify({
 			"action": "spass",
-			"args": [+$(this).parent().index()]
+			"args": [+$(this).attr("data-index")]
 		}));
 	});
 }

@@ -61,9 +61,7 @@ function socketSetup() { // god help me
 
 
 			$('.cutting-table-template').render(allCuts);
-			setTimeout(function() {
-				populateActions();
-			}, 500);
+			populateActions();
 		}
 	};
 
