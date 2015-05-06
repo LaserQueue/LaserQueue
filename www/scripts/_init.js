@@ -15,8 +15,5 @@ setInterval(function() {
 var oldJsonData = "uninitialized";
 var jsonData;
 
-// initialize action row
-populateActions();
-
 // initialize the modal by changing the title
 $('.notify-modal-title').html("Notification");
