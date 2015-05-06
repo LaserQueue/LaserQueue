@@ -28,7 +28,10 @@ function socketSetup() { // god help me
 		jsonData = JSON.parse(JSON.parse(msg.data));
 
 		// if data is new
-		if(JSON.stringify(jsonData) != JSON.stringify(oldJsonData)) {
+		if(JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
+			
+			oldJsonData = $.extend({}, jsonData);
+
 			// log the data
 			logText('old JSON: ' + JSON.stringify(oldJsonData));
 			logText('new JSON received: ' + JSON.stringify(jsonData));
@@ -36,23 +39,31 @@ function socketSetup() { // god help me
 			// reinitialize full list of cuts
 			allCuts = [];
 
+
+
+
 			// for each priority in list
 			$(jsonData["queue"]).each(function(index, el) {
 				// for each cut in priority
 				$(el).each(function(arrayIndex, arrayEl) {
 					// at this point nothing is human-readable
 					// make material human-readable
-					arrayEl.material = materials[arrayEl.material];
+					displayEl = $.extend({}, arrayEl); // deepcopy
+					displayEl.material = materials[arrayEl.material];
+					displayEl.priority = priorities[arrayEl.priority];
+					displayEl.esttime = arrayEl.esttime + (arrayEl.esttime == 1 ? ' minute' : ' minutes');
 
 					// add to full list of cuts
-					allCuts = allCuts.concat(arrayEl);
+					allCuts = allCuts.concat(displayEl);
 				});
 			});
+
+
+
 
 			$('.cutting-table-template').render(allCuts);
 			populateActions();
 		}
-		oldJsonData = jsonData;
 	};
 
 	// when websockets error
