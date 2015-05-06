@@ -33,7 +33,6 @@ function socketSetup() { // god help me
 			oldJsonData = $.extend({}, jsonData);
 
 			// log the data
-			logText('old JSON: ' + JSON.stringify(oldJsonData));
 			logText('new JSON received: ' + JSON.stringify(jsonData));
 
 			// reinitialize full list of cuts
@@ -62,7 +61,9 @@ function socketSetup() { // god help me
 
 
 			$('.cutting-table-template').render(allCuts);
-			populateActions();
+			setTimeout(function() {
+				populateActions();
+			}, 500);
 		}
 	};
 
