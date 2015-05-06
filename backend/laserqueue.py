@@ -42,7 +42,7 @@ class Queue:
 				"material": material,
 				"esttime": esttime,
 				"coachmodified": False,
-				"uuid": uuid.uuid1()
+				"uuid": str(uuid.uuid1())
 			})
 
 	def passoff(self, priority, index=0):
