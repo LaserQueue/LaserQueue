@@ -38,4 +38,3 @@ if __name__ == "__main__":
 	os.system("cd "+selfpath+"; ./startbackend.sh " + " ".join(sys.argv[1:]) + " &")
 	os.chdir(os.path.join(os.getcwd(), "www"))
 	http.server.test(HandlerClass=SimpleHTTPRequestHandler, port=args.port)
-	os.system("pkill Python; pkill python3")
