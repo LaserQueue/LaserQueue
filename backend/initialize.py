@@ -36,9 +36,11 @@ def getpacks():
 	if args.skip: return
 	pl = [str(i).split(" ")[0] for i in pip.get_installed_distributions()]
 	packages = (PACKAGES_WIN if os.name == "nt" else PACKAGES_UX)
+	installed = False
 	for pack in packages:
 		if pack in pl:
 			continue
+		installed = True
 		confirm = ("y" if args.all else "")
 		while confirm not in ["y", "n"]:
 			confirm = input("Install dependency "+pack+"? (y/n) ").lower().strip().rstrip()
@@ -53,6 +55,12 @@ def getpacks():
 				print("WARNING: Program may not run without this library.")
 				continue
 			os.system("sudo pip3 install "+pack)
+	if installed:
+		for pack in packages:
+			if pack not in pl:
+				print("Failed to install all dependencies.")
+	if installed:
+		print("Sucessfully installed all dependencies!")
 
 
 
@@ -62,7 +70,7 @@ def main():
 	getpacks()
 	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json")):
 		copyconf()
-	print("initialization was successful")
+	print("Initialization complete.")
 
 def getIps():
 	from netifaces import interfaces, ifaddresses, AF_INET

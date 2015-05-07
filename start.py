@@ -30,7 +30,7 @@ if args.shh:
 	quit()
 
 if os.name != "nt" and os.geteuid() and args.port == 80:
-	print("attempting to elevate permissions")
+	print("Root required, attempting to elevate permissions.")
 	os.system("cd "+selfpath+"; sudo -k ./start.sh "+" ".join(sys.argv[1:]))
 	quit()
 

@@ -58,6 +58,7 @@ def hello(websocket, path):
 			
 		
 def main():
+	print("Serving WebSockets on "+("localhost" if args.local else config['host'])+" port "+config["port"]+" ...")
 	temppath = os.path.join(os.path.sep, "tmp")
 	open(os.path.join(temppath, "topage.json"), "w").close() # initialize file
 	open(os.path.join(temppath, "toscript.json"), "w").close() # initialize file
