@@ -3,7 +3,7 @@ import http.server
 from http.server import SimpleHTTPRequestHandler
 
 import argparse
-parser = argparse.ArgumentParser(add_help=False)
+parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
 	action="store_const",const=True,default=False)
 parser.add_argument("-p", "--port", help="Port to host from", dest="port",
@@ -11,8 +11,6 @@ parser.add_argument("-p", "--port", help="Port to host from", dest="port",
 parser.add_argument("-q", "--quiet", help="makes the script not give output", dest="shh",
 	action="store_const",const=True,default=False)
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
-	action="store_const",const=True,default=False)
-parser.add_argument("-h", "--help", help="Show help", dest="help",
 	action="store_const",const=True,default=False)
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
 	action="store_const",const=True,default=False)
