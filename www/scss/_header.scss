@@ -2,6 +2,10 @@
 	max-height: 80px;
 	max-width: 80vw;
 	margin: 3%;
+	transition: transform 0.1s ease-in-out;
+	&:active {
+		transform: scale(0.9);
+	}
 	@media (max-width: 690px) {
 		display: block;
 		width: 240px !important;
