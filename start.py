@@ -10,7 +10,7 @@ parser.add_argument("-h", "--help", help="Show this help message and exit", dest
 	action="store_const",const=True,default=False)
 parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
 	action="store_const",const=True,default=False)
-parser.add_argument("-q", "--quiet", help="makes the script not give output", dest="shh",
+parser.add_argument("-q", "--quiet", help="Makes the script not give output", dest="shh",
 	action="store_const",const=True,default=False)
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
 	action="store_const",const=True,default=False)
