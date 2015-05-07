@@ -22,7 +22,7 @@ function logText(text) {
 function populateActions() {
 	$(".cutting-table-template tr td:nth-child(1)").each(function(index, el) {
 		$(el).children('i').each(function(iIndex, iElement) {
-			$(iElement).attr('data-index', index);
+			$(iElement).attr('data-uuid', allCuts[index].uuid);
 			$(iElement).unbind('click');
 		});
 	});
@@ -32,19 +32,19 @@ function populateActions() {
 	
 	// handler to remove a job
 	$(".remove-job").click(function() {
-		logText("removing item " + $(this).attr("data-index"));
+		logText("removing item " + $(this).attr("data-uuid"));
 		socket.send(JSON.stringify({
-			"action": "sremove",
-			"args": [+$(this).attr("data-index")]
+			"action": "uremove",
+			"args": [$(this).attr("data-uuid")]
 		}));
 	});
 
 	// handler to lower a job
 	$(".lower-priority").click(function() {
-		logText("passing item " + $(this).attr("data-index"));
+		logText("passing item " + $(this).attr("data-uuid"));
 		socket.send(JSON.stringify({
-			"action": "spass",
-			"args": [+$(this).attr("data-index")]
+			"action": "upass",
+			"args": [$(this).attr("data-uuid")]
 		}));
 	});
 }
