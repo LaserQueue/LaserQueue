@@ -13,12 +13,12 @@
 		60
 	],
 	"priorities": [
-		"Lunch/After NuVu",
-		"Low", 
-		"Normal",
-		"Important",
+		"Absolutely Required",
 		"Urgent",
-		"Absolutely Required"
+		"Important",
+		"Normal",
+		"Low", 
+		"Lunch/After NuVu"
 	],
 	"materials": {
 		"w": "Thin Wood",
@@ -30,7 +30,7 @@
 		"o": "Other"
 	},
 	"default_material": "w",
-	"default_priority": 2,
+	"default_priority": 3,
 	"name_input": "Enter name here",
 	"time_input": "Estimated time (min)",
 	"modified_hover": "Modified",
