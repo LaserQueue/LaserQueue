@@ -29,6 +29,11 @@ if args.shh:
 	os.system("cd "+selfpath+"; python3 start.py {0} >/dev/null".format(newargs))
 	quit()
 
+if os.name != "nt" and os.geteuid() and args.port == 80:
+	print("attempting to elevate permissions")
+	os.system("cd "+selfpath+"; sudo -k ./start.sh "+" ".join(sys.argv[1:]))
+	quit()
+
 if __name__ == "__main__":
 	os.system("cd "+selfpath+"; cd backend; python3 initialize.py "+" ".join(sys.argv[1:]))
 	os.system("cd "+selfpath+"; ./startbackend.sh " + " ".join(sys.argv[1:]) + " &")
