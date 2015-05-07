@@ -5,7 +5,6 @@ window.console.log("This silly browser log is generally not used. Click the cons
 setInterval(function() {
 	if(typeof reconnectRate != "undefined" && (typeof socket == "undefined" || socket.readyState == socket.CLOSED)) {
 		// initialize websockets if closed
-		window.console.trace();
 		logText("LaserCutter software is up. Attempting connection to WebSockets host", host);
 		socketSetup();
 	}
