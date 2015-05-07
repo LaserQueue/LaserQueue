@@ -20,6 +20,10 @@ var devLog = true;
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
+
+	// log entire config file
+	logText("Config file follows:" + JSON.stringify(getConfigFile.responseJSON, null, 2));
+
 	// set host from host and port
 	host = "ws://" + getConfigFile.responseJSON["host"] + ":" + getConfigFile.responseJSON["port"];
 
@@ -31,6 +35,4 @@ getConfigFile = $.getJSON('/config.json', function() {
 	refreshRate = getConfigFile.responseJSON["refreshRate"];
 	reconnectRate = getConfigFile.responseJSON["reconnectRate"];
 
-	// log entire config file
-	logText("Config file follows:" + JSON.stringify(getConfigFile.responseJSON, null, 2));
 });
