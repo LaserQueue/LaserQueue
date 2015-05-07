@@ -1,7 +1,7 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate;
+var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate;
 var allCuts = [];
 var displayEl = {}
 var renderDirectives = {
@@ -18,6 +18,8 @@ var renderDirectives = {
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
+
+	config = getConfigFile.responseJSON;
 
 	// hide and disable log if not enabled
 	devLog = getConfigFile.responseJSON["dev_log"];
