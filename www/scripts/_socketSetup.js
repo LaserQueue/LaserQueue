@@ -51,7 +51,6 @@ function socketSetup() { // god help me
 					displayEl.material = materials[arrayEl.material];
 					displayEl.priority = priorities[arrayEl.priority];
 					displayEl.esttime = arrayEl.esttime + (arrayEl.esttime == 1 ? ' minute' : ' minutes');
-
 					// add to full list of cuts
 					allCuts = allCuts.concat(displayEl);
 				});
@@ -60,7 +59,7 @@ function socketSetup() { // god help me
 
 
 
-			$('.cutting-table-template').render(allCuts);
+			$('.cutting-table-template').render(allCuts, renderDirectives);
 			populateActions();
 		}
 	};

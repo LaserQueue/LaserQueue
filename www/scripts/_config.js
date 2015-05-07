@@ -4,6 +4,18 @@
 var getConfigFile, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate;
 var allCuts = [];
 var displayEl = {}
+var renderDirectives = {
+	priority: {
+		html: function(params) {
+			return this.priority + (
+				this.coachmodified ? 
+					' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + getConfigFile.responseJSON['modified_hover'] + '"></span>'
+					: ''
+			);
+		},
+	}
+};
+
 var devLog = true;
 
 // fetches config file from server
