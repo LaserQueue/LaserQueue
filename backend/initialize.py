@@ -19,6 +19,15 @@ parser.add_argument("--install-all", help="Don't ask for confirmation on install
 	action="store_const",const=True,default=False)
 args = parser.parse_args()
 
+def qsort(l):
+		if l == []: 
+				return []
+		else:
+				pivot = l[0]
+				lesser = qsort([x for x in l[1:] if x < pivot])
+				greater = qsort([x for x in l[1:] if x >= pivot])
+				return lesser + [pivot] + greater
+
 def copyconf():
 	data = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	data["host"] = getIps()[0]
@@ -64,9 +73,25 @@ def getpacks():
 	if installed:
 		print("Sucessfully installed all dependencies!")
 
+def _comparel(list1, list2):
+	list1diff, list2diff = False, False
+	for i in list1:
+		if i not in list2:
+			list1diff = True; break
+	for i in list2:
+		if i not in list1:
+			list2diff = True; break
+	if list1diff and list2diff: return "ne"
+	elif list1diff:             return "l1"
+	elif list2diff:             return "l2"
+	else:                       return "eq"
 
-
-
+def _fillblanks(odict, adict):
+	keys = list(adict.keys())
+	for i in keys:
+		if i not in odict:
+			odict[i] = adict[i]
+	return odict
 
 def main():
 	getpacks()
@@ -79,13 +104,36 @@ def main():
 	else:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		if data["host"] == "localhost":
+			print("Last time you ran this program, it was in local mode.")
 			confirm = ""
 			while confirm not in ["y", "n"]:
-				print("Last time you ran this program, it was in local mode.")
 				confirm = input("Do you want to regenerate the host? (y/n) ").lower().strip().rstrip()
 			if confirm == "y":
 				data["host"] = getIps()[0]
 			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
+	data = json.load(open(os.path.join("..", "www", "config.json")))
+	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
+	keys = list(data.keys())
+	dkeys = list(defaultdata.keys())
+	equiv = _comparel(keys, dkeys)
+	print(equiv) 
+	if equiv == "ne" or equiv == "l2":
+		print("Your config isn't storing the data expected.")
+		print("Expected: "+", ".join(qsort(dkeys))+".")
+		print("Found:    "+", ".join(qsort(keys))+".")
+		confirm = ""
+		while confirm not in ["y", "n"]:
+			confirm = input("Do you want to regenerate the config? (y/n) ").lower().strip().rstrip()
+		if confirm == "y":
+			copyconf()
+		else:
+			print("Instead, you can add all missing tags to defaultconf.")
+			confirm = ""
+			while confirm not in ["y", "n"]:
+				confirm = input("Do you want to add all missing tags? (y/n) ").lower().strip().rstrip()
+			if confirm == "y":
+				data = _fillblanks(data, defaultdata)
+				json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
 	print("Initialization complete.")
 
 def getIps():
