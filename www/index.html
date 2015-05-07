@@ -48,21 +48,10 @@
 						<input type="text" class="form-control cut-human-name" placeholder="What is it they call you?" style="font-size:0.95em" autofocus>
 						<input type="text" class="form-control cut-time-estimate" placeholder="Estimated time (min)">
 						<select name="material" id="cut-material" class="cut-material form-control">
-							<option value="w">Thin Wood</option>
-							<option value="tw">Thick Wood</option>
-							<option value="c">Cardboard</option>
-							<option value="a">Acrylic</option>
-							<option value="p">Paper</option>
-							<option value="f">Fabric, Felt, etc.</option>
-							<option value="o">Other</option>
+							
 						</select>
 						<select name="priority" id="priority-dropdown" class="priority-dropdown form-control">
-							<option value="0">Lunch / After NuVu</option>
-							<option value="1">Low</option>
-							<option value="2" selected>Normal</option>
-							<option value="3">Important</option>
-							<option value="4">Urgent</option>
-							<option value="5">Absolutely Required</option>
+							
 						</select>
 						<button type="submit" class="btn btn-default btn-pink btn-submit">Submit</button>
 					</div>
@@ -105,8 +94,10 @@
 		<pre class="log-pre"><code class="language-bash log">Log starts here</code></pre><br>
 		
 	</div>
-	<script type="text/javascript" src="/scripts/scripts.min.js"></script>
+	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="/bower_components/transparency/dist/transparency.min.js"></script>
+	<script type="text/javascript" src="/scripts/scripts.min.js"></script>
 	<script src="/scripts/prism.js"></script>
 	<script>document.addEventListener("touchstart", function(){}, true);</script>
 </body>

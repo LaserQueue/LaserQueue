@@ -1,7 +1,7 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate;
+var getConfigFile, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate;
 var allCuts = [];
 var displayEl = {}
 var renderDirectives = {
@@ -36,5 +36,19 @@ getConfigFile = $.getJSON('/config.json', function() {
 	// set refreshRate and reconnectRate
 	refreshRate = getConfigFile.responseJSON["refreshRate"];
 	reconnectRate = getConfigFile.responseJSON["reconnectRate"];
+
+	// render the materials dropdown
+	for(var m in materials) {
+		$('#cut-material').append('
+			<option value="' + m + '">' + materials[m] + '</option>
+		');
+	}
+
+	// render the priorities dropdown
+	for(var p in priorities) {
+		$('#priority-dropdown').append('
+			<option value="' + p + '">' + priorities[p] + '</option>
+		');
+	}
 
 });
