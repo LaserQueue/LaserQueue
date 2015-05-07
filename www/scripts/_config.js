@@ -33,7 +33,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 	// set materials and priorities in the same way
 	materials = getConfigFile.responseJSON["materials"];
-	priorities = getConfigFile.responseJSON["priorities"].reverse();
+	priorities = getConfigFile.responseJSON["priorities"];
 
 	// set refreshRate and reconnectRate
 	refreshRate = getConfigFile.responseJSON["refreshRate"];
