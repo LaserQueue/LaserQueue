@@ -2,6 +2,7 @@
 	max-height: 80px;
 	max-width: 80vw;
 	margin: 3%;
+	cursor: pointer;
 	transition: transform 0.08s ease-in-out;
 	&:hover { transform: scale(1.1); }
 	&:active { transform: scale(0.9); }
