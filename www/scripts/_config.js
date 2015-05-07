@@ -42,14 +42,14 @@ getConfigFile = $.getJSON('/config.json', function() {
 	// render the materials dropdown
 	for(var m in materials) {
 		$('#cut-material').append('
-			<option value="' + m + '">' + materials[m] + '</option>
+			<option ' + (m === config.default_material ? 'selected' : '' ) + ' value="' + m + '">' + materials[m] + '</option>
 		');
 	}
 
 	// render the priorities dropdown
 	for(var p in priorities) {
 		$('#priority-dropdown').append('
-			<option value="' + p + '">' + priorities[p] + '</option>
+			<option ' + (p == config.default_priority ? 'selected' : '') + ' value="' + p + '">' + priorities[p] + '</option>
 		');
 	}
 
