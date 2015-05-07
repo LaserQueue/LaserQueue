@@ -3,8 +3,8 @@
 	max-width: 80vw;
 	margin: 3%;
 	transition: transform 0.08s ease-in-out;
-	&:hover { transform: rotateY(360deg);transition-duration: 0.5s; }
-	&:active { transform: scale(0.85); }
+	&:hover { transform: scale(1.1); }
+	&:active { transform: scale(0.9); }
 	@media (max-width: 690px) {
 		display: block;
 		width: 240px !important;
