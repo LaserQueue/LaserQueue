@@ -70,6 +70,10 @@ def main():
 	getpacks()
 	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json")):
 		copyconf()
+	if args.local:
+		data = json.load(open(os.path.join("..", "www", "config.json")))
+		data["host"] = "localhost"
+		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
 	print("Initialization complete.")
 
 def getIps():
