@@ -16,10 +16,12 @@ var renderDirectives = {
 	}
 };
 
-var devLog = true;
-
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
+
+	// hide and disable log if not enabled
+	devLog = getConfigFile.responseJSON["dev_log"];
+	if(devLog != true) { $('[for=log-checkbox]').slideUp(); }
 
 	// log entire config file
 	logText("Config file follows:" + JSON.stringify(getConfigFile.responseJSON, null, 2));
