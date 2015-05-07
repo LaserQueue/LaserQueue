@@ -33,5 +33,5 @@
 	"default_priority": 2,
 	"name_input": "Enter name here",
 	"time_input": "Estimated time (min)",
-	"modified_hover": "Coach-modified"
+	"modified_hover": "Modified"
 }
