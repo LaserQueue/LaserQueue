@@ -33,5 +33,6 @@
 	"default_priority": 2,
 	"name_input": "Enter name here",
 	"time_input": "Estimated time (min)",
-	"modified_hover": "Modified"
+	"modified_hover": "Modified",
+	"dev_log":true
 }
