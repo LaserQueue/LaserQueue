@@ -1,23 +1,14 @@
 @keyframes fadeIn {
     0% {
-        opacity: 0
+        opacity: 0;
+        transform: translateY();
     }
     45% {
-        opacity: 0
+        opacity: 0;
+        transform: translateY();
     }
     to {
-        opacity: 1
-    }
-}
-
-@keyframes fadeInSlower {
-    0% {
-        opacity: 0
-    }
-    65% {
-        opacity: 0
-    }
-    to {
-        opacity: 1
+        opacity: 1;
+        transform: translateY();
     }
 }
