@@ -116,7 +116,6 @@ def main():
 	keys = list(data.keys())
 	dkeys = list(defaultdata.keys())
 	equiv = _comparel(keys, dkeys)
-	print(equiv) 
 	if equiv == "ne" or equiv == "l2":
 		print("Your config isn't storing the data expected.")
 		print("Expected: "+", ".join(qsort(dkeys))+".")
