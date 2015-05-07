@@ -32,5 +32,6 @@
 	"default_material": "w",
 	"default_priority": 2,
 	"name_input": "Enter name here",
-	"time_input": "Estimated time (min)"
+	"time_input": "Estimated time (min)",
+	"modified_hover": "Coach-modified"
 }
