@@ -76,6 +76,16 @@ def main():
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		data["host"] = "localhost"
 		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
+	else:
+		data = json.load(open(os.path.join("..", "www", "config.json")))
+		if data["host"] == "localhost":
+			confirm = ""
+			while confirm not in ["y", "n"]:
+				print("Last time you ran this program, it was in local mode.")
+				confirm = input("Do you want to regenerate the host? (y/n) ").lower().strip().rstrip()
+			if confirm == "y":
+				data["host"] = getIps()[0]
+			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
 	print("Initialization complete.")
 
 def getIps():
