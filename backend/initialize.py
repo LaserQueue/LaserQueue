@@ -115,11 +115,15 @@ def main():
 	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	keys = list(data.keys())
 	dkeys = list(defaultdata.keys())
-	equiv = _comparel(keys, dkeys)
-	if equiv == "ne" or equiv == "l2":
+	equiv = _comparel(dkeys, keys)
+
+	misskeys = [i for i in dkeys if i not in keys]
+
+	if equiv == "ne" or equiv == "l1":
 		print("Your config isn't storing the data expected.")
 		print("Expected: "+", ".join(qsort(dkeys))+".")
 		print("Found:    "+", ".join(qsort(keys))+".")
+		print("Missing:  "+", ".join(qsort(misskeys))+".")
 		confirm = ""
 		while confirm not in ["y", "n"]:
 			confirm = input("Do you want to regenerate the config? (y/n) ").lower().strip().rstrip()
