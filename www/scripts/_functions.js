@@ -66,3 +66,7 @@ function resetForm(form) {
 		// later. maybe milestone 0.1.0
 	}
 }
+
+function coachMode() {
+	
+}

@@ -11,3 +11,20 @@
 		transform: translateY(0);
 	}
 }
+
+@keyframes spinny {
+	from {
+		transform: rotateZ(0) rotateY(50deg) rotateX(0) scale(1.5);
+	}
+	to {
+		transform: rotateZ(360deg) rotateY(180deg) rotateX(720deg) scale(0.9);
+	}
+}
+
+html.lol {
+	background: $nuvu-pink;
+	background-image: url('/img/nyancat.gif');
+	body {
+		animation: spinny infinite alternate ease-in-out 3s;
+	}
+}
