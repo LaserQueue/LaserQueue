@@ -81,3 +81,4 @@ sftp-config.json
 ### Program specific ###
 config.json
 cache.json
+password
