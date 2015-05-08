@@ -26,5 +26,6 @@ html.lol {
 	background-image: url('/img/nyancat.gif');
 	body {
 		animation: spinny infinite alternate ease-in-out 3s;
+		filter: saturate(8);
 	}
 }
