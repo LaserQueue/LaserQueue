@@ -97,3 +97,8 @@ auth
 {
 	"action": "auth"
 }
+
+rickroll
+{
+	"action":"rickroll"
+}
