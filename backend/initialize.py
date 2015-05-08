@@ -32,7 +32,7 @@ def qsort(l):
 def copyconf():
 	data = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	data["host"] = getIps()[0]
-	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
+	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
 PACKAGES_UX = [
 	"websockets",
@@ -118,17 +118,17 @@ def main():
 	if args.local:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		data["host"] = "localhost"
-		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
+		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 	else:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
-		if data["host"] == "localhost":
+		if "host" in data and data["host"] == "localhost":
 			print("Last time you ran this program, it was in local mode.")
 			confirm = ""
 			while confirm not in ["y", "n"]:
 				confirm = input("Do you want to regenerate the host? (y/n) ").lower().strip().rstrip()
 			if confirm == "y":
 				data["host"] = getIps()[0]
-			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
+			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 	data = json.load(open(os.path.join("..", "www", "config.json")))
 	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	keys = list(data.keys())
@@ -153,8 +153,10 @@ def main():
 			while confirm not in ["y", "n"]:
 				confirm = input("Do you want to regenerate all missing tags? (y/n) ").lower().strip().rstrip()
 			if confirm == "y":
+				if "host" not in data:
+					data["host"] = getIps()[0]
 				data = _fillblanks(data, defaultdata)
-				json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
+				json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 	print("Initialization complete.")
 
 def getIps():
