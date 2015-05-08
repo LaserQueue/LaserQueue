@@ -59,7 +59,10 @@ def main():
 				try:
 					x = comm.parseData(queue, data)
 					if x:
-						json.dump({"action":"notification", "title":"Error occurred", "content":x}, open(os.path.join(temppath, "topage.json"), "w"))
+						if x == "auth successful":
+							json.dump({"action":"auth"}, open(os.path.join(temppath, "topage.json"), "w"))
+						else:
+							json.dump({"action":"notification", "title":"Error occurred", "content":x}, open(os.path.join(temppath, "topage.json"), "w"))
 						time.sleep(0.2)
 				except: 
 					pass

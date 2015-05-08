@@ -51,7 +51,7 @@ arguments: uuid
 moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
 
 
-auth ### NYI ###
+auth
 arguments: password
 
 the auth action is completely insecure. It's meant for enough authentication that the admins don't need to constantly watch the users. This will be fixed when logins are fully implemented. The password is currently plaintext, but eventually will be hashed. 
@@ -84,7 +84,7 @@ notification ### NYI ###
 	"content": the text displayed in the modal.
 }
 
-auth ### NYI ###
+auth
 {
 	"action": "auth"
 }

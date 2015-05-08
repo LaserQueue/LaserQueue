@@ -1,4 +1,6 @@
-import json
+import json, os
+
+config = json.load(open(os.path.join("..", "www", "")))
 
 def _typelist(l):
 	return [type(i) for i in l]
@@ -152,6 +154,17 @@ def parseData(queue, jdata):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.udecrement(args[0])
+
+	# auth packet	
+	elif jdata["action"] == "auth":
+		if len(args) != 1:
+			return "Expected 1 argument, recieved "+str(len(args))
+		if type(args[0]) != str:
+			return "The password must be a string."
+		if os.path.exists("password") and not config["admin_mode_enabled"]:
+			password = open("password").read().strip().rstrip()
+			if args[0].strip().rstrip() == password:
+				return "auth successful"
 	else:
 		return "Bad action name"
 
