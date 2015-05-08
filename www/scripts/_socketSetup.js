@@ -26,7 +26,9 @@ function socketSetup() { // god help me
 	socket.onmessage = function(msg) {
 
 		// print to log and consoles
-		jsonData = JSON.parse(JSON.parse(msg.data));
+		jsonData = JSON.parse(msg.data);
+		console.log(typeof jsonData.action);
+		logText('Command received: ' + jsonData["action"]);
 
 		// if being told to display table
 		if(jsonData.action == "display") {
@@ -66,9 +68,7 @@ function socketSetup() { // god help me
 
 
 			}
-		
 		} else if(jsonData.action == 'rickroll') {
-			alert('ayy lmao');
 			rickroll();
 		}
 	};
