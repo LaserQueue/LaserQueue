@@ -23,7 +23,7 @@ function populateActions() {
 	$(".cutting-table-template tr td:nth-child(1)").each(function(index, el) {
 		$(el).children('i').each(function(iIndex, iElement) {
 			$(iElement).attr('data-uuid', allCuts[index].uuid);
-			$(iElement).unbind('click');
+			$(iElement).unbind('mousedown');
 		});
 	});
 
@@ -31,7 +31,7 @@ function populateActions() {
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	// handler to remove a job
-	$(".remove-job").click(function() {
+	$(".remove-job").mousedown(function() {
 		logText("removing item " + $(this).attr("data-uuid"));
 		socket.send(JSON.stringify({
 			"action": "uremove",
@@ -40,7 +40,7 @@ function populateActions() {
 	});
 
 	// handler to lower a job
-	$(".lower-priority").click(function() {
+	$(".lower-priority").mousedown(function() {
 		logText("passing item " + $(this).attr("data-uuid"));
 		socket.send(JSON.stringify({
 			"action": "upass",
