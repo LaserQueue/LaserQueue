@@ -37,5 +37,6 @@
 	"dev_log":true,
 	"allow_multiples":false,
 	"recalc_priority":true,
-	"admin_mode_enabled":true
+	"admin_mode_enabled":true,
+	"allow_multiple_materials":true
 }

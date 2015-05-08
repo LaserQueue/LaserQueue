@@ -32,7 +32,7 @@ class Queue:
 		inqueue = False
 		for i in self.queue:
 			for j in i: 
-				if name.lower() == j["name"].lower() and material == j["material"]:
+				if name.lower() == j["name"].lower() and (material == j["material"] or not config["allow_multiple_materials"]):
 					inqueue = True
 					break
 
