@@ -58,10 +58,19 @@ the auth action is completely insecure. It's meant for enough authentication tha
 requests an authentication packet from the server. if recieved, you'll be put into admin mode.
 
 
+null
+arguments: N/A
+
+nothing
+
+
+uuddlrlrba
+arguments: N/A
+
+huehuehue
+
+
 *: applies the Modified gear.
-
-
-
 
 
 Sending to client:
