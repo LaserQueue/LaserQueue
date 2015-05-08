@@ -3,6 +3,7 @@ import os
 import socket
 import pip
 import argparse
+from math import ceil
 
 parser = argparse.ArgumentParser(prog='startbackend.sh')
 parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
@@ -86,6 +87,23 @@ def _comparel(list1, list2):
 	elif list2diff:             return "l2"
 	else:                       return "eq"
 
+def _prettyl(l, starttext, minlen=0):
+	for i in l:
+		if len(i)+1 > minlen:
+			minlen = len(i)+1
+
+	indent = " "*(len(starttext)+1)
+	for i in range(max(1, int(ceil(len(l)/3.0)))):
+		if i: print(indent, end="")
+		else: print(starttext, end=" ")
+		if i == int(ceil(len(l)/3.0))-1: 
+			printl = [" "*(minlen-len(j))+j for j in l[i*3:]]
+			print(",".join(printl))
+		else:   
+			printl = [" "*(minlen-len(j))+j for j in l[i*3:i*3+3]]
+			print(",".join(printl), end=",\n")
+
+
 def _fillblanks(odict, adict):
 	keys = list(adict.keys())
 	for i in keys:
@@ -120,20 +138,20 @@ def main():
 	misskeys = [i for i in dkeys if i not in keys]
 
 	if equiv == "ne" or equiv == "l1":
-		print("Your config isn't storing the data expected.")
-		print("Expected: "+", ".join(qsort(dkeys))+".")
-		print("Found:    "+", ".join(qsort(keys))+".")
-		print("Missing:  "+", ".join(qsort(misskeys))+".")
+		print("\nYour config isn't storing the data expected.\n")
+		_prettyl(qsort(dkeys), "Expected:", 25);    print()
+		_prettyl(qsort(keys), "Found:   ", 25);     print()
+		_prettyl(qsort(misskeys), "Missing: ", 25); print()
 		confirm = ""
 		while confirm not in ["y", "n"]:
 			confirm = input("Do you want to regenerate the config? (y/n) ").lower().strip().rstrip()
 		if confirm == "y":
 			copyconf()
 		else:
-			print("Instead, you can add all missing tags to defaultconf.")
+			print("Instead, you can just regenerate the values of all missing tags.")
 			confirm = ""
 			while confirm not in ["y", "n"]:
-				confirm = input("Do you want to add all missing tags? (y/n) ").lower().strip().rstrip()
+				confirm = input("Do you want to regenerate all missing tags? (y/n) ").lower().strip().rstrip()
 			if confirm == "y":
 				data = _fillblanks(data, defaultdata)
 				json.dump(data, open(os.path.join("..", "www", "config.json"), "w"))
