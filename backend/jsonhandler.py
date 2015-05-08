@@ -167,6 +167,15 @@ def parseData(queue, jdata):
 			password = open("password").read().strip().rstrip()
 			if args[0].strip().rstrip() == password:
 				return "auth successful"
+	elif jdata["action"] == "uuddlrlrba":
+		if len(args) != 1:
+			return "Expected 1 argument, recieved "+str(len(args))
+		if type(args[0]) != str:
+			return "The password must be a string."
+		if os.path.exists("password") and not config["admin_mode_enabled"]:
+			password = open("password").read().strip().rstrip()
+			if args[0].strip().rstrip() == password:
+				return "uuddlrlrba"
 	else:
 		return "Bad action name"
 
