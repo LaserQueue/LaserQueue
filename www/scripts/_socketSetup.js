@@ -24,43 +24,52 @@ function socketSetup() { // god help me
 
 	// when websockets message
 	socket.onmessage = function(msg) {
+
 		// print to log and consoles
 		jsonData = JSON.parse(JSON.parse(msg.data));
 
-		// if data is new
-		if(JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
-			
-			oldJsonData = $.extend({}, jsonData);
+		// if being told to display table
+		if(jsonData.action == "display") {
 
-			// log the data
-			logText('new JSON received: ' + JSON.stringify(jsonData));
+			// if data is new
+			if(JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
+				
+				// deep copy jsonData to oldJsonData
+				oldJsonData = $.extend({}, jsonData);
 
-			// reinitialize full list of cuts
-			allCuts = [];
+				// log the new data
+				logText('new JSON received: ' + JSON.stringify(jsonData));
 
+				// reinitialize full list of cuts
+				allCuts = [];
 
+				// for each priority in list
+				$(jsonData["queue"]).each(function(index, el) {
 
+					// for each cut in priority
+					$(el).each(function(arrayIndex, arrayEl) {
+						// at this point nothing is human-readable
+						// make material human-readable
+						displayEl = $.extend({}, arrayEl); // deepcopy
+						displayEl.material = materials[arrayEl.material];
+						displayEl.priority = priorities[arrayEl.priority];
+						displayEl.esttime = arrayEl.esttime + (arrayEl.esttime == 1 ? ' minute' : ' minutes');
+						// add to full list of cuts
+						allCuts = allCuts.concat(displayEl);
+					});
 
-			// for each priority in list
-			$(jsonData["queue"]).each(function(index, el) {
-				// for each cut in priority
-				$(el).each(function(arrayIndex, arrayEl) {
-					// at this point nothing is human-readable
-					// make material human-readable
-					displayEl = $.extend({}, arrayEl); // deepcopy
-					displayEl.material = materials[arrayEl.material];
-					displayEl.priority = priorities[arrayEl.priority];
-					displayEl.esttime = arrayEl.esttime + (arrayEl.esttime == 1 ? ' minute' : ' minutes');
-					// add to full list of cuts
-					allCuts = allCuts.concat(displayEl);
 				});
-			});
+				
+				// render allCuts into table
+				$('.cutting-table-template').render(allCuts, renderDirectives);
+				populateActions();
 
 
-
-
-			$('.cutting-table-template').render(allCuts, renderDirectives);
-			populateActions();
+			}
+		
+		} else if(jsonData.action == 'rickroll') {
+			alert('ayy lmao');
+			rickroll();
 		}
 	};
 
