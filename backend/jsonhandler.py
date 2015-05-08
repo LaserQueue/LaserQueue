@@ -30,6 +30,8 @@ exceptions: if move target index is -1, it will append to the bottom of the list
 """
 
 def parseData(queue, jdata):
+	if jdata["action"] == "uuddlrlrba":
+		return "uuddlrlrba"
 	if "args" not in jdata or jdata["action"] == "null":
 		return
 	args = jdata["args"]

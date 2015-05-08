@@ -61,6 +61,9 @@ def main():
 					if x:
 						if x == "auth successful":
 							json.dump({"action":"auth"}, open(os.path.join(temppath, "topage.json"), "w"))
+						elif x == "uuddlrlrba" and config["easter_eggs"]:
+							json.dump({"action":"rickroll"}, open(os.path.join(temppath, "topage.json"), "w"))
+							time.sleep(1)
 						else:
 							json.dump({"action":"notification", "title":"Error occurred", "content":x}, open(os.path.join(temppath, "topage.json"), "w"))
 						time.sleep(0.2)

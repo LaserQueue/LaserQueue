@@ -38,5 +38,6 @@
 	"allow_multiples":false,
 	"recalc_priority":true,
 	"admin_mode_enabled":true,
-	"allow_multiple_materials":true
+	"allow_multiple_materials":true,
+	"easter_eggs":false
 }
