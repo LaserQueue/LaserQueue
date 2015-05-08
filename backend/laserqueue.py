@@ -26,7 +26,8 @@ class Queue:
 	def append(self, name, priority, esttime, material):
 		esttime = min(360, max(0.1, esttime))
 
-		priority = _calcpriority(priority, esttime)
+		if not config["recalc_priority"]:
+			priority = _calcpriority(priority, esttime)
 
 		inqueue = False
 		for i in self.queue:
@@ -35,7 +36,7 @@ class Queue:
 					inqueue = True
 					break
 
-		if not inqueue:
+		if not inqueue or config["allow_multiples"]:
 			self.queue[lpri-priority].append({
 				"priority": lpri-priority,
 				"name": name.title().strip().rstrip(),

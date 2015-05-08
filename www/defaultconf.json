@@ -34,5 +34,7 @@
 	"name_input": "Enter name here",
 	"time_input": "Estimated time (min)",
 	"modified_hover": "Modified",
-	"dev_log":true
+	"dev_log":true,
+	"allow_multiples":false,
+	"recalc_priority":true
 }
