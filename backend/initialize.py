@@ -129,34 +129,15 @@ def main():
 			if confirm == "y":
 				data["host"] = getIps()[0]
 			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
+
 	data = json.load(open(os.path.join("..", "www", "config.json")))
 	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
-	keys = list(data.keys())
-	dkeys = list(defaultdata.keys())
-	equiv = _comparel(dkeys, keys)
+	if "host" not in data:
+		data["host"] = getIps()[0]
+	data = _fillblanks(data, defaultdata)
+  json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
-	misskeys = [i for i in dkeys if i not in keys]
-
-	if equiv == "ne" or equiv == "l1":
-		print("\nYour config isn't storing the data expected.\n")
-		_prettyl(qsort(dkeys), "Expected:", 25);    print()
-		_prettyl(qsort(keys), "Found:   ", 25);     print()
-		_prettyl(qsort(misskeys), "Missing: ", 25); print()
-		confirm = ""
-		while confirm not in ["y", "n"]:
-			confirm = input("Do you want to regenerate the config? (y/n) ").lower().strip().rstrip()
-		if confirm == "y":
-			copyconf()
-		else:
-			print("Instead, you can just regenerate the values of all missing tags.")
-			confirm = ""
-			while confirm not in ["y", "n"]:
-				confirm = input("Do you want to regenerate all missing tags? (y/n) ").lower().strip().rstrip()
-			if confirm == "y":
-				if "host" not in data:
-					data["host"] = getIps()[0]
-				data = _fillblanks(data, defaultdata)
-				json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
+				
 	print("Initialization complete.")
 
 def getIps():
