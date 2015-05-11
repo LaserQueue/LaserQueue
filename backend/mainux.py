@@ -60,9 +60,7 @@ def main():
 					x = comm.parseData(queue, data)
 					if x:
 						print(x)
-						if x == "auth successful":
-							json.dump({"action":"auth"}, open(os.path.join(temppath, "topage.json"), "w"))
-						elif x == "uuddlrlrba" and config["easter_eggs"]:
+						if x == "uuddlrlrba" and config["easter_eggs"]:
 							json.dump({"action":"rickroll"}, open(os.path.join(temppath, "topage.json"), "w"))
 							time.sleep((config["refreshRate"]*1.5)/1000)
 						else:

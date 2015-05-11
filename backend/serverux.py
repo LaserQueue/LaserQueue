@@ -39,20 +39,24 @@ def hello(websocket, path):
 		try:
 			messagedata = json.loads(message)
 			if message != None and ("action" in messagedata and messagedata["action"] != "null"): print(message)
-			if os.path.exists(os.path.join(temppath, "topage.json")):
+			if os.path.exists(os.path.join(temppath, "topage.json")): 
 				if messagedata:
 					if message != None and ("action" in messagedata and messagedata["action"] != "null"):
 						print("saving message")
-					messagef = open(os.path.join(temppath, "toscript.json"), "w")
-					json.dump(messagedata, messagef)
-					messagef.close()
+						if message["action"] == "auth":
+							if message["args"][0] == open("password").read().strip().rstrip():
+								yield from websocket.send(json.dumps({"action":"auth"}))
+						else:
+							messagef = open(os.path.join(temppath, "toscript.json"), "w")
+							json.dump(messagedata, messagef)
+							messagef.close()
 
-					time.sleep(0.05)
+							time.sleep(0.05)
 
-					dataf = open(os.path.join(temppath, "topage.json"))
-					data = json.load(dataf)
-					dataf.close()
-					yield from websocket.send(json.dumps(data))
+							dataf = open(os.path.join(temppath, "topage.json"))
+							data = json.load(dataf)
+							dataf.close()
+							yield from websocket.send(json.dumps(data))
 		except:
 			pass
 			
