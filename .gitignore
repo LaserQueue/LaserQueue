@@ -77,6 +77,8 @@ sftp-config.json
 ### Sass ###
 .sass-cache
 
+### Gulp ###
+node_modules/
 
 ### Program specific ###
 config.json
