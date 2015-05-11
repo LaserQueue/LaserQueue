@@ -67,7 +67,7 @@ function socketSetup() { // god help me
 
 			}
 		} else if(jsonData.action == 'rickroll') {
-			rickroll();
+			rickRoll();
 		}
 	};
 
