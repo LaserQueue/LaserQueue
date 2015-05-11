@@ -44,7 +44,6 @@ def main():
 		if time.time()-stamp > 20 and args.backup:
 			stamp = time.time()
 			json.dump(queue.queue, open("cache.json", "w"))
-			print("queue backed up")
 		if os.path.exists(os.path.join(temppath, "toscript.json")):
 			dataf = open(os.path.join(temppath, "toscript.json"))
 			datat = dataf.read()

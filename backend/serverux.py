@@ -42,10 +42,10 @@ def hello(websocket, path):
 			if os.path.exists(os.path.join(temppath, "topage.json")): 
 				if messagedata:
 					if message != None and "action" in messagedata:
-						if messagedata["action"] != "null":
+						if messagedata["action"] not in ["null", "auth", "uuddlrlrba"]:
 							print("saving message")
 						if messagedata["action"] == "auth":
-							if message["args"][0] == open("password").read().strip().rstrip():
+							if message["args"][0].strip().rstrip() == open("password").read().strip().rstrip():
 								yield from websocket.send(json.dumps({"action":"auth"}))
 						else:
 							messagef = open(os.path.join(temppath, "toscript.json"), "w")
