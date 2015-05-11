@@ -49,7 +49,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 	// render the priorities dropdown
 	for(var p in priorities) {
 		$('#priority-dropdown').append('
-			<option ' + (p == config.default_priority ? 'selected' : '') + ' value="' + priorities.length-p-1 + '">' + priorities[p] + '</option>
+			<option ' + (p == config.default_priority ? 'selected' : '') + ' value="' + String(priorities.length-p-1) + '">' + priorities[p] + '</option>
 		');
 	}
 
