@@ -27,8 +27,6 @@ function socketSetup() { // god help me
 
 		// print to log and consoles
 		jsonData = JSON.parse(msg.data);
-		console.log(typeof jsonData.action);
-		logText('Command received: ' + jsonData["action"]);
 
 		// if being told to display table
 		if(jsonData.action == "display") {
