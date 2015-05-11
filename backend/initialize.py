@@ -135,7 +135,7 @@ def main():
 	if "host" not in data:
 		data["host"] = getIps()[0]
 	data = _fillblanks(data, defaultdata)
-  json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
+	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
 				
 	print("Initialization complete.")
