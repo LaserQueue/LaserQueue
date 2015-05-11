@@ -38,7 +38,7 @@ def hello(websocket, path):
 		temppath = os.path.join(os.path.sep, "tmp")
 		try:
 			messagedata = json.loads(message)
-			if message != None and ("action" in messagedata and messagedata["action"] != "null"): print(message)
+			if message != None and ("action" in messagedata and messagedata["action"] not in ["null", "auth", "uuddlrlrba"]): print(message)
 			if os.path.exists(os.path.join(temppath, "topage.json")): 
 				if messagedata:
 					if message != None and "action" in messagedata:
