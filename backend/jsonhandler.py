@@ -155,17 +155,6 @@ def parseData(queue, jdata):
 
 		queue.udecrement(args[0])
 
-	# auth packet	
-	elif jdata["action"] == "auth":
-		if len(args) != 1:
-			return "Expected 1 argument, recieved "+str(len(args))
-		if type(args[0]) != str:
-			return "The password must be a string."
-		if os.path.exists("password") and config["admin_mode_enabled"]:
-			password = open("password").read().strip().rstrip()
-			if args[0].strip().rstrip() == password:
-				return "auth successful"
-
 
 	elif jdata["action"] == "uuddlrlrba":
 		if len(args) != 1:
