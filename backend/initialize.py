@@ -10,6 +10,8 @@ parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
 	action="store_const",const=True,default=False)
 parser.add_argument("-p", "--port", help="Port to host from", dest="port",
 	default=80, type=int)
+parser.add_argument("-n", "--regen-host", help="Regenerate host in config", dest="host",
+	action="store_const",const=True,default=False)
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
 	action="store_const",const=True,default=False)
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",

@@ -6,6 +6,8 @@ import argparse
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("-p", "--port", help="Port to host from", dest="port",
 	default=80, type=int)
+parser.add_argument("-n", "--regen-host", help="Regenerate host in config", dest="host",
+	action="store_const",const=True,default=False)
 parser.add_argument("-h", "--help", help="Show this help message and exit", dest="help",
 	action="store_const",const=True,default=False)
 parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
