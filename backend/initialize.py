@@ -117,6 +117,10 @@ def main():
 	getpacks()
 	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json")):
 		copyconf()
+	if args.host:
+		data = json.load(open(os.path.join("..", "www", "config.json")))
+		data["host"] = getIps()
+		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 	if args.local:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		data["host"] = "localhost"
@@ -131,7 +135,6 @@ def main():
 			if confirm == "y":
 				data["host"] = getIps()[0]
 			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
-
 	data = json.load(open(os.path.join("..", "www", "config.json")))
 	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	if "host" not in data:
