@@ -32,7 +32,7 @@ selfpath = os.path.dirname(os.path.realpath(__file__))
 
 if args.shh:
 	newargs = " ".join([i for i in sys.argv[1:] if i != "-q"])
-	os.system("cd "+selfpath+"; python3 start.py {0} >/dev/null".format(newargs))
+	os.system("cd "+selfpath+"; ./start.sh {0} >/dev/null".format(newargs))
 	quit()
 
 if os.name != "nt" and os.geteuid() and args.port == 80:
