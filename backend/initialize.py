@@ -119,7 +119,7 @@ def main():
 		copyconf()
 	if args.host:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
-		data["host"] = getIps()
+		data["host"] = getIps()[0]
 		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 	if args.local:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
