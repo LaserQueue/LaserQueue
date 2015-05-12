@@ -39,5 +39,6 @@
 	"recalc_priority":true,
 	"admin_mode_enabled":true,
 	"allow_multiple_materials":true,
-	"easter_eggs":false
+	"easter_eggs":false,
+	"recapitalize":true
 }

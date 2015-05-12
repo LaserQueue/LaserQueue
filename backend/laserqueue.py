@@ -36,10 +36,13 @@ class Queue:
 					inqueue = True
 					break
 
+		if config["recapitalize"]:
+			name = name.title()
+
 		if not inqueue or config["allow_multiples"]:
 			self.queue[lpri-priority].append({
 				"priority": lpri-priority,
-				"name": name.title().strip().rstrip(),
+				"name": name.strip().rstrip(),
 				"material": material,
 				"esttime": esttime,
 				"coachmodified": False,
