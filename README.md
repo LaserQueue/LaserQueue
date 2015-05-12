@@ -18,6 +18,7 @@ To start the server, run `start.sh` as root. If on Windows, run `startbackend.ba
 - `-q`, `--quiet`: Start without output. Only applies to start.sh. Equivalent to >/dev/null.
 - `-b`, `--queue-backup`: Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.
 - `-r`, `--regen-config`: Regenerate the config. This is the default option if no config.json file is found in WWW
+- `-n`, `--regen-host`: Regenerate the host in the config. Does not affect any other config values. 
 - `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
 - `--install-all`: No short option. Installs all dependencies without prompting
 
