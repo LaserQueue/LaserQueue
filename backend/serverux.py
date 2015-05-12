@@ -49,7 +49,10 @@ def hello(websocket, path):
 						if messagedata["action"] == "auth":
 							if messagedata["args"][0].strip().rstrip() == open("password").read().strip().rstrip():
 								time.sleep(0.05)
-								yield from websocket.send(json.dumps({"action":"auth"}))
+								yield from websocket.send(json.dumps({"action":"auth","success":True}))
+							else:
+								time.sleep(0.05)
+								yield from websocket.send(json.dumps({"action":"auth","success":False}))
 						else:
 							messagef = open(os.path.join(temppath, "toscript.json"), "w")
 							json.dump(messagedata, messagef)
