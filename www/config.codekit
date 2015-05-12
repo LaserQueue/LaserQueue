@@ -2733,6 +2733,17 @@
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1
 		},
+	"\/img\/laserQueue old.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 57177,
+		"inputAbbreviatedPath": "\/img\/laserQueue old.png",
+		"outputAbbreviatedPath": "\/img\/laserQueue old.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/img\/laserQueue.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -2743,6 +2754,26 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
+		},
+	"\/index.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/index.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/scripts\/_config.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/scripts\/_config.js",
+		"outputAbbreviatedPath": "\/scripts\/min\/_config-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
 		},
 	"\/scripts\/_functions.js": {
 		"fileType": 64,
@@ -2761,6 +2792,17 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/scripts\/_init.js",
 		"outputAbbreviatedPath": "\/scripts\/min\/_init-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/scripts\/_socketSetup.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/scripts\/_socketSetup.js",
+		"outputAbbreviatedPath": "\/scripts\/min\/_socketSetup-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -2809,6 +2851,17 @@
 		"outputPathIsSetByUser": 1,
 		"outputStyle": 2,
 		"syntaxCheckerStyle": 0
+		},
+	"\/scripts\/scripts.min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/scripts\/scripts.min.js",
+		"outputAbbreviatedPath": "\/scripts\/min\/scripts.min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
 		},
 	"\/scss\/_a.scss": {
 		"createSourceMap": 0,
