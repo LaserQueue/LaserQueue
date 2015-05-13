@@ -26,7 +26,7 @@ class Queue:
 	def append(self, name, priority, esttime, material):
 		esttime = min(360, max(0.1, esttime))
 
-		if not config["recalc_priority"]:
+		if config["recalc_priority"]:
 			priority = _calcpriority(priority, esttime)
 
 		inqueue = False
