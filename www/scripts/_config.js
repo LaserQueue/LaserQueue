@@ -1,7 +1,7 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate;
+var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate, easterEggs;
 var allCuts = [];
 var displayEl = {}
 var renderDirectives = {
@@ -38,6 +38,8 @@ getConfigFile = $.getJSON('/config.json', function() {
 	// set refreshRate and reconnectRate
 	refreshRate = getConfigFile.responseJSON["refreshRate"];
 	reconnectRate = getConfigFile.responseJSON["reconnectRate"];
+
+	easterEggs = getConfigFile.responseJSON["easter_eggs"];
 
 	// render the materials dropdown
 	for(var m in materials) {

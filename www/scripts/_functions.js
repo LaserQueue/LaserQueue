@@ -68,6 +68,11 @@ function resetForm(form) {
 }
 
 function rickRoll() {
-	modalMessage('You goofed', '<iframe width="420" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&disablekb=1&controls=0&loop=1&showinfo=0&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>');
-	$('html').addClass('lol');
+	if (easterEggs) {
+		modalMessage('Never gonna give you up', '<iframe width="420" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&disablekb=1&controls=0&loop=1&showinfo=0&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>');
+		$('html').addClass('lol');
+	}
+	else {
+		logText("This is a serious establishment, son. I'm dissapointed in you.");
+	}
 }
