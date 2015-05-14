@@ -89,3 +89,9 @@ class SIDCache:
 			if sid.uuid == uuid:
 				return sid
 
+def cache(sids):
+	json.dump(sids.sids, open("scache.json", "w"))
+
+def loadcache():
+	return SIDCache.load(json.load(open("scache.json")))
+
