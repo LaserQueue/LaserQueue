@@ -1,6 +1,6 @@
 from laserqueue import Queue, config
 import jsonhandler as comm
-import sids
+import sidhandler as sids
 
 import json
 import os.path
