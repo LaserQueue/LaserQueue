@@ -48,7 +48,7 @@ def parseData(queue, sessions, jdata):
 	authstate = sessions.check(jdata["sid"])
 	if action in authactions and not authstate: return
 
-	if action == "auth":
+	if action == "auth" and config["admin_mode_enabled"]:
 		if len(args) != 1:
 			return "Expected 1 arguments, recieved "+str(len(args))
 		expectedtypes = [str]
