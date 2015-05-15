@@ -40,5 +40,14 @@
 	"admin_mode_enabled":true,
 	"allow_multiple_materials":true,
 	"easter_eggs":false,
-	"recapitalize":true
+	"recapitalize":true,
+	"authactions": [
+		"move",
+		"smove",
+		"umove",
+		"sincrement",
+		"uincrement",
+		"sdecrement",
+		"udecrement"
+	]
 }

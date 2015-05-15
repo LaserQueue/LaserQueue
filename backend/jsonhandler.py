@@ -29,16 +29,6 @@ add (args name, base priority, estimated time in minutes, material code)
 exceptions: if move target index is -1, it will append to the bottom of the list
 """
 
-authactions = [
-	"move",
-	"smove",
-	"umove",
-	"sincrement",
-	"uincrement",
-	"sdecrement",
-	"udecrement"
-]
-
 def parseData(queue, sessions, jdata):
 	if "args" not in jdata or jdata["action"] == "null" or "sid" not in jdata:
 		return
@@ -46,7 +36,7 @@ def parseData(queue, sessions, jdata):
 	action = jdata["action"]
 
 	authstate = sessions.check(jdata["sid"])
-	if action in authactions and not authstate: return
+	if action in config["authactions"] and not authstate: return
 
 	if action == "auth" and config["admin_mode_enabled"]:
 		if len(args) != 1:
