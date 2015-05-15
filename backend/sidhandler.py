@@ -7,9 +7,9 @@
 # 	if sid exists and is not authorized:
 # 		return False on auth, set lasttimestamp to now
 # 	if sid exists and is over 60 minutes old:
-# 		destroy and regenerate sid, return False
+# 		destroy, return False
 # 	if sid exists and has gone 20 minutes since lasttimestamp:
-# 		destroy and regenerate sid, return False
+# 		destroy, return False
 
 import time
 import json
@@ -68,7 +68,8 @@ class SIDCache:
 	def check(self, uuid):
 		csid = self._get(uuid)
 		if not csid: self.sids.append(SID(uuid));      return False
-		elif not csid.checkstate(): self.csid.regen(); return False
+		elif not csid.checkstate(): 
+			self.sids.remove(csid); return False
 		elif not csid.authstate: csid.onupdate();      return False
 		return True
 	def auth(self, uuid, password):
