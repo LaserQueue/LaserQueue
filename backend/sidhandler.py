@@ -91,7 +91,7 @@ class SIDCache:
 				return sid
 
 def cache(sids):
-	json.dump(sids.sids, open("scache.json", "w"))
+	json.dump(sids.serialize(), open("scache.json", "w"))
 
 def loadcache():
 	return SIDCache.load(json.load(open("scache.json")))
