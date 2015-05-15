@@ -1,5 +1,6 @@
 from laserqueue import Queue, config
 import jsonhandler as comm
+import sids
 
 import json
 import os.path
@@ -40,12 +41,16 @@ def main():
 	if args.backup:
 		if os.path.exists("cache.json"):
 			queue.queue = json.load(open("cache.json"))
+		sessions = sids.loadcache()
+	else:
+		sessions = sids.SIDCache()
 
 	stamp = time.time()
 	while True:
 		if time.time()-stamp > 20 and args.backup:
 			stamp = time.time()
 			json.dump(queue.queue, open("cache.json", "w"))
+			sids.cache(sessions)
 		if os.path.exists(os.path.join(temppath, "toscript.json")):
 			dataf = open(os.path.join(temppath, "toscript.json"))
 			datat = dataf.read()
@@ -58,7 +63,7 @@ def main():
 					print(datat)
 			if data:
 				try:
-					x = comm.parseData(queue, data)
+					x = comm.parseData(queue, sessions, data)
 					if x:
 						print(x)
 						if x == "uuddlrlrba" and config["easter_eggs"]:

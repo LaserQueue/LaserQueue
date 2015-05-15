@@ -29,7 +29,7 @@ add (args name, base priority, estimated time in minutes, material code)
 exceptions: if move target index is -1, it will append to the bottom of the list
 """
 
-def parseData(queue, jdata):
+def parseData(queue, sessions, jdata):
 	if "args" not in jdata or jdata["action"] == "null":
 		return
 	args = jdata["args"]

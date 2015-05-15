@@ -69,7 +69,7 @@ class SIDCache:
 		csid = self._get(uuid)
 		if not csid: self.sids.append(SID(uuid));      return False
 		elif not csid.checkstate(): 
-			self.sids.remove(csid); return False
+			self.sids.remove(csid);                      return False
 		elif not csid.authstate: csid.onupdate();      return False
 		return True
 	def auth(self, uuid, password):
@@ -94,5 +94,8 @@ def cache(sids):
 	json.dump(sids.serialize(), open("scache.json", "w"))
 
 def loadcache():
-	return SIDCache.load(json.load(open("scache.json")))
+	if os.path.exists("scache.json"):
+		return SIDCache.load(json.load(open("scache.json")))
+	else:
+		return SIDCache()
 
