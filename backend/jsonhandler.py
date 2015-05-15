@@ -29,12 +29,36 @@ add (args name, base priority, estimated time in minutes, material code)
 exceptions: if move target index is -1, it will append to the bottom of the list
 """
 
+authactions = [
+	"move",
+	"smove",
+	"umove",
+	"sincrement",
+	"uincrement",
+	"sdecrement",
+	"udecrement"
+]
+
 def parseData(queue, sessions, jdata):
-	if "args" not in jdata or jdata["action"] == "null":
+	if "args" not in jdata or jdata["action"] == "null" or "sid" not in jdata:
 		return
 	args = jdata["args"]
+	action = jdata["action"]
 
-	if jdata["action"] == "move":
+	authstate = sessions.check(jdata["sid"])
+	if action in authactions and not authstate: return
+
+	if action == "auth":
+		if len(args) != 1:
+			return "Expected 1 arguments, recieved "+str(len(args))
+		expectedtypes = [str]
+		if _typelist(args) != expectedtypes:
+			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
+
+		sessions.auth(jdata["sid"], jdata["args"][0])
+
+
+	elif action == "move":
 		if len(args) != 4:
 			return "Expected 4 arguments, recieved "+str(len(args))
 		expectedtypes = [int, int, int, int]
@@ -43,7 +67,7 @@ def parseData(queue, sessions, jdata):
 
 		queue.move(args[0],args[1],args[2],args[3])
 
-	elif jdata["action"] == "smove":
+	elif action == "smove":
 		if len(args) != 3:
 			return "Expected 3 arguments, recieved "+str(len(args))
 		expectedtypes = [int, int, int]
@@ -52,7 +76,7 @@ def parseData(queue, sessions, jdata):
 
 		queue.smove(args[0],args[1],args[2])
 
-	elif jdata["action"] == "remove":
+	elif action == "remove":
 		if len(args) != 2:
 			return "Expected 2 arguments, recieved "+str(len(args))
 		expectedtypes = [int, int]
@@ -61,7 +85,7 @@ def parseData(queue, sessions, jdata):
 
 		queue.remove(args[0],args[1])
 
-	elif jdata["action"] == "sremove":
+	elif action == "sremove":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		expectedtypes = [int]
@@ -70,7 +94,7 @@ def parseData(queue, sessions, jdata):
 
 		queue.sremove(args[0])
 
-	elif jdata["action"] == "pass":
+	elif action == "pass":
 		if len(args) not in [1, 2]:
 			return "Expected at most 2 arguments, recieved "+str(len(args))
 		expectedtypes = [[int], [int, int]]
@@ -79,7 +103,7 @@ def parseData(queue, sessions, jdata):
 
 		queue.passoff(args[0], args[1] if len(args)>1 else 0)
 
-	elif jdata["action"] == "spass":
+	elif action == "spass":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		expectedtypes = [int]
@@ -88,7 +112,7 @@ def parseData(queue, sessions, jdata):
 
 		queue.spass(args[0])
 
-	elif jdata["action"] == "add":
+	elif action == "add":
 		if len(args) != 4:
 			return "Expected 4 arguments, recieved "+str(len(args))
 		expectedtypes = [str, int, int, str]
@@ -96,7 +120,7 @@ def parseData(queue, sessions, jdata):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.append(args[0],args[1],args[2],args[3])
-	elif jdata["action"] == "sdecrement":
+	elif action == "sdecrement":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		expectedtypes = [int]
@@ -104,7 +128,7 @@ def parseData(queue, sessions, jdata):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.sdecrement(args[0])
-	elif jdata["action"] == "sincrement":
+	elif action == "sincrement":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		expectedtypes = [int]
@@ -114,7 +138,7 @@ def parseData(queue, sessions, jdata):
 		queue.sincrement(args[0])
 
 
-	elif jdata["action"] == "upass":
+	elif action == "upass":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		expectedtypes = [str]
@@ -122,7 +146,7 @@ def parseData(queue, sessions, jdata):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.upass(args[0])
-	elif jdata["action"] == "uremove":
+	elif action == "uremove":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		expectedtypes = [str]
@@ -130,7 +154,7 @@ def parseData(queue, sessions, jdata):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.uremove(args[0])
-	elif jdata["action"] == "umove":
+	elif action == "umove":
 		if len(args) != 3:
 			return "Expected 3 arguments, recieved "+str(len(args))
 		expectedtypes = [str, int, int]
@@ -138,7 +162,7 @@ def parseData(queue, sessions, jdata):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.umove(args[0], args[1], args[2])
-	elif jdata["action"] == "uincrement":
+	elif action == "uincrement":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		expectedtypes = [str]
@@ -146,7 +170,7 @@ def parseData(queue, sessions, jdata):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.uincrement(args[0])
-	elif jdata["action"] == "udecrement":
+	elif action == "udecrement":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		expectedtypes = [str]
@@ -156,7 +180,7 @@ def parseData(queue, sessions, jdata):
 		queue.udecrement(args[0])
 
 
-	elif jdata["action"] == "uuddlrlrba":
+	elif action == "uuddlrlrba":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))
 		if type(args[0]) != str:
