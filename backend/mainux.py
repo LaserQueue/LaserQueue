@@ -47,10 +47,6 @@ def main():
 
 	stamp = time.time()
 	while True:
-		if time.time()-stamp > 20 and args.backup:
-			stamp = time.time()
-			json.dump(queue.queue, open("cache.json", "w"))
-			sids.cache(sessions)
 		if os.path.exists(os.path.join(temppath, "toscript.json")):
 			dataf = open(os.path.join(temppath, "toscript.json"))
 			datat = dataf.read()
@@ -58,6 +54,9 @@ def main():
 				data = json.loads(datat)
 				if data and data["action"] != null:
 					print(data)
+					if args.backup:
+						json.dump(queue.queue, open("cache.json", "w"))
+						sids.cache(sessions)
 			except:
 				if "action" in data and data["action"] != "null":
 					print(datat)
