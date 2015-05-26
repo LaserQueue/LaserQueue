@@ -1,7 +1,7 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate, easterEggs;
+var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate, easterEggs, SID;
 var allCuts = [];
 var displayEl = {}
 var renderDirectives = {
@@ -15,6 +15,10 @@ var renderDirectives = {
 		},
 	}
 };
+
+alert('ayy');
+SID = uuid.v1();
+console.log(SID);
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
