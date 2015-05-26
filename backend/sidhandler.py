@@ -19,12 +19,14 @@ class SID:
 	def __init__(self, uuid):
 		self.lasttimestamp = time.time()
 		self.timestamp = time.time()
+		self.authstamp = time.time()
 		self.authstate = False
 		self.uuid = uuid
 	def load(jdata): #initialization method, do not call on existing object
 		self = SID(None)
 		self.lasttimestamp = jdata["laststamp"]
 		self.timestamp = jdata["stamp"]
+		self.authstamp = jdata["authstamp"]
 		self.authstate = jdata["auth"]
 		self.uuid = jdata["uuid"]
 		return self
@@ -32,6 +34,7 @@ class SID:
 		return {
 			"stamp": self.timestamp,
 			"laststamp": self.lasttimestamp,
+			"authstamp": self.authstamp,
 			"auth": self.authstate,
 			"uuid": self.uuid
 		}
@@ -44,6 +47,8 @@ class SID:
 		return False
 	def checkstate(self):
 		timestamp = time.time()
+		if timestamp-self.authstamp > 600:
+			self.authstate = False
 		if timestamp-self.lasttimestamp > 1200:
 			return False
 		elif timestamp-self.timestamp > 3600:
@@ -51,9 +56,11 @@ class SID:
 		return True
 	def onupdate(self):
 		self.lasttimestamp = time.time()
+		self.authstamp = time.time()
 	def regen(self):
 		self.lasttimestamp = time.time()
 		self.timestamp = time.time()
+		self.authstamp = time.time()
 		self.authstate = False
 
 
