@@ -7,14 +7,15 @@ $(document).ready(function() {
 	$(".btn-submit").click(function(clickAction) {
 		clickAction.preventDefault();
 		logText("submit button clicked");
-		socket.send('
+		socket.send(JSON.stringify(
 			{
 				"action": "add",
 				"args": [
-				"' + $(".cut-human-name").val() +'", ' + $(".priority-dropdown").val() + ', ' + $('.cut-time-estimate').val() + ', "' + $('.cut-material').val() + '"
-				]
+				$(".cut-human-name").val(), +$(".priority-dropdown").val(), +$('.cut-time-estimate').val(), $('.cut-material').val()
+				],
+				"sid": SID
 			}
-		');
+		));
 		resetForm($(".new-cut-form"));
 		
 	});
