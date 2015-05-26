@@ -37,6 +37,8 @@ def parseData(queue, sessions, jdata):
 		if action in config["authactions"] and not authstate: return
 		if action == "uuddlrlrba":
 			return "uuddlrlrba"
+		elif action == "deauth":
+			sessions.deauth(sid)
 	else:
 		return
 	if "args" not in jdata or jdata["action"] == "null":

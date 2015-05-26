@@ -47,6 +47,8 @@ class SID:
 				self.authstate = True
 				return True
 		return False
+	def deauth(self):
+		self.authstate = False
 	def checkstate(self):
 		timestamp = time.time()
 		if timestamp-self.authstamp > config["auth_timeout"] and config["auth_timeout"]:
@@ -86,6 +88,8 @@ class SIDCache:
 		if self.check(uuid) or self._get(uuid).auth(password): 
 			return True
 		return False
+	def deauth(self, uuid):
+		self._get(uuid).deauth()
 	def serialize(self):
 		return [sid.serialize() for sid in self.sids]
 	def _isin(self, uuid):
