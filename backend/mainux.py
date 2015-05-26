@@ -50,19 +50,15 @@ def main():
 		if os.path.exists(os.path.join(temppath, "toscript.json")):
 			dataf = open(os.path.join(temppath, "toscript.json"))
 			datat = dataf.read()
-			try:
+			if datat and datat != "{}":
 				data = json.loads(datat)
-				if data and data["action"] != null:
-					print(data)
-					if args.backup:
-						json.dump(queue.queue, open("cache.json", "w"))
-						sids.cache(sessions)
-			except:
-				if "action" in data and data["action"] != "null":
-					print(datat)
-			if data:
 				try:
 					x = comm.parseData(queue, sessions, data)
+					if "action" in data and data["action"] != "null":
+						print(datat)
+						if args.backup:
+							json.dump(queue.queue, open("cache.json", "w"))
+							sids.cache(sessions)
 					if x:
 						print(x)
 						if x == "uuddlrlrba" and config["easter_eggs"]:

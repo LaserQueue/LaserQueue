@@ -67,11 +67,11 @@ class SIDCache:
 		return self
 	def check(self, uuid):
 		csid = self._get(uuid)
-		if not csid: self.sids.append(SID(uuid)); return False
+		if not csid:               return False
 		elif not csid.checkstate(): 
-			self.sids.remove(csid);                 return False
+			self.sids.remove(csid);  return False
 		csid.onupdate()
-		if not csid.authstate:                    return False
+		if not csid.authstate:     return False
 		return True
 	def auth(self, uuid, password):
 		if self.check(uuid) or self._get(uuid).auth(password): 
@@ -86,7 +86,7 @@ class SIDCache:
 		return False
 	def _get(self, uuid):
 		if not self._isin(uuid):
-			return
+			self.sids.append(SID(uuid))
 		for sid in self.sids:
 			if sid.uuid == uuid:
 				return sid
