@@ -2689,15 +2689,15 @@
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/scripts\/scripts.js",
-		"outputAbbreviatedPath": "\/scripts\/min\/scripts-min.js",
+		"outputAbbreviatedPath": "\/scripts\/scripts.min.js",
 		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
+		"outputPathIsSetByUser": 1,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 0
 		},
 	"\/scripts\/scripts.min.js": {
 		"fileType": 64,
-		"ignore": 0,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/scripts\/scripts.min.js",
 		"outputAbbreviatedPath": "\/scripts\/min\/scripts.min-min.js",
