@@ -55,7 +55,7 @@ def main():
 				try:
 					x = comm.parseData(queue, sessions, data)
 					if "action" in data and data["action"] != "null":
-						print(datat)
+						print(json.dumps(data, indent=2))
 						if args.backup:
 							json.dump(queue.queue, open("cache.json", "w"), indent=2)
 							sids.cache(sessions)
