@@ -30,16 +30,18 @@ exceptions: if move target index is -1, it will append to the bottom of the list
 """
 
 def parseData(queue, sessions, jdata):
-	if "args" not in jdata or jdata["action"] == "null" or "sid" not in jdata:
+	if "sid" in jdata and "action" in jdata:
+		sid = jdata["sid"]
+		action = jdata["action"]
+		authstate = sessions.check(sid)
+		if action in config["authactions"] and not authstate: return
+		if action == "uuddlrlrba":
+			return "uuddlrlrba"
+	else:
 		return
-	sid = jdata["sid"]
-	action = jdata["action"]
-	
+	if "args" not in jdata or jdata["action"] == "null":
+		return
 
-	authstate = sessions.check(sid)
-	if action in config["authactions"] and not authstate: return
-	if action == "uuddlrlrba":
-		return "uuddlrlrba"
 	args = jdata["args"]
 
 	if action == "auth" and config["admin_mode_enabled"]:
