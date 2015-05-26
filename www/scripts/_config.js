@@ -16,9 +16,8 @@ var renderDirectives = {
 	}
 };
 
-alert('ayy');
 SID = uuid.v1();
-console.log(SID);
+window.console.log("I have SID " + SID);
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
