@@ -57,7 +57,7 @@ def main():
 					if "action" in data and data["action"] != "null":
 						print(datat)
 						if args.backup:
-							json.dump(queue.queue, open("cache.json", "w"))
+							json.dump(queue.queue, open("cache.json", "w"), indent=2)
 							sids.cache(sessions)
 					if x:
 						print(x)
