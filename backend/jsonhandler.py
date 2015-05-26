@@ -32,12 +32,15 @@ exceptions: if move target index is -1, it will append to the bottom of the list
 def parseData(queue, sessions, jdata):
 	if "args" not in jdata or jdata["action"] == "null" or "sid" not in jdata:
 		return
-	args = jdata["args"]
-	action = jdata["action"]
 	sid = jdata["sid"]
+	action = jdata["action"]
+	
 
 	authstate = sessions.check(sid)
 	if action in config["authactions"] and not authstate: return
+	if action == "uuddlrlrba":
+		return "uuddlrlrba"
+	args = jdata["args"]
 
 	if action == "auth" and config["admin_mode_enabled"]:
 		if len(args) != 1:
@@ -169,11 +172,6 @@ def parseData(queue, sessions, jdata):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
 		queue.udecrement(args[0])
-
-
-	elif action == "uuddlrlrba":
-		return "uuddlrlrba"
-
 
 	else:
 		return "Bad action name"
