@@ -55,8 +55,6 @@ def parseData(queue, sessions, jdata):
 		expectedtypes = [int, int, int, int]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
-		if not sessions.check(sid):
-			return
 
 		queue.move(args[0],args[1],args[2],args[3])
 
@@ -66,8 +64,6 @@ def parseData(queue, sessions, jdata):
 		expectedtypes = [int, int, int]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
-		if not sessions.check(sid):
-			return
 
 		queue.smove(args[0],args[1],args[2])
 
@@ -95,8 +91,6 @@ def parseData(queue, sessions, jdata):
 		expectedtypes = [[int], [int, int]]
 		if _typelist(args) not in expectedtypes:
 			return "Expected "+str(expectedtypes[0])+" or "+str(expectedtypes[1])+", recieved "+str(_typelist(args))
-		if not sessions.check(sid):
-			return
 
 		queue.passoff(args[0], args[1] if len(args)>1 else 0)
 
@@ -123,8 +117,6 @@ def parseData(queue, sessions, jdata):
 		expectedtypes = [int]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
-		if not sessions.check(sid):
-			return
 
 		queue.sdecrement(args[0])
 	elif action == "sincrement":
@@ -133,8 +125,6 @@ def parseData(queue, sessions, jdata):
 		expectedtypes = [int]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
-		if not sessions.check(sid):
-			return
 
 		queue.sincrement(args[0])
 
@@ -161,8 +151,6 @@ def parseData(queue, sessions, jdata):
 		expectedtypes = [str, int, int]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
-		if not sessions.check(sid):
-			return
 
 		queue.umove(args[0], args[1], args[2])
 	elif action == "uincrement":
@@ -171,8 +159,6 @@ def parseData(queue, sessions, jdata):
 		expectedtypes = [str]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
-		if not sessions.check(sid):
-			return
 
 		queue.uincrement(args[0])
 	elif action == "udecrement":
@@ -181,8 +167,6 @@ def parseData(queue, sessions, jdata):
 		expectedtypes = [str]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
-		if not sessions.check(sid):
-			return
 
 		queue.udecrement(args[0])
 
