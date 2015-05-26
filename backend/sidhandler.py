@@ -15,6 +15,8 @@ import time
 import json
 import os
 
+config = json.load(open(os.path.join("..", "www", "config.json")))
+
 class SID:
 	def __init__(self, uuid):
 		self.lasttimestamp = time.time()
@@ -47,11 +49,11 @@ class SID:
 		return False
 	def checkstate(self):
 		timestamp = time.time()
-		if timestamp-self.authstamp > 600:
+		if timestamp-self.authstamp > config["auth_timeout"] and config["auth_timeout"]:
 			self.authstate = False
-		if timestamp-self.lasttimestamp > 1200:
+		if timestamp-self.lasttimestamp > config["lastuse_timeout"] and config["lastuse_timeout"]:
 			return False
-		elif timestamp-self.timestamp > 3600:
+		elif timestamp-self.timestamp > config["sid_total_timeout"] and config["sid_total_timeout"]:
 			return False
 		return True
 	def onupdate(self):
