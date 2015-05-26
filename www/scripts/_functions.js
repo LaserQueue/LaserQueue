@@ -35,7 +35,8 @@ function populateActions() {
 		logText("removing item " + $(this).attr("data-uuid"));
 		socket.send(JSON.stringify({
 			"action": "uremove",
-			"args": [$(this).attr("data-uuid")]
+			"args": [$(this).attr("data-uuid")],
+			"sid": SID
 		}));
 	});
 
@@ -44,7 +45,8 @@ function populateActions() {
 		logText("passing item " + $(this).attr("data-uuid"));
 		socket.send(JSON.stringify({
 			"action": "upass",
-			"args": [$(this).attr("data-uuid")]
+			"args": [$(this).attr("data-uuid")],
+			"sid": SID
 		}));
 	});
 }
