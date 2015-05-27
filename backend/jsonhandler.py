@@ -118,7 +118,7 @@ def parseData(queue, sessions, jdata):
 		if not _comparetypes(args, expectedtypes):
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
-		queue.append(args[0],args[1],args[2],args[3])
+		queue.append(args[0],args[1],args[2],args[3], sid, authstate)
 	elif action == "sdecrement":
 		if len(args) != 1:
 			return "Expected 1 argument, recieved "+str(len(args))

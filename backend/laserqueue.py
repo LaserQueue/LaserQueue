@@ -23,7 +23,7 @@ def _concatlist(lists):
 class Queue:
 	def __init__(self):
 		self.queue = [[] for i in config["priorities"]]
-	def append(self, name, priority, esttime, material):
+	def append(self, name, priority, esttime, material, sid, authstate):
 		if not name:
 			return
 		esttime = min(360, max(0.1, esttime))
@@ -47,8 +47,9 @@ class Queue:
 				"name": name.strip().rstrip(),
 				"material": material,
 				"esttime": esttime,
-				"coachmodified": False,
-				"uuid": str(uuid.uuid1())
+				"coachmodified": authstate,
+				"uuid": str(uuid.uuid1()),
+				"sid": sid
 			})
 
 	def passoff(self, priority, index=0):
