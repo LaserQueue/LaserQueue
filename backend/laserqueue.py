@@ -26,7 +26,11 @@ class Queue:
 	def append(self, name, priority, esttime, material, sid, authstate):
 		if not name:
 			return
-		esttime = min(360, max(0.1, esttime))
+		bounds = config["length_bounds"]
+		if bounds[0] >= 0:
+			esttime = max(bounds[0], esttime)
+		if bounds[1] >= 0:
+			esttime = min(bounds[1], esttime)
 
 		if config["recalc_priority"]:
 			priority = _calcpriority(priority, esttime)

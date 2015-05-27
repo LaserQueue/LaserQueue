@@ -53,5 +53,6 @@
 	],
 	"auth_timeout": 600,
 	"lastuse_timeout": 1800,
-	"sid_total_timeout": 3600
+	"sid_total_timeout": 3600,
+	"length_bounds": [0.1, 360]
 }
