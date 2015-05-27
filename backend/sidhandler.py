@@ -23,14 +23,14 @@ class SID:
 		self.timestamp = time.time()
 		self.authstamp = time.time()
 		self.authstate = False
-		self.uuid = uuid
+		self.uuid = str(uuid)
 	def load(jdata): #initialization method, do not call on existing object
 		self = SID(None)
 		self.lasttimestamp = jdata["laststamp"]
 		self.timestamp = jdata["stamp"]
 		self.authstamp = jdata["authstamp"]
 		self.authstate = jdata["auth"]
-		self.uuid = jdata["uuid"]
+		self.uuid = str(jdata["uuid"])
 		return self
 	def serialize(self):
 		return {
