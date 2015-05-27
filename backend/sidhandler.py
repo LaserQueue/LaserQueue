@@ -109,6 +109,9 @@ class SIDCache:
 		for sid in self.sids:
 			if sid.uuid == uuid:
 				return sid
+	def update(self):
+		for sid in self.sids:
+			self.check(sid.uuid)
 
 def cache(sids):
 	json.dump(sids.serialize(), open("scache.json", "w"), indent=2)
