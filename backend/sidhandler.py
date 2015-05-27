@@ -94,6 +94,8 @@ class SIDCache:
 		return [sid.serialize() for sid in self.sids]
 	def allauth(self):
 		return [sid.uuid for sid in self.sids if sid.authstate]
+	def cutauths(self):
+		return [sid.uuid[:len(sid.uuid)/2] for sid in self.sids if sid.authstate]
 	def allnonauth(self):
 		return [sid.uuid for sid in self.sids if not sid.authstate]
 	def _isin(self, uuid):

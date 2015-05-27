@@ -208,7 +208,7 @@ def generateData(queue, sessions, esttime, currtime):
 	jdata["esttime"] = esttime
 	jdata["currtime"] = currtime
 	jdata["action"] = "display"
-	jdata["auths"] = sessions.allauth()
+	jdata["auths"] = sessions.cutauths()
 	return jdata
 
 
