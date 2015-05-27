@@ -92,6 +92,10 @@ class SIDCache:
 		self._get(uuid).deauth()
 	def serialize(self):
 		return [sid.serialize() for sid in self.sids]
+	def allauth(self):
+		return [sid.uuid for sid in self.sids if sid.authstate]
+	def allnonauth(self):
+		return [sid.uuid for sid in self.sids if not sid.authstate]
 	def _isin(self, uuid):
 		for i in self.sids:
 			if i.uuid == uuid:

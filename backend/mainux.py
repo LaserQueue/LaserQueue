@@ -66,7 +66,7 @@ def main():
 							time.sleep((config["refreshRate"]*1.5)/1000)
 						time.sleep(0.2)
 					else:
-						json.dump(comm.generateData(queue, calculated_time, elapsed_time), open(os.path.join(temppath, "topage.json"), "w"))
+						json.dump(comm.generateData(queue, sessions, calculated_time, elapsed_time), open(os.path.join(temppath, "topage.json"), "w"))
 						json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"), {})
 						if data["action"] != "null": print(queue.queue)
 				except: 

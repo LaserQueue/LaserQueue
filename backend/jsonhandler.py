@@ -202,12 +202,13 @@ Format for program-to-site data:
 }
 """
 
-def generateData(queue, esttime, currtime):
+def generateData(queue, sessions, esttime, currtime):
 	jdata = {}
 	jdata["queue"] = queue.queue
 	jdata["esttime"] = esttime
 	jdata["currtime"] = currtime
 	jdata["action"] = "display"
+	jdata["auths"] = sessions.allauth()
 	return jdata
 
 
