@@ -24,6 +24,8 @@ class Queue:
 	def __init__(self):
 		self.queue = [[] for i in config["priorities"]]
 	def append(self, name, priority, esttime, material):
+		if not name:
+			return
 		esttime = min(360, max(0.1, esttime))
 
 		if config["recalc_priority"]:
