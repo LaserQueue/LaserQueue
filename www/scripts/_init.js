@@ -38,3 +38,15 @@ $('.nuvu-logo').click(function() {
 		}
 	});
 });
+
+// footer
+$.ajax({
+	url: '/infotext.md',
+	type: 'GET'
+})
+.done(function(request) {
+	$('.credits-footer').before(marked(request));
+})
+.fail(function() {
+	console.log("Failed to get infotext.md");
+});
