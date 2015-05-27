@@ -39,6 +39,7 @@ def parseData(queue, sessions, jdata):
 			return "uuddlrlrba"
 		elif action == "deauth":
 			sessions.deauth(sid)
+			return
 	else:
 		return
 	if "args" not in jdata or jdata["action"] == "null":

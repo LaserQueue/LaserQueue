@@ -51,8 +51,8 @@ def main():
 			dataf = open(os.path.join(temppath, "toscript.json"))
 			datat = dataf.read()
 			if datat and datat != "{}":
-				data = json.loads(datat)
 				try:
+					data = json.loads(datat)
 					x = comm.parseData(queue, sessions, data)
 					if "action" in data and data["action"] != "null":
 						print(json.dumps(data, indent=2))
