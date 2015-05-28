@@ -40,9 +40,13 @@ def parseData(queue, sessions, jdata):
 		elif action == "deauth":
 			sessions.deauth(sid)
 			return
+		elif action == "null" or action == "refresh":
+			sessions.newnull(sid)
+			sessions.update()
+			return
 	else:
 		return
-	if "args" not in jdata or jdata["action"] == "null":
+	if "args" not in jdata:
 		return
 
 	args = jdata["args"]
