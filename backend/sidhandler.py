@@ -67,7 +67,7 @@ class SID:
 		timestamp = time.time()
 		if timestamp-self.authstamp > config["auth_timeout"] and config["auth_timeout"]:
 			self.authstate = False
-		if timestamp-self.lastnull > config["refreshRate"]*0.005:
+		if timestamp-self.lastnull > config["refreshRate"]*0.015:
 			return False
 		elif timestamp-self.lasttimestamp > config["lastuse_timeout"] and config["lastuse_timeout"]:
 			return False
