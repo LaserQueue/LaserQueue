@@ -10,6 +10,8 @@ Get the latest version by `git clone`ing the repo or downloading a zip. Auto-upd
 
 To start the server, run `start.sh` as root. If on Windows, run `startbackend.bat`. You'll need Python 3.4.x or greater.
 
+To change the admin login password, create a plaintext file `password` under backend. This will be hashed upon script run.
+
 ### Flags:
 
 - `-h`, `--help`: Display a list of these flags. Does not start the backend.
