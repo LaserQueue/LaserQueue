@@ -14,8 +14,20 @@
 import time
 import json
 import os
+import hashlib
 
 config = json.load(open(os.path.join("..", "www", "config.json")))
+
+if os.path.exists("password"):
+	opass = open("password").read().strip().rstrip()
+	hash_object = hashlib.sha1(opass.encode()).hexdigest()
+	hashed_final = hashlib.sha1(hash_object.encode()).hexdigest()
+	hashed = open("hashpassword", "w")
+	hashed.write(hashed_final)
+	hashed.close()
+	os.remove("password")
+if os.path.exists("hashpassword"):
+	PASSWORD = open("hashpassword").read().strip().rstrip()
 
 class SID:
 	def __init__(self, uuid):
@@ -41,9 +53,9 @@ class SID:
 			"uuid": self.uuid
 		}
 	def auth(self, password):
-		if os.path.exists("password"):
-			correctpass = open("password").read().strip().rstrip()
-			if password.strip().rstrip() == correctpass: # *sighs* I'll hash-salt the password one of these days.
+		if os.path.exists("hashpassword"):
+			hash_object = hashlib.sha1(password.strip().rstrip().encode()).hexdigest()
+			if hash_object.strip().rstrip() == PASSWORD: 
 				self.authstate = True
 				return True
 		return False
