@@ -53,6 +53,7 @@ def main():
 			if datat and datat != "{}":
 				try:
 					data = json.loads(datat)
+					queue.metapriority()
 					x = comm.parseData(queue, sessions, data)
 					if "action" in data and data["action"] != "null":
 						print(json.dumps(data, indent=2))

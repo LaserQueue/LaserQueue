@@ -1,5 +1,6 @@
 import json
 import uuid
+import time
 import os.path
 from copy import deepcopy
 
@@ -23,6 +24,19 @@ def _concatlist(lists):
 class Queue:
 	def __init__(self):
 		self.queue = [[] for i in config["priorities"]]
+
+	def metapriority(self):
+		for i in self.queue:
+			for item in i:
+				if time.time()-item["time"] > (config["metabump"] + config["metabumpmult"]*item["priority"]):
+					pri = item["priority"]-1
+					if pri < 0: continue
+					i.remove(item)
+					item["time"] += config["metabump"] + config["metabumpmult"]*item["priority"]
+					item["priority"] = pri
+					self.queue[pri].append(item)
+
+
 	def append(self, name, priority, esttime, material, sid, authstate):
 		if not name:
 			return
@@ -53,7 +67,8 @@ class Queue:
 				"esttime": esttime,
 				"coachmodified": authstate,
 				"uuid": str(uuid.uuid1()),
-				"sid": sid
+				"sid": sid,
+				"time": time.time()
 			})
 
 	def passoff(self, priority, index=0):
