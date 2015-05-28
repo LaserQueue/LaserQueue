@@ -36,9 +36,10 @@ if args.shh:
 	quit()
 
 if os.name != "nt" and os.geteuid() and args.port == 80:
-	print("Root required on port 80, enter your password to elevate permissions.")
-	print("(Use --port PORT to change ports.)")
-	os.system("cd "+selfpath+"; sudo -k ./start.sh "+" ".join(sys.argv[1:]))
+	prompt = """\"Root required on port 80, enter your password to elevate permissions.
+(Use --port PORT to change ports.)
+Password: \""""
+	os.system("cd "+selfpath+"; sudo -p "+prompt+" ./start.sh "+" ".join(sys.argv[1:]))
 	quit()
 
 if __name__ == "__main__":
