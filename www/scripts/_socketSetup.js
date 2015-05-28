@@ -17,7 +17,10 @@ function socketSetup() { // god help me
 		socket.send(JSON.stringify({"action": "null"}));
 		setInterval(function () {
 			if(socket.readyState != socket.CONNECTING) {
-				socket.send(JSON.stringify({"action": "null"}));
+				socket.send(JSON.stringify({
+					"action": "null",
+					"sid": SID
+				}));
 			}
 		},refreshRate);
 	};
