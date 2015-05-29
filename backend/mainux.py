@@ -42,6 +42,9 @@ def main():
 	if args.backup:
 		if os.path.exists("cache.json"):
 			queue = Queue.load(open("cache.json"))
+		else:
+			json.dump({}, open("cache.json", "w"))
+			os.chmod("cache.json", 777)
 		sessions = sids.loadcache()
 	else:
 		sessions = sids.SIDCache()
@@ -61,6 +64,7 @@ def main():
 						sessions.update()
 						if args.backup:
 							json.dump(queue.queue, open("cache.json", "w"), indent=2)
+
 							sids.cache(sessions)
 					if x and type(x) is str:
 						print(x)
