@@ -21,7 +21,14 @@ def _concatlist(lists):
 			masterlist.append(j)
 	return masterlist
 
+def _fillblanks(odict, keys):
+	for i in keys:
+		if i not in odict:
+			odict[i] = None
+	return odict
+
 class Queue:
+	requiredtags = ["priority", "name", "material", "esttime", "coachmodified", "uuid", "sid", "time"]
 	def __init__(self):
 		self.queue = [[] for i in config["priorities"]]
 
@@ -41,6 +48,7 @@ class Queue:
 			i = q.queue[ii]
 			for item in i:
 				item["priority"] = ii
+				item = _fillblanks(item, Queue.requiredtags)
 		return q
 
 	def metapriority(self):
