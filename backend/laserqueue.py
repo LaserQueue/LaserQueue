@@ -25,6 +25,24 @@ class Queue:
 	def __init__(self):
 		self.queue = [[] for i in config["priorities"]]
 
+	def load(fileobj): # init method, do not call on existing object
+		jdata = json.load(fileobj)
+		q = Queue()
+		if type(jdata) is not list:
+			return q
+		if len(jdata) != len(config["priorities"]):
+			if len(jdata) > len(config["priorities"]):
+				q.queue = jdata[:len(config["priorities"])]
+			elif len(jdata) < len(config["priorities"]):
+				q.queue = jdata + [[] for i in range(len(config["priorities"])-len(jdata))]
+		else:
+			q.queue = jdata
+		for ii in range(len(q.queue)):
+			i = q.queue[ii]
+			for item in i:
+				item["priority"] = ii
+		return q
+
 	def metapriority(self):
 		for i in self.queue:
 			for item in i:

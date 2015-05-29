@@ -137,8 +137,9 @@ def cache(sids):
 	json.dump(sids.serialize(), open("scache.json", "w"), indent=2)
 
 def loadcache():
-	if os.path.exists("scache.json"):
-		return SIDCache.load(json.load(open("scache.json")))
-	else:
-		return SIDCache()
+	try:
+		if os.path.exists("scache.json"):
+			return SIDCache.load(json.load(open("scache.json")))
+	except: pass
+	return SIDCache()
 

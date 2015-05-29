@@ -41,7 +41,7 @@ def main():
 
 	if args.backup:
 		if os.path.exists("cache.json"):
-			queue.queue = json.load(open("cache.json"))
+			queue = Queue.load(open("cache.json"))
 		sessions = sids.loadcache()
 	else:
 		sessions = sids.SIDCache()
