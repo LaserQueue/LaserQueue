@@ -32,7 +32,7 @@ $('.nuvu-logo').click(function() {
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
 		if($('#password').val() !== "imacoach") {
-			modalMessage("WHO DO YOU THINK YOU ARE", "I understand. You found paradise in America, you had a good trade, you made a good living. The police protected you and there were courts of law. You didn't need a friend like me. But, now you come to me, and you say: \"LaserQueue, give me justice.\" But you don't ask with respect. You don't offer friendship. You don't even think to call me Godfather. Instead, you come into my house on the day my daughter is to be married, you tell me you're a coach, and you LIE TO ME.");
+			modalMessage(getConfigFile.responseJSON["auth_fail_title"], getConfigFile.responseJSON["auth_fail_body"]);
 		} else {
 			coachMode();
 		}
