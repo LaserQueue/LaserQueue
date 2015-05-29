@@ -33,6 +33,7 @@ elapsed_time = -1    # Compat with windows version
 
 def main():
 	global calculated_time, elapsed_time
+	shamed = []
 	queue = Queue()
 	temppath = os.path.join(os.path.sep, "tmp")
 
@@ -54,21 +55,26 @@ def main():
 				try:
 					data = json.loads(datat)
 					queue.metapriority()
-					x = comm.parseData(queue, sessions, data)
+					x = comm.parseData(queue, sessions, data, shamed)
 					if "action" in data and data["action"] != "null":
 						print(json.dumps(data, indent=2))
 						sessions.update()
 						if args.backup:
 							json.dump(queue.queue, open("cache.json", "w"), indent=2)
 							sids.cache(sessions)
-					if x:
+					if x and type(x) is str:
 						print(x)
 						if x == "uuddlrlrba" and config["easter_eggs"]:
 							json.dump({"action":"rickroll"}, open(os.path.join(temppath, "topage.json"), "w"))
 							time.sleep((config["refreshRate"]*1.5)/1000)
+						elif x == "sorry":
+							if data["sid"][:int(len(data["sid"])/2)] in shamed:
+								shamed.remove(data["sid"][:int(len(data["sid"])/2)])
 						time.sleep(0.2)
 					else:
-						json.dump(comm.generateData(queue, sessions, calculated_time, elapsed_time), open(os.path.join(temppath, "topage.json"), "w"))
+						if x is False:
+							shamed.append(data["sid"][:int(len(data["sid"])/2)])
+						json.dump(comm.generateData(queue, sessions, shamed, calculated_time, elapsed_time), open(os.path.join(temppath, "topage.json"), "w"))
 						json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"), {})
 						if data["action"] != "null": print(queue.queue)
 				except Exception as e: 

@@ -29,7 +29,7 @@ add (args name, base priority, estimated time in minutes, material code)
 exceptions: if move target index is -1, it will append to the bottom of the list
 """
 
-def parseData(queue, sessions, jdata):
+def parseData(queue, sessions, jdata, shamed):
 	if "sid" in jdata and "action" in jdata:
 		sid = jdata["sid"]
 		action = jdata["action"]
@@ -44,6 +44,8 @@ def parseData(queue, sessions, jdata):
 			sessions.newnull(sid)
 			sessions.update()
 			return
+		elif action == "shame":
+			return "sorry"
 	else:
 		return
 	if "args" not in jdata:
@@ -58,7 +60,7 @@ def parseData(queue, sessions, jdata):
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", recieved "+str(_typelist(args))
 
-		sessions.auth(sid, args[0])
+		return sessions.auth(sid, args[0])
 
 
 	elif action == "move":
@@ -207,13 +209,14 @@ Format for program-to-site data:
 }
 """
 
-def generateData(queue, sessions, esttime, currtime):
+def generateData(queue, sessions, shamed, esttime, currtime):
 	jdata = {}
 	jdata["queue"] = queue.queue
 	jdata["esttime"] = esttime
 	jdata["currtime"] = currtime
 	jdata["action"] = "display"
 	jdata["auths"] = sessions.cutauths()
+	jdata["deauths"] = shamed
 	return jdata
 
 
