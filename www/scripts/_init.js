@@ -31,11 +31,11 @@ $('.nuvu-logo').click(function() {
 	');
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
-		if($('#password').val() !== 'imacoach') {
-			modalMessage(config['auth_fail_title'], config['auth_fail_body']);
-		} else {
-			coachMode();
-		}
+		socket.send(JSON.stringify({
+			"action": "auth",
+			"args": [sha1($('#password').val())],
+			"sid": SID
+		}));
 	});
 });
 
