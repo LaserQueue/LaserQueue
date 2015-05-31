@@ -19,7 +19,7 @@ var jsonData;
 $('.notify-modal-title').html("Notification");
 
 // authentication modal
-$('.nuvu-logo').click(function() {
+$('.authorize').click(function() {
 	modalMessage('Authenticate', '
 		<form class="login-form">
 			<div class="form-group">
