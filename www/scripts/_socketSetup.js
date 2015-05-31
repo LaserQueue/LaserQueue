@@ -36,8 +36,6 @@ function socketSetup() { // god help me
 		
 			// if being told to display table
 			if(jsonData.action == "display") {
-
-			
 				
 				// deep copy jsonData to oldJsonData
 				oldJsonData = $.extend({}, jsonData);
@@ -68,7 +66,6 @@ function socketSetup() { // god help me
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
-
 
 			}
 		} else if(jsonData.action == 'rickroll') {
