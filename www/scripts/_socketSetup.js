@@ -34,14 +34,14 @@ function socketSetup() { // god help me
 		// if data is new
 		if(JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
 		
+			// deep copy jsonData to oldJsonData
+			oldJsonData = $.extend({}, jsonData);
+			
+			// log the new data
+			logText('new JSON received: ' + JSON.stringify(jsonData));
+
 			// if being told to display table
 			if(jsonData.action == "display") {
-				
-				// deep copy jsonData to oldJsonData
-				oldJsonData = $.extend({}, jsonData);
-
-				// log the new data
-				logText('new JSON received: ' + JSON.stringify(jsonData));
 
 				// reinitialize full list of cuts
 				allCuts = [];
@@ -66,8 +66,8 @@ function socketSetup() { // god help me
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
-
 			}
+			
 		} else if(jsonData.action == 'rickroll') {
 			rickRoll();
 		}
