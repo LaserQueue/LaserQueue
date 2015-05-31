@@ -6,7 +6,7 @@
 	transition: transform 0.08s ease-in-out;
 	&:hover { transform: scale(1.1); }
 	&:active { transform: scale(0.9); }
-	@media (max-width: 690px) {
+	@media (max-width: 768px) {
 		display: block;
 		width: 240px !important;
 		margin: 45px auto 20px;
