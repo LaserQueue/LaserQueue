@@ -29,6 +29,7 @@ $('.nuvu-logo').click(function() {
 			<button type="submit" class="btn btn-default">Sign in</button>
 		</form>
 	');
+
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
 		logText("Password entered. Attempting auth.");
@@ -38,6 +39,7 @@ $('.nuvu-logo').click(function() {
 			"sid": SID
 		}));
 	});
+	
 });
 
 // footer
