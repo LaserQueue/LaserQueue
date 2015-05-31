@@ -31,6 +31,7 @@ $('.nuvu-logo').click(function() {
 	');
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
+		logText("Password entered. Attempting auth.");
 		socket.send(JSON.stringify({
 			"action": "auth",
 			"args": [sha1($('#password').val())],
