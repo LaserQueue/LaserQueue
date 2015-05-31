@@ -72,6 +72,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 				ga('create', '" + config.google_analytics_key + "', {
 					'cookieDomain': 'none'
 				});
+				ga('set', 'forceSSL', true);
 				ga('send', 'pageview');
 
 			</script>
