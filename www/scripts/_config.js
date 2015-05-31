@@ -69,7 +69,9 @@ getConfigFile = $.getJSON('/config.json', function() {
 				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-				ga('create', '" + config.google_analytics_key + "', 'auto');
+				ga('create', '" + config.google_analytics_key + "', {
+					'cookieDomain': 'none'
+				});
 				ga('send', 'pageview');
 
 			</script>
