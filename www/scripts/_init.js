@@ -32,12 +32,19 @@ $('.nuvu-logo').click(function() {
 
 	$('.login-form').submit(function(event) {
 		event.preventDefault();
-		logText("Password entered. Attempting auth.");
+		logText("Password entered. Attempting auth and switching to \"Logging in\" modal.");
 		socket.send(JSON.stringify({
 			"action": "auth",
 			"args": [sha1($('#password').val())],
 			"sid": SID
 		}));
+		modalMessage('Logging in', '
+			<div class="progress">
+    			<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+    				<span class="sr-only">Logging in...</span>
+    			</div>
+			</div>
+		');
 	});
 	
 });
