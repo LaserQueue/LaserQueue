@@ -8,7 +8,7 @@
 	&:active { transform: scale(0.9); }
 	@media (max-width: 768px) {
 		display: block;
-		width: 240px !important;
+		width: 100%;
 		margin: 45px auto 20px;
 	}
 }
@@ -16,20 +16,6 @@
 .control-panel {
 	margin: 20px;
 	display: inline-block;
-}
-
-.cut-form-group * {
-	display: inline;
-	width: 172px;
-}
-
-form input, form select {
-	margin-bottom: 15px;
-	width: 250px;
-	@media (max-width: 400px) {
-		width: 85vw !important;
-		margin: 6px auto;
-	}
 }
 
 .btn-pink, .btn-pink:hover, .btn-pink:focus {
@@ -45,9 +31,30 @@ form input, form select {
 	}
 }
 
+.cut-form-group * {
+	margin-right: 15px;
+}
+
 .form-control {
 	box-shadow: none !important;
 	&:focus {
 		border-color: $nuvu-pink;
 	}
+}
+
+@media (max-width: 768px) {
+	.control-panel {
+		width: 100vw;
+		margin: 0;
+	}
+
+	.new-cut-form {
+		width: 85vw;
+		margin: 15px auto;
+	}
+
+	.new-cut-form {input, select, select option, button {
+		width: 100% !important;
+		margin: 7.5px 7.5px 7.5px 0;
+	}}
 }
