@@ -46,6 +46,7 @@ $('.nuvu-logo').click(function() {
 	    			</div>
 				</div>
 			');
+			// if not authed in a few seconds, display error modal
 		}
 	});
 	
