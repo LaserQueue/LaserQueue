@@ -58,5 +58,6 @@
 	"metabump": 900,
 	"metabumpmult": 30,
 	"auth_fail_title": "WHO DO YOU THINK YOU ARE?",
-	"auth_fail_body": "I understand. You found paradise in America, you had a good trade, you made a good living. The police protected you and there were courts of law. You didn't need a friend like me. But, now you come to me, and you say: \"LaserQueue, give me justice.\" But you don't ask with respect. You don't offer friendship. You don't even think to call me Godfather. Instead, you come into my house on the day my daughter is to be married, you tell me you're a coach, and you LIE TO ME."
+	"auth_fail_body": "I understand. You found paradise in America, you had a good trade, you made a good living. The police protected you and there were courts of law. You didn't need a friend like me. But, now you come to me, and you say: \"LaserQueue, give me justice.\" But you don't ask with respect. You don't offer friendship. You don't even think to call me Godfather. Instead, you come into my house on the day my daughter is to be married, you tell me you're a coach, and you LIE TO ME.",
+	"google_analytics_key": ""
 }
