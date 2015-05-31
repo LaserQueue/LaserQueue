@@ -62,6 +62,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 	if(config.google_analytics_key == '') {
 		logText("Google Analytics tracking is not enabled.");
 	} else {
+		logText("Google Analytics tracking is enabled with key " + +config.google_analytics_key);
 		$('body').append("
 			<script>
 				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
