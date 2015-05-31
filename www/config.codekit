@@ -2874,17 +2874,6 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/scripts\/_config.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/scripts\/_config.js",
-		"outputAbbreviatedPath": "\/scripts\/min\/_config-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
 	"\/scripts\/_functions.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -3114,32 +3103,26 @@
 	"\/scripts\/scripts.js": [
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_config.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_init.js",
 			"position": 0,
 			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_init.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_functions.js",
 			"position": 1,
 			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_functions.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_socketSetup.js",
 			"position": 2,
 			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_socketSetup.js",
-			"position": 3,
-			"type": 0
-			},
-		{
-			"followForSyntaxChecking": 1,
 			"linkedFileAbbreviatedPath": "\/scripts\/_auth.js",
-			"position": 4,
+			"position": 3,
 			"type": 0
 			}
 		]
