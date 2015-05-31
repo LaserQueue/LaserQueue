@@ -46,6 +46,7 @@ $('.nuvu-logo').click(function() {
 	    			</div>
 				</div>
 			');
+			setTimeout('auth()', 1000);
 			// if not authed in a few seconds, display error modal
 		}
 	});
@@ -58,7 +59,9 @@ $.ajax({
 	type: 'GET'
 })
 .done(function(request) {
-	$('.credits-footer').before(marked(request));
+	$('.credits-footer').before(
+		marked(request)
+	);
 })
 .fail(function() {
 	console.log("Failed to get infotext.md");
