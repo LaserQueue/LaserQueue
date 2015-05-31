@@ -21,6 +21,14 @@
 	}
 }
 
+@keyframes login-loader {
+	from {
+		width: 5%;
+	} to {
+		width: 100%;
+	}
+}
+
 html.lol {
 	background: $nuvu-pink;
 	background-image: url('/img/nyancat.gif');

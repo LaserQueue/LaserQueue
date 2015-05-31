@@ -40,14 +40,12 @@ $('.authorize').click(function() {
 				"sid": SID
 			}));
 			modalMessage('Logging in', '
-				<div class="progress">
-	    			<div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-	    				<span>Logging in. This should take just a moment...</span>
-	    			</div>
+				<div class="progress logging-in">
+	    			<div class="progress-bar active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="animation: login-loader 1s ease-out;width: 100%;"></div>
 				</div>
 			');
 			setTimeout('auth()', 1000);
-			// if not authed in a few seconds, display error modal
+			
 		}
 	});
 	
