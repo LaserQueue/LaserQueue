@@ -18,7 +18,7 @@ var renderDirectives = {
 };
 
 SID = uuid.v1();
-window.console.log("I have SID " + SID);
+window.console.log('I have SID ' + SID);
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
@@ -26,24 +26,24 @@ getConfigFile = $.getJSON('/config.json', function() {
 	config = getConfigFile.responseJSON;
 
 	// hide and disable log if not enabled
-	devLog = getConfigFile.responseJSON["dev_log"];
+	devLog = config.dev_log;
 	if(devLog != true) { $('[for=log-checkbox]').slideUp(); }
 
 	// log entire config file
-	logText("Config file follows:" + JSON.stringify(getConfigFile.responseJSON, null, 2));
+	logText('Config file follows:' + JSON.stringify(getConfigFile.responseJSON, null, 2));
 
 	// set host from host and port
-	host = "ws://" + getConfigFile.responseJSON["host"] + ":" + getConfigFile.responseJSON["port"];
+	host = 'ws://' + config.host + ':' + config.port;
 
 	// set materials and priorities in the same way
-	materials = getConfigFile.responseJSON["materials"];
-	priorities = getConfigFile.responseJSON["priorities"];
+	materials = config.materials;
+	priorities = config.priorities;
 
 	// set refreshRate and reconnectRate
-	refreshRate = getConfigFile.responseJSON["refreshRate"];
-	reconnectRate = getConfigFile.responseJSON["reconnectRate"];
+	refreshRate = config.refreshRate;
+	reconnectRate = config.reconnectRate;
 
-	easterEggs = getConfigFile.responseJSON["easter_eggs"];
+	easterEggs = config.easter_eggs;
 
 	// render the materials dropdown
 	for(var m in materials) {
@@ -60,9 +60,9 @@ getConfigFile = $.getJSON('/config.json', function() {
 	}
 
 	if(config.google_analytics_key == '') {
-		logText("Google Analytics tracking is not enabled.");
+		logText('Google Analytics tracking is not enabled.');
 	} else {
-		logText("Google Analytics tracking is enabled with key " + config.google_analytics_key);
+		logText('Google Analytics tracking is enabled with key ' + config.google_analytics_key);
 
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
