@@ -2,6 +2,7 @@
 
 // declare almost all globals here
 var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate, easterEggs, SID;
+var authed = false;
 var allCuts = [];
 var displayEl = {}
 var renderDirectives = {
