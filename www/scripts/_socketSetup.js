@@ -28,7 +28,7 @@ function socketSetup() { // god help me
 	// when websockets message
 	socket.onmessage = function(msg) {
 
-		// print to log and consoles
+		// loads JSON data
 		jsonData = JSON.parse(msg.data);
 
 		// if data is new
@@ -40,7 +40,7 @@ function socketSetup() { // god help me
 			// log the new data
 			logText('new JSON received: ' + JSON.stringify(jsonData));
 
-			// if being told to display table
+			// if being told to render table
 			if(jsonData.action == "display") {
 
 				// reinitialize full list of cuts
@@ -67,7 +67,7 @@ function socketSetup() { // god help me
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
 			}
-			
+
 		} else if(jsonData.action == 'rickroll') {
 			rickRoll();
 		}
