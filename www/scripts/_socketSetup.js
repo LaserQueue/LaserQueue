@@ -31,11 +31,13 @@ function socketSetup() { // god help me
 		// print to log and consoles
 		jsonData = JSON.parse(msg.data);
 
-		// if being told to display table
-		if(jsonData.action == "display") {
+		// if data is new
+		if(JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
+		
+			// if being told to display table
+			if(jsonData.action == "display") {
 
-			// if data is new
-			if(JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
+			
 				
 				// deep copy jsonData to oldJsonData
 				oldJsonData = $.extend({}, jsonData);
