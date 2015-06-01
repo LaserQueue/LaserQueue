@@ -47,16 +47,18 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 	// render the materials dropdown
 	for(var m in materials) {
+		var selected = (m === config.default_material ? 'selected' : '');
 		$('#cut-material').append('
-			<option ' + (m === config.default_material ? 'selected' : '' ) + ' value="' + m + '">' + materials[m] + '</option>
+			<option ' + selected + ' value="' + m + '" class="'+selected+'">' + materials[m] + '</option>
 		');
 	}
 
 	// render the priorities dropdown
 	for(var p in priorities) {
-		var disabled = (p < config.default_priority && !config.priority_selection ? 'class="disabled"' : '');
+		var disabled = (p < config.default_priority && !config.priority_selection ? 'disabled ' : '');
+		var selected = (p == config.default_priority ? 'selected' : '');
 		$('#priority-dropdown').append('
-			<option ' + (p == config.default_priority ? 'selected' : '') + ' value="' + String(priorities.length-p-1) + '" '+ disabled +'>' + priorities[p] + '</option>
+			<option ' + selected + ' value="' + String(priorities.length-p-1) + '"  class="'+ disabled + selected + '">' + priorities[p] + '</option>
 		');
 	}
 

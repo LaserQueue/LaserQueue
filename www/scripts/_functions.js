@@ -65,8 +65,7 @@ function resetForm(form) {
 	form.find('input:text, input:password, input[type=number], input:file, textarea').val(''); // removed 'select'
 	form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
 	if($(form).selector == ".new-cut-form") {
-		// here is for resetting the form
-		// later. maybe milestone 0.1.0
+		form.find('.selected').prop('selected', true);
 	}
 }
 
