@@ -39,12 +39,6 @@ $('.authorize').click(function() {
 				"args": [sha1($('#password').val())],
 				"sid": SID
 			}));
-			modalMessage('Logging in', '
-				<div class="progress logging-in">
-	    			<div class="progress-bar active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="animation: login-loader 1s ease-out;width: 100%;"></div>
-				</div>
-			');
-			setTimeout('auth()', 1000);
 			
 		}
 	});
