@@ -54,8 +54,9 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 	// render the priorities dropdown
 	for(var p in priorities) {
+		var disabled = (p < config.default_priority && !config.priority_selection ? 'class="disabled"' : '');
 		$('#priority-dropdown').append('
-			<option ' + (p == config.default_priority ? 'selected' : '') + ' value="' + String(priorities.length-p-1) + '">' + priorities[p] + '</option>
+			<option ' + (p == config.default_priority ? 'selected' : '') + ' value="' + String(priorities.length-p-1) + '" '+ disabled +'>' + priorities[p] + '</option>
 		');
 	}
 
