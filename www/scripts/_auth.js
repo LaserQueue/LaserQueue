@@ -6,6 +6,7 @@ function auth() {
 	}
 
 	if(authed) {
+		logText("User has been authed. Displaying authed modal.");
 		modalMessage('Success!', '<p class="lead">You\'ve been authorized!</p>');
 	} else {
 		modalMessage('Failure', '<p class="lead">Unfortunately, it looks like your password was wrong.</p>');
