@@ -20,28 +20,30 @@ $('.notify-modal-title').html("Notification");
 
 // authentication modal
 $('.authorize').click(function() {
-	modalMessage('Authenticate', '
-		<form class="login-form">
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input type="password" class="form-control" id="password" placeholder="Password">
-			</div>
-			<button type="submit" class="btn btn-default">Sign in</button>
-		</form>
-	');
+	if (!authed) {
+		modalMessage('Authenticate', '
+			<form class="login-form">
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" class="form-control" id="password" placeholder="Password">
+				</div>
+				<button type="submit" class="btn btn-default">Sign in</button>
+			</form>
+		');
 
-	$('.login-form').submit(function(event) {
-		event.preventDefault();
-		if($('#password').val() != '') {
-			logText("Password entered. Attempting auth and switching to \"Logging in\" modal.");
-			socket.send(JSON.stringify({
-				"action": "auth",
-				"args": [sha1($('#password').val())],
-				"sid": SID
-			}));
-			
-		}
-	});
+		$('.login-form').submit(function(event) {
+			event.preventDefault();
+			if($('#password').val() != '') {
+				logText("Password entered. Attempting auth and switching to \"Logging in\" modal.");
+				socket.send(JSON.stringify({
+					"action": "auth",
+					"args": [sha1($('#password').val())],
+					"sid": SID
+				}));
+				
+			}
+		});
+	}
 	
 });
 
