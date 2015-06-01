@@ -50,8 +50,8 @@ if __name__ == "__main__":
 		if not os.path.exists(os.path.join(selfpath, "www", "config.json")):
 			json.dump({}, open(os.path.join(selfpath, "www", "config.json"), "w"))
 
-	if os.name != "nt" and os.geteuid() and args.port <= 1024:
-		prompt = """\"Root required on ports 0-1024, enter your password to elevate permissions.
+	if os.name != "nt" and os.geteuid() and args.port < 1024:
+		prompt = """\"Root required on ports up to 1023, enter your password to elevate permissions.
 (Use --port PORT to change ports.)
 Password: \""""
 		os.system("cd "+selfpath+"; sudo -p "+prompt+" ./start.sh "+" ".join(sys.argv[1:]))
