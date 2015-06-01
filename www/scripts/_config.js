@@ -60,6 +60,10 @@ getConfigFile = $.getJSON('/config.json', function() {
 		');
 	}
 
+	if (!config.priority_selection) {
+		$('.disabled').prop('disabled', true);
+	}
+
 	if(config.google_analytics_key == '') {
 		logText('Google Analytics tracking is not enabled.');
 	} else {
