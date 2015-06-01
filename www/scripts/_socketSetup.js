@@ -46,6 +46,10 @@ function socketSetup() { // god help me
 				// reinitialize full list of cuts
 				allCuts = [];
 
+				if (jsonData.auths.indexOf(SID.substring(0, 18)) <= 0) {
+					deauth();
+				}
+
 				// for each priority in list
 				$(jsonData["queue"]).each(function(index, el) {
 
