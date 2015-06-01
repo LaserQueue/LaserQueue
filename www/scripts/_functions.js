@@ -20,6 +20,7 @@ function logText(text) {
 
 // repopulate action button index
 function populateActions() {
+	logText("Populating actions");
 	$(".cutting-table-template tr td:nth-child(1)").each(function(index, el) {
 		$(el).children('i').each(function(iIndex, iElement) {
 			$(iElement).attr('data-uuid', allCuts[index].uuid);
