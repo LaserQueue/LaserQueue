@@ -142,6 +142,5 @@ def loadcache():
 			return SIDCache.load(json.load(open("scache.json")))
 	except: pass
 	json.dump({}, open("scache.json", "w"))
-	os.chmod("scache.json", 777)
 	return SIDCache()
 

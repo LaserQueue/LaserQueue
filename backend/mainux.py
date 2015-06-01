@@ -44,7 +44,6 @@ def main():
 			queue = Queue.load(open("cache.json"))
 		else:
 			json.dump({}, open("cache.json", "w"))
-			os.chmod("cache.json", 777)
 		sessions = sids.loadcache()
 	else:
 		sessions = sids.SIDCache()
