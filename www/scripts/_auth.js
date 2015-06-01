@@ -1,12 +1,13 @@
 function auth() {
 	for(i in jsonData.auths) {
 		if(jsonData.auths[i] == SID.substring(0, 18)) {
+			logText("User has been authed.");
 			authed = true;
 		}
 	}
 
 	if(authed) {
-		logText("User has been authed. Displaying authed modal.");
+		logText("Displaying authed modal.");
 		modalMessage('Success!', '<p class="lead">You\'ve been authorized!</p>');
 	} else {
 		modalMessage('Failure', '<p class="lead">Unfortunately, it looks like your password was wrong.</p>');
