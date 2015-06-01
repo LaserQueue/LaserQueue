@@ -11,6 +11,7 @@ function auth() {
 		modalMessage('Failure', '<p class="lead">Unfortunately, it looks like your password was wrong.</p>');
 		for(i in jsonData.deauths) {
 			if(jsonData.deauths[i] == SID.substring(0, 18)) {
+				logText("Password was wrong. Added to deauths. Shame activated. You're bad and you should feel bad.");
 				socket.send(JSON.stringify({"action":"shame","sid": SID}));
 			}
 		}
