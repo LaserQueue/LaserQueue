@@ -74,6 +74,9 @@ class Queue:
 		if bounds[1] >= 0:
 			esttime = min(bounds[1], esttime)
 
+		if not config["priority_selection"]:
+			priority = min(lpri-config["default_priority"], priority)
+
 		if config["recalc_priority"]:
 			priority = _calcpriority(priority, esttime)
 
