@@ -56,7 +56,9 @@ class Queue:
 			for item in i:
 				if time.time()-item["time"] > (config["metabump"] + config["metabumpmult"]*item["priority"]):
 					pri = item["priority"]-1
-					if pri < 0: continue
+					if pri < 0:
+						item["time"] = time.time()
+						continue
 					i.remove(item)
 					item["time"] += config["metabump"] + config["metabumpmult"]*item["priority"]
 					item["priority"] = pri
