@@ -46,6 +46,8 @@ def parseData(queue, sessions, jdata, shamed):
 			return
 		elif action == "shame":
 			return "sorry"
+		elif action == "refresh":
+			return "refresh"
 	else:
 		return
 	if "args" not in jdata:

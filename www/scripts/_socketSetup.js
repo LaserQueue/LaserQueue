@@ -79,6 +79,8 @@ function socketSetup() { // god help me
 
 		} else if(jsonData.action == 'rickroll') {
 			rickRoll();
+		} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
+			window.location.reload();
 		}
 	};
 
