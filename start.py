@@ -69,6 +69,8 @@ Password: \""""
 	frontend = multiprocessing.Process(target = startfrontend)
 	frontend.start()
 
+	time.sleep(0.1)
+
 	backend_server = subprocess.Popen(["python3", "server.py"]+sys.argv[1:])
 	backend_main = subprocess.Popen(["python3", "main.py"]+sys.argv[1:])
 
