@@ -40,7 +40,7 @@ def parseData(queue, sessions, jdata, shamed):
 		elif action == "deauth":
 			sessions.deauth(sid)
 			return
-		elif action == "null" or action == "refresh":
+		elif action == "null":
 			sessions.newnull(sid)
 			sessions.update()
 			return
