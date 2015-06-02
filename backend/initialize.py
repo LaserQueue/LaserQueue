@@ -33,6 +33,11 @@ def qsort(l):
 
 def copyconf():
 	data = json.load(open(os.path.join("..", "www", "defaultconf.json")))
+	if os.path.exists(os.path.join("..", "www", "userconf.json")):
+		userdata = json.load(open(os.path.join("..", "www", "userconf.json")))
+	else:
+		userdata = {}
+	data = _fillblanks(userdata, data)
 	data["host"] = getIps()[0]
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
@@ -107,11 +112,7 @@ def _prettyl(l, starttext, minlen=0):
 
 
 def _fillblanks(odict, adict):
-	keys = list(adict.keys())
-	for i in keys:
-		if i not in odict:
-			odict[i] = adict[i]
-	return odict
+	return dict(adict, **odict)
 
 def main():
 	getpacks()
@@ -137,6 +138,11 @@ def main():
 			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 	data = json.load(open(os.path.join("..", "www", "config.json")))
 	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
+	if os.path.exists(os.path.join("..", "www", "userconf.json")):
+		userdata = json.load(open(os.path.join("..", "www", "userconf.json")))
+	else:
+		userdata = {}
+	defaultdata = _fillblanks(userdata, defaultdata)
 	if "host" not in data:
 		data["host"] = getIps()[0]
 	data = _fillblanks(data, defaultdata)
