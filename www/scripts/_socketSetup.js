@@ -14,10 +14,10 @@ function socketSetup() { // god help me
 		$('#notify-modal').modal('hide');
 
 		// poll for new data and repeat every refreshRate
-		socketSend({"action": "null"});
+		socketSend({'action': 'null'});
 		setInterval(function () {
 			if(socket.readyState != socket.CONNECTING) {
-				socketSend({"action": "null"});
+				socketSend({'action': 'null'});
 			}
 		},refreshRate);
 	};
@@ -38,7 +38,7 @@ function socketSetup() { // god help me
 			logText('new JSON received: ' + JSON.stringify(jsonData));
 
 			// if being told to render table
-			if(jsonData.action == "display") {
+			if(jsonData.action == 'display') {
 
 				// reinitialize full list of cuts
 				allCuts = [];
@@ -55,7 +55,7 @@ function socketSetup() { // god help me
 					}
 				}
 				// for each priority in list
-				$(jsonData["queue"]).each(function(index, el) {
+				$(jsonData.queue).each(function(index, el) {
 
 					// for each cut in priority
 					$(el).each(function(arrayIndex, arrayEl) {
@@ -86,11 +86,11 @@ function socketSetup() { // god help me
 	// when websockets error
 	socket.onerror = function(error) {
 		// go tell a nerd
-		modalMessage("Error 4", "Could not connect to socket at " + host + ". Maybe the backend is not running? This page will try to reconnect every few seconds. <br><br> <button class='btn btn-default btn-pink btn-retry'>Retry</button>");
+		modalMessage('Error 4', 'Could not connect to socket at ' + host + '. Maybe the backend is not running? This page will try to reconnect every few seconds. <br><br> <button class="btn btn-default btn-pink btn-retry">Retry</button>');
 
 		// set up retry button
 		$('.btn-retry').click(function() {
-			window.location = window.location.origin + "?foo=" + Math.floor(Math.random()*11000);
+			window.location = window.location.origin + '?foo=' + Math.floor(Math.random()*11000);
 		});
 	};
 };

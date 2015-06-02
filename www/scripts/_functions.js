@@ -14,14 +14,14 @@ function logText(text) {
 		var minutesZero = (currentMinutes < 10 ? '0' : '');
 		var secondsZero = (currentSeconds < 10 ? '0' : '');
 		var millisZero = (currentMillis < 10 ? '00' : currentMillis < 100 ? '0' : '');
-		$(".log-pre").prepend("<span class='log-time'> [" + hoursZero + currentHours + ":" + minutesZero + currentMinutes + ":" + secondsZero + currentSeconds + "." + millisZero + currentMillis + "]:</span> " + text + "\n");
+		$('.log-pre').prepend('<span class="log-time"> [' + hoursZero + currentHours + ':' + minutesZero + currentMinutes + ':' + secondsZero + currentSeconds + '.' + millisZero + currentMillis + ']:</span> ' + text + '\n');
 	}
 }
 
 // repopulate action button index
 function populateActions() {
-	logText("Populating actions");
-	$(".cutting-table-template tr td:nth-child(1)").each(function(index, el) {
+	logText('Populating actions');
+	$('.cutting-table-template tr td:nth-child(1)').each(function(index, el) {
 		$(el).children('i').each(function(iIndex, iElement) {
 			$(iElement).attr('data-uuid', allCuts[index].uuid);
 			$(iElement).unbind('click');
@@ -32,38 +32,38 @@ function populateActions() {
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	// handler to remove a job
-	$(".remove-job").click(function() {
-		logText("removing item " + $(this).attr("data-uuid"));
+	$('.remove-job').click(function() {
+		logText('removing item ' + $(this).attr('data-uuid'));
 		socketSend({
-			"action": "uremove",
-			"args": [$(this).attr("data-uuid")]
+			'action': 'uremove',
+			'args': [$(this).attr('data-uuid')]
 		});
 	});
 
 	// handler to lower a job
-	$(".lower-priority").click(function() {
-		logText("passing item " + $(this).attr("data-uuid"));
+	$('.lower-priority').click(function() {
+		logText('passing item ' + $(this).attr('data-uuid'));
 		socketSend({
-			"action": "upass",
-			"args": [$(this).attr("data-uuid")]
+			'action': 'upass',
+			'args': [$(this).attr('data-uuid')]
 		});
 	});
 
 	// handler to decrement a job
-	$(".decrement-job").click(function() {
-		logText("removing item " + $(this).attr("data-uuid"));
+	$('.decrement-job').click(function() {
+		logText('removing item ' + $(this).attr('data-uuid'));
 		socketSend({
-			"action": "udecrement",
-			"args": [$(this).attr("data-uuid")]
+			'action': 'udecrement',
+			'args': [$(this).attr('data-uuid')]
 		});
 	});
 
 	// handler to increment a job
-	$(".increment-job").click(function() {
-		logText("passing item " + $(this).attr("data-uuid"));
+	$('.increment-job').click(function() {
+		logText('passing item ' + $(this).attr('data-uuid'));
 		socketSend({
-			"action": "uincrement",
-			"args": [$(this).attr("data-uuid")]
+			'action': 'uincrement',
+			'args': [$(this).attr('data-uuid')]
 		});
 	});
 }
@@ -80,7 +80,7 @@ function modalMessage(modalTitle, modalBody) {
 function resetForm(form) {
 	form.find('input:text, input:password, input[type=number], input:file, textarea').val(''); // removed 'select'
 	form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
-	if($(form).selector == ".new-cut-form") {
+	if($(form).selector == '.new-cut-form') {
 		form.find('.selected').prop('selected', true);
 	}
 }
@@ -96,6 +96,6 @@ function rickRoll() {
 		$('html').addClass('lol');
 	}
 	else {
-		logText("This is a serious establishment, son. I'm dissapointed in you.");
+		logText('This is a serious establishment, son. I\'m dissapointed in you.');
 	}
 }
