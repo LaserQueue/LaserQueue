@@ -2,6 +2,9 @@ function auth() {
 	authed = true;
 	logText('Displaying authed modal.');
 	modalMessage('Success!', '<p class="lead">You\'ve been authorized!</p>');
+	setTimeout("
+		$('#notify-modal').modal('hide');
+	", 2000)
 	$('.cutting-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', false);
 }
