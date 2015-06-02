@@ -60,5 +60,6 @@
 	"metabumpmult": 30,	
 	"google_analytics_key": "",
 	"priority_selection": false,
-	"allow_force_refresh": false
+	"allow_force_refresh": false,
+	"priority_choose": false
 }
