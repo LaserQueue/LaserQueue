@@ -8,7 +8,7 @@ function auth() {
 function failedauth() {
 	modalMessage('Failure', '<p class="lead">Unfortunately, it looks like your password was wrong.</p>');
 	logText('Password was wrong. Added to deauths. Shame activated. You\'re bad and you should feel bad.');
-	socket.send(JSON.stringify({'action':'shame','sid': SID}));
+	socketSend({'action':'shame'});
 }
 
 function deauth() {

@@ -34,21 +34,19 @@ function populateActions() {
 	// handler to remove a job
 	$(".remove-job").click(function() {
 		logText("removing item " + $(this).attr("data-uuid"));
-		socket.send(JSON.stringify({
+		socketSend({
 			"action": "uremove",
-			"args": [$(this).attr("data-uuid")],
-			"sid": SID
-		}));
+			"args": [$(this).attr("data-uuid")]
+		});
 	});
 
 	// handler to lower a job
 	$(".lower-priority").click(function() {
 		logText("passing item " + $(this).attr("data-uuid"));
-		socket.send(JSON.stringify({
+		socketSend({
 			"action": "upass",
-			"args": [$(this).attr("data-uuid")],
-			"sid": SID
-		}));
+			"args": [$(this).attr("data-uuid")]
+		});
 	});
 }
 
@@ -67,6 +65,11 @@ function resetForm(form) {
 	if($(form).selector == ".new-cut-form") {
 		form.find('.selected').prop('selected', true);
 	}
+}
+
+function socketSend(jdata) {
+	jdata.sid = SID;
+	socket.send(JSON.stringify(jdata));
 }
 
 function rickRoll() {

@@ -35,11 +35,10 @@ $('.authorize').click(function() {
 			event.preventDefault();
 			if($('#password').val() != '') {
 				logText("Password entered. Attempting auth and switching to \"Logging in\" modal.");
-				socket.send(JSON.stringify({
+				socketSend({
 					"action": "auth",
-					"args": [sha1($('#password').val())],
-					"sid": SID
-				}));
+					"args": [sha1($('#password').val())]
+				});
 				
 			}
 		});

@@ -14,13 +14,10 @@ function socketSetup() { // god help me
 		$('#notify-modal').modal('hide');
 
 		// poll for new data and repeat every refreshRate
-		socket.send(JSON.stringify({"action": "null"}));
+		socketSend({"action": "null"});
 		setInterval(function () {
 			if(socket.readyState != socket.CONNECTING) {
-				socket.send(JSON.stringify({
-					"action": "null",
-					"sid": SID
-				}));
+				socketSend({"action": "null"});
 			}
 		},refreshRate);
 	};
