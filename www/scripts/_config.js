@@ -59,6 +59,11 @@ getConfigFile = $.getJSON('/config.json', function() {
 	easterEggs = config.easter_eggs;
 
 	// render the materials dropdown
+	if (config.default_material == "") {
+		$('#cut-material').append('
+			<option selected value="N/A" class="selected">Choose a material...</option>
+		');
+	}
 	for(var m in materials) {
 		var selected = (m === config.default_material ? 'selected' : '');
 		$('#cut-material').append('

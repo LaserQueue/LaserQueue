@@ -68,6 +68,8 @@ class Queue:
 	def append(self, name, priority, esttime, material, sid, authstate):
 		if not name:
 			return
+		if material == "N/A":
+			return
 		bounds = config["length_bounds"]
 		if bounds[0] >= 0:
 			esttime = max(bounds[0], esttime)
