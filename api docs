@@ -1,5 +1,3 @@
-Sam, you know how to format things. All I'll do is put docs here.
-
 
 comm protocols
 
@@ -9,10 +7,11 @@ Format:
 {
 	"action": action to perform
 	"args": list of arguments
+	"sid": your session ID.
 }
 
 actions:
-Note: only listing recommended actions. using the undocumented actions might result in problems with multiple people using the software at once.
+Note: only listing recommended actions. using the undocumented actions might result in unexpected errors.
 
 
 add
@@ -33,29 +32,34 @@ arguments: uuid
 removes the specified job from the list.
 
 
-umove *
+umove *§
 arguments: uuid, target index, target priority
 
 moves the specified job to the target index, and the target priority.
 
 
-uincrement *
+uincrement *§
 arguments: uuid
 
 moves the specified job up one job, or if it's at the top of its priority level, up one priority.
 
 
-udecrement *
+udecrement *§
 arguments: uuid
 
 moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
 
 
 auth
-arguments: password
+arguments: sha1 hash of password
 
-the auth action is completely insecure. It's meant for enough authentication that the admins don't need to constantly watch the users. This will be fixed when logins are fully implemented. The password is currently plaintext, but eventually will be hashed. 
-requests an authentication packet from the server. if recieved, you'll be put into admin mode.
+enter admin mode if password is correct.
+
+
+deauth
+arguments: N/A
+
+leave admin mode.
 
 
 null
@@ -64,13 +68,28 @@ arguments: N/A
 nothing
 
 
-uuddlrlrba
-arguments: password
+shame
+arguments: N/A
+
+if you had a failed auth attempt, remove yourself from the deauths list.
+
+
+refresh
+arguments: N/A
+
+refresh all users. Useful for pushing changes.
+dependent upon config.allow_force_refresh.
+
+
+uuddlrlrba §
+arguments: N/A
 
 huehuehue
+dependent upon config.easter_eggs.
 
 
 *: applies the Modified gear.
+§: requires auth by default.
 
 
 Sending to client:
@@ -84,21 +103,18 @@ display
 	"currtime": current time of operation. leave as -1 if you don't want it to render.      ### NYI ###
 	"esttime": estimated time of the operation. leave as -1 if you don't want it to render. ### NYI ###
 	"queue": the queue object.
+	"auths": a list of the first halves of every auth'd sid.
+	"deauths": a list of the first halves of every sid that failed to auth.
 }
 
-notification ### NYI ###
+refresh the page.
+dependent upon config.allow_force_refresh
 {
-	"action": "notification"
-	"title": the title of the modal error.
-	"content": the text displayed in the modal.
+	"action":"refresh"
 }
 
-auth
-{
-	"action": "auth"
-}
-
-rickroll
+rickroll everyone.
+dependent upon config.easter_eggs
 {
 	"action":"rickroll"
 }
