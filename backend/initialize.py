@@ -140,6 +140,7 @@ def main():
 	if "host" not in data:
 		data["host"] = getIps()[0]
 	data = _fillblanks(data, defaultdata)
+	data["version"] = defaultdata["version"]
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
 				

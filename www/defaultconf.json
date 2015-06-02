@@ -1,4 +1,5 @@
 {
+	"version": "0.0.4",
 	"host": "",
 	"port": "8763",
 	"serverRefreshRate": 300000,
