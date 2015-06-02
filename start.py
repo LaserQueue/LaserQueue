@@ -1,5 +1,7 @@
 import os, sys
+import subprocess, time
 import http.server
+import multiprocessing
 import json
 from http.server import SimpleHTTPRequestHandler
 
@@ -31,7 +33,11 @@ if args.help:
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 
+def startfrontend():
+	http.server.test(HandlerClass=SimpleHTTPRequestHandler, port=args.port)
+
 if __name__ == "__main__":
+	os.chdir(selfpath)
 	if args.shh:
 		newargs = " ".join([i for i in sys.argv[1:] if i != "-q"])
 		os.system("cd "+selfpath+"; ./start.sh {0} >/dev/null".format(newargs))
@@ -54,11 +60,23 @@ if __name__ == "__main__":
 		prompt = """\"Root required on ports up to 1023, enter your password to elevate permissions.
 (Use --port PORT to change ports.)
 Password: \""""
-		os.system("cd "+selfpath+"; sudo -p "+prompt+" ./start.sh "+" ".join(sys.argv[1:]))
+		os.system("sudo -p "+prompt+" ./start.sh "+" ".join(sys.argv[1:]))
 		quit()
 
+	os.chdir(os.path.join(os.getcwd(), "backend"))
+	os.system("python3 initialize.py "+" ".join(sys.argv[1:]))
 
-	os.system("cd "+selfpath+"; cd backend; python3 initialize.py "+" ".join(sys.argv[1:]))
-	os.system("cd "+selfpath+"; ./startbackend.sh " + " ".join(sys.argv[1:]) + " &")
-	os.chdir(os.path.join(os.getcwd(), "www"))
-	http.server.test(HandlerClass=SimpleHTTPRequestHandler, port=args.port)
+	frontend = multiprocessing.Process(target = startfrontend)
+	frontend.start()
+
+	backend_server = subprocess.Popen(["python3", "server.py"]+sys.argv[1:])
+	backend_main = subprocess.Popen(["python3", "main.py"]+sys.argv[1:])
+
+	os.chdir(os.path.join(os.getcwd(), "..", "www"))
+	while not backend_server.returncode and not backend_main.returncode: time.sleep(0.001)
+	kill_server = subprocess.Popen(['kill', str(backend_server.pid), "1>/dev/null"])
+	kill_main = subprocess.Popen(['kill', str(backend_main.pid), "1>/dev/null"])
+	while not kill_server.returncode and not kill_main.returncode: time.sleep(0.001)
+	frontend.terminate()
+	
+
