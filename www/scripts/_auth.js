@@ -7,6 +7,7 @@ function onAuth() {
 	', 2000)
 	$('.cutting-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', false);
+	$('.authorize').attr('data-original-title', 'Click to log out');
 }
 
 function onFailedauth() {
@@ -20,4 +21,5 @@ function onDeauth() {
 	logText('User has been deauthed.');
 	$('.cutting-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', true);
+	$('.authorize').attr('data-original-title', 'Click to authenticate');
 }

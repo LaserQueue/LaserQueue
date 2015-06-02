@@ -20,7 +20,10 @@ $('.notify-modal-title').html('Notification');
 
 // authentication modal
 $('.authorize').click(function() {
-	if (!authed) {
+	if (authed) {
+		socketSend({'action': 'deauth'});
+	}
+	else {
 		modalMessage('Authenticate', '
 			<form class="login-form">
 				<div class="form-group">
