@@ -2,6 +2,7 @@ function auth() {
 	authed = true;
 	logText('Displaying authed modal.');
 	modalMessage('Success!', '<p class="lead">You\'ve been authorized!</p>');
+	$('.cutting-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', false);
 }
 
@@ -14,5 +15,5 @@ function failedauth() {
 function deauth() {
 	authed = false;
 	logText('User has been deauthed.');
-	$('.disabled').prop('disabled', true);
+	$('.disabled').prop('disabled', true)
 }

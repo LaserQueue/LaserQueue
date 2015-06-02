@@ -48,6 +48,24 @@ function populateActions() {
 			"args": [$(this).attr("data-uuid")]
 		});
 	});
+
+	// handler to decrement a job
+	$(".decrement-job").click(function() {
+		logText("removing item " + $(this).attr("data-uuid"));
+		socketSend({
+			"action": "udecrement",
+			"args": [$(this).attr("data-uuid")]
+		});
+	});
+
+	// handler to increment a job
+	$(".increment-job").click(function() {
+		logText("passing item " + $(this).attr("data-uuid"));
+		socketSend({
+			"action": "uincrement",
+			"args": [$(this).attr("data-uuid")]
+		});
+	});
 }
 
 // displays message in modal

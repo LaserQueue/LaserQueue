@@ -251,8 +251,8 @@ class Queue:
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
-					index = j.index(i)
-					priority = self.queue.index(i)
+					index = i.index(j)
+					priority = lpri-self.queue.index(i)
 
 		if priority == lpri and not index:
 			return
@@ -273,8 +273,8 @@ class Queue:
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
-					index = j.index(i)
-					priority = self.queue.index(i)
+					index = i.index(j)
+					priority = lpri-self.queue.index(i)
 
 		if not priority and len(self.queue[lpri-priority]) < index:
 			return
