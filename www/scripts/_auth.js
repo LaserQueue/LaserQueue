@@ -15,5 +15,5 @@ function failedauth() {
 function deauth() {
 	authed = false;
 	logText('User has been deauthed.');
-	$('.disabled').prop('disabled', true)
+	$('.disabled').prop('disabled', true);
 }
