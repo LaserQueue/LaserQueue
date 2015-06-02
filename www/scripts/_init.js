@@ -25,11 +25,17 @@ $('.authorize').click(function() {
 			<form class="login-form">
 				<div class="form-group">
 					<label for="password">Password</label>
-					<input type="password" class="form-control" id="password" placeholder="Password">
+					<input type="password" class="form-control coach-password" id="password" placeholder="Password">
 				</div>
 				<button type="submit" class="btn btn-default">Sign in</button>
 			</form>
 		');
+
+		setTimeout("
+			$('.coach-password').focus();
+		",500);
+
+		
 
 		$('.login-form').submit(function(event) {
 			event.preventDefault();
