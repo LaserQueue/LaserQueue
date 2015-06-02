@@ -1,3 +1,2 @@
 #!/bin/bash
-cd $(/bin/pwd -P)
-python3 start.py $*
+python3 $(dirname $0)/start.py $*
