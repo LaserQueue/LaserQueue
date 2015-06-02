@@ -8,14 +8,19 @@ Download the latest stable version from [github.com/yrsegal/LaserQueue/releases]
 
 Get the latest version by `git clone`ing the repo or downloading a zip. Auto-updating is planned but not yet implemented.
 
-To start the server, run `startbackend.sh`. If on Windows, run `startbackend.bat`. You'll need Python 3.4.x or greater.
+To start the server, run `start.sh` as root. If on Windows, run `startbackend.bat`. You'll need Python 3.4.x or greater.
+
+To change the admin login password, create a plaintext file `password` under backend. This will be hashed upon script run.
 
 ### Flags:
 
 - `-h`, `--help`: Display a list of these flags. Does not start the backend.
+- `-p`, `--port`: Set the port for the website to be hosted.
 - `-l`, `--local`: Start the backend in local mode. You'll connect with localhost.
+- `-q`, `--quiet`: Start without output. Only applies to start.sh. Equivalent to >/dev/null.
 - `-b`, `--queue-backup`: Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.
 - `-r`, `--regen-config`: Regenerate the config. This is the default option if no config.json file is found in WWW
+- `-n`, `--regen-host`: Regenerate the host in the config. Does not affect any other config values. 
 - `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
 - `--install-all`: No short option. Installs all dependencies without prompting
 

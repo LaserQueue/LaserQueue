@@ -1,0 +1,120 @@
+
+comm protocols
+
+Sending to server
+
+Format:
+{
+	"action": action to perform
+	"args": list of arguments
+	"sid": your session ID.
+}
+
+actions:
+Note: only listing recommended actions. using the undocumented actions might result in unexpected errors.
+
+
+add
+arguments: name, priority, estimated time, material code
+
+adds the specified name, priority, etc to the list.
+
+
+upass
+arguments: uuid
+
+moves the specified job below the next job.
+
+
+uremove
+arguments: uuid
+
+removes the specified job from the list.
+
+
+umove *§
+arguments: uuid, target index, target priority
+
+moves the specified job to the target index, and the target priority.
+
+
+uincrement *§
+arguments: uuid
+
+moves the specified job up one job, or if it's at the top of its priority level, up one priority.
+
+
+udecrement *§
+arguments: uuid
+
+moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
+
+
+auth
+arguments: sha1 hash of password
+
+enter admin mode if password is correct.
+
+
+deauth
+arguments: N/A
+
+leave admin mode.
+
+
+null
+arguments: N/A
+
+nothing
+
+
+shame
+arguments: N/A
+
+if you had a failed auth attempt, remove yourself from the deauths list.
+
+
+refresh
+arguments: N/A
+
+refresh all users. Useful for pushing changes.
+dependent upon config.allow_force_refresh.
+
+
+uuddlrlrba §
+arguments: N/A
+
+huehuehue
+dependent upon config.easter_eggs.
+
+
+*: applies the Modified gear.
+§: requires auth by default.
+
+
+Sending to client:
+
+the action tag defines the data sent.
+
+
+display
+{
+	"action": "display"
+	"currtime": current time of operation. leave as -1 if you don't want it to render.      ### NYI ###
+	"esttime": estimated time of the operation. leave as -1 if you don't want it to render. ### NYI ###
+	"queue": the queue object.
+	"auths": a list of the first halves of every auth'd sid.
+	"deauths": a list of the first halves of every sid that failed to auth.
+}
+
+refresh the page.
+dependent upon config.allow_force_refresh
+{
+	"action":"refresh"
+}
+
+rickroll everyone.
+dependent upon config.easter_eggs
+{
+	"action":"rickroll"
+}

@@ -13,12 +13,12 @@
 		60
 	],
 	"priorities": [
-		"Lunch/After NuVu",
-		"Low", 
-		"Medium",
-		"High",
+		"Absolutely Required",
 		"Urgent",
-		"Absolutely Required"
+		"Important",
+		"Normal",
+		"Low", 
+		"Lunch/After NuVu"
 	],
 	"materials": {
 		"w": "Thin Wood",
@@ -28,5 +28,37 @@
 		"p": "Paper",
 		"f": "Fabric",
 		"o": "Other"
-	}
+	},
+	"default_material": "w",
+	"default_priority": 3,
+	"name_input": "Enter name here",
+	"time_input": "Estimated time (min)",
+	"modified_hover": "Modified",
+	"dev_log":true,
+	"allow_multiples":false,
+	"recalc_priority":true,
+	"admin_mode_enabled":true,
+	"allow_multiple_materials":true,
+	"easter_eggs":false,
+	"recapitalize":true,
+	"authactions": [
+		"move",
+		"smove",
+		"umove",
+		"sincrement",
+		"uincrement",
+		"sdecrement",
+		"udecrement",
+		"refresh",
+		"uuddlrlrba"
+	],
+	"auth_timeout": 600,
+	"lastuse_timeout": 1800,
+	"sid_total_timeout": 3600,
+	"length_bounds": [0.1, 360],
+	"metabump": 900,
+	"metabumpmult": 30,	
+	"google_analytics_key": "",
+	"priority_selection": false,
+	"allow_force_refresh": false
 }

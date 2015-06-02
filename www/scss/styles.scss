@@ -1,5 +1,5 @@
 @import "variables";
-
+@import "animations";
 
 @import "a";
 @import "header";
@@ -9,7 +9,7 @@
 	outline: none !important;
 }
 
-.glyphicon-remove, .glyphicon-triangle-bottom {
+.glyphicon-remove, .glyphicon-triangle-bottom, .glyphicon-chevron-up, .glyphicon-chevron-down {
 	cursor: pointer;
 	transition: transform 0.1s linear;
 	&:hover { transform: scale(1.2); }
@@ -20,6 +20,12 @@
 	color: firebrick;
 	&:hover { color: darken(firebrick, 10%); }
 	&:active { color: darken(firebrick, 25%); }
+}
+
+.glyphicon-chevron-up, .glyphicon-chevron-down {
+	color: $nuvu-pink;
+	&:hover { color: darken($nuvu-pink, 10%); }
+	&:active { color: darken($nuvu-pink, 25%); }
 }
 
 #cut-material, #priority-dropdown {
@@ -36,6 +42,8 @@
 * {
 	transition: width 0.7s ease-in-out, height 0.7s ease-in-out, padding 0.7s ease-in-out, margin 0.7s ease-in-out, position 0.7s ease-in-out, display 0.7s ease-in-out;
 }
+
+body { animation: fadeIn 1 0.8s linear; }
 
 @import "scrollbar";
 

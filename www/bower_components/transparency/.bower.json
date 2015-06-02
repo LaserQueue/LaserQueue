@@ -1,0 +1,28 @@
+{
+  "name": "transparency",
+  "version": "0.10.0",
+  "main": "./dist/transparency.js",
+  "ignore": [
+    "**/*",
+    "!dist/transparency.js",
+    "!dist/transparency.min.js"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "requirejs": "~2.1.15",
+    "jquery": "~2.1.1",
+    "handlebars": "~2.0.0",
+    "benchmark": "~1.0.0",
+    "mocha": "~1.21.4"
+  },
+  "homepage": "https://github.com/leonidas/transparency",
+  "_release": "0.10.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.10.0",
+    "commit": "f2ade21809e49c08c04a7d7a889a153d6803e9fc"
+  },
+  "_source": "git://github.com/leonidas/transparency.git",
+  "_target": "~0.10.0",
+  "_originalSource": "transparency"
+}

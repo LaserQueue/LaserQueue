@@ -8,9 +8,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -78,7 +76,14 @@ sftp-config.json
 ### Sass ###
 .sass-cache
 
+### Gulp ###
+node_modules/
 
 ### Program specific ###
 config.json
+scache.json
 cache.json
+password
+infotext.md
+hashpassword
+www/infotext.md
