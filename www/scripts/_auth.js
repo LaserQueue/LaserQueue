@@ -1,4 +1,4 @@
-function auth() {
+function onAuth() {
 	authed = true;
 	logText('Displaying authed modal.');
 	modalMessage('Success!', '<p class="lead">You\'ve been authorized!</p>');
@@ -9,13 +9,13 @@ function auth() {
 	$('.disabled').prop('disabled', false);
 }
 
-function failedauth() {
+function onFailedauth() {
 	modalMessage('Failure', '<p class="lead">Unfortunately, it looks like your password was wrong.</p>');
 	logText('Password was wrong. Added to deauths. Shame activated. You\'re bad and you should feel bad.');
 	socketSend({'action':'shame'});
 }
 
-function deauth() {
+function onDeauth() {
 	authed = false;
 	logText('User has been deauthed.');
 	$('.cutting-table-template').render(allCuts, renderDirectives);

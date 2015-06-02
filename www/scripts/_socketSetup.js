@@ -45,13 +45,13 @@ function socketSetup() { // god help me
 
 				if (config.admin_mode_enabled) {
 					if (jsonData.auths.indexOf(SID.substring(0, 18)) < 0 && authed) {
-						deauth();
+						onDeauth();
 					}
 					else if (jsonData.auths.indexOf(SID.substring(0, 18)) >= 0 && !authed) {
-						auth();
+						onAuth();
 					}
 					else if (jsonData.deauths.indexOf(SID.substring(0, 18)) >= 0 && !authed) {
-						failedauth();
+						onFailedauth();
 					}
 				}
 				// for each priority in list
