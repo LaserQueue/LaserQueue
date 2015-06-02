@@ -18,5 +18,6 @@ function failedauth() {
 function deauth() {
 	authed = false;
 	logText('User has been deauthed.');
+	$('.cutting-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', true);
 }
