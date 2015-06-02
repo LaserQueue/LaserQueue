@@ -22,6 +22,7 @@ $('.notify-modal-title').html('Notification');
 $('.authorize').click(function() {
 	if (authed) {
 		socketSend({'action': 'deauth'});
+		$('.authorize').tooltip('hide');
 	}
 	else {
 		modalMessage('Authenticate', '
@@ -33,6 +34,7 @@ $('.authorize').click(function() {
 				<button type="submit" class="btn btn-default">Sign in</button>
 			</form>
 		');
+		$('.authorize').tooltip('hide');
 
 		setTimeout('
 			$(".coach-password").focus();
