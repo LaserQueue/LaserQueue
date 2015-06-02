@@ -29,8 +29,9 @@ function populateActions() {
 	});
 
 	// reinitialize bootstrap tooltips
-	$('[data-toggle="tooltip"]').tooltip();
-	
+	if(isTouchDevice() == false) {
+		$('[data-toggle="tooltip"]').tooltip();
+	}
 	// handler to remove a job
 	$('.remove-job').click(function() {
 		logText('removing item ' + $(this).attr('data-uuid'));
@@ -98,4 +99,8 @@ function rickRoll() {
 	else {
 		logText('This is a serious establishment, son. I\'m dissapointed in you.');
 	}
+}
+
+function isTouchDevice(){
+	return true == ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
 }
