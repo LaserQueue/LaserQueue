@@ -2566,6 +2566,17 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
+	"\/bower_components\/marked\/lib\/marked.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/bower_components\/marked\/lib\/marked.js",
+		"outputAbbreviatedPath": "\/bower_components\/marked\/lib\/min\/marked-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
 	"\/bower_components\/marked\/marked.min.js": {
 		"fileType": 64,
 		"ignore": 0,
@@ -3098,18 +3109,18 @@
 	},
 "hooks": [
 	],
-"lastSavedByUser": "Wire Segal",
+"lastSavedByUser": "Sam Daitzman",
 "manualImportLinks": {
 	"\/scripts\/scripts.js": [
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_auth.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_config.js",
 			"position": 0,
 			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_config.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_functions.js",
 			"position": 1,
 			"type": 0
 			},
@@ -3121,13 +3132,13 @@
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_functions.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_socketSetup.js",
 			"position": 3,
 			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/scripts\/_socketSetup.js",
+			"linkedFileAbbreviatedPath": "\/scripts\/_auth.js",
 			"position": 4,
 			"type": 0
 			}
