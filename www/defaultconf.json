@@ -65,5 +65,6 @@
 	"google_analytics_key": "",
 	"priority_selection": false,
 	"allow_force_refresh": false,
-	"priority_choose": false
+	"priority_choose": false,
+	"pass_depth": 1
 }
