@@ -9,7 +9,7 @@ function socketSetup() { // god help me
 	// when websockets connects
 	socket.onopen = function() {
 		// print to log and consoles
-		logText('WebSockets connection opened successfully \n');
+		logText('WebSockets connection opened successfully');
 
 		$('#notify-modal').modal('hide');
 

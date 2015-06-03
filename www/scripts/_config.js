@@ -107,8 +107,8 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 		googleAnalytics('send', 'pageview');
 	}
-	
-	logText('LaserCutter software is up. Attempting connection to WebSockets host', host);
+
+	logText('LaserCutter software is up. Attempting connection to WebSockets host ' + host);
 	socketSetup();
 	setInterval(function() {
 		if(typeof reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
