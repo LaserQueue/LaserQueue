@@ -234,6 +234,7 @@ class Queue:
 			if end in i:
 				tindex = i.index(end)
 				tpri = lpri-ii
+		target["time"] = time.time()
 		target["priority"] = lpri-tpri
 		self.queue[lpri-tpri].insert(tindex+1, target)
 
@@ -243,6 +244,7 @@ class Queue:
 				if j["uuid"] == u:
 					target = deepcopy(j)
 					i.remove(j)
+		target["time"] = time.time()
 		target["coachmodified"] = True
 		target["priority"] = lpri-np
 		self.queue[lpri-np].insert(ni, target)
@@ -265,6 +267,7 @@ class Queue:
 				priority = lpri
 			else:
 				index = len(self.queue[max(lpri-priority, 0)])
+		item["time"] = time.time()
 		item["coachmodified"] = True
 		item["priority"] = lpri-priority
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
@@ -287,6 +290,7 @@ class Queue:
 				priority = 0
 			else:
 				index = 0
+		item["time"] = time.time()
 		item["coachmodified"] = True
 		item["priority"] = lpri-priority
 		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
