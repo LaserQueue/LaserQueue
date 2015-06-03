@@ -8,7 +8,6 @@ $(document).ready(function() {
 		clickAction.preventDefault();
 		logText("submit button clicked");
 		var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
-		logText(estimate); 
 		socketSend(
 			{
 				"action": "add",
