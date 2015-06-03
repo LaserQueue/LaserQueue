@@ -56,7 +56,10 @@
 	"auth_timeout": 600,
 	"lastuse_timeout": 1800,
 	"sid_total_timeout": 3600,
-	"length_bounds": [0.017, 360],
+	"length_bounds": [
+		0.0166666667, 
+		360
+	],
 	"metabump": 900,
 	"metabumpmult": 30,	
 	"google_analytics_key": "",

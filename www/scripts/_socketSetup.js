@@ -69,7 +69,7 @@ function socketSetup() { // god help me
 						timetotal -= hours*60;
 						var minutes = +(timetotal).toFixed(0);
 						timetotal -= minutes;
-						var seconds = timetotal*60;
+						var seconds = +(timetotal*60).toFixed(2);
 
 						var output = String(hours ? hours+'h' : '') + (minutes && hours ? ' ' : '');
 						output += String(minutes ? minutes+'m' : '') + (seconds && minutes ? ' ' : '');

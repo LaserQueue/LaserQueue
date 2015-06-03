@@ -8,8 +8,7 @@ $(document).ready(function() {
 		clickAction.preventDefault();
 		logText("submit button clicked");
 		var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
-		socketSend(
-			{
+		socketSend({
 				'action': 'add',
 				'args': [
 					$('.cut-human-name').val(), 
@@ -17,8 +16,7 @@ $(document).ready(function() {
 					+estimate[0], 
 					$('.cut-material').val()
 				]
-			}
-		);
+			});
 		resetForm($('.new-cut-form'));
 		
 	});
