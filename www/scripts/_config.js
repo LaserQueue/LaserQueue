@@ -87,6 +87,15 @@ getConfigFile = $.getJSON('/config.json', function() {
 		');
 	}
 
+	socketSetup();
+	setInterval(function() {
+		if(typeof reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
+			// initialize websockets if closed
+			logText('LaserCutter software is up. Attempting connection to WebSockets host', host);
+			socketSetup();
+		}
+	}, reconnectRate);
+
 	if (!config.priority_selection) {
 		$('.disabled').prop('disabled', true);
 	}
