@@ -38,13 +38,12 @@ window.console.log('I have SID ' + SID);
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
 
-	logText('Log starts here')
-
 	config = getConfigFile.responseJSON;
 
 	// hide and disable log if not enabled
 	devLog = config.dev_log;
 	if(devLog != true) { $('[for=log-checkbox]').slideUp(); }
+	logText('Log starts here');
 
 	// log entire config file
 	logText('Config file follows: ' + JSON.stringify(getConfigFile.responseJSON, null, 2));
