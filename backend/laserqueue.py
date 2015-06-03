@@ -186,3 +186,36 @@ class Queue:
 		item["coachmodified"] = True
 		item["priority"] = lpri-priority
 		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
+
+	def attr(self, u, attrname, value, authstate):
+		if attrname not in self.requiredtags or attrname in ["uuid", "sid", "time"]:
+			return
+		if attrname not in config["attr_edit_perms"] and not authstate:
+			return
+		for i in self.queue:
+			for j in i:
+				if j["uuid"] == u:
+					index = i.index(j)
+					priority = lpri-self.queue.index(i)
+		item = self.queue[lpri-priority][index]
+		if attrname not in config["attr_edit_perms"] and attrname != "coachmodified":
+			item["coachmodified"] = True
+
+		if attrname == "name": item["name"] = str(value).strip().rstrip()
+		elif attrname == "material" and value in config["materials"]: item["material"] = value
+		elif attrname == "esttime":
+			bounds = config["length_bounds"]
+			if bounds[0] >= 0:
+				value = max(bounds[0], value)
+			if bounds[1] >= 0:
+				value = min(bounds[1], value)
+			item["esttime"] = value
+			if config["recalc_priority"] and not authstate:
+				newpriority = _calcpriority(priority, value)
+				item["priority"] = lpri-newpriority
+				self.queue[lpri-priority].pop(index)
+				self.queue[lpri-newpriority].append(item)
+			elif authstate and config["recalc_priority"]:
+				item["coachmodified"] = True
+		elif attrname == "coachmodified": item["coachmodified"] = bool(value)
+
