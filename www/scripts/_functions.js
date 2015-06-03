@@ -34,7 +34,7 @@ function populateActions() {
 	}
 	// handler to remove a job
 	$('.remove-job').click(function() {
-		ga('send', 'event', 'action', 'click', 'remove job');
+		googleAnalytics('send', 'event', 'action', 'click', 'remove job');
 		logText('removing item ' + $(this).attr('data-uuid'));
 		socketSend({
 			'action': 'remove',
@@ -44,7 +44,7 @@ function populateActions() {
 
 	// handler to lower a job
 	$('.lower-priority').click(function() {
-		ga('send', 'event', 'action', 'click', 'pass job');
+		googleAnalytics('send', 'event', 'action', 'click', 'pass job');
 		logText('passing item ' + $(this).attr('data-uuid'));
 		socketSend({
 			'action': 'pass',
@@ -54,7 +54,7 @@ function populateActions() {
 
 	// handler to decrement a job
 	$('.decrement-job').click(function() {
-		ga('send', 'event', 'action', 'click', 'decrement job');
+		googleAnalytics('send', 'event', 'action', 'click', 'decrement job');
 		logText('removing item ' + $(this).attr('data-uuid'));
 		socketSend({
 			'action': 'decrement',
@@ -64,7 +64,7 @@ function populateActions() {
 
 	// handler to increment a job
 	$('.increment-job').click(function() {
-		ga('send', 'event', 'action', 'click', 'increment job');
+		googleAnalytics('send', 'event', 'action', 'click', 'increment job');
 		logText('passing item ' + $(this).attr('data-uuid'));
 		socketSend({
 			'action': 'increment',
@@ -107,4 +107,10 @@ function rickRoll() {
 
 function isTouchDevice(){
 	return true == ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
+}
+
+function googleAnalytics(i, s, o, g, r, a, m){
+	if (config.google_analytics_key != '') {
+		ga(i, s, o, g, r, a, m);
+	}
 }
