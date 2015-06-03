@@ -21,14 +21,21 @@ def _concatlist(lists):
 			masterlist.append(j)
 	return masterlist
 
-def _fillblanks(odict, keys):
-	for i in keys:
-		if i not in odict:
-			odict[i] = None
-	return odict
+def _fillblanks(odict, adict):
+	return dict(adict, **odict)
 
 class Queue:
-	requiredtags = ["priority", "name", "material", "esttime", "coachmodified", "uuid", "sid", "time"]
+	requiredtags = {
+		"priority":0,
+		"name":"DEFAULT",
+		"material":"o", 
+		"esttime": 0, 
+		"coachmodified": False, 
+		"uuid": "this object is so old that it should be deleted", 
+		"sid": "this object is so old that it should be deleted", 
+		"time": 2**30,
+		"totaldiff": 0
+	}
 	def __init__(self):
 		self.queue = [[] for i in config["priorities"]]
 
@@ -92,6 +99,7 @@ class Queue:
 
 		if not inqueue or config["allow_multiples"]:
 			self.queue[lpri-priority].append({
+				"totaldiff": 0,
 				"priority": lpri-priority,
 				"name": name.strip().rstrip(),
 				"material": material,
@@ -188,7 +196,7 @@ class Queue:
 		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
 
 	def attr(self, u, attrname, value, authstate):
-		if attrname not in self.requiredtags or attrname in ["uuid", "sid", "time"]:
+		if attrname not in self.requiredtags or attrname in ["uuid", "sid", "time", "totaldiff"]:
 			return
 		if attrname not in config["attr_edit_perms"] and not authstate:
 			return
@@ -209,9 +217,17 @@ class Queue:
 				value = max(bounds[0], value)
 			if bounds[1] >= 0:
 				value = min(bounds[1], value)
+			prevtime = item["esttime"]
 			item["esttime"] = value
 			if config["recalc_priority"] and not authstate:
-				newpriority = _calcpriority(priority, value)
+				newpriority = priority*1
+				item["totaldiff"] += value-prevtime
+				item["totaldiff"] = max(item["totaldiff"], 0)
+				while item["totaldiff"] >= 10: 
+					newpriority -= 1
+					item["totaldiff"] -= 10
+
+				newpriority = max(newpriority, 0)
 				item["priority"] = lpri-newpriority
 				self.queue[lpri-priority].pop(index)
 				self.queue[lpri-newpriority].append(item)

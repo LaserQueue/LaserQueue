@@ -65,9 +65,9 @@ function socketSetup() { // god help me
 						displayEl.material = materials[arrayEl.material];
 						displayEl.priority = priorities[arrayEl.priority];
 						var timetotal = arrayEl.esttime;
-						var hours = +(timetotal/60).toFixed(0);
+						var hours = Math.floor(timetotal/60);
 						timetotal -= hours*60;
-						var minutes = +(timetotal).toFixed(0);
+						var minutes = Math.floor(timetotal);
 						timetotal -= minutes;
 						var seconds = +(timetotal*60).toFixed(2);
 

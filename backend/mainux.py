@@ -75,6 +75,8 @@ def main():
 						elif x == "sorry":
 							if data["sid"][:int(len(data["sid"])/2)] in shamed:
 								shamed.remove(data["sid"][:int(len(data["sid"])/2)])
+						else:
+							print(x)
 						time.sleep(0.2)
 					else:
 						if x is False:

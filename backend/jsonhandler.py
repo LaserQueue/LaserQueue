@@ -8,11 +8,12 @@ def _typelist(l):
 def _comparetypes(args, expected, numbers = False):
 	args = _typelist(args)
 	if numbers: args = [(int if i == float else i) for i in args]
-	for ii in range(len(expected)):
-		i = expected[ii]
-		if i == any_type:
-			expected[ii] = args[ii]
-	return args == expected
+	exp = expected[:]
+	for ii in range(len(exp)):
+		i = exp[ii]
+		if i is any_type:
+			exp[ii] = args[ii]
+	return args == exp
 
 
 class any_type: pass # typelist exception
@@ -63,9 +64,9 @@ def parseData(queue, sessions, jdata, shamed):
 
 	if action == "auth" and config["admin_mode_enabled"]:
 		if len(args) != 1:
-			return "Expected 1 arguments, received "+str(len(args))
+			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
-		if _comparetypes(args, expectedtypes):
+		if not _comparetypes(args, expectedtypes):
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
 		return sessions.auth(sid, args[0])
@@ -83,7 +84,7 @@ def parseData(queue, sessions, jdata, shamed):
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
-		if _comparetypes(args, expectedtypes):
+		if not _comparetypes(args, expectedtypes):
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
 		queue.passoff(args[0])
@@ -91,7 +92,7 @@ def parseData(queue, sessions, jdata, shamed):
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
-		if _comparetypes(args, expectedtypes):
+		if not _comparetypes(args, expectedtypes):
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
 		queue.remove(args[0])
@@ -99,7 +100,7 @@ def parseData(queue, sessions, jdata, shamed):
 		if len(args) != 3:
 			return "Expected 3 arguments, received "+str(len(args))
 		expectedtypes = [str, int, int]
-		if _comparetypes(args, expectedtypes):
+		if not _comparetypes(args, expectedtypes):
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
 		queue.move(args[0], args[1], args[2])
@@ -107,7 +108,7 @@ def parseData(queue, sessions, jdata, shamed):
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
-		if _comparetypes(args, expectedtypes):
+		if not _comparetypes(args, expectedtypes):
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
 		queue.increment(args[0])
@@ -115,7 +116,7 @@ def parseData(queue, sessions, jdata, shamed):
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
-		if _comparetypes(args, expectedtypes):
+		if not _comparetypes(args, expectedtypes):
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
 		queue.decrement(args[0])
@@ -123,7 +124,7 @@ def parseData(queue, sessions, jdata, shamed):
 		if len(args) != 3:
 			return "Expected 3 arguments, received "+str(len(args))
 		expectedtypes = [str, str, any_type]
-		if _comparetypes(args, expectedtypes):
+		if not _comparetypes(args, expectedtypes):
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
 		queue.attr(args[0],args[1],args[2],authstate)
