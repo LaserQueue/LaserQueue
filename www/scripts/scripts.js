@@ -7,13 +7,15 @@ $(document).ready(function() {
 	$(".btn-submit").click(function(clickAction) {
 		clickAction.preventDefault();
 		logText("submit button clicked");
+		var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
+		logText(estimate); 
 		socketSend(
 			{
 				"action": "add",
 				"args": [
 					$(".cut-human-name").val(), 
 					+$(".priority-dropdown").val(), 
-					+$('.cut-time-estimate').val(), 
+					+estimate[0], 
 					$('.cut-material').val()
 				]
 			}
