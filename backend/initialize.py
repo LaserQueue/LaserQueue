@@ -81,36 +81,6 @@ def getpacks():
 	if installed:
 		print("Sucessfully installed all dependencies!")
 
-def _comparel(list1, list2):
-	list1diff, list2diff = False, False
-	for i in list1:
-		if i not in list2:
-			list1diff = True; break
-	for i in list2:
-		if i not in list1:
-			list2diff = True; break
-	if list1diff and list2diff: return "ne"
-	elif list1diff:             return "l1"
-	elif list2diff:             return "l2"
-	else:                       return "eq"
-
-def _prettyl(l, starttext, minlen=0):
-	for i in l:
-		if len(i)+1 > minlen:
-			minlen = len(i)+1
-
-	indent = " "*(len(starttext)+1)
-	for i in range(max(1, int(ceil(len(l)/3.0)))):
-		if i: print(indent, end="")
-		else: print(starttext, end=" ")
-		if i == int(ceil(len(l)/3.0))-1: 
-			printl = [" "*(minlen-len(j))+j for j in l[i*3:]]
-			print(",".join(printl))
-		else:   
-			printl = [" "*(minlen-len(j))+j for j in l[i*3:i*3+3]]
-			print(",".join(printl), end=",\n")
-
-
 def _fillblanks(odict, adict):
 	return dict(adict, **odict)
 

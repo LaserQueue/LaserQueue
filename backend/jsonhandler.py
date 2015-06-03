@@ -73,46 +73,46 @@ def parseData(queue, sessions, jdata, shamed):
 
 		queue.append(args[0],args[1],args[2],args[3], sid, authstate)
 
-	elif action == "upass":
+	elif action == "pass":
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
-		queue.upass(args[0])
-	elif action == "uremove":
+		queue.passoff(args[0])
+	elif action == "remove":
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
-		queue.uremove(args[0])
-	elif action == "umove":
+		queue.remove(args[0])
+	elif action == "move":
 		if len(args) != 3:
 			return "Expected 3 arguments, received "+str(len(args))
 		expectedtypes = [str, int, int]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
-		queue.umove(args[0], args[1], args[2])
-	elif action == "uincrement":
+		queue.move(args[0], args[1], args[2])
+	elif action == "increment":
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
-		queue.uincrement(args[0])
-	elif action == "udecrement":
+		queue.increment(args[0])
+	elif action == "decrement":
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))
 		expectedtypes = [str]
 		if _typelist(args) != expectedtypes:
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
-		queue.udecrement(args[0])
+		queue.decrement(args[0])
 
 	else:
 		return "Bad action name"

@@ -102,12 +102,12 @@ class Queue:
 				"time": time.time()
 			})
 
-	def uremove(self, u):
+	def remove(self, u):
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					i.remove(j)
-	def upass(self, u):
+	def passoff(self, u):
 		masterqueue = _concatlist(self.queue)
 		for i in self.queue:
 			for j in i:
@@ -130,7 +130,7 @@ class Queue:
 		target["priority"] = lpri-tpri
 		self.queue[lpri-tpri].insert(tindex+1, target)
 
-	def umove(self, u, ni, np):
+	def move(self, u, ni, np):
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
@@ -141,7 +141,7 @@ class Queue:
 		target["priority"] = lpri-np
 		self.queue[lpri-np].insert(ni, target)
 
-	def uincrement(self, u):
+	def increment(self, u):
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
@@ -164,7 +164,7 @@ class Queue:
 		item["priority"] = lpri-priority
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
 
-	def udecrement(self, u):
+	def decrement(self, u):
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:

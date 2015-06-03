@@ -36,7 +36,7 @@ function populateActions() {
 	$('.remove-job').click(function() {
 		logText('removing item ' + $(this).attr('data-uuid'));
 		socketSend({
-			'action': 'uremove',
+			'action': 'remove',
 			'args': [$(this).attr('data-uuid')]
 		});
 	});
@@ -45,7 +45,7 @@ function populateActions() {
 	$('.lower-priority').click(function() {
 		logText('passing item ' + $(this).attr('data-uuid'));
 		socketSend({
-			'action': 'upass',
+			'action': 'pass',
 			'args': [$(this).attr('data-uuid')]
 		});
 	});
@@ -54,7 +54,7 @@ function populateActions() {
 	$('.decrement-job').click(function() {
 		logText('removing item ' + $(this).attr('data-uuid'));
 		socketSend({
-			'action': 'udecrement',
+			'action': 'decrement',
 			'args': [$(this).attr('data-uuid')]
 		});
 	});
@@ -63,7 +63,7 @@ function populateActions() {
 	$('.increment-job').click(function() {
 		logText('passing item ' + $(this).attr('data-uuid'));
 		socketSend({
-			'action': 'uincrement',
+			'action': 'increment',
 			'args': [$(this).attr('data-uuid')]
 		});
 	});

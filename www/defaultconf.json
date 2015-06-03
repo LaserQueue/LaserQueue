@@ -44,12 +44,8 @@
 	"recapitalize":true,
 	"authactions": [
 		"move",
-		"smove",
-		"umove",
-		"sincrement",
-		"uincrement",
-		"sdecrement",
-		"udecrement",
+		"increment",
+		"decrement",
 		"refresh",
 		"uuddlrlrba"
 	],

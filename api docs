@@ -11,7 +11,6 @@ Format:
 }
 
 actions:
-Note: only listing recommended actions. using the undocumented actions might result in unexpected errors.
 
 
 add
