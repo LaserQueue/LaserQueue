@@ -14,7 +14,13 @@ function logText(text) {
 		var minutesZero = (currentMinutes < 10 ? '0' : '');
 		var secondsZero = (currentSeconds < 10 ? '0' : '');
 		var millisZero = (currentMillis < 10 ? '00' : currentMillis < 100 ? '0' : '');
-		$('.log-pre').prepend('<span class="log-time"> [' + hoursZero + currentHours + ':' + minutesZero + currentMinutes + ':' + secondsZero + currentSeconds + '.' + millisZero + currentMillis + ']:</span> ' + text + '\n');
+		var timestamp = '[' + hoursZero + currentHours + ':' + minutesZero + currentMinutes + ':' + secondsZero + currentSeconds + '.' + millisZero + currentMillis + ']';
+
+		var textArray = text.split('\n');
+
+		for (var i = textArray.length - 1; i >= 0; i--) {
+			$('.log-pre').prepend('<span class="log-time"> ' + timestamp + ':</span> ' + textArray[i] + '\n');
+		}
 	}
 }
 

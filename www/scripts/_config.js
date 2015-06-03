@@ -38,6 +38,8 @@ window.console.log('I have SID ' + SID);
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
 
+	logText('Log starts here')
+
 	config = getConfigFile.responseJSON;
 
 	// hide and disable log if not enabled
@@ -45,7 +47,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 	if(devLog != true) { $('[for=log-checkbox]').slideUp(); }
 
 	// log entire config file
-	logText('Config file follows:' + JSON.stringify(getConfigFile.responseJSON, null, 2));
+	logText('Config file follows: ' + JSON.stringify(getConfigFile.responseJSON, null, 2));
 
 	// set host from host and port
 	host = 'ws://' + config.host + ':' + config.port;
