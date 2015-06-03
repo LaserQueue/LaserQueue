@@ -81,6 +81,7 @@ node_modules/
 
 ### Program specific ###
 config.json
+userconfig.json
 scache.json
 cache.json
 password
