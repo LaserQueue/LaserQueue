@@ -49,6 +49,12 @@ arguments: uuid
 moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
 
 
+attr 
+arguments: uuid, attribute, value
+
+sets the attribute of job uuid to value. if the config doesn't state that you can do it, you need auth. If it's an auth-requiring action, it applies the Modified gear.
+
+
 auth
 arguments: sha1 hash of password
 
