@@ -61,7 +61,7 @@ class Queue:
 	def metapriority(self):
 		for i in self.queue:
 			for item in i:
-				if time.time()-item["time"] > (config["metabump"] + config["metabumpmult"]*item["priority"]):
+				if time.time()-item["time"] > (config["metabump"] + config["metabumpmult"]*item["priority"]) and config["metabump"]:
 					pri = item["priority"]-1
 					if pri < 0:
 						item["time"] = time.time()
