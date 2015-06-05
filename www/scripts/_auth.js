@@ -4,7 +4,7 @@ function onAuth() {
 	modalMessage('Success!', '<p class="lead">You\'ve been authorized!</p>');
 	setTimeout('
 		$("#notify-modal").modal("hide");
-	', 2000);
+	', 1000);
 	$('.cutting-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', false);
 	$('.authorize').attr('data-original-title', config.logout);
