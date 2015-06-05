@@ -10,7 +10,7 @@ var renderDirectives = {
 		html: function(params) {
 			return this.priority + (
 				this.coachmodified ? 
-					' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + getConfigFile.responseJSON['modified_hover'] + '"></span>'
+					' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
 					: ''
 			);
 		},
@@ -19,14 +19,14 @@ var renderDirectives = {
 		html: function(params) {
 			return (
 				authed ? '
-				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="Cancel this job"></i>
-				<i class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="Increment this job"></i> 
-				<i class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="Decrement this job"></i>'
+				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></i>
+				<i class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></i> 
+				<i class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></i>'
 				: params.index >= config.pass_depth && config.pass_depth ? '
-				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="Cancel this job"></i>'
+				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></i>'
 				:  '
-				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="Cancel this job"></i>
-				<i class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="Move job down"></i>'
+				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></i>
+				<i class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></i>'
 			);
 		},
 	}
@@ -98,6 +98,46 @@ getConfigFile = $.getJSON('/config.json', function() {
 	$('.cut-time-estimate').attr('title', config.time_hover);
 	$('.cut-material').attr('title', config.material_hover);
 	$('.priority-dropdown').attr('title', config.priority_hover);
+
+	if (config.admin_mode_enabled) {
+		$('.authorize').click(function() {
+			if (authed) {
+				socketSend({'action': 'deauth'});
+				$('.authorize').tooltip('hide');
+			}
+			else {
+				modalMessage('Authenticate', '
+					<form class="login-form">
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input type="password" class="form-control coach-password" id="password" placeholder="Password">
+						</div>
+						<button type="submit" class="btn btn-default">Sign in</button>
+					</form>
+				');
+				$('.authorize').tooltip('hide');
+
+				setTimeout('
+					$(".coach-password").focus();
+				',500);
+
+				
+
+				$('.login-form').submit(function(event) {
+					event.preventDefault();
+					if($('#password').val() != '') {
+						logText('Password entered. Attempting auth.');
+						socketSend({
+							'action': 'auth',
+							'args': [sha1($('#password').val())]
+						});
+						
+					}
+				});
+			}
+		});
+		$('.authorize').attr('data-original-title', config.login);
+	};
 
 	if(config.google_analytics_key == '') {
 		logText('Google Analytics tracking is not enabled.');

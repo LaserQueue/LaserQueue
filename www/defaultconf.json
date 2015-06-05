@@ -73,5 +73,11 @@
 	"priority_selection": false,
 	"allow_force_refresh": false,
 	"priority_choose": false,
-	"pass_depth": 1
+	"pass_depth": 1,
+	"remove_hover": "Cancel this job",
+	"pass_hover": "Move job down",
+	"incr_hover": "Increment job's position",
+	"decr_hover": "Decrement job's position",
+	"logout": "Click to log out",
+	"login": "Click to authenticate"
 }

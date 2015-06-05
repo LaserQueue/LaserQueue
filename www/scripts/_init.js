@@ -10,45 +10,6 @@ var jsonData;
 // initialize the modal by changing the title
 $('.notify-modal-title').html('Notification');
 
-// authentication modal
-$('.authorize').click(function() {
-	if (authed) {
-		socketSend({'action': 'deauth'});
-		$('.authorize').tooltip('hide');
-	}
-	else {
-		modalMessage('Authenticate', '
-			<form class="login-form">
-				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" class="form-control coach-password" id="password" placeholder="Password">
-				</div>
-				<button type="submit" class="btn btn-default">Sign in</button>
-			</form>
-		');
-		$('.authorize').tooltip('hide');
-
-		setTimeout('
-			$(".coach-password").focus();
-		',500);
-
-		
-
-		$('.login-form').submit(function(event) {
-			event.preventDefault();
-			if($('#password').val() != '') {
-				logText('Password entered. Attempting auth and switching to "Logging in" modal.');
-				socketSend({
-					'action': 'auth',
-					'args': [sha1($('#password').val())]
-				});
-				
-			}
-		});
-	}
-	
-});
-
 // footer
 $.ajax({
 	url: '/infotext.md',
