@@ -64,7 +64,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 	// render the materials dropdown
 	if (config.default_material == "") {
 		$('#cut-material').append('
-			<option disabled selected value="N/A" class="selected">Choose a material...</option>
+			<option disabled selected value="N/A" class="selected">' + config.material_input + '</option>
 		');
 	}
 	for(var m in materials) {
@@ -77,7 +77,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 	// render the priorities dropdown
 	if (config.priority_choose) {
 		$('#priority-dropdown').append('
-			<option disabled selected value="-1" class="selected">Choose a priority...</option>
+			<option disabled selected value="-1" class="selected">' + config.priority_input + '</option>
 		');
 	}
 	for(var p in priorities) {
@@ -94,6 +94,10 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 	$('.cut-human-name').attr('placeholder', config.name_input);
 	$('.cut-time-estimate').attr('placeholder', config.time_input);
+	$('.cut-human-name').attr('title', config.name_hover);
+	$('.cut-time-estimate').attr('title', config.time_hover);
+	$('.cut-material').attr('title', config.material_hover);
+	$('.priority-dropdown').attr('title', config.priority_hover);
 
 	if(config.google_analytics_key == '') {
 		logText('Google Analytics tracking is not enabled.');
