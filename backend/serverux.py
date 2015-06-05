@@ -28,7 +28,7 @@ args = parser.parse_args()
 if args.help:
 	quit()
 
-config = json.load(open(os.path.join("..", "www", "config.json")))
+from configloader import config
 
 @asyncio.coroutine
 def hello(websocket, path):

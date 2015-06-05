@@ -1,4 +1,5 @@
-from laserqueue import Queue, config
+from laserqueue import Queue
+from configloader import config
 import jsonhandler as comm
 import sidhandler as sids
 

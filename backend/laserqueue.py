@@ -4,7 +4,7 @@ import time
 import os.path
 from copy import deepcopy
 
-config = json.load(open(os.path.join("..", "www", "config.json")))
+from configloader import config
 
 lpri = len(config["priorities"])-1
 
