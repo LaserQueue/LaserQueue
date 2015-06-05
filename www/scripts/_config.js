@@ -92,6 +92,9 @@ getConfigFile = $.getJSON('/config.json', function() {
 		$('.disabled').prop('disabled', true);
 	}
 
+	$('.cut-human-name').attr('placeholder', config.name_input);
+	$('.cut-time-estimate').attr('placeholder', config.time_input);
+
 	if(config.google_analytics_key == '') {
 		logText('Google Analytics tracking is not enabled.');
 	} else {

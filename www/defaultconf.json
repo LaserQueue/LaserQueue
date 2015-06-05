@@ -32,7 +32,7 @@
 	},
 	"default_material": "w",
 	"default_priority": 3,
-	"name_input": "Enter name here",
+	"name_input": "What is it they call you?",
 	"time_input": "Estimated time (min)",
 	"modified_hover": "Modified",
 	"dev_log":true,
