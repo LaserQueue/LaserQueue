@@ -1,14 +1,10 @@
-::-webkit-scrollbar              {
+::-webkit-scrollbar {
 	background: rgba($nuvu-pink, 0);
 	width: 5px;
 }
-::-webkit-scrollbar-track        {}
-::-webkit-scrollbar-track-piece  {}
-::-webkit-scrollbar-thumb        {
+
+::-webkit-scrollbar-thumb {
 	background: rgba($nuvu-pink, 1);
 	border-radius: 25px;
 	margin: 0 5px;
 }
-
-::-webkit-scrollbar-corner       { /* 6 */ }
-::-webkit-resizer                { /* 7 */ }
