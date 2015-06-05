@@ -1,11 +1,11 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate, easterEggs, SID;
-var authed = false;
-var allCuts = [];
-var displayEl = {}
-var renderDirectives = {
+var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate, easterEggs, SID,
+    authed = false,
+    allCuts = [],
+    displayEl = {},
+    renderDirectives = {
 	priority: {
 		html: function(params) {
 			return this.priority + (
@@ -46,7 +46,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 	logText('Log starts here');
 
 	// log entire config file
-	logText('Config file follows: ' + JSON.stringify(getConfigFile.responseJSON, null, 2));
+	logText('Config file follows: ' + JSON.stringify(config, null, 2));
 
 	// set host from host and port
 	host = 'ws://' + config.host + ':' + config.port;
