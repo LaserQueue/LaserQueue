@@ -39,6 +39,7 @@ window.console.log('SID: ' + SID);
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
 
+	// config.thing returns thing in the config file
 	config = getConfigFile.responseJSON;
 
 	// hide and disable log if not enabled
