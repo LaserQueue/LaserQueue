@@ -40,9 +40,9 @@ class Queue:
 		self.queue = [[] for i in config["priorities"]]
 
 	@classmethod
-	def load(self, fileobj):
+	def load(cls, fileobj):
 		jdata = json.load(fileobj)
-		self = Queue()
+		self = cls()
 		if type(jdata) is not list:
 			return self
 		if len(jdata) != len(config["priorities"]):

@@ -30,7 +30,7 @@ if os.path.exists("hashpassword"):
 	PASSWORD = open("hashpassword").read().strip().rstrip()
 
 class SID:
-	def __init__(self, uuid):
+	def __init__(self, uuid=None):
 		self.lasttimestamp = time.time()
 		self.timestamp = time.time()
 		self.authstamp = time.time()
@@ -38,8 +38,8 @@ class SID:
 		self.lastnull = time.time()
 		self.uuid = str(uuid)
 	@classmethod
-	def load(self, jdata):
-		self = SID(None)
+	def load(cls, jdata):
+		self = cls()
 		self.lasttimestamp = jdata["laststamp"]
 		self.timestamp = jdata["stamp"]
 		self.authstamp = jdata["authstamp"]
@@ -91,8 +91,8 @@ class SIDCache:
 	def __init__(self):
 		self.sids = []
 	@classmethod
-	def load(self, jdata):
-		self = SIDCache()
+	def load(cls, jdata):
+		self = cls()
 		for sid in jdata:
 			self.sids.append(SID.load(sid))
 		return self
