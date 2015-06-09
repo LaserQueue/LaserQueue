@@ -37,7 +37,8 @@ class SID:
 		self.authstate = False
 		self.lastnull = time.time()
 		self.uuid = str(uuid)
-	def load(jdata): #initialization method, do not call on existing object
+	@classmethod
+	def load(jdata):
 		self = SID(None)
 		self.lasttimestamp = jdata["laststamp"]
 		self.timestamp = jdata["stamp"]
@@ -89,7 +90,8 @@ class SID:
 class SIDCache:
 	def __init__(self):
 		self.sids = []
-	def load(jdata): #initialization method, do not call on existing object
+	@classmethod
+	def load(jdata):
 		self = SIDCache()
 		for sid in jdata:
 			self.sids.append(SID.load(sid))

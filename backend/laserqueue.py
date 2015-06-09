@@ -39,7 +39,8 @@ class Queue:
 	def __init__(self):
 		self.queue = [[] for i in config["priorities"]]
 
-	def load(fileobj): # init method, do not call on existing object
+	@classmethod
+	def load(fileobj):
 		jdata = json.load(fileobj)
 		q = Queue()
 		if type(jdata) is not list:
