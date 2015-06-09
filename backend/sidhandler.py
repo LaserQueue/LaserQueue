@@ -38,7 +38,7 @@ class SID:
 		self.lastnull = time.time()
 		self.uuid = str(uuid)
 	@classmethod
-	def load(jdata):
+	def load(self, jdata):
 		self = SID(None)
 		self.lasttimestamp = jdata["laststamp"]
 		self.timestamp = jdata["stamp"]
@@ -46,7 +46,6 @@ class SID:
 		self.authstate = jdata["auth"]
 		self.lastnull = time.time()
 		self.uuid = str(jdata["uuid"])
-		return self
 	def serialize(self):
 		return {
 			"stamp": self.timestamp,
@@ -91,11 +90,10 @@ class SIDCache:
 	def __init__(self):
 		self.sids = []
 	@classmethod
-	def load(jdata):
+	def load(self, jdata):
 		self = SIDCache()
 		for sid in jdata:
 			self.sids.append(SID.load(sid))
-		return self
 	def check(self, uuid):
 		csid = self._get(uuid)
 		if not csid:               return False
