@@ -101,18 +101,21 @@ def update():
 			print("New update found!")
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = input("Do you want to update from version "+config["version"]+" to "+masterconfig["version"]+"? ").lower().strip().rstrip()
+				confirm = input("Do you want to update from version "+config["version"]+" to "+masterconfig["version"]+"? \n\
+This will create a folder LaserQueue-"+masterconfig["version"]+" under "+os.path.abspath(os.path.join("..", ".."))+". \n\
+(y / n) ").lower().strip().rstrip()
 			if confirm == "y":
-				pass # fetch/clone code will go here
+				import git
+				git.Repo.clone_from(config["update_repo"], os.path.join("..","..","LaserQueue-"+masterconfig["version"]))
+				print("New version located in "+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"]))+". Run \n\
+"+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"], "start.sh"))+" \n\
+to use the new version.\n")
 
 	except Exception as e: 
 		print("Error connecting to server: "+str(e))
 
 def main():
 	getpacks()
-
-	update()
-
 	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json")):
 		copyconf()
 	if args.host:
@@ -146,6 +149,7 @@ def main():
 	data["version"] = defaultdata["version"]
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
+	update()
 				
 	print("Initialization complete.")
 
