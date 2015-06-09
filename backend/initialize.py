@@ -77,6 +77,9 @@ def getpacks():
 				print("WARNING: Program may not run without this library.")
 				continue
 			os.system("sudo pip3 install "+pack)
+			pl.append(pack)
+		else:
+			pl.append(pack)
 	if installed:
 		for pack in packages:
 			if pack not in pl:
