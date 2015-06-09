@@ -3,6 +3,7 @@ import os
 import socket
 import pip
 import argparse
+import urllib.request
 from math import ceil
 
 parser = argparse.ArgumentParser(prog='startbackend.sh')
@@ -43,13 +44,15 @@ def copyconf():
 
 PACKAGES_UX = [
 	"websockets",
-	"netifaces"
+	"netifaces",
+	"GitPython"
 ]
 PACKAGES_WIN = [
 	"websockets",
 	"netifaces",
 	"pyserial",
-	"pyautoit"
+	"pyautoit",
+	"GitPython"
 ]
 def getpacks():
 	if args.skip: return
@@ -84,8 +87,26 @@ def getpacks():
 def _fillblanks(odict, adict):
 	return dict(adict, **odict)
 
+def update():
+	if args.skip: return
+	config = json.load(open(os.path.join("..", "www", "defaultconf.json")))
+	try:
+		masterconfig = urllib.request.urlopen(config["update_target"])
+		if masterconfig["version"] > config["version"]:
+			confirm = ("y" if args.all else "")
+			while confirm not in ["y", "n"]:
+				confirm = input("Do you want to update from "+config["version"]+" to "+masterconfig["version"]+"? ").lower().strip().rstrip()
+			if confirm == "y":
+				pass # fetch/clone code will go here
+
+	except:
+		print("Error connecting to server.")
+
 def main():
 	getpacks()
+
+	update()
+
 	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json")):
 		copyconf()
 	if args.host:

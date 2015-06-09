@@ -1,5 +1,6 @@
 {
 	"version": "0.0.4",
+	"update_target": "https://raw.githubusercontent.com/yrsegal/LaserQueue/master/www/defaultconf.json",
 	"host": "",
 	"port": "8763",
 	"serverRefreshRate": 300000,
