@@ -46,6 +46,7 @@ class SID:
 		self.authstate = jdata["auth"]
 		self.lastnull = time.time()
 		self.uuid = str(jdata["uuid"])
+		return self
 	def serialize(self):
 		return {
 			"stamp": self.timestamp,
@@ -94,6 +95,7 @@ class SIDCache:
 		self = SIDCache()
 		for sid in jdata:
 			self.sids.append(SID.load(sid))
+		return self
 	def check(self, uuid):
 		csid = self._get(uuid)
 		if not csid:               return False

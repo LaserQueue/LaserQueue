@@ -57,6 +57,7 @@ class Queue:
 			for item in i:
 				item["priority"] = ii
 				item = _fillblanks(item, Queue.requiredtags)
+		return self
 
 	def metapriority(self):
 		for i in self.queue:
