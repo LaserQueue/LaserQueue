@@ -91,16 +91,19 @@ def update():
 	if args.skip: return
 	config = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	try:
-		masterconfig = urllib.request.urlopen(config["update_target"])
+		configpage = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
+		masterconfig = json.loads(configpage)
+		if "version" not in masterconfig: return
 		if masterconfig["version"] > config["version"]:
+			print("New update found!")
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = input("Do you want to update from "+config["version"]+" to "+masterconfig["version"]+"? ").lower().strip().rstrip()
+				confirm = input("Do you want to update from version "+config["version"]+" to "+masterconfig["version"]+"? ").lower().strip().rstrip()
 			if confirm == "y":
 				pass # fetch/clone code will go here
 
-	except:
-		print("Error connecting to server.")
+	except Exception as e: 
+		print("Error connecting to server: "+str(e))
 
 def main():
 	getpacks()
