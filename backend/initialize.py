@@ -27,24 +27,16 @@ def copyconf():
 	data["host"] = getIps()[0]
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
-PACKAGES_UX = [
+PACKAGES = [
 	"websockets",
 	"netifaces",
-	"GitPython"
-]
-PACKAGES_WIN = [
-	"websockets",
-	"netifaces",
-	"pyserial",
-	"pyautoit",
 	"GitPython"
 ]
 def getpacks():
 	if args.skip: return
 	pl = [str(i).split(" ")[0] for i in pip.get_installed_distributions()]
-	packages = (PACKAGES_WIN if os.name == "nt" else PACKAGES_UX)
 	installed = False
-	for pack in packages:
+	for pack in PACKAGES:
 		if pack in pl:
 			continue
 		installed = True
@@ -61,14 +53,15 @@ def getpacks():
 			if confirm == "n": 
 				print("WARNING: Program may not run without this library.")
 				continue
-			os.system("sudo pip3 install "+pack)
-			pl.append(pack)
+			if not os.system("sudo pip3 install "+pack):
+				pl.append(pack)
 		else:
 			pl.append(pack)
 	if installed:
-		for pack in packages:
+		for pack in PACKAGES:
 			if pack not in pl:
-				print("Failed to install all dependencies.")
+				print("Failed to install dependency "+pack+".")
+				installed = False
 	if installed:
 		print("Sucessfully installed all dependencies!")
 
