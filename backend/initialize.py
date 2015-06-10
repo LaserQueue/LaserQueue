@@ -6,22 +6,7 @@ import argparse
 import urllib.request
 from math import ceil
 
-parser = argparse.ArgumentParser(prog='startbackend.sh')
-parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
-	action="store_const",const=True,default=False)
-parser.add_argument("-p", "--port", help="Port to host from", dest="port",
-	default=80, type=int)
-parser.add_argument("-n", "--regen-host", help="Regenerate host in config", dest="host",
-	action="store_const",const=True,default=False)
-parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
-	action="store_const",const=True,default=False)
-parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
-	action="store_const",const=True,default=False)
-parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
-	action="store_const",const=True,default=False)
-parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
-	action="store_const",const=True,default=False)
-args = parser.parse_args()
+from parseargv import args
 
 def qsort(l):
 		if l == []: 
