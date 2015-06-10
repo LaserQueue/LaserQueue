@@ -30,7 +30,7 @@ if __name__ == "__main__":
 	argvs = [i for i in sys.argv[1:] if i != "-q"]
 	FNULL = open(os.devnull, 'w')
 
-	output = FNULL if args.shh else subprocess.STDOUT
+	output = FNULL if args.shh else None
 
 	backend_server = subprocess.Popen(["python3", "server.py"]+argvs, stdout=output, stderr=output)
 	backend_main = subprocess.Popen(["python3", "main.py"]+argvs, stdout=output, stderr=output)
