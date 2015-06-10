@@ -6,9 +6,9 @@ Download the latest stable version from [github.com/yrsegal/LaserQueue/releases]
 
 ## Running the software
 
-Get the latest version by `git clone`ing the repo or downloading a zip. Auto-updating is planned but not yet implemented.
+Get the latest version by `git clone`ing the repo or downloading a zip. (Autoupdating is currently under development.)
 
-To start the server, run `start.sh` as root. If on Windows, run `startbackend.bat`. You'll need Python 3.4.x or greater.
+To start the server, run `start.sh` or `start.py`. You'll need Python 3.4.x or greater.
 
 To change the admin login password, create a plaintext file `password` under backend. This will be hashed upon script run.
 
@@ -29,8 +29,9 @@ To change the admin login password, create a plaintext file `password` under bac
 All dependencies should be met the first time you run the program. The program will detect your system and prompt to install them. However, you will definitely need Python >=3.4.x for WebSockets. If (for some reason) you would like to install these by hand, feel free:
 
 - [Python 3.4.x](https://www.python.org/downloads/)
+- websockets (`#~ pip3 install websockets`)
 - netifaces (`#~ pip3 install netifaces`)
-- On Windows: pyautoit, pyserial (installing these manually on Windows is not recommended)
+- GitPython (`#~ pip3 install GitPython`)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yrsegal/laserqueue/trend.png)](https://bitdeli.com/free “Bitdeli Badge”)
 
