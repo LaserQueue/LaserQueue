@@ -21,6 +21,8 @@ elapsed_time = 0
 # 	while True:
 # 		elapsed_time = elapsed.read()
 
+temppath = tempfile.gettempdir()
+
 def main():
 	global calculated_time, elapsed_time
 	queue = Queue()
@@ -28,7 +30,6 @@ def main():
 	# elapsedT = threading.Thread(target=getelapsed)
 	estimateT.start()
 	# elapsedåT.start()
-	temppath = os.path.expanduser(os.path.join("~", "AppData", "Local", "Temp"))
 	lelap, lcalc = elapsed_time, calculated_time
 
 	json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"))

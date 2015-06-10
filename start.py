@@ -2,27 +2,28 @@ import os, sys
 import subprocess, time
 import http.server
 import json
+import tempfile
 from http.server import SimpleHTTPRequestHandler
 
 from backend.parseargv import args
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 
+def initFile(path, data=""):
+	if not os.path.exists(path):
+		newfile = open(path, "w")
+		newfile.write(data)
+		newfile.close()
+
 if __name__ == "__main__":
 	os.chdir(selfpath)
 
-	if os.name != "nt" and os.geteuid():
-		temppath = os.path.join(os.path.sep, "tmp")
-		if not os.path.exists(os.path.join(temppath, "topage.json")):
-			open(os.path.join(temppath, "topage.json"), "w").close()
-		if not os.path.exists(os.path.join(temppath, "toscript.json")):
-			open(os.path.join(temppath, "toscript.json"), "w").close()
-		if not os.path.exists(os.path.join(selfpath, "backend", "cache.json")):
-			json.dump([], open(os.path.join(selfpath, "backend", "cache.json"), "w"))
-		if not os.path.exists(os.path.join(selfpath, "backend", "scache.json")):
-			json.dump({}, open(os.path.join(selfpath, "backend", "scache.json"), "w"))
-		if not os.path.exists(os.path.join(selfpath, "www", "config.json")):
-			json.dump({}, open(os.path.join(selfpath, "www", "config.json"), "w"))
+	temppath = tempfile.gettempdir()
+	initFile(os.path.join(temppath, "topage.json"))
+	initFile(os.path.join(temppath, "toscript.json"))
+	initFile(os.path.join(selfpath, "backend", "cache.json"), "[]")
+	initFile(os.path.join(selfpath, "backend", "scache.json"), "{}")
+	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
 
 	os.chdir(os.path.join(os.getcwd(), "backend"))
 	os.system("python3 initialize.py "+" ".join(sys.argv[1:]))

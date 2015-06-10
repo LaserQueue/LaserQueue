@@ -12,11 +12,12 @@ from parseargv import args
 calculated_time = -1 # Compat with windows version
 elapsed_time = -1    # Compat with windows version
 
+temppath = tempfile.gettempdir()
+
 def main():
 	global calculated_time, elapsed_time
 	shamed = []
 	queue = Queue()
-	temppath = os.path.join(os.path.sep, "tmp")
 
 	json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"))
 
