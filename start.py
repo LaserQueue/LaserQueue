@@ -8,6 +8,7 @@ from http.server import SimpleHTTPRequestHandler
 from backend.parseargv import args
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
+os.chdir(selfpath)
 
 def initFile(path, data=""):
 	if not os.path.exists(path):
@@ -16,7 +17,6 @@ def initFile(path, data=""):
 		newfile.close()
 
 if __name__ == "__main__":
-	os.chdir(selfpath)
 
 	temppath = tempfile.gettempdir()
 	initFile(os.path.join(temppath, "topage.json"))

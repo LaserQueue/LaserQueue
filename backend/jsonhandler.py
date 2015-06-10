@@ -155,11 +155,9 @@ Format for program-to-site data:
 }
 """
 
-def generateData(queue, sessions, shamed, esttime, currtime):
+def generateData(queue, sessions, shamed):
 	jdata = {}
 	jdata["queue"] = queue.queue
-	jdata["esttime"] = esttime
-	jdata["currtime"] = currtime
 	jdata["action"] = "display"
 	jdata["auths"] = sessions.cutauths()
 	jdata["deauths"] = shamed

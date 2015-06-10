@@ -13,6 +13,9 @@ from configloader import config
 
 temppath = tempfile.gettempdir()
 
+selfpath = os.path.dirname(os.path.realpath(__file__))
+os.chdir(selfpath)
+
 @asyncio.coroutine
 def hello(websocket, path):
 	stamp = time.time()
@@ -48,3 +51,6 @@ def main():
 
 	asyncio.get_event_loop().run_until_complete(start_server)
 	asyncio.get_event_loop().run_forever()
+
+if __name__ == "__main__":
+	main()
