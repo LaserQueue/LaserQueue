@@ -8,6 +8,9 @@ from math import ceil
 
 from parseargv import args
 
+selfpath = os.path.dirname(os.path.realpath(__file__))
+os.chdir(selfpath)
+
 def qsort(l):
 		if l == []: 
 				return []
