@@ -39,7 +39,6 @@ if __name__ == "__main__":
 
 	os.chdir("backend")
 	initcode = gSystem("initialize.py "+" ".join(sys.argv[1:]))
-	print(initcode)
 	if initcode:
 		if initcode == 2560:
 			os.chdir("..")
