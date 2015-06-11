@@ -3,6 +3,7 @@ import os
 import socket
 import pip
 import argparse
+import gzip
 import urllib.request
 from math import ceil
 
@@ -80,20 +81,40 @@ def update():
 		if "version" not in masterconfig: return
 		if masterconfig["version"] > config["version"]:
 			print("New update found: Version "+masterconfig["version"]+".")
-			confirm = ("y" if args.all else "")
-			while confirm not in ["y", "n"]:
+			confirm = ("fetch" if args.all else "")
+			while confirm not in ["fetch", "overwrite", "cancel"]:
 				confirm = input("Do you want to get version "+config["version"]+" to "+masterconfig["version"]+"? \n\
-This will create a folder LaserQueue-"+masterconfig["version"]+" under "+os.path.abspath(os.path.join("..", ".."))+". \n\
-(y / n) ").lower().strip().rstrip()
-			if confirm == "y":
-				import git
+The fetch option will update into "+os.path.abspath(os.path.join("..", "..", "LaserQueue-"+masterconfig["version"]))+". \n\
+The overwrite option will backup to "+os.path.abspath(os.path.join("..", "..", "LaserQueue-"+config["version"]+".tar.gz"))+", and fetch master. \n\
+(fetch / overwrite / cancel) ").lower().strip().rstrip()
+			import git
+			if confirm == "fetch":
 				git.Repo.clone_from(config["update_repo"], os.path.join("..","..","LaserQueue-"+masterconfig["version"]))
+
 				print("New version located in "+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"]))+". Run \n\
 "+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"], "start.py"))+" \n\
 to use the new version.\n")
+			elif confirm == "overwrite":
+				if not os.path.exists(os.path.join("..", ".git")):
+					repo = git.Repo.init("..")
+				else:
+					repo = git.Repo("..")
+				if "origin" not in [i.name for i in repo.remotes]:
+					origin = repo.create_remote("origin", config["update_repo"])
+					origin.fetch()
+				tarchive = open(os.path.join("..", "..", "LaserQueue-"+config["version"]+".tar.gz"), 'wb')
+				repo.archive(tarchive)
+				gzip.GzipFile(fileobj=tarchive, mode='wb')
+
+				repo.git.branch('-D', 'master')
+				repo.git.checkout('master')
+
+				quit(10)
+
+
 
 	except Exception as e: 
-		print("Error connecting to server: "+str(e))
+		print("Error updating: "+str(e))
 
 def main():
 	getpacks()

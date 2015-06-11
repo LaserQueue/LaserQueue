@@ -38,7 +38,16 @@ if __name__ == "__main__":
 	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
 
 	os.chdir("backend")
-	gSystem("python3 initialize.py "+" ".join(sys.argv[1:]))
+	initcode = gSystem("initialize.py "+" ".join(sys.argv[1:]))
+	if initcode:
+		if initcode == 10:
+			print("Update successful! Restarting server.", end="")
+			time.sleep(1.0/3)
+			print(".", end="")
+			time.sleep(1.0/3)
+			print(".")
+		else:
+			quit(initcode)
 
 	argvs = [i for i in sys.argv[1:] if i != "-q"]
 	FNULL = open(os.devnull, 'w')
