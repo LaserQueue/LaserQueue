@@ -79,17 +79,17 @@ def update():
 		masterconfig = json.loads(configpage)
 		if "version" not in masterconfig: return
 		if masterconfig["version"] > config["version"]:
-			print("New update found!")
+			print("New update found: Version "+masterconfig["version"]+".")
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = input("Do you want to update from version "+config["version"]+" to "+masterconfig["version"]+"? \n\
+				confirm = input("Do you want to get version "+config["version"]+" to "+masterconfig["version"]+"? \n\
 This will create a folder LaserQueue-"+masterconfig["version"]+" under "+os.path.abspath(os.path.join("..", ".."))+". \n\
 (y / n) ").lower().strip().rstrip()
 			if confirm == "y":
 				import git
 				git.Repo.clone_from(config["update_repo"], os.path.join("..","..","LaserQueue-"+masterconfig["version"]))
 				print("New version located in "+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"]))+". Run \n\
-"+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"], "start.sh"))+" \n\
+"+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"], "start.py"))+" \n\
 to use the new version.\n")
 
 	except Exception as e: 
