@@ -116,6 +116,7 @@ to use the new version.\n")
 				except:
 					make_tarfile(os.path.join("..", "..", prefix+config["version"]+".tar.gz"), "..")
 
+				repo.git.fetch("--all")
 				repo.git.reset("--hard", "origin/master")
 
 				quit(10)
