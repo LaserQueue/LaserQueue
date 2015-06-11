@@ -39,13 +39,12 @@ if __name__ == "__main__":
 
 	os.chdir("backend")
 	initcode = gSystem("initialize.py "+" ".join(sys.argv[1:]))
+	print(initcode)
 	if initcode:
-		if initcode == 10:
-			print("Update successful! Restarting server.", end="")
-			time.sleep(1.0/3)
-			print(".", end="")
-			time.sleep(1.0/3)
-			print(".")
+		if initcode == 2560:
+			os.chdir("..")
+			print("Update successful! Restarting server...\n\n\n")
+			quit(gSystem("start.py "+" ".join(sys.argv[1:])))
 		else:
 			quit(initcode)
 

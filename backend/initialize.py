@@ -5,6 +5,7 @@ import pip
 import argparse
 import gzip
 import urllib.request
+import tarfile
 from math import ceil
 
 from parseargv import args
@@ -72,6 +73,10 @@ def getpacks():
 def _fillblanks(odict, adict):
 	return dict(adict, **odict)
 
+def make_tarfile(output_filename, source_dir):
+    with tarfile.open(output_filename, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
+
 def update():
 	if args.skip: return
 	config = json.load(open(os.path.join("..", "www", "defaultconf.json")))
@@ -82,17 +87,19 @@ def update():
 		if masterconfig["version"] > config["version"]:
 			print("New update found: Version "+masterconfig["version"]+".")
 			confirm = ("fetch" if args.all else "")
+			prefix = os.path.basename(os.path.abspath(".."))+"-"
+
 			while confirm not in ["fetch", "overwrite", "cancel"]:
 				confirm = input("Do you want to get version "+config["version"]+" to "+masterconfig["version"]+"? \n\
-The fetch option will update into "+os.path.abspath(os.path.join("..", "..", "LaserQueue-"+masterconfig["version"]))+". \n\
-The overwrite option will backup to "+os.path.abspath(os.path.join("..", "..", "LaserQueue-"+config["version"]+".tar.gz"))+", and fetch master. \n\
+The fetch option will update into "+os.path.abspath(os.path.join("..", "..", prefix+masterconfig["version"]))+". \n\
+The overwrite option will backup to "+os.path.abspath(os.path.join("..", "..", prefix+config["version"]+".tar.gz"))+", and fetch master. \n\
 (fetch / overwrite / cancel) ").lower().strip().rstrip()
 			import git
 			if confirm == "fetch":
-				git.Repo.clone_from(config["update_repo"], os.path.join("..","..","LaserQueue-"+masterconfig["version"]))
+				git.Repo.clone_from(config["update_repo"], os.path.join("..","..",prefix+masterconfig["version"]))
 
-				print("New version located in "+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"]))+". Run \n\
-"+os.path.abspath(os.path.join("..","..","LaserQueue-"+masterconfig["version"], "start.py"))+" \n\
+				print("\nNew version located in "+os.path.abspath(os.path.join("..","..",prefix+masterconfig["version"]))+". Run \n\
+"+os.path.abspath(os.path.join("..","..",prefix+masterconfig["version"], "start.py"))+" \n\
 to use the new version.\n")
 			elif confirm == "overwrite":
 				if not os.path.exists(os.path.join("..", ".git")):
@@ -102,17 +109,16 @@ to use the new version.\n")
 				if "origin" not in [i.name for i in repo.remotes]:
 					origin = repo.create_remote("origin", config["update_repo"])
 					origin.fetch()
-				tarchive = open(os.path.join("..", "..", "LaserQueue-"+config["version"]+".tar.gz"), 'wb')
-				repo.archive(tarchive)
-				gzip.GzipFile(fileobj=tarchive, mode='wb')
+				try:
+					tarchive = open(os.path.join("..", "..", prefix+config["version"]+".tar.gz"), 'wb')
+					repo.archive(tarchive)
+					gzip.GzipFile(fileobj=tarchive, mode='wb')
+				except:
+					make_tarfile(os.path.join("..", "..", prefix+config["version"]+".tar.gz"), "..")
 
-				repo.git.branch('-D', 'master')
-				repo.git.checkout('master')
+				repo.git.reset("--hard", "origin/master")
 
 				quit(10)
-
-
-
 	except Exception as e: 
 		print("Error updating: "+str(e))
 
