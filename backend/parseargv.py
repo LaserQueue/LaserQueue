@@ -16,7 +16,11 @@ parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest=
 	action="store_const",const=True,default=False)
 parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
 	action="store_const",const=True,default=False)
+parser.add_argument("-nu", "--no-update", help="Skip update", dest="skipupdate",
+	action="store_const",const=True,default=False)
 parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
+	action="store_const",const=True,default=False)
+parser.add_argument("--install-update", help="Don't ask for confirmation on update", dest="allupdate",
 	action="store_const",const=True,default=False)
 args = parser.parse_args()
 

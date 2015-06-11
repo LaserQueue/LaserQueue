@@ -6,7 +6,7 @@ Download the latest stable version from [github.com/yrsegal/LaserQueue/releases]
 
 ## Running the software
 
-Get the latest version by `git clone`ing the repo or downloading a zip. (Autoupdating is currently under development.)
+Get the latest version by `git clone`ing the repo or downloading a zip. If there's a new update, the program will prompt you on run.  
 
 To start the server, run `start.sh` or `start.py`. You'll need Python 3.4.x or greater.
 
@@ -22,7 +22,9 @@ To change the admin login password, create a plaintext file `password` under bac
 - `-r`, `--regen-config`: Regenerate the config. This is the default option if no config.json file is found in WWW
 - `-n`, `--regen-host`: Regenerate the host in the config. Does not affect any other config values. 
 - `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
-- `--install-all`: No short option. Installs all dependencies without prompting
+- `-nu`, `--no-update`: Does not install or prompt for updates.
+- `--install-all`: No short option. Installs all dependencies without prompting.
+- `--install-update`: No short option. Installs updates without prompting.
 
 ## Dependencies
 

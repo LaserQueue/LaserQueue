@@ -78,7 +78,7 @@ def make_tarfile(output_filename, source_dir):
         tar.add(source_dir, arcname=os.path.basename(source_dir))
 
 def update():
-	if args.skip: return
+	if args.skipupdate: return
 	config = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	try:
 		configpage = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
@@ -86,7 +86,7 @@ def update():
 		if "version" not in masterconfig: return
 		if masterconfig["version"] > config["version"]:
 			print("New update found: Version "+masterconfig["version"]+".")
-			confirm = ("fetch" if args.all else "")
+			confirm = ("overwrite" if args.allupdate else "")
 			prefix = os.path.basename(os.path.abspath(".."))+"-"
 
 			while confirm not in ["fetch", "overwrite", "cancel"]:
