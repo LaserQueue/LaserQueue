@@ -43,9 +43,9 @@ if __name__ == "__main__":
 		if initcode == 2560:
 			os.chdir("..")
 			print("Update successful! Restarting server...\n\n\n")
-			quit(gSystem("start.py "+" ".join(sys.argv[1:])))
+			quit(gSystem("start.py "+" ".join(sys.argv[1:]))/256)
 		else:
-			quit(initcode)
+			quit(initcode/256)
 
 	argvs = [i for i in sys.argv[1:] if i != "-q"]
 	FNULL = open(os.devnull, 'w')
