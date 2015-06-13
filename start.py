@@ -59,10 +59,10 @@ if __name__ == "__main__":
 
 	os.chdir(os.path.join("..", "www"))
 	if os.name != "nt" and os.geteuid() and args.port < 1024:
-		prompt = """Root required to host on ports up to 1023, enter your password to elevate permissions.
-(Use --port PORT to change ports.)
-Password: """
-		frontend = subprocess.Popen(["sudo", "-p", prompt, "python3", "-m", "http.server", str(args.port)], stdout=output, stderr=output)
+		print("\n\
+Root required on ports up to 1023, attempting to elevate permissions. \n\
+(Use --port PORT to change ports.)")
+		frontend = subprocess.Popen(["sudo", "python3", "-m", "http.server", str(args.port)], stdout=output, stderr=output)
 	else:
 		frontend = gPopen(["-m", "http.server", str(args.port)], stdout=output, stderr=output)
 	
