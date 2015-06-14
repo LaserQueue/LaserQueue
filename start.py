@@ -1,9 +1,7 @@
 import os, sys
 import subprocess, time
-import http.server
 import json
 import tempfile
-from http.server import SimpleHTTPRequestHandler
 
 from backend.parseargv import args
 
