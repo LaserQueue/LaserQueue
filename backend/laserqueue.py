@@ -73,7 +73,8 @@ class Queue:
 					self.queue[pri].append(item)
 
 
-	def append(self, name, priority, esttime, material, sid, authstate):
+	def append(self, args, authstate, sid, sessions):
+		name, priority, esttime, material = args[0], args[1], args[2], args[3]
 		if not name or material == "N/A" or priority == -1:
 			return
 		bounds = config["length_bounds"]
@@ -111,12 +112,14 @@ class Queue:
 				"time": time.time()
 			})
 
-	def remove(self, u):
+	def remove(self, args, authstate, sid, sessions):
+		u = args[0]
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					i.remove(j)
-	def passoff(self, u):
+	def passoff(self, args, authstate, sid, sessions):
+		u = args[0]
 		oindex = -1
 		masterqueue = _concatlist(self.queue)
 		for i in self.queue:
@@ -138,9 +141,11 @@ class Queue:
 				tpri = lpri-ii
 		target["time"] = time.time()
 		target["priority"] = lpri-tpri
+		if authstate: target["coachmodified"] = True
 		self.queue[lpri-tpri].insert(tindex+1, target)
 
-	def relmove(self, u, nindex):
+	def relmove(self, args, authstate, sid, sessions):
+		u, nindex = args[0], args[1]
 		target = None
 		for i in self.queue:
 			for j in i:
@@ -166,11 +171,12 @@ class Queue:
 
 		target["time"] = time.time()
 		target["priority"] = bpri
-		target["coachmodified"] = True
+		if authstate: target["coachmodified"] = True
 		self.queue[bpri].insert(bind, target)
 
 
-	def move(self, u, ni, np):
+	def move(self, args, authstate, sid, sessions):
+		u, ni, np = args[0], args[1], args[2]
 		target = None
 		for i in self.queue:
 			for j in i:
@@ -179,11 +185,12 @@ class Queue:
 					i.remove(j)
 		if not target: return
 		target["time"] = time.time()
-		target["coachmodified"] = True
+		if authstate: target["coachmodified"] = True
 		target["priority"] = lpri-np
 		self.queue[lpri-np].insert(ni, target)
 
-	def increment(self, u):
+	def increment(self, args, authstate, sid, sessions):
+		u = args[0]
 		index = -1
 		priority = -1
 		for i in self.queue:
@@ -204,11 +211,12 @@ class Queue:
 			else:
 				index = len(self.queue[max(lpri-priority, 0)])
 		item["time"] = time.time()
-		item["coachmodified"] = True
+		if authstate: item["coachmodified"] = True
 		item["priority"] = lpri-priority
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
 
-	def decrement(self, u):
+	def decrement(self, args, authstate, sid, sessions):
+		u = args[0]
 		index = -1
 		priority = -1
 		for i in self.queue:
@@ -229,11 +237,12 @@ class Queue:
 			else:
 				index = 0
 		item["time"] = time.time()
-		item["coachmodified"] = True
+		if authstate: item["coachmodified"] = True
 		item["priority"] = lpri-priority
 		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
 
-	def attr(self, u, attrname, value, authstate):
+	def attr(self, args, authstate, sid, sessions):
+		u, attrname, value = args[0], args[1], args[2]
 		if attrname not in self.requiredtags or attrname in ["uuid", "sid", "time", "totaldiff"]:
 			return
 		if attrname not in config["attr_edit_perms"] and not authstate:
