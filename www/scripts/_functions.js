@@ -28,9 +28,9 @@ function logText(text) {
 function populateActions() {
 	logText('Populating actions');
 	$('.cutting-table-template tr td:nth-child(1)').each(function(index, el) {
-		$(el).children('i').each(function(iIndex, iElement) {
-			$(iElement).attr('data-uuid', allCuts[index].uuid);
-			$(iElement).unbind('click');
+		$(el).children('a').each(function(aIndex, aElement) {
+			$(aElement).attr('data-uuid', allCuts[index].uuid);
+			$(aElement).unbind('click');
 		});
 	});
 
@@ -38,6 +38,7 @@ function populateActions() {
 	if(isTouchDevice() == false) {
 		$('[data-toggle="tooltip"]').tooltip();
 	}
+
 	// handler to remove a job
 	$('.remove-job').click(function() {
 		googleAnalytics('send', 'event', 'action', 'click', 'remove job');

@@ -19,14 +19,14 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities,  refre
 		html: function(params) {
 			return (
 				authed ? '
-				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></i>
-				<i class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></i> 
-				<i class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></i>'
+				<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>
+				<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></a> 
+				<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></a>'
 				: params.index >= config.pass_depth && config.pass_depth ? '
-				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></i>'
+				<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>'
 				:  '
-				<i class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></i>
-				<i class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></i>'
+				<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>
+				<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></a>'
 			);
 		},
 	}

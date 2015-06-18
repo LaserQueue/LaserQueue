@@ -11,10 +11,40 @@ td {
 
 .cutting-table tr:not(.table-first-row) td:nth-child(1), .cutting-table tr:not(.table-first-row) td:nth-child(1) * {
 	user-select: none;
+	text-decoration: none;
+	&:focus {
+		outline: none;
+		border: none;
+	}
 }
 
 .cutting-table tr:last-child td:nth-child(1) .lower-priority {
 	display: none;
+}
+
+
+.glyphicon-remove, .glyphicon-triangle-bottom, .glyphicon-chevron-up, .glyphicon-chevron-down {
+	cursor: pointer;
+	transition: transform 0.1s linear;
+	&:hover { transform: scale(1.2); }
+	&:active { transform: scale(0.9); }
+}
+
+.glyphicon-remove, .glyphicon-remove:hover, .glyphicon-remove:focus {
+	color: firebrick;
+	&:hover { color: darken(firebrick, 10%); }
+	&:active { color: darken(firebrick, 25%); }
+}
+
+.increment-job, .decrement-job {
+	color: $nuvu-pink;
+	&:focus { color: $nuvu-pink; }
+	&:hover { color: darken($nuvu-pink, 10%); }
+	&:active { color: darken($nuvu-pink, 25%); }
+}
+
+.lower-priority, .lower-priority:hover, .lower-priority:focus {
+	color: black;
 }
 
 .coach-modified {

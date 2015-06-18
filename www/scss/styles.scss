@@ -9,25 +9,6 @@
 	outline: none !important;
 }
 
-.glyphicon-remove, .glyphicon-triangle-bottom, .glyphicon-chevron-up, .glyphicon-chevron-down {
-	cursor: pointer;
-	transition: transform 0.1s linear;
-	&:hover { transform: scale(1.2); }
-	&:active { transform: scale(0.9); }
-}
-
-.glyphicon-remove {
-	color: firebrick;
-	&:hover { color: darken(firebrick, 10%); }
-	&:active { color: darken(firebrick, 25%); }
-}
-
-.glyphicon-chevron-up, .glyphicon-chevron-down {
-	color: $nuvu-pink;
-	&:hover { color: darken($nuvu-pink, 10%); }
-	&:active { color: darken($nuvu-pink, 25%); }
-}
-
 #cut-material, #priority-dropdown {
 	width: 172px;
 }
