@@ -8,6 +8,7 @@ function onAuth() {
 	$('.cutting-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', false);
 	$('.authorize').attr('data-original-title', config.logout);
+	$('.nuvu-logo').attr('src', '/img/admin-logo.svg');
 }
 
 function onFailedauth() {
@@ -22,4 +23,5 @@ function onDeauth() {
 	$('.cutting-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', true);
 	$('.authorize').attr('data-original-title', config.login);
+	$('.nuvu-logo').attr('src', '/img/logo.svg');
 }
