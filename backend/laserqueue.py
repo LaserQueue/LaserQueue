@@ -117,12 +117,13 @@ class Queue:
 				if j["uuid"] == u:
 					i.remove(j)
 	def passoff(self, u):
+		oindex = -1
 		masterqueue = _concatlist(self.queue)
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					oindex = masterqueue.index(j)
-
+		if oindex == -1: return
 		if oindex == len(masterqueue)-1: return
 		target = masterqueue[oindex]
 		for ii in range(len(self.queue)):
@@ -140,23 +141,27 @@ class Queue:
 		self.queue[lpri-tpri].insert(tindex+1, target)
 
 	def move(self, u, ni, np):
+		target = None
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					target = deepcopy(j)
 					i.remove(j)
+		if not target: return
 		target["time"] = time.time()
 		target["coachmodified"] = True
 		target["priority"] = lpri-np
 		self.queue[lpri-np].insert(ni, target)
 
 	def increment(self, u):
+		index = -1
+		priority = -1
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					index = i.index(j)
 					priority = lpri-self.queue.index(i)
-
+		if index == -1 and priority == -1: return
 		if priority == lpri and not index:
 			return
 		item = self.queue[lpri-priority].pop(index)
@@ -174,12 +179,14 @@ class Queue:
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
 
 	def decrement(self, u):
+		index = -1
+		priority = -1
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					index = i.index(j)
 					priority = lpri-self.queue.index(i)
-
+		if index == -1 and priority == -1: return
 		if not priority and len(self.queue[lpri-priority]) < index:
 			return
 		item = self.queue[lpri-priority].pop(index)
@@ -201,11 +208,14 @@ class Queue:
 			return
 		if attrname not in config["attr_edit_perms"] and not authstate:
 			return
+		index = -1
+		priority = -1
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					index = i.index(j)
 					priority = lpri-self.queue.index(i)
+		if index == -1 and priority == -1: return
 		item = self.queue[lpri-priority][index]
 		if attrname not in config["attr_edit_perms"] and attrname != "coachmodified":
 			item["coachmodified"] = True
