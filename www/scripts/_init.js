@@ -23,3 +23,8 @@ $.ajax({
 .fail(function() {
 	console.log('Failed to get infotext.md');
 });
+
+// focus the first form element on not-mobile
+if(!isTouchDevice()) {
+	$('.cut-human-name').focus();
+}
