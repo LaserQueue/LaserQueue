@@ -1,4 +1,4 @@
-// put any utilities and functions etc. in here
+// put any utilities and functions etc in here
 
 
 // logs text to devlog on page

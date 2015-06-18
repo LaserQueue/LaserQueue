@@ -1,4 +1,4 @@
-// main program with other stuff
+// main program
 
 // when jquery is here
 $(document).ready(function() {
@@ -18,6 +18,7 @@ $(document).ready(function() {
 				]
 			});
 		resetForm($('.new-cut-form'));
+		$('.cut-human-name').focus();
 		
 	});
 
