@@ -140,6 +140,36 @@ class Queue:
 		target["priority"] = lpri-tpri
 		self.queue[lpri-tpri].insert(tindex+1, target)
 
+	def relmove(self, u, nindex):
+		target = None
+		for i in self.queue:
+			for j in i:
+				if j["uuid"] == u:
+					target = deepcopy(j)
+					i.remove(j)
+		if not target: return
+
+		masterqueue = _concatlist(self.queue)
+
+		if nindex <= 0:
+			bpri = masterqueue[0]["priority"]
+			bind = 0
+		elif nindex >= len(masterqueue):
+			bpri = masterqueue[-1]["priority"]
+			bind = len(self.queue[bpri])
+		else:
+			bpri = masterqueue[ni-1]["priority"]
+			bind = len(self.queue[bpri])
+
+		print(bpri)
+		print(bind)
+
+		target["time"] = time.time()
+		target["priority"] = bpri
+		target["coachmodified"] = True
+		self.queue[bpri].insert(bind, target)
+
+
 	def move(self, u, ni, np):
 		target = None
 		for i in self.queue:

@@ -104,6 +104,14 @@ def parseData(queue, sessions, jdata, shamed):
 			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
 
 		queue.move(args[0], args[1], args[2])
+	elif action == "relmove":
+		if len(args) != 2:
+			return "Expected 2 arguments, received "+str(len(args))
+		expectedtypes = [str, int]
+		if not _comparetypes(args, expectedtypes):
+			return "Expected "+str(expectedtypes)+", received "+str(_typelist(args))
+
+		queue.relmove(args[0], args[1])
 	elif action == "increment":
 		if len(args) != 1:
 			return "Expected 1 argument, received "+str(len(args))

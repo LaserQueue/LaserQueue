@@ -52,6 +52,7 @@
 	"recapitalize":true,
 	"authactions": [
 		"move",
+		"relmove",
 		"increment",
 		"decrement",
 		"refresh",
