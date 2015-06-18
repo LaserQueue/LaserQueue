@@ -37,7 +37,7 @@ arguments: uuid, target index, target priority
 moves the specified job to the target index, and the target priority.
 
 
-move *§
+relmove *§
 arguments: uuid, target index
 
 moves the specified job to the target index in the master index. Out of bounds will default to the bounds.
