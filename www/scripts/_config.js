@@ -100,6 +100,13 @@ getConfigFile = $.getJSON('/config.json', function() {
 	$('.cut-material').attr('title', config.material_hover);
 	$('.priority-dropdown').attr('title', config.priority_hover);
 
+	$('.action-header').text(config.action_header);
+	$('.name-header').text(config.name_header);
+	$('.material-header').text(config.material_header);
+	$('.time-header').text(config.time_header);
+	$('.priority-header').text(config.priority_header);
+
+
 
   buttons = {
   	'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>',

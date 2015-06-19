@@ -82,5 +82,10 @@
 	"incr_hover": "Increment job's position",
 	"decr_hover": "Decrement job's position",
 	"logout": "Click to log out",
-	"login": "Click to authenticate"
+	"login": "Click to authenticate",
+	"action_header": "Action",
+	"name_header": "Name",
+	"material_header": "Material",
+	"time_header": "Est. Time",
+	"priority_header": "Priority"
 }
