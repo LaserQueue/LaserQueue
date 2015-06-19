@@ -6,30 +6,31 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities,  refre
     allCuts = [],
     displayEl = {},
     renderDirectives = {
-	priority: {
-		html: function(params) {
-			return this.priority + (
-				this.coachmodified ? 
-					' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
-					: ''
-			);
+		priority: {
+			html: function(params) {
+				return this.priority + (
+					this.coachmodified ? 
+						' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
+						: ''
+				);
+			},
 		},
-	},
-	actions: {
-		html: function(params) {
-			var data = '';
-			for (var i = 0; i < Object.keys(buttons).length; i++) {
-				var button = Object.keys(buttons)[i];
-				if (config.authactions.indexOf(button) == -1 || authed) {
-					if (button != "pass" || !(params.index >= config.pass_depth && config.pass_depth || authed)) {
-						data += buttons[button];
+		actions: {
+			html: function(params) {
+				var data = '';
+				for (var i = 0; i < Object.keys(buttons).length; i++) {
+					var button = Object.keys(buttons)[i];
+					if (config.authactions.indexOf(button) == -1 || authed) {
+						if (button != "pass" || !(params.index >= config.pass_depth && config.pass_depth || authed)) {
+							data += buttons[button];
+						}
 					}
 				}
-			}
-			return data;
-		},
-	}
-};
+				return data;
+			},
+		}
+	},
+	draggable = [];
 
 // generate a session ID
 SID = uuid.v1();

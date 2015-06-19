@@ -89,6 +89,7 @@ function socketSetup() { // god help me
 				// make items draggable anywhere if authed
 				if(authed) {
 					$('.cutting-table-template tr').each(function(index, el) {
+						draggable[index] = this;
 						$(this).draggabilly({
 							axis: 'y',
 							container: $('.cutting-table-template')//,

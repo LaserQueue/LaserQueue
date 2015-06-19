@@ -24,4 +24,5 @@ function onDeauth() {
 	$('.disabled').prop('disabled', true);
 	$('.authorize').attr('data-original-title', config.login);
 	$('.nuvu-logo').attr('src', '/img/logo.svg');
+	$(draggable).draggabilly('disable');
 }
