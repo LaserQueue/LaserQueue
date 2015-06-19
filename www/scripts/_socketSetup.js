@@ -92,6 +92,9 @@ function socketSetup() { // god help me
 						axis: 'y'//,
 						// grid: [ 37, 37 ]
 					});
+					$(this).on('dragMove', function(event, pointer, moveVector) {
+						console.log(Math.round(moveVector.y / 37));
+					});
 				});
 			}
 

@@ -3261,27 +3261,6 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
-	"\/infotext.md": {
-		"criticStyle": 0,
-		"enableFootnotes": 0,
-		"enableLabels": 1,
-		"enableSmartQuotes": 1,
-		"escapeLineBreaks": 0,
-		"fileType": 4096,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/infotext.md",
-		"maskEmailAddresses": 1,
-		"outputAbbreviatedPath": "\/infotext.html",
-		"outputFormat": 0,
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"parseMetadata": 1,
-		"processHTML": 0,
-		"randomFootnoteNumbers": 0,
-		"useCompatibilityMode": 0
-		},
 	"\/scripts\/_auth.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -3528,7 +3507,7 @@
 	},
 "hooks": [
 	],
-"lastSavedByUser": "Wire Segal",
+"lastSavedByUser": "Sam Daitzman",
 "manualImportLinks": {
 	"\/scripts\/scripts.js": [
 		{

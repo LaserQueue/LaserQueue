@@ -52,3 +52,8 @@ td {
 	transition: transform 1.5s ease-in-out;
 	&:hover { transform: rotate(1080deg) scale(1.5); }
 }
+
+.cutting-table-template tr.is-dragging {
+	background: white;
+	opacity: 0.9;
+}
