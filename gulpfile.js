@@ -28,16 +28,19 @@ gulp.task('sass', function() {
 			.pipe(rename({suffix: '.min'}))
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/css'))
-	.pipe(notify({message: 'Sass has been compiled'}));
+	.pipe(notify({message: 'SCSS has been compiled'}));
 });
 
 // compile js
 gulp.task('js', function() {
 	return gulp.src(['./www/scripts/_functions.js', './www/scripts/_config.js', './www/scripts/_init.js', './www/scripts/_socketSetup.js', './www/scripts/_auth.js', './www/scripts/scripts.js'])
+		.pipe(jshint())
+		.pipe(jshint.reporter('default'))
 		.pipe(sourcemaps.init())
 			.pipe(concat('scripts.min.js'))
 		.pipe(sourcemaps.write('.'))
-	.pipe(gulp.dest('./www/js/'));
+	.pipe(gulp.dest('./www/js/'))
+	.pipe(notify({message: 'JS has been compiled'}));
 });
 
 // watch sass and compile
@@ -47,7 +50,7 @@ gulp.task('sass-watch', function() {
 
 // watch js and compile
 gulp.task('js-watch', function() {
-	gulp.watch('./www/js/*.js', ['js']);
+	gulp.watch('./www/scripts/*.js', ['js']);
 });
 
 // Default task, just runs dev

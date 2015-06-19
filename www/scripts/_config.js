@@ -69,6 +69,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 			<option disabled selected value="N/A" class="selected">' + config.material_input + '</option>
 		');
 	}
+	
 	for(var m in materials) {
 		var selected = (m === config.default_material ? 'selected' : '');
 		$('#cut-material').append('
