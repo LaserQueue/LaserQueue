@@ -113,6 +113,14 @@ function socketSend(jdata) {
 	}
 }
 
+// wrapper for socketSend that changes an item's attribute
+function changeAttr(taskid, attrKey, attrVal) {
+	socketSend({
+		'action': 'attr',
+		'args': [taskid, attrKey, attrVal]
+	});
+}
+
 // read the function name, it says it all
 function rickRoll() {
 	if (easterEggs) {
