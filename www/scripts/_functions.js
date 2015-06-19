@@ -115,10 +115,18 @@ function socketSend(jdata) {
 
 // wrapper for socketSend that changes an item's attribute
 function changeAttr(taskid, attrKey, attrVal) {
-	socketSend({
-		'action': 'attr',
-		'args': [taskid, attrKey, attrVal]
-	});
+	if(typeof taskid == 'string') {
+		socketSend({
+			'action': 'attr',
+			'args': [taskid, attrKey, attrVal]
+		});
+	} else if(typeof taskid == 'number') {
+		changeAttr(allCuts[taskid].uuid, attrKey, attrVal);
+	} else if(typeof taskid == 'object') {
+		changeAttr($(taskid).attr('data-uuid'), attrKey, attrVal);
+	} else {
+		logText('changeAttr() called with invalid taskid type');
+	}
 }
 
 // read the function name, it says it all
