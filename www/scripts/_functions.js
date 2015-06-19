@@ -35,7 +35,7 @@ function populateActions() {
 	});
 
 	// reinitialize bootstrap tooltips
-	if(isTouchDevice() == false) {
+	if(isTouchDevice() === false) {
 		$('[data-toggle="tooltip"]').tooltip();
 	}
 
@@ -92,7 +92,7 @@ function populateActions() {
 					'action': 'relmove',
 					'args': [
 						$(this).attr('data-uuid'),
-						+$(this).attr('data-pos') + +Math.round($(this).data('draggabilly').position.y / 37)
+						parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / 37))
 					]
 				});
 			});
@@ -162,12 +162,12 @@ function rickRoll() {
 
 // checks if the device is a touch device
 function isTouchDevice(){
-	return true == ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
+	return true === ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
 }
 
 // ga() if Google Analytics is enabled
 function googleAnalytics(i, s, o, g, r, a, m){
-	if (config.google_analytics_key != '') {
+	if (typeof config.google_analytics_key !== 'string' && config.google_analytics_key !== '') {
 		ga(i, s, o, g, r, a, m);
 	}
 }
