@@ -7,6 +7,7 @@ var uglify       = require('gulp-uglify');
 var rename       = require('gulp-rename');
 var concat       = require('gulp-concat');
 var groupConcat  = require('gulp-group-concat');
+var watch        = require('gulp-watch');
 var sourcemaps   = require('gulp-sourcemaps');
 
 // compile sass
@@ -35,25 +36,28 @@ gulp.task('sass', function() {
 gulp.task('js', function() {
 	return gulp.src(['./www/scripts/_functions.js', './www/scripts/_config.js', './www/scripts/_init.js', './www/scripts/_socketSetup.js', './www/scripts/_auth.js', './www/scripts/scripts.js'])
 		.pipe(jshint())
-		.pipe(jshint.reporter('default'))
 		.pipe(sourcemaps.init())
 			.pipe(concat('scripts.min.js'))
+			.pipe(uglify())
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/js/'))
-	.pipe(notify({message: 'JS has been compiled'}));
+	.pipe(notify({message: 'JS has been compiled'}))
+	.pipe(jshint.reporter('default'));
 });
 
 // watch sass and compile
 gulp.task('sass-watch', function() {
+	gulp.start(['sass']);
 	gulp.watch('./www/scss/*.scss', ['sass']);
 });
 
 // watch js and compile
 gulp.task('js-watch', function() {
+	gulp.start(['js']);
 	gulp.watch('./www/scripts/*.js', ['js']);
 });
 
 // Default task, just runs dev
 gulp.task('default', function() {
-	gulp.start([]);
+	gulp.start(['sass-watch', 'js-watch']);
 });
