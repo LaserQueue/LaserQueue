@@ -114,7 +114,8 @@ getConfigFile = $.getJSON('/config.json', function() {
   	'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>',
   	'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></a>',
   	'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></a>',
-  	'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></a>'
+  	'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></a>',
+  	'relmove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="' + config.drag_hover + '"></a>'
   };
 
 	if (config.admin_mode_enabled) {
