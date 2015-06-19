@@ -32,7 +32,7 @@ All dependencies should be met the first time you run the program. The program w
 
 Required to start:  
 - [Python 3.4.x](https://www.python.org/downloads/)
-- pip (`#~ easy_install pip`)
+- pip (`#~ curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python3`)
 
 Other dependencies (installed on runtime):  
 - websockets (`#~ pip3 install websockets`)
