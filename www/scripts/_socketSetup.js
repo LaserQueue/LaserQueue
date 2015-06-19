@@ -85,6 +85,14 @@ function socketSetup() { // god help me
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
+
+				// make items draggable anywhere
+				$('.cutting-table-template tr').each(function(index, el) {
+					$(this).draggabilly({
+						axis: 'y'//,
+						// grid: [ 37, 37 ]
+					});
+				});
 			}
 
 		} else if(jsonData.action == 'rickroll') {
