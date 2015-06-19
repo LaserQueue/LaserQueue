@@ -28,9 +28,13 @@ To change the admin login password, create a plaintext file `password` under bac
 
 ## Dependencies
 
-All dependencies should be met the first time you run the program. The program will detect your system and prompt to install them. However, you will definitely need Python >=3.4.x for WebSockets. If (for some reason) you would like to install these by hand, feel free:
+All dependencies should be met the first time you run the program. The program will detect your system and prompt to install them. However, you will definitely need Python at ≥ 3.4.x for WebSockets. If (for some reason) you would like to install these by hand, feel free:
 
+Required to start:  
 - [Python 3.4.x](https://www.python.org/downloads/)
+- pip (`#~ easy_install pip`)
+
+Other dependencies (installed on runtime):  
 - websockets (`#~ pip3 install websockets`)
 - netifaces (`#~ pip3 install netifaces`)
 - GitPython (`#~ pip3 install GitPython`)
