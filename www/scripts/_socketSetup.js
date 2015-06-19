@@ -89,11 +89,13 @@ function socketSetup() { // god help me
 				// make items draggable anywhere
 				$('.cutting-table-template tr').each(function(index, el) {
 					$(this).draggabilly({
-						axis: 'y'//,
+						axis: 'y',
+						container: $('.cutting-table-template')//,
 						// grid: [ 37, 37 ]
 					});
 					$(this).on('dragMove', function(event, pointer, moveVector) {
-						console.log(Math.round(moveVector.y / 37));
+						console.log(this);
+						Math.round(moveVector.y / 37);
 					});
 				});
 			}

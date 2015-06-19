@@ -34,6 +34,11 @@ function populateActions() {
 		});
 	});
 
+	$('.cutting-table-template tr').each(function(index, el) {
+		$(el).attr('data-uuid', allCuts[index].uuid);
+		$(el).unbind('click');
+	});
+
 	// reinitialize bootstrap tooltips
 	if(isTouchDevice() == false) {
 		$('[data-toggle="tooltip"]').tooltip();
@@ -42,40 +47,40 @@ function populateActions() {
 	// handler to remove a job
 	$('.remove-job').click(function() {
 		googleAnalytics('send', 'event', 'action', 'click', 'remove job');
-		logText('removing item ' + $(this).attr('data-uuid'));
+		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
 			'action': 'remove',
-			'args': [$(this).attr('data-uuid')]
+			'args': [$($(this).parents()[1]).attr('data-uuid')]
 		});
 	});
 
 	// handler to lower a job
 	$('.lower-priority').click(function() {
 		googleAnalytics('send', 'event', 'action', 'click', 'pass job');
-		logText('passing item ' + $(this).attr('data-uuid'));
+		logText('passing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
 			'action': 'pass',
-			'args': [$(this).attr('data-uuid')]
+			'args': [$($(this).parents()[1]).attr('data-uuid')]
 		});
 	});
 
 	// handler to decrement a job
 	$('.decrement-job').click(function() {
 		googleAnalytics('send', 'event', 'action', 'click', 'decrement job');
-		logText('removing item ' + $(this).attr('data-uuid'));
+		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
 			'action': 'decrement',
-			'args': [$(this).attr('data-uuid')]
+			'args': [$($(this).parents()[1]).attr('data-uuid')]
 		});
 	});
 
 	// handler to increment a job
 	$('.increment-job').click(function() {
 		googleAnalytics('send', 'event', 'action', 'click', 'increment job');
-		logText('passing item ' + $(this).attr('data-uuid'));
+		logText('passing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
 			'action': 'increment',
-			'args': [$(this).attr('data-uuid')]
+			'args': [$($(this).parents()[1]).attr('data-uuid')]
 		});
 	});
 }
