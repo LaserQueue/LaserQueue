@@ -27,12 +27,6 @@ function logText(text) {
 // repopulate action button UUIDs
 function populateActions() {
 	logText('Populating actions');
-	$('.cutting-table-template tr td:nth-child(1)').each(function(index, el) {
-		$(el).children('a').each(function(aIndex, aElement) {
-			$(aElement).attr('data-uuid', allCuts[index].uuid);
-			$(aElement).unbind('click');
-		});
-	});
 
 	$('.cutting-table-template tr').each(function(index, el) {
 		$(el).attr('data-uuid', allCuts[index].uuid);
