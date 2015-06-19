@@ -163,11 +163,8 @@ class Queue:
 			bpri = masterqueue[-1]["priority"]
 			bind = len(self.queue[bpri])
 		else:
-			bpri = masterqueue[ni-1]["priority"]
+			bpri = masterqueue[nindex-1]["priority"]
 			bind = len(self.queue[bpri])
-
-		print(bpri)
-		print(bind)
 
 		target["time"] = time.time()
 		target["priority"] = bpri
