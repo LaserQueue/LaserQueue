@@ -147,6 +147,8 @@ class Queue:
 	def relmove(self, args, authstate, sid, sessions):
 		u, nindex = args[0], args[1]
 		target = None
+		masterqueue = _concatlist(self.queue)
+		if len(masterqueue) <= 1: return
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:

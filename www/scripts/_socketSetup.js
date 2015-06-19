@@ -85,27 +85,6 @@ function socketSetup() { // god help me
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
-
-				// make items draggable anywhere if authed
-				if(authed) {
-					$('.cutting-table-template tr').each(function(index, el) {
-						draggable[index] = this;
-						$(this).draggabilly({
-							axis: 'y',
-							container: $('.cutting-table-template')//,
-							// grid: [ 37, 37 ]
-						});
-						$(this).on('dragEnd', function(event, pointer) {
-							socketSend({
-								'action': 'relmove',
-								'args': [
-									$(this).attr('data-uuid'),
-									+$(this).attr('data-pos') + +Math.round($(this).data('draggabilly').position.y / 37)
-								]
-							});
-						});
-					});
-				}
 			}
 
 		} else if(jsonData.action == 'rickroll') {

@@ -78,6 +78,26 @@ function populateActions() {
 			'args': [$($(this).parents()[1]).attr('data-uuid')]
 		});
 	});
+
+	if (authed || config.authactions.indexOf('relmove') == -1) {
+		$('.cutting-table-template tr').each(function(index, el) {
+			draggable[index] = this;
+			$(this).draggabilly({
+				axis: 'y',
+				container: $('.cutting-table-template')//,
+				// grid: [ 37, 37 ]
+			});
+			$(this).on('dragEnd', function(event, pointer) {
+				socketSend({
+					'action': 'relmove',
+					'args': [
+						$(this).attr('data-uuid'),
+						+$(this).attr('data-pos') + +Math.round($(this).data('draggabilly').position.y / 37)
+					]
+				});
+			});
+		});
+	}
 }
 
 // displays message in a bootstrap modal
