@@ -1,7 +1,7 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate, easterEggs, SID,
+var getConfigFile, config, host, jsonData, socket, materials, priorities,  refreshRate, reconnectRate, easterEggs, SID, buttons,
     authed = false,
     allCuts = [],
     displayEl = {},
@@ -17,17 +17,16 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities,  refre
 	},
 	actions: {
 		html: function(params) {
-			return (
-				authed ? '
-				<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>
-				<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></a> 
-				<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></a>'
-				: params.index >= config.pass_depth && config.pass_depth ? '
-				<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>'
-				:  '
-				<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>
-				<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></a>'
-			);
+			var data = '';
+			for (var i = 0; i < Object.keys(buttons).length; i++) {
+				var button = Object.keys(buttons)[i];
+				if (config.authactions.indexOf(button) == -1 || authed) {
+					if (button != "pass" || !(params.index >= config.pass_depth && config.pass_depth || authed)) {
+						data += buttons[button];
+					}
+				}
+			}
+			return data;
 		},
 	}
 };
@@ -100,6 +99,14 @@ getConfigFile = $.getJSON('/config.json', function() {
 	$('.cut-time-estimate').attr('title', config.time_hover);
 	$('.cut-material').attr('title', config.material_hover);
 	$('.priority-dropdown').attr('title', config.priority_hover);
+
+
+  buttons = {
+  	'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>',
+  	'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></a>',
+  	'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></a>',
+  	'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></a>'
+  };
 
 	if (config.admin_mode_enabled) {
 		$('.authorize').click(function() {
