@@ -30,6 +30,7 @@ function populateActions() {
 
 	$('.cutting-table-template tr').each(function(index, el) {
 		$(el).attr('data-uuid', allCuts[index].uuid);
+		$(el).attr('data-pos', index);
 		$(el).unbind('click');
 	});
 
