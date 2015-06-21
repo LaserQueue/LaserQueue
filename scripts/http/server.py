@@ -107,6 +107,11 @@ def date_time_string(timestamp=None):
 							 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 	now = time.time()
 	year, month, day, hh, mm, ss, x, y, z = time.localtime(now)
+	hh = "0" + str(hh) if hh < 10 else str(hh)
+	mm = "0" + str(mm) if mm < 10 else str(mm)
+	ss = "0" + str(ss) if ss < 10 else str(ss)
+	day = "0" + str(day) if day < 10 else str(day)
+
 	s = (bcolors.MAGENTA + "[{0}/{1}/{2} {3}:{4}:{5}] " + bcolors.ENDC).format(
 		day, monthname[month], year, hh, mm, ss)
 	return s
