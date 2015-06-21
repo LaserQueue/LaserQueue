@@ -3,15 +3,17 @@ var sass         = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var notify       = require('gulp-notify');
 var jscs         = require('gulp-jscs');
-var jscsStylish = require('gulp-jscs-stylish');
+var jscsStylish  = require('gulp-jscs-stylish');
 var jshint       = require('gulp-jshint');
 var noop         = function() {};
 var uglify       = require('gulp-uglify');
+var UglifyJS     = require('uglify-js');
 var rename       = require('gulp-rename');
 var concat       = require('gulp-concat');
 var groupConcat  = require('gulp-group-concat');
 var watch        = require('gulp-watch');
 var sourcemaps   = require('gulp-sourcemaps');
+var sizereport   = require('gulp-sizereport');
 
 // compile sass
 gulp.task('sass', function() {
@@ -32,7 +34,7 @@ gulp.task('sass', function() {
 			.pipe(rename({suffix: '.min'}))
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/css'))
-	.pipe(notify({message: 'SCSS has been compiled'}));
+	.pipe(notify({message: 'SCSS has been compiled'}))
 });
 
 // compile js
@@ -63,7 +65,23 @@ gulp.task('js-watch', function() {
 	gulp.watch('./www/scripts/*.js', ['js']);
 });
 
+// js size report
+gulp.task('js-size-report', function() {
+	gulp.src('./www/js/scripts.min.js').pipe(sizereport({gzip: true}));
+});
+
+// style size report
+gulp.task('style-size-report', function() {
+	gulp.src('./www/css/styles.min.css').pipe(sizereport({gzip: true}));
+})
+
+// overall size report
+gulp.task('size', function() {
+	gulp.start(['js-size-report', 'style-size-report']);
+	gulp.src('./www/index.html').pipe(sizereport({gzip: true}));
+})
+
 // Default task, just runs dev
 gulp.task('default', function() {
-	gulp.start(['sass-watch', 'js-watch']);
+	gulp.start(['sass-watch', 'js-watch', 'size']).on('error', function() {});
 });
