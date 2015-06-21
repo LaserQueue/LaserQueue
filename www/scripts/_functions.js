@@ -4,10 +4,7 @@ if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function(match, number) { 
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-      ;
+      return typeof args[number] != 'undefined' ? args[number] : match;
     });
   };
 }
@@ -15,7 +12,7 @@ if (!String.prototype.format) {
 if (!String.prototype.repeat) {
   String.prototype.repeat = function(count) {
     'use strict';
-    if (this == null) {
+    if (this === null) {
       throw new TypeError('can\'t convert ' + this + ' to object');
     }
     var str = '' + this;
@@ -30,7 +27,7 @@ if (!String.prototype.repeat) {
       throw new RangeError('repeat count must be less than infinity');
     }
     count = Math.floor(count);
-    if (str.length == 0 || count == 0) {
+    if (str.length === 0 || count === 0) {
       return '';
     }
     // Ensuring count is a 31-bit integer allows us to heavily optimize the
@@ -45,13 +42,13 @@ if (!String.prototype.repeat) {
         rpt += str;
       }
       count >>>= 1;
-      if (count == 0) {
+      if (count === 0) {
         break;
       }
       str += str;
     }
     return rpt;
-  }
+  };
 }
 
 function ensureNumberStringLength(number, len) {
