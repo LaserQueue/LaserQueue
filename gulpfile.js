@@ -64,6 +64,7 @@ gulp.task('sass-watch', function() {
 gulp.task('js-watch', function() {
 	gulp.start(['js']);
 	gulp.watch('./www/scripts/*.js', ['js']);
+	gulp.watch('./.jscsrc', ['js']);
 });
 
 // make cache manifest
