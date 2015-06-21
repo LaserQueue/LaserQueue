@@ -54,8 +54,8 @@ td {
 }
 
 .cutting-table-template tr.is-dragging {
-	 * {
-		background: lightgray;
+	* {
+		background: lighten(lightgray, 10%);
 		cursor: move;
 		z-index: 99999999;
 	}
