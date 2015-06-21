@@ -7,7 +7,7 @@ class Config:
 		self.data = json.load(open(path))
 	def __getitem__(self, y):
 		if os.path.getctime(self.path) > self.lastmodtime:
-			self.data = json.load(self.path)
+			self.data = json.load(open(self.path))
 			lastmodtime = os.path.getctime(self.path)
 		return self.data[y]
 
