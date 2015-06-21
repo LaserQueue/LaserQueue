@@ -46,7 +46,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 	// hide and disable log if not enabled
 	devLog = config.dev_log;
-	if(devLog != true) { $('[for=log-checkbox]').slideUp(); }
+	if(devLog != true) { $('[for=log-checkbox]').remove(); }
 	logText('Log starts here');
 
 	// log entire config file
