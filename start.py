@@ -65,9 +65,16 @@ Root required on ports up to 1023, attempting to elevate permissions. \n\
 	else:
 		frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 	
-	while not backend_server.returncode and not backend_main.returncode and not frontend.returncode: time.sleep(0.001)
-	backend_server.kill()
-	backend_main.kill()
-	frontend.kill()
+	try:
+		while not backend_server.returncode and not backend_main.returncode and not frontend.returncode: time.sleep(0.001)
+	except KeyboardInterrupt:
+		print()
+		cprint("Keyboard interrupt received, exiting.")
+	finally:
+		backend_server.kill()
+		backend_main.kill()
+		try:
+			frontend.kill()
+		except: pass
 	
 

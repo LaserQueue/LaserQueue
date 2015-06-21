@@ -1269,7 +1269,6 @@ def test(HandlerClass=BaseHTTPRequestHandler,
 	try:
 		httpd.serve_forever()
 	except KeyboardInterrupt:
-		cprint("Keyboard interrupt received, exiting.")
 		httpd.server_close()
 		sys.exit(0)
 
