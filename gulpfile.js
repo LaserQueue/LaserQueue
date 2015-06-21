@@ -75,12 +75,8 @@ gulp.task('manifest', function() {
 			preferOnline: true,
 			network: ['http://*', 'https://*', '*'],
 			filename: 'app.manifest',
-			exclude: 'app.manifest',
+			exclude: ['app.manifest', 'index.html'],
 			cache: [
-				'index.html',
-				'config.json',
-				'js/scripts.min.js',
-				'css/styles.min.css',
 				'img/logo.svg',
 				'img/laserQueue.png',
 				'bower_components/js-sha1/build/sha1.min.js',

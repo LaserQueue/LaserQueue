@@ -1,12 +1,8 @@
 CACHE MANIFEST
-# Time: Sun Jun 21 2015 08:29:50 GMT-0400 (EDT)
+# Time: Sun Jun 21 2015 08:54:09 GMT-0400 (EDT)
 
 
 CACHE:
-index.html
-config.json
-js/scripts.min.js
-css/styles.min.css
 img/logo.svg
 img/laserQueue.png
 bower_components/js-sha1/build/sha1.min.js
