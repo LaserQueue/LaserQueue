@@ -21,6 +21,8 @@ function logText(text) {
 		for (var i = textArray.length - 1; i >= 0; i--) {
 			$('.log-pre').prepend('<span class="log-time"> ' + timestamp + ':</span> ' + textArray[i] + '\n');
 		}
+	} else {
+		window.console.log('DevLog Redirect: [' + text + ']');
 	}
 }
 
