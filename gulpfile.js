@@ -40,7 +40,7 @@ gulp.task('sass', function() {
 
 // compile js
 gulp.task('js', function() {
-	return gulp.src(['./www/scripts/_functions.js', './www/scripts/_config.js', './www/scripts/_init.js', './www/scripts/_socketSetup.js', './www/scripts/_auth.js', './www/scripts/scripts.js'])
+	return gulp.src(['./www/scripts/*.js', './www/scripts/scripts.js'])
 		.pipe(jshint())
 		.pipe(sourcemaps.init())
 			.pipe(jscs())
