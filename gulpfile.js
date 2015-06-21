@@ -2,7 +2,10 @@ var gulp         = require('gulp');
 var sass         = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var notify       = require('gulp-notify');
+var jscs         = require('gulp-jscs');
+var jscsStylish = require('gulp-jscs-stylish');
 var jshint       = require('gulp-jshint');
+var noop         = function() {};
 var uglify       = require('gulp-uglify');
 var rename       = require('gulp-rename');
 var concat       = require('gulp-concat');
@@ -37,6 +40,9 @@ gulp.task('js', function() {
 	return gulp.src(['./www/scripts/_functions.js', './www/scripts/_config.js', './www/scripts/_init.js', './www/scripts/_socketSetup.js', './www/scripts/_auth.js', './www/scripts/scripts.js'])
 		.pipe(jshint())
 		.pipe(sourcemaps.init())
+			.pipe(jscs())
+			.on('error', noop)
+			.pipe(jscsStylish.combineWithHintResults())
 			.pipe(concat('scripts.min.js'))
 			.pipe(uglify())
 		.pipe(sourcemaps.write('.'))
