@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Sun Jun 21 2015 15:47:19 GMT-0400 (EDT)
+# Time: Sun Jun 21 2015 16:15:49 GMT-0400 (EDT)
 
 
 CACHE:
@@ -13,9 +13,9 @@ bower_components/jquery/dist/jquery.min.js
 
 
 NETWORK:
-http://*
-https://*
 *
+app.manifest
+index.html
 
 
 SETTINGS:

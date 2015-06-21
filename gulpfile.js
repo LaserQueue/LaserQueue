@@ -73,7 +73,7 @@ gulp.task('manifest', function() {
 			hash: true,
 			timestamp: true,
 			preferOnline: true,
-			network: ['http://*', 'https://*', '*'],
+			network: ['*', 'app.manifest', 'index.html'],
 			filename: 'app.manifest',
 			exclude: ['app.manifest', 'index.html'],
 			cache: [
