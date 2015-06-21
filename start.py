@@ -2,6 +2,7 @@ import os, sys
 import subprocess, time
 import json
 import tempfile
+import atexit
 
 from scripts.parseargv import args
 from scripts.config import cprint, cinput, bcolors
@@ -27,6 +28,14 @@ def gSystem(cmd):
 	else:
 		return os.system("python3 "+cmd)
 
+def cleanup(): 
+	backend_server.kill()
+	backend_main.kill()
+	try:
+		frontend.kill()
+	except: pass
+
+atexit.register(cleanup) 
 
 if __name__ == "__main__":
 	temppath = tempfile.gettempdir()
@@ -71,10 +80,6 @@ Root required on ports up to 1023, attempting to elevate permissions. \n\
 		print()
 		cprint("Keyboard interrupt received, exiting.")
 	finally:
-		backend_server.kill()
-		backend_main.kill()
-		try:
-			frontend.kill()
-		except: pass
+		quit(0)
 	
 
