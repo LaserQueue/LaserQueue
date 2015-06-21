@@ -1,5 +1,6 @@
 from laserqueue import Queue
-from configloader import config
+from config import *
+config = Config(os.path.join("..","www","config.json"))
 import jsonhandler as comm
 import sidhandler as sids
 import tempfile
@@ -41,7 +42,6 @@ def main():
 					queue.metapriority()
 					x = comm.parseData(queue, sessions, data)
 					if "action" in data and data["action"] != "null":
-						print(json.dumps(data, indent=2))
 						sessions.update()
 						if args.backup:
 							json.dump(queue.queue, open("cache.json", "w"), indent=2)
@@ -58,16 +58,15 @@ def main():
 							if data["sid"][:int(len(data["sid"])/2)] in shamed:
 								shamed.remove(data["sid"][:int(len(data["sid"])/2)])
 						else:
-							print(x)
+							cprint(bcolors.YELLOW + x)
 						time.sleep(0.2)
 					else:
 						if x is False:
 							shamed.append(data["sid"][:int(len(data["sid"])/2)])
 						json.dump(comm.generateData(queue, sessions, shamed), open(os.path.join(temppath, "topage.json"), "w"))
 						json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"), {})
-						if data["action"] != "null": print(queue.queue)
 				except Exception as e: 
-					print(e)
+					cprint(bcolors.YELLOW + e)
 				
 		time.sleep(0.01)
 

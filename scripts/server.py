@@ -9,7 +9,8 @@ import tempfile
 
 from parseargv import args
 
-from configloader import config
+from config import *
+config = Config(os.path.join("..","www","config.json"))
 
 temppath = tempfile.gettempdir()
 
@@ -25,12 +26,13 @@ def hello(websocket, path):
 		message = yield from websocket.recv()
 		try:
 			messagedata = json.loads(message)
-			if message != None and ("action" in messagedata and messagedata["action"] not in ["null", "auth", "uuddlrlrba"]): print(message)
+			if message != None and ("action" in messagedata and messagedata["action"] not in ["null", "auth", "uuddlrlrba"]): 
+				cprint(message)
 			if os.path.exists(os.path.join(temppath, "topage.json")): 
 				if messagedata:
 					if message != None and "action" in messagedata:
 						if messagedata["action"] not in ["null", "auth", "uuddlrlrba"]:
-							print("saving message")
+							cprint("Saving message.")
 						messagef = open(os.path.join(temppath, "toscript.json"), "w")
 						json.dump(messagedata, messagef)
 						messagef.close()
@@ -46,8 +48,8 @@ def hello(websocket, path):
 			
 		
 def main():
-	print("Serving WebSockets on "+config['host']+" port "+config["port"]+" ...")
-	start_server = websockets.serve(hello, config['host'], config['port'])
+	cprint("Serving WebSockets on 0.0.0.0 port "+config["port"]+" ...")
+	start_server = websockets.serve(hello, "0.0.0.0", config['port'])
 
 	asyncio.get_event_loop().run_until_complete(start_server)
 	asyncio.get_event_loop().run_forever()

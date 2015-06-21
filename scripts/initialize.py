@@ -6,12 +6,15 @@ import argparse
 import gzip
 import urllib.request
 import tarfile
+import time
 from math import ceil
 
 from parseargv import args
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
+
+from config import cprint, cinput, bcolors
 
 def qsort(l):
 		if l == []: 
@@ -47,16 +50,16 @@ def getpacks():
 		installed = True
 		confirm = ("y" if args.all else "")
 		while confirm not in ["y", "n"]:
-			confirm = input("Install dependency "+pack+"? (y/n) ").lower().strip().rstrip()
+			confirm = cinput("Install dependency "+pack+"? (y/n) ").lower().strip().rstrip()
 		if confirm == "n": 
-			print("WARNING: Program may not run without this library.")
+			cprint(bcolors.YELLOW + "WARNING: Program may not run without this library.")
 			continue
 		if pip.main(["install", pack]) and os.name != "nt":
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = input("Install failed, try again with elevated permissions? (y/n) ").lower().strip().rstrip()
+				confirm = cinput("Install failed, try again with elevated permissions? (y/n) ").lower().strip().rstrip()
 			if confirm == "n": 
-				print("WARNING: Program may not run without this library.")
+				cprint(bcolors.YELLOW + "WARNING: Program may not run without this library.")
 				continue
 			if not os.system("sudo pip3 install "+pack):
 				pl.append(pack)
@@ -65,17 +68,17 @@ def getpacks():
 	if installed:
 		for pack in PACKAGES:
 			if pack not in pl:
-				print("Failed to install dependency "+pack+".")
+				cprint(bcolors.DARKRED + "Failed to install dependency "+pack+".")
 				installed = False
 	if installed:
-		print("Sucessfully installed all dependencies!")
+		cprint("Sucessfully installed all dependencies!")
 
 def _fillblanks(odict, adict):
 	return dict(adict, **odict)
 
 def make_tarfile(output_filename, source_dir):
-    with tarfile.open(output_filename, "w:gz") as tar:
-        tar.add(source_dir, arcname=os.path.basename(source_dir))
+		with tarfile.open(output_filename, "w:gz") as tar:
+				tar.add(source_dir, arcname=os.path.basename(source_dir))
 
 def update():
 	if args.skipupdate: return
@@ -90,7 +93,7 @@ def update():
 			prefix = os.path.basename(os.path.abspath(".."))+"-"
 
 			while confirm not in ["fetch", "overwrite", "cancel"]:
-				confirm = input("Do you want to get version "+config["version"]+" to "+masterconfig["version"]+"? \n\
+				confirm = cinput("Do you want to get version "+config["version"]+" to "+masterconfig["version"]+"? \n\
 The fetch option will update into "+os.path.abspath(os.path.join("..", "..", prefix+masterconfig["version"]))+". \n\
 The overwrite option will backup to "+os.path.abspath(os.path.join("..", "..", prefix+config["version"]+".tar.gz"))+", and fetch master. \n\
 (fetch / overwrite / cancel) ").lower().strip().rstrip()
@@ -98,7 +101,7 @@ The overwrite option will backup to "+os.path.abspath(os.path.join("..", "..", p
 			if confirm == "fetch":
 				git.Repo.clone_from(config["update_repo"], os.path.join("..","..",prefix+masterconfig["version"]))
 
-				print("\nNew version located in "+os.path.abspath(os.path.join("..","..",prefix+masterconfig["version"]))+". Run \n\
+				cprint("\nNew version located in "+os.path.abspath(os.path.join("..","..",prefix+masterconfig["version"]))+". Run \n\
 "+os.path.abspath(os.path.join("..","..",prefix+masterconfig["version"], "start.py"))+" \n\
 to use the new version.\n")
 			elif confirm == "overwrite":
@@ -121,7 +124,7 @@ to use the new version.\n")
 
 				quit(10)
 	except Exception as e: 
-		print("Error updating: "+str(e))
+		cprint(bcolors.DARKRED + "Error updating: "+str(e))
 
 def main():
 	getpacks()
@@ -138,10 +141,10 @@ def main():
 	else:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		if "host" in data and data["host"] == "localhost":
-			print("Last time you ran this program, it was in local mode.")
+			cprint("Last time you ran this program, it was in local mode.")
 			confirm = ""
 			while confirm not in ["y", "n"]:
-				confirm = input("Do you want to regenerate the host? (y/n) ").lower().strip().rstrip()
+				confirm = cinput("Do you want to regenerate the host? (y/n) ").lower().strip().rstrip()
 			if confirm == "y":
 				data["host"] = getIps()[0]
 			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
@@ -160,7 +163,7 @@ def main():
 
 	update()
 				
-	print("Initialization complete.")
+	cprint("Initialization complete.")
 
 def getIps():
 	from netifaces import interfaces, ifaddresses, AF_INET

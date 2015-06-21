@@ -3,7 +3,8 @@ import subprocess, time
 import json
 import tempfile
 
-from backend.parseargv import args
+from scripts.parseargv import args
+from scripts.config import cprint, cinput, bcolors
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
@@ -31,16 +32,16 @@ if __name__ == "__main__":
 	temppath = tempfile.gettempdir()
 	initFile(os.path.join(temppath, "topage.json"))
 	initFile(os.path.join(temppath, "toscript.json"))
-	initFile(os.path.join(selfpath, "backend", "cache.json"), "[]")
-	initFile(os.path.join(selfpath, "backend", "scache.json"), "{}")
+	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
+	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
 	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
 
-	os.chdir("backend")
+	os.chdir("scripts")
 	initcode = gSystem("initialize.py "+" ".join(sys.argv[1:]))
 	if initcode:
 		if initcode == 2560:
 			os.chdir("..")
-			print("Update successful! Restarting server...\n\n\n")
+			cprint("Update successful! Restarting server...\n\n\n")
 			quit(gSystem("start.py "+" ".join(sys.argv[1:]))/256)
 		else:
 			quit(initcode/256)
@@ -57,12 +58,12 @@ if __name__ == "__main__":
 
 	os.chdir(os.path.join("..", "www"))
 	if os.name != "nt" and os.geteuid() and args.port < 1024:
-		print("\n\
+		cprint("\
 Root required on ports up to 1023, attempting to elevate permissions. \n\
 (Use --port PORT to change ports.)")
-		frontend = subprocess.Popen(["sudo", "python3", "-m", "http.server", str(args.port)], stdout=output, stderr=output)
+		frontend = subprocess.Popen(["sudo", "-p", " "*23+"Password: ", "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 	else:
-		frontend = gPopen(["-m", "http.server", str(args.port)], stdout=output, stderr=output)
+		frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 	
 	while not backend_server.returncode and not backend_main.returncode and not frontend.returncode: time.sleep(0.001)
 	backend_server.kill()

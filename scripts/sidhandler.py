@@ -16,7 +16,8 @@ import json
 import os
 import hashlib
 
-from configloader import config
+from config import *
+config = Config(os.path.join("..","www","config.json"))
 
 if os.path.exists("password"):
 	opass = open("password").read().strip().rstrip()

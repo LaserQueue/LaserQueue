@@ -1,6 +1,7 @@
 import json, os
 
-from configloader import config
+from config import *
+config = Config(os.path.join("..","www","config.json"))
 
 def _typelist(l):
 	return [type(i) for i in l]
