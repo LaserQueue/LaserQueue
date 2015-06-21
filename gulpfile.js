@@ -42,7 +42,7 @@ gulp.task('js', function() {
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/js/'))
 	.pipe(notify({message: 'JS has been compiled'}))
-	.pipe(jshint.reporter('default'));
+	.pipe(jshint.reporter('jshint-stylish'));
 });
 
 // watch sass and compile
