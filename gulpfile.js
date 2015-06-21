@@ -71,6 +71,7 @@ gulp.task('manifest', function() {
 	return gulp.src(['./www/'])
 		.pipe(manifest({
 			hash: true,
+			timestamp: true,
 			preferOnline: true,
 			network: ['http://*', 'https://*', '*'],
 			filename: 'app.manifest',
