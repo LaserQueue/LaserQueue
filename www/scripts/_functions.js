@@ -87,7 +87,11 @@ function populateActions() {
 				container: $('.cutting-table-template')//,
 				// grid: [ 37, 37 ]
 			});
+			$(this).on('dragStart', function() {
+				$('[data-toggle="tooltip"]').tooltip('destroy');
+			});
 			$(this).on('dragEnd', function(event, pointer) {
+				$('[data-toggle="tooltip"]').tooltip();
 				socketSend({
 					'action': 'relmove',
 					'args': [
