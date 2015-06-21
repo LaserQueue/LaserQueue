@@ -579,7 +579,7 @@ class BaseHTTPRequestHandler(socketserver.StreamRequestHandler):
 
 		"""
 
-		sys.stderr.write(date_time_string() + "- {0} - {1}\n".format(
+		sys.stderr.write(date_time_string() + "{0} - {1}\n".format(
 			self.address_string(),
 			format%args) + bcolors.ENDC) 
 

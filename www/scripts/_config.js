@@ -2,35 +2,49 @@
 
 // declare almost all globals here
 var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, SID, buttons,
-    authed = false,
-    allCuts = [],
-    displayEl = {},
-    renderDirectives = {
-		priority: {
-			html: function(params) {
-				return this.priority + (
-					this.coachmodified ? 
-						' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
-						: ''
-				);
+		authed = false,
+		allCuts = [],
+		displayEl = {},
+		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+							'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		renderDirectives = {
+			priority: {
+				html: function(params) {
+					return this.priority + (
+						this.coachmodified ? 
+							' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
+							: ''
+					);
+				},
 			},
-		},
-		actions: {
-			html: function(params) {
-				var data = '';
-				for (var i = 0; i < Object.keys(buttons).length; i++) {
-					var button = Object.keys(buttons)[i];
-					if (config.authactions.indexOf(button) == -1 || authed) {
-						if (button != "pass" || !(params.index >= config.pass_depth && config.pass_depth || authed)) {
-							data += buttons[button];
+			actions: {
+				html: function(params) {
+					var data = '';
+					for (var i = 0; i < Object.keys(buttons).length; i++) {
+						var button = Object.keys(buttons)[i];
+						if (config.authactions.indexOf(button) == -1 || authed) {
+							if (button != "pass" || !(params.index >= config.pass_depth && config.pass_depth || authed)) {
+								data += buttons[button];
+							}
 						}
 					}
-				}
-				return data;
-			},
-		}
-	},
-	draggable = [];
+					return data;
+				},
+			}
+		},
+		draggable = [];
+
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
 
 // generate a session ID
 SID = uuid.v1();
@@ -112,13 +126,13 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 
 
-  buttons = {
-  	'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>',
-  	'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></a>',
-  	'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></a>',
-  	'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></a>',
-  	'relmove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="' + config.drag_hover + '"></a>'
-  };
+	buttons = {
+		'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>',
+		'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></a>',
+		'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></a>',
+		'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></a>',
+		'relmove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="' + config.drag_hover + '"></a>'
+	};
 
 	if (config.admin_mode_enabled) {
 		$('.authorize').click(function() {

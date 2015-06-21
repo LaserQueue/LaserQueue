@@ -3,26 +3,31 @@
 
 // logs text to devlog on page
 function logText(text) {
-	if(devLog) {
-		var currentTime = new Date();
-		var currentHours = currentTime.getHours();
-		var currentMinutes = currentTime.getMinutes();
-		var currentSeconds = currentTime.getSeconds();
-		var currentMillis = currentTime.getMilliseconds();
+	var currentTime = new Date();
+	var currentDay = currentTime.getDate();
+	var currentMonth = months[currentTime.getMonth()];
+	var currentYear = currentTime.getFullYear();
+	var currentHours = currentTime.getHours();
+	var currentMinutes = currentTime.getMinutes();
+	var currentSeconds = currentTime.getSeconds();
 
-		var hoursZero = (currentHours < 10 ? '0' : '');
-		var minutesZero = (currentMinutes < 10 ? '0' : '');
-		var secondsZero = (currentSeconds < 10 ? '0' : '');
-		var millisZero = (currentMillis < 10 ? '00' : currentMillis < 100 ? '0' : '');
-		var timestamp = '[' + hoursZero + currentHours + ':' + minutesZero + currentMinutes + ':' + secondsZero + currentSeconds + '.' + millisZero + currentMillis + ']';
+
+	currentDay = currentDay + (currentDay < 10 ? '0' : '');
+	currentHours = currentHours + (currentHours < 10 ? '0' : '');
+	currentMinutes = currentMinutes + (currentMinutes < 10 ? '0' : '');
+	currentSeconds = currentSeconds + (currentSeconds < 10 ? '0' : '');
+	var timestamp = '[{0}/{1}/{2} {3}:{4}:{5}] '.format(currentDay, currentMonth, currentYear,
+		currentHours, currentMinutes, currentSeconds);
+	if(devLog) {
 
 		var textArray = text.split('\n');
 
-		for (var i = textArray.length - 1; i >= 0; i--) {
-			$('.log-pre').prepend('<span class="log-time"> ' + timestamp + ':</span> ' + textArray[i] + '\n');
+		for (var i = textArray.length - 1; i > 0; i--) {
+			$('.log-pre').prepend('<span class="log-time">                        </span> ' + textArray[i] + '\n');
 		}
+		$('.log-pre').prepend('<span class="log-time"> ' + timestamp + '</span>' + textArray[0] + '\n');
 	} else {
-		window.console.log('DevLog Redirect: [' + text + ']');
+		window.console.log(timestamp+text);
 	}
 }
 
