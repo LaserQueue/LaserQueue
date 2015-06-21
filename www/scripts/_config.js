@@ -34,23 +34,9 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities, refres
 		},
 		draggable = [];
 
-if (!String.prototype.format) {
-  String.prototype.format = function() {
-    var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) { 
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-      ;
-    });
-  };
-}
-
 // generate a session ID
 SID = uuid.v1();
-window.console.log('%c%s',
-            'font-size: 24px;',
-            'SID: ' + SID);
+window.console.log('SID: ' + SID);
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {
@@ -61,6 +47,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 	// hide and disable log if not enabled
 	devLog = config.dev_log;
 	if(devLog != true) { $('[for=log-checkbox]').remove(); }
+	else {console.log('Recommended: use the in-page log. Most info goes there.');}
 	logText('Log starts here');
 
 	// log entire config file

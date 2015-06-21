@@ -1,7 +1,4 @@
 // initialize the things
-console.log('%c%s',
-            'font-size: 24px;',
-            'Recomended: use the in-page log. Most info goes there.');
 
 // holds old and new JSON
 // for comparison to minimize layout thrashing n stuff
