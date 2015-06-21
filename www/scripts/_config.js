@@ -34,7 +34,9 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities, refres
 
 // generate a session ID
 SID = uuid.v1();
-window.console.log('SID: ' + SID);
+window.console.log('%c%s',
+            'font-size: 24px;',
+            'SID: ' + SID);
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function() {

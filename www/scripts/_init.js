@@ -1,6 +1,7 @@
 // initialize the things
-
-window.console.log('This silly browser log is generally not used. Click the console button at the bottom of the page instead! If there are errors here, please raise an issue.');
+console.log('%c%s',
+            'font-size: 24px;',
+            'Recomended: use the in-page log. Most info goes there.');
 
 // holds old and new JSON
 // for comparison to minimize layout thrashing n stuff
