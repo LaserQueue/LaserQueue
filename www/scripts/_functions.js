@@ -91,8 +91,10 @@ function populateActions() {
 			});
 			$(this).on('dragStart', function() {
 				$('[data-toggle="tooltip"]').tooltip('destroy');
+				$('.cutting-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').addClass('animate-hide');
 			});
 			$(this).on('dragEnd', function(event, pointer) {
+				$('.cutting-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').removeClass('animate-hide');
 				$('[data-toggle="tooltip"]').tooltip();
 				socketSend({
 					'action': 'relmove',

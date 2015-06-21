@@ -29,6 +29,15 @@
 	}
 }
 
+@keyframes animate-hide {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
+}
+
 html.lol {
 	background: $nuvu-pink;
 	background-image: url('/img/nyancat.gif');

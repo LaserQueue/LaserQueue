@@ -53,7 +53,15 @@ td {
 	&:hover { transform: rotate(1080deg) scale(1.5); }
 }
 
-.cutting-table-template tr.is-dragging * {
-	background: lightgray;
-	z-index: 99;
+.cutting-table-template tr.is-dragging {
+	 * {
+		background: lightgray;
+		cursor: move;
+		z-index: 99999999;
+	}
+}
+
+.animate-hide {
+	transform: scale(0);
+	animation: animate-hide 0.3s ease-in-out;
 }
