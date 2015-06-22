@@ -1,7 +1,7 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, SID, buttons,
+var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, SID, buttons, socketReconnectID,
 		authed = false,
 		allCuts = [],
 		displayEl = {},
@@ -55,6 +55,19 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	// set host from host and port
 	host = 'ws://' + config.host + ':' + config.port;
 
+	reconnectRate = config.reconnectRate;
+	logText('LaserCutter software is up. Attempting connection to WebSockets host ' + host);
+	socketSetup();
+	socketReconnectID = setInterval(function tryToReconnect() {
+		if(typeof reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
+			// initialize websockets if closed
+			logText('Attempting connection to WebSockets host', host);
+			socketSetup();
+		}
+	}, reconnectRate);
+});
+
+function applyConfig() {
 	// set materials and priorities in the same way
 	materials = config.materials;
 	priorities = config.priorities;
@@ -169,14 +182,12 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		googleAnalytics('send', 'pageview');
 	}
 
-	logText('LaserCutter software is up. Attempting connection to WebSockets host ' + host);
-	socketSetup();
-	setInterval(function tryToReconnect() {
+	clearInterval(socketReconnectID);
+	socketReconnectID = setInterval(function tryToReconnect() {
 		if(typeof reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
 			// initialize websockets if closed
 			logText('Attempting connection to WebSockets host', host);
 			socketSetup();
 		}
 	}, reconnectRate);
-
-});
+}
