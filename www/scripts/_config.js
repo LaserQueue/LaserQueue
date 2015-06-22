@@ -68,16 +68,12 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 	// render the materials dropdown
 	if (config.default_material == "") {
-		$('#cut-material').append('
-			<option disabled selected value="N/A" class="selected">' + config.material_input + '</option>
-		');
+		$('#cut-material').append('<option disabled selected value="N/A" class="selected">' + config.material_input + '</option>');
 	}
 	
 	for(var m in materials) {
 		var selected = (m === config.default_material ? 'selected' : '');
-		$('#cut-material').append('
-			<option ' + selected + ' value="' + m + '" class="'+selected+'">' + materials[m] + '</option>
-		');
+		$('#cut-material').append('<option ' + selected + ' value="' + m + '" class="'+selected+'">' + materials[m] + '</option>');
 	}
 
 	// render the priorities dropdown
