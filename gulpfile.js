@@ -11,6 +11,7 @@ var UglifyJS     = require('uglify-js');
 var rename       = require('gulp-rename');
 var concat       = require('gulp-concat');
 var groupConcat  = require('gulp-group-concat');
+var fileinclude  = require('gulp-file-include');
 var watch        = require('gulp-watch');
 var sourcemaps   = require('gulp-sourcemaps');
 var manifest     = require('gulp-manifest');
@@ -31,9 +32,11 @@ gulp.task('sass', function() {
 // compile js
 gulp.task('js', function() {
 	gulp.src(['./www/lib/scripts/*.js'])
+		.pipe(fileinclude())
 		.pipe(jshint())
 		.pipe(jscs({
 			"excludeFiles": [
+				"scripts.js",
 				"prism.js",
 				"konami.js"
 			]
