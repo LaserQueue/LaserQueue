@@ -31,25 +31,20 @@ gulp.task('sass', function() {
 
 // compile js
 gulp.task('js', function() {
-	gulp.src(['./www/lib/scripts/*.js'])
-		.pipe(fileinclude())
+	gulp.src('./www/lib/scripts/_*.js')
 		.pipe(jshint())
-		.pipe(jscs({
-			"excludeFiles": [
-				"scripts.js",
-				"prism.js",
-				"konami.js"
-			]
-		}))
+		.pipe(jscs())
+		.pipe(jscsStylish.combineWithHintResults())
+		.pipe(jshint.reporter('jshint-stylish'));
+	gulp.src(['./www/lib/scripts/scripts.js'])
+		.pipe(fileinclude())
 		.pipe(sourcemaps.init())
 			.on('error', noop)
-			.pipe(jscsStylish.combineWithHintResults())
 			.pipe(concat('scripts.min.js'))
 			.pipe(uglify())
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/js/'))
 	.pipe(notify({message: 'JS has been compiled'}))
-	.pipe(jshint.reporter('jshint-stylish'));
 });
 
 // watch sass and compile

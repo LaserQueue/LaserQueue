@@ -46,8 +46,10 @@ $('.btn-submit').click(function submitForm(clickAction) {
 	
 });
 
-var easterEgg = new Konami();
-easterEgg.code = function rickRollUser() {
-	rickRoll();
-};
-easterEgg.load();
+$(document).ready(function loadKonami() {
+	var easterEgg = new Konami();
+	easterEgg.code = function rickRollUser() {
+		rickRoll();
+	};
+	easterEgg.load();
+});
