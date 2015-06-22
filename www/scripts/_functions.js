@@ -1,56 +1,55 @@
 // put any utilities and functions etc in here
 
 if (!String.prototype.format) {
-	String.prototype.format = function() {
+	String.prototype.format = function stringPrototypeFormat() {
 		var args = arguments;
-		return this.replace(/{(\d+)}/g, function(match, number) {
+		return this.replace(/{(\d+)}/g, function matchWithNumber(match, number) {
 			return typeof args[number] != 'undefined' ? args[number] : match;
 		});
 	};
 }
-
-
 if (!String.prototype.repeat) {
-  String.prototype.repeat = function(count) {
-	'use strict';
-	if (this === null) {
-	  throw new TypeError('can\'t convert ' + this + ' to object');
-	}
-	var str = '' + this;
-	count = +count;
-	if (count != count) {
-	  count = 0;
-	}
-	if (count < 0) {
-	  return str;
-	}
-	if (count == Infinity) {
-	  throw new RangeError('repeat count must be less than infinity');
-	}
-	count = Math.floor(count);
-	if (str.length === 0 || count === 0) {
-	  return '';
-	}
-	// Ensuring count is a 31-bit integer allows us to heavily optimize the
-	// main part. But anyway, most current (August 2014) browsers can't handle
-	// strings 1 << 28 chars or longer, so:
-	if (str.length * count >= 1 << 28) {
-	  throw new RangeError('repeat count must not overflow maximum string size');
-	}
-	var rpt = '';
-	for (;;) {
-	  if ((count & 1) == 1) {
-		rpt += str;
-	  }
-	  count >>>= 1;
-	  if (count === 0) {
-		break;
-	  }
-	  str += str;
-	}
-	return rpt;
-  };
+	String.prototype.repeat = function countThrough(count) {
+		'use strict';
+		if (this === null) {
+			throw new TypeError('can\'t convert ' + this + ' to object');
+		}
+		var str = '' + this;
+		count = +count;
+		if (count != count) {
+			count = 0;
+		}
+		if (count < 0) {
+			return str;
+		}
+		if (count == Infinity) {
+			throw new RangeError('repeat count must be less than infinity');
+		}
+		count = Math.floor(count);
+		if (str.length === 0 || count === 0) {
+			return '';
+		}
+		// ensuring count is a 31-bit integer allows us to heavily optimize the
+		// main part. But anyway, most current (August 2014) browsers can't handle
+		// strings 1 << 28 chars or longer, so:
+		if (str.length * count >= 1 << 28) {
+			throw new RangeError('repeat count must not overflow maximum string size');
+		}
+		var rpt = '';
+		for (;;) {
+			if ((count & 1) == 1) {
+				rpt += str;
+			}
+			count >>>= 1;
+			if (count === 0) {
+				break;
+			}
+			str += str;
+		}
+		return rpt;
+	};
 }
+
 
 function ensureNumberStringLength(number, len) {
 	return '0'.repeat(len - String(number).length) + String(number);
@@ -85,7 +84,7 @@ function logText(text) {
 function populateActions() {
 	logText('Populating actions');
 
-	$('.cutting-table-template tr').each(function(index, el) {
+	$('.cutting-table-template tr').each(function dataToTable(index, el) {
 		$(el).attr('data-uuid', allCuts[index].uuid);
 		$(el).attr('data-pos', index);
 		$(el).unbind('click');
@@ -97,7 +96,7 @@ function populateActions() {
 	}
 
 	// handler to remove a job
-	$('.remove-job').click(function() {
+	$('.remove-job').click(function removeJob() {
 		googleAnalytics('send', 'event', 'action', 'click', 'remove job');
 		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
@@ -107,7 +106,7 @@ function populateActions() {
 	});
 
 	// handler to lower a job
-	$('.lower-priority').click(function() {
+	$('.lower-priority').click(function lowerPriority() {
 		googleAnalytics('send', 'event', 'action', 'click', 'pass job');
 		logText('passing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
@@ -117,7 +116,7 @@ function populateActions() {
 	});
 
 	// handler to decrement a job
-	$('.decrement-job').click(function() {
+	$('.decrement-job').click(function decrementJob() {
 		googleAnalytics('send', 'event', 'action', 'click', 'decrement job');
 		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
@@ -127,7 +126,7 @@ function populateActions() {
 	});
 
 	// handler to increment a job
-	$('.increment-job').click(function() {
+	$('.increment-job').click(function incrementJob() {
 		googleAnalytics('send', 'event', 'action', 'click', 'increment job');
 		logText('passing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
@@ -137,18 +136,18 @@ function populateActions() {
 	});
 
 	if (authed || config.authactions.indexOf('relmove') == -1) {
-		$('.cutting-table-template tr').each(function(index, el) {
+		$('.cutting-table-template tr').each(function makeRowsDraggable(index, el) {
 			draggable[index] = this;
 			$(this).draggabilly({
 				axis: 'y',
 				container: $('.cutting-table-template')//,
 				// grid: [ 37, 37 ]
 			});
-			$(this).on('dragStart', function() {
+			$(this).on('dragStart', function handleDragStart() {
 				$('[data-toggle="tooltip"]').tooltip('destroy');
 				$('.cutting-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').addClass('animate-hide');
 			});
-			$(this).on('dragEnd', function(event, pointer) {
+			$(this).on('dragEnd', function handleDragEnd(event, pointer) {
 				$('.cutting-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').removeClass('animate-hide');
 				$('[data-toggle="tooltip"]').tooltip();
 				socketSend({
