@@ -34,6 +34,7 @@ def main():
 		sessions = sids.SIDCache()
 
 	stamp = time.time()
+	cprint("Ready to process data ...")
 	try:
 		while True:
 			if os.path.exists(os.path.join(temppath, "toscript.json")):
