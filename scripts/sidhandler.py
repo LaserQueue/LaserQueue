@@ -17,7 +17,9 @@ import os
 import hashlib
 
 from config import *
-config = Config(os.path.join("..","www","config.json"))
+config = WalkingConfig(os.path.join("..","www","config.json"), 
+	os.path.join("..","www","defaultconf.json"), 
+	os.path.join("..","www","userconf.json"))
 
 if os.path.exists("password"):
 	opass = open("password").read().strip().rstrip()

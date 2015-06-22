@@ -14,7 +14,7 @@ from parseargv import args
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
 
-from config import cprint, cinput, bcolors, cprintconf
+from config import *
 cprintconf.color = bcolors.CYAN
 cprintconf.name = "Setup"
 
@@ -130,7 +130,7 @@ to use the new version.\n")
 
 def main():
 	getpacks()
-	if args.regen or not os.path.exists(os.path.join("..", "www", "config.json")):
+	if args.regen:
 		copyconf()
 	if args.host:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
@@ -152,14 +152,8 @@ def main():
 			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 	data = json.load(open(os.path.join("..", "www", "config.json")))
 	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
-	if os.path.exists(os.path.join("..", "www", "userconf.json")):
-		userdata = json.load(open(os.path.join("..", "www", "userconf.json")))
-	else:
-		userdata = {}
-	defaultdata = _fillblanks(userdata, defaultdata)
 	if "host" not in data:
 		data["host"] = getIps()[0]
-	data = _fillblanks(data, defaultdata)
 	data["version"] = defaultdata["version"]
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 

@@ -1,7 +1,9 @@
 import json, os
 
 from config import *
-config = Config(os.path.join("..","www","config.json"))
+config = WalkingConfig(os.path.join("..","www","config.json"), 
+	os.path.join("..","www","defaultconf.json"), 
+	os.path.join("..","www","userconf.json"))
 
 def _typelist(l):
 	return [type(i) for i in l]

@@ -2,7 +2,9 @@ from laserqueue import Queue
 from config import *
 cprintconf.color = bcolors.BLUE
 cprintconf.name = "Backend"
-config = Config(os.path.join("..","www","config.json"))
+config = WalkingConfig(os.path.join("..","www","config.json"), 
+	os.path.join("..","www","defaultconf.json"), 
+	os.path.join("..","www","userconf.json"))
 import jsonhandler as comm
 import sidhandler as sids
 import tempfile

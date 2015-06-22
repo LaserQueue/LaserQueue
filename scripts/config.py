@@ -17,23 +17,17 @@ class Config:
 		return self.data[y]
 
 class WalkingConfig(Config):
-	def __init__(self, path, refpath):
-		self.walkload(path, refpath)
+	def __init__(self, path, refpath, userrefpath):
+		self.walkload(path, refpath, userrefpath)
 	def modtimes(self):
 		return [os.path.getctime(i) for i in self.files]
-	def walkload(self, path, refpath):
-		filename = os.path.basename(refpath)
-		findpath = os.path.dirname(refpath)
-		reffile = None
-		while True:
-			if filename in os.listdir(findpath):
-				reffile = os.path.join(findpath, filename)
-				break
-			elif os.path.abspath(findpath) == os.path.sep:
-				raise FileNotFoundError(filename+" not found in directory tree.")
-			findpath = os.path.join(findpath, "..")
-
+	def walkload(self, path, refpath, userrefpath):
+		reffile = self.getfilename(refpath)
 		refconf = json.load(open(reffile))
+		usrfile = self.getfilename(userrefpath, False)
+		if usrfile:
+			usrconf = json.load(open(usrfile))
+			refconf = _fillblanks(usrconf, refconf)
 		filename = os.path.basename(path)
 		findpath = os.path.dirname(path)
 		items = {}
@@ -57,7 +51,21 @@ class WalkingConfig(Config):
 				configfile = json.load(open(i))
 				items = _fillblanks(items, configfile)
 			self.data = _fillblanks(items, self.refconf)
-
+	def getfilename(self, path, strict=True):
+		filename = os.path.basename(path)
+		findpath = os.path.dirname(path)
+		reffile = None
+		while True:
+			if filename in os.listdir(findpath):
+				reffile = os.path.join(findpath, filename)
+				break
+			elif os.path.abspath(findpath) == os.path.sep:
+				if strict:
+					raise FileNotFoundError(filename+" not found in directory tree.")
+				else:
+					break
+			findpath = os.path.join(findpath, "..")
+		return reffile
 
 
 

@@ -12,7 +12,9 @@ from parseargv import args
 from config import *
 cprintconf.color = bcolors.DARKBLUE
 cprintconf.name = "Socket"
-config = Config(os.path.join("..","www","config.json"))
+config = WalkingConfig(os.path.join("..","www","config.json"), 
+	os.path.join("..","www","defaultconf.json"), 
+	os.path.join("..","www","userconf.json"))
 
 temppath = tempfile.gettempdir()
 

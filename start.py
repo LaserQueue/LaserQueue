@@ -29,10 +29,11 @@ def gSystem(cmd):
 		return os.system("python3 "+cmd)
 
 def cleanup(): 
-	backend_server.kill()
-	backend_main.kill()
-	try:
-		frontend.kill()
+	try: backend_server.kill()
+	except: pass
+	try: backend_main.kill()
+	except: pass
+	try: frontend.kill()
 	except: pass
 
 class dummyProcess:
