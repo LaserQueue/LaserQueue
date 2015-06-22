@@ -7,7 +7,7 @@ function socketSetup() { // god help me
 	socket = new WebSocket(host);
 
 	// when websockets connects
-	socket.onopen = function() {
+	socket.onopen = function handleSocketOpen() {
 		// print to log and consoles
 		logText('WebSockets connection opened successfully');
 
@@ -15,15 +15,15 @@ function socketSetup() { // god help me
 
 		// poll for new data and repeat every refreshRate
 		socketSend({'action': 'null'});
-		setInterval(function () {
+		setInterval(function pollForData() {
 			if(socket.readyState != socket.CONNECTING) {
 				socketSend({'action': 'null'});
 			}
-		},refreshRate);
+		}, refreshRate);
 	};
 
 	// when websockets message
-	socket.onmessage = function(msg) {
+	socket.onmessage = function handleNewMessage(msg) {
 
 		// loads JSON data
 		jsonData = JSON.parse(msg.data);
@@ -55,10 +55,10 @@ function socketSetup() { // god help me
 					}
 				}
 				// for each priority in list
-				$(jsonData.queue).each(function(index, el) {
+				$(jsonData.queue).each(function loopThroughCuts(index, el) {
 
 					// for each cut in priority
-					$(el).each(function(arrayIndex, arrayEl) {
+					$(el).each(function loopThroughCut(arrayIndex, arrayEl) {
 						// at this point nothing is human-readable
 						// make material human-readable
 						displayEl = $.extend({}, arrayEl); // deepcopy
@@ -95,12 +95,12 @@ function socketSetup() { // god help me
 	};
 
 	// when websockets error
-	socket.onerror = function(error) {
+	socket.onerror = function handleWebSocketsError(error) {
 		// go tell a nerd
 		modalMessage('Error 4', 'Could not connect to socket at ' + host + '. Maybe the backend is not running? This page will try to reconnect every few seconds. <br><br> <button class="btn btn-default btn-pink btn-retry">Retry</button>');
 
 		// set up retry button
-		$('.btn-retry').click(function() {
+		$('.btn-retry').click(function reloadWithRandom() {
 			window.location = window.location.origin + '?foo=' + Math.floor(Math.random()*11000);
 		});
 	};
