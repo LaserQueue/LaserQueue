@@ -35,6 +35,12 @@ def cleanup():
 		frontend.kill()
 	except: pass
 
+class dummyProcess:
+	def __init__(self):
+		self.returncode = None
+	def kill(self):
+		pass
+
 atexit.register(cleanup) 
 
 if __name__ == "__main__":
@@ -65,29 +71,40 @@ if __name__ == "__main__":
 
 	backend_port = int(Config(os.path.join("..","www","config.json"))["port"])
 
-	if os.name != "nt" and os.geteuid() and backend_port < 1024:
-		cprintconf.color = bcolors.DARKBLUE
-		cprintconf.name = "Socket"
-		cprint("\
+	load_frontend = (args.load_frontend or (not args.load_frontend and not args.load_backend)) and not args.load_none
+	load_backend = (args.load_backend or (not args.load_frontend and not args.load_backend)) and not args.load_none
+
+
+	if load_backend:
+		if os.name != "nt" and os.geteuid() and backend_port < 1024:
+			cprintconf.color = bcolors.DARKBLUE
+			cprintconf.name = "Socket"
+			cprint("\
 Root required on ports up to 1023, attempting to elevate permissions. \n\
 (Edit config.json to change ports.)")
-		backend_server = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "server.py"]+argvs, stdout=output, stderr=output)
+			backend_server = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "server.py"]+argvs, stdout=output, stderr=output)
+		else:
+			backend_server = gPopen(["server.py"]+argvs, stdout=output, stderr=output)
+		backend_main = gPopen(["main.py"]+argvs, stdout=output, stderr=output)
 	else:
-		backend_server = gPopen(["server.py"]+argvs, stdout=output, stderr=output)
-	backend_main = gPopen(["main.py"]+argvs, stdout=output, stderr=output)
+		backend_server = dummyProcess()
+		backend_main = dummyProcess()
 
 	time.sleep(0.5)
 
 	os.chdir(os.path.join("..", "www"))
-	if os.name != "nt" and os.geteuid() and args.port < 1024:
-		cprintconf.color = bcolors.PURPLE
-		cprintconf.name = "HTTP"
-		cprint("\
+	if load_frontend:
+		if os.name != "nt" and os.geteuid() and args.port < 1024:
+			cprintconf.color = bcolors.PURPLE
+			cprintconf.name = "HTTP"
+			cprint("\
 Root required on ports up to 1023, attempting to elevate permissions. \n\
 (Use --port PORT to change ports.)")
-		frontend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
+			frontend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
+		else:
+			frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 	else:
-		frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
+		frontend = dummyProcess()
 	
 	try:
 		while not backend_server.returncode and not backend_main.returncode and not frontend.returncode: time.sleep(0.001)

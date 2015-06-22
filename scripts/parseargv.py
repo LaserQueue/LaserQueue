@@ -18,6 +18,12 @@ parser.add_argument("-s", "--skip-install", help="Skip package installation", de
 	action="store_const",const=True,default=False)
 parser.add_argument("-nu", "--no-update", help="Skip update", dest="skipupdate",
 	action="store_const",const=True,default=False)
+parser.add_argument("--backend", help="Loads backend but not frontend", dest="load_backend",
+	action="store_const",const=True,default=False)
+parser.add_argument("--frontend", help="Loads frontend but not backend", dest="load_frontend",
+	action="store_const",const=True,default=False)
+parser.add_argument("--init-only", help="Doesn't load frontend or backend", dest="load_none",
+	action="store_const",const=True,default=False)
 parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
 	action="store_const",const=True,default=False)
 parser.add_argument("--install-update", help="Don't ask for confirmation on update", dest="allupdate",
