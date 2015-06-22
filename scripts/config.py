@@ -1,30 +1,69 @@
 import os, json, time
 
+def _fillblanks(odict, adict):
+	return dict(adict, **odict)
+
 class Config:
 	def __init__(self, path):
 		self.path = path
 		self.lastmodtime = os.path.getctime(path)
 		self.data = json.load(open(path))
-	def __getitem__(self, y):
+	def reload(self):
 		if os.path.getctime(self.path) > self.lastmodtime:
 			self.data = json.load(open(self.path))
 			lastmodtime = os.path.getctime(self.path)
+	def __getitem__(self, y):
+		self.reload()
 		return self.data[y]
 
 class WalkingConfig(Config):
-	def __init__(self, path):
-		filename = os.path.basename(path)
-		findpath = os.path.dirname(path)
-		self.path = None
+	def __init__(self, path, referencepath):
+		self.walkload(path, referencepath)
+	def modtimes(self):
+		return [os.path.getctime(i) for i in self.files]
+	def walkload(self, path, referencepath):
+		filename = os.path.basename(refpath)
+		findpath = os.path.dirname(refpath)
+		reffile = None
 		while True:
 			if filename in os.listdir(findpath):
-				self.path = os.path.join(findpath, filename)
+				reffile = os.path.join(findpath, filename)
 				break
 			elif os.path.abspath(findpath) == os.path.sep:
 				raise FileNotFoundError(filename+" not found in directory tree.")
 			findpath = os.path.join(findpath, "..")
-		self.lastmodtime = os.path.getctime(self.path)
-		self.data = json.load(open(self.path))
+
+		refconf = json.load(open(reffile))
+		filename = os.path.basename(path)
+		findpath = os.path.dirname(path)
+		items = {}
+		files = []
+		while os.path.abspath(findpath) != os.path.sep:
+			if filename in os.listdir(findpath):
+				configfile = json.load(open(os.path.join(findpath, filename)))
+				files.append(os.path.join(findpath, filename))
+				items = _fillblanks(items, configfile)
+			findpath = os.path.join(findpath, "..")
+		items = _fillblanks(items, refconf)
+		self.data = items
+		self.refconf = refconf
+		self.files = files
+		self.lastmods = self.modtimes()
+	def reload(self):
+		items = {}
+		if self.modtimes() != self.lastmods:
+			lastmods = self.modtimes()
+			for i in self.files:
+				configfile = json.load(open(i))
+				items = _fillblanks(items, configfile)
+			self.data = _fillblanks(items, self.refconf)
+
+
+
+
+
+
+
 
 def date_time_string(timestamp=None):
 	"""Return the current date and time formatted for a message header."""
