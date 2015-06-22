@@ -1,10 +1,10 @@
 CACHE MANIFEST
-# Time: Mon Jun 22 2015 09:32:39 GMT-0400 (EDT)
+# Time: Mon Jun 22 2015 09:47:09 GMT-0400 (EDT)
 
 
 CACHE:
-img/logo.svg
-img/laserQueue.png
+dist/img/logo.svg
+dist/img/laserQueue.png
 bower_components/js-sha1/build/sha1.min.js
 bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2
 bower_components/bootstrap/dist/css/bootstrap.min.css

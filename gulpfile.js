@@ -18,7 +18,7 @@ var sizereport   = require('gulp-sizereport');
 
 // compile sass
 gulp.task('sass', function() {
-	return gulp.src('./www/scss/styles.scss')
+	return gulp.src('./www/lib/scss/styles.scss')
 		.pipe(sourcemaps.init())
 			.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 			.pipe(
@@ -34,13 +34,13 @@ gulp.task('sass', function() {
 			)
 			.pipe(rename({suffix: '.min'}))
 		.pipe(sourcemaps.write('.'))
-	.pipe(gulp.dest('./www/css'))
+	.pipe(gulp.dest('./www/dist/css'))
 	.pipe(notify({message: 'SCSS has been compiled'}))
 });
 
 // compile js
 gulp.task('js', function() {
-	return gulp.src(['./www/scripts/_*.js', './www/scripts/scripts.js'])
+	return gulp.src(['./www/lib/scripts/_*.js', './www/lib/scripts/scripts.js'])
 		.pipe(jshint())
 		.pipe(jscs())
 		.pipe(sourcemaps.init())
@@ -49,7 +49,7 @@ gulp.task('js', function() {
 			.pipe(concat('scripts.min.js'))
 			.pipe(uglify())
 		.pipe(sourcemaps.write('.'))
-	.pipe(gulp.dest('./www/js/'))
+	.pipe(gulp.dest('./www/dist/js/'))
 	.pipe(notify({message: 'JS has been compiled'}))
 	.pipe(jshint.reporter('jshint-stylish'));
 });
@@ -57,13 +57,13 @@ gulp.task('js', function() {
 // watch sass and compile
 gulp.task('sass-watch', function() {
 	gulp.start(['sass']);
-	gulp.watch('./www/scss/*.scss', ['sass']);
+	gulp.watch('./www/lib/scss/*.scss', ['sass']);
 });
 
 // watch js and compile
 gulp.task('js-watch', function() {
 	gulp.start(['js']);
-	gulp.watch('./www/scripts/*.js', ['js']);
+	gulp.watch('./www/lib/scripts/*.js', ['js']);
 	gulp.watch('./.jscsrc', ['js']);
 });
 
@@ -78,8 +78,8 @@ gulp.task('manifest', function() {
 			filename: 'app.manifest',
 			exclude: ['app.manifest', 'index.html'],
 			cache: [
-				'img/logo.svg',
-				'img/laserQueue.png',
+				'dist/img/logo.svg',
+				'dist/img/laserQueue.png',
 				'bower_components/js-sha1/build/sha1.min.js',
 				'bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2',
 				'bower_components/bootstrap/dist/css/bootstrap.min.css',
@@ -97,12 +97,12 @@ gulp.task('manifest-watch', function() {
 
 // js size report
 gulp.task('js-size-report', function() {
-	gulp.src('./www/js/scripts.min.js').pipe(sizereport({gzip: true}));
+	gulp.src('./www/dist/js/scripts.min.js').pipe(sizereport({gzip: true}));
 });
 
 // style size report
 gulp.task('style-size-report', function() {
-	gulp.src('./www/css/styles.min.css').pipe(sizereport({gzip: true}));
+	gulp.src('./www/dist/css/styles.min.css').pipe(sizereport({gzip: true}));
 })
 
 // overall size report
