@@ -59,7 +59,7 @@ def main():
 									json.dump({"action":"rickroll"}, open(os.path.join(temppath, "topage.json"), "w"))
 									time.sleep((config["refreshRate"]*1.5)/1000)
 								else:
-									cprint(bcolors.YELLOW + "This is a serious establisment, son. I'm dissapointed in you.")
+									cprint(bcolors.YELLOW + "This is a serious establishment, son. I'm dissapointed in you.")
 							elif x == "refresh":
 								if config["allow_force_refresh"]:
 									json.dump({"action":"refresh"}, open(os.path.join(temppath, "topage.json"), "w"))
