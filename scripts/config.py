@@ -17,11 +17,11 @@ class Config:
 		return self.data[y]
 
 class WalkingConfig(Config):
-	def __init__(self, path, referencepath):
-		self.walkload(path, referencepath)
+	def __init__(self, path, refpath):
+		self.walkload(path, refpath)
 	def modtimes(self):
 		return [os.path.getctime(i) for i in self.files]
-	def walkload(self, path, referencepath):
+	def walkload(self, path, refpath):
 		filename = os.path.basename(refpath)
 		findpath = os.path.dirname(refpath)
 		reffile = None
