@@ -107,7 +107,7 @@ Root required on ports up to 1023, attempting to elevate permissions. \n\
 		frontend = dummyProcess()
 	
 	try:
-		while not backend_server.returncode and not backend_main.returncode and not frontend.returncode: time.sleep(0.001)
+		while not backend_server.returncode and not backend_main.returncode and not frontend.returncode and not args.load_none: time.sleep(0.001)
 	except KeyboardInterrupt:
 		print()
 		cprintconf.color = bcolors.RED
