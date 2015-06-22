@@ -5,7 +5,9 @@ import tempfile
 import atexit
 
 from scripts.parseargv import args
-from scripts.config import cprint, cinput, bcolors
+from scripts.config import cprint, cinput, bcolors, cprintconf
+cprintconf.color = bcolors.DARKGREEN
+cprintconf.name = "Startup"
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
@@ -70,7 +72,7 @@ if __name__ == "__main__":
 		cprint("\
 Root required on ports up to 1023, attempting to elevate permissions. \n\
 (Use --port PORT to change ports.)")
-		frontend = subprocess.Popen(["sudo", "-p", " "*23+"Password: ", "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
+		frontend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 	else:
 		frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 	
@@ -78,7 +80,9 @@ Root required on ports up to 1023, attempting to elevate permissions. \n\
 		while not backend_server.returncode and not backend_main.returncode and not frontend.returncode: time.sleep(0.001)
 	except KeyboardInterrupt:
 		print()
-		cprint("Keyboard interrupt received, exiting.")
+		cprintconf.color = bcolors.RED
+		cprintconf.name = "Cleanup"
+		cprint("Keyboard interrupt recieved, exiting.")
 	finally:
 		quit(0)
 	

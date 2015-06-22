@@ -14,7 +14,9 @@ from parseargv import args
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
 
-from config import cprint, cinput, bcolors
+from config import cprint, cinput, bcolors, cprintconf
+cprintconf.color = bcolors.CYAN
+cprintconf.name = "Setup"
 
 def qsort(l):
 		if l == []: 
@@ -57,7 +59,7 @@ def getpacks():
 		if pip.main(["install", pack]) and os.name != "nt":
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = cinput("Install failed, try again with elevated permissions? (y/n) ").lower().strip().rstrip()
+				confirm = cinput(bcolors.RED + "Install failed, try again with elevated permissions? (y/n) ").lower().strip().rstrip()
 			if confirm == "n": 
 				cprint(bcolors.YELLOW + "WARNING: Program may not run without this library.")
 				continue
@@ -88,7 +90,7 @@ def update():
 		masterconfig = json.loads(configpage)
 		if "version" not in masterconfig: return
 		if masterconfig["version"] > config["version"]:
-			print("New update found: Version "+masterconfig["version"]+".")
+			cprint("New update found: Version "+masterconfig["version"]+".")
 			confirm = ("overwrite" if args.allupdate else "")
 			prefix = os.path.basename(os.path.abspath(".."))+"-"
 

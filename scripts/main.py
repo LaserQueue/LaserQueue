@@ -1,5 +1,7 @@
 from laserqueue import Queue
 from config import *
+cprintconf.color = bcolors.BLUE
+cprintconf.name = "Backend"
 config = Config(os.path.join("..","www","config.json"))
 import jsonhandler as comm
 import sidhandler as sids

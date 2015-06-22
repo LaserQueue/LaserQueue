@@ -10,6 +10,8 @@ import tempfile
 from parseargv import args
 
 from config import *
+cprintconf.color = bcolors.DARKBLUE
+cprintconf.name = "WS Server"
 config = Config(os.path.join("..","www","config.json"))
 
 temppath = tempfile.gettempdir()

@@ -61,15 +61,25 @@ class bcolors:
 	WHITE = '\033[97m'
 	ENDC = '\033[0m'
 
+class colorconf:
+	def __init__(self):
+		self.color = bcolors.WHITE
+		self.name = "Generic"
+
+cprintconf = colorconf()
+
+
 def cprint(text):
 	prints = text.split("\n")
-	print(date_time_string() + prints[0] + bcolors.ENDC)
+	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC
+	print(date_time_string() + originstr + prints[0] + bcolors.ENDC)
 	for i in prints[1:]:
-		print(" "*23 + i + bcolors.ENDC)
+		print(" "*(26+len(cprintconf.name)) + i + bcolors.ENDC)
 
 def cinput(text):
 	prints = text.split("\n")
-	print(date_time_string() + prints[0])
+	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC
+	print(date_time_string() + originstr + prints[0])
 	for i in prints[1:-1]:
-		print(" "*23 + i)
-	return input(" "*23 + prints[-1] + bcolors.ENDC)
+		print(" "*(26+len(cprintconf.name)) + i)
+	return input(" "*(26+len(cprintconf.name)) + prints[-1] + bcolors.ENDC)
