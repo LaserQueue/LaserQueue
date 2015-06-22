@@ -70,7 +70,9 @@ if __name__ == "__main__":
 
 	output = FNULL if args.shh else None
 
-	backend_port = int(Config(os.path.join("..","www","config.json"))["port"])
+	backend_port = int(WalkingConfig(os.path.join("..","www","config.json"), 
+		os.path.join("..","www","defaultconf.json"), 
+		os.path.join("..","www","userconf.json"))["port"])
 
 	load_frontend = (args.load_frontend or (not args.load_frontend and not args.load_backend)) and not args.load_none
 	load_backend = (args.load_backend or (not args.load_frontend and not args.load_backend)) and not args.load_none

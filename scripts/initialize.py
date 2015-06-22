@@ -151,10 +151,12 @@ def main():
 				data["host"] = getIps()[0]
 			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 	data = json.load(open(os.path.join("..", "www", "config.json")))
-	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
-	if "host" not in data:
+	config = WalkingConfig(os.path.join("..","www","config.json"), 
+		os.path.join("..","www","defaultconf.json"), 
+		os.path.join("..","www","userconf.json"))
+	if "host" not in config:
 		data["host"] = getIps()[0]
-	data["version"] = defaultdata["version"]
+	data["version"] = config["version"]
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
 	update()

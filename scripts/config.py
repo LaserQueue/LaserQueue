@@ -15,6 +15,12 @@ class Config:
 	def __getitem__(self, y):
 		self.reload()
 		return self.data[y]
+	def __contains__(self, key):
+		self.reload()
+		return key in self.data
+	def get(self, k, d=None):
+		self.reload()
+		return self.data.get(k, d)
 
 class WalkingConfig(Config):
 	def __init__(self, path, refpath, userrefpath):
