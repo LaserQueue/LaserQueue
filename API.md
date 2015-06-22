@@ -1,129 +1,146 @@
+# LaserQueue API
 
-comm protocols
+This overview describes the API that binds the frontend and backend of the LaserQueue.
 
-Sending to server
+## Communication
+Communication will be between some frontend user interface and the backend server using WebSockets. By default, we use port 8763 for this.
 
-Format:
+## Data format
+JSON formatted as follows:
+```
 {
 	"action": action to perform
-	"args": list of arguments
+	"args": [list, of, Arguments]
 	"sid": your session ID.
 }
+```
 
-actions:
+## Session ID
+Each active user has a session ID, a 128-bit unique key. This UUID should be generated at the beginning of a session and sent with every packet except for data refreshes with {"action": "null"}.
 
-
-add
-arguments: name, priority, estimated time, material code
-
-adds the specified name, priority, etc to the list.
+## Actions:
 
 
-pass
-arguments: uuid
+### add
+Arguments: name, priority, estimated time, material code
 
-moves the specified job below the next job.
-
-
-remove
-arguments: uuid
-
-removes the specified job from the list.
+Adds the specified name, priority, etc to the list
 
 
-move *§
-arguments: uuid, target index, target priority
+### pass
+Arguments: uuid
 
-moves the specified job to the target index, and the target priority.
-
-
-relmove *§
-arguments: uuid, target index
-
-moves the specified job to the target index in the master index. Out of bounds will default to the bounds.
+Moves the specified job below the next job
 
 
-increment *§
-arguments: uuid
+### remove
+Arguments: uuid
 
-moves the specified job up one job, or if it's at the top of its priority level, up one priority.
-
-
-decrement *§
-arguments: uuid
-
-moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
+Removes the specified job from the list
 
 
-attr 
-arguments: uuid, attribute, value
+### move *§
+Arguments: uuid, target index, target priority
 
-sets the attribute of job uuid to value. if the config doesn't state that you can do it, you need auth. If it's an auth-requiring action, it applies the Modified gear.
-
-
-auth
-arguments: sha1 hash of password
-
-enter admin mode if password is correct.
+Moves the specified job to the target index, and the target priority
 
 
-deauth
-arguments: N/A
+### relmove *§
+Arguments: uuid, target index
 
-leave admin mode.
-
-
-null
-arguments: N/A
-
-nothing
+Moves the specified job to the target index in the master index. Out of bounds will default to the bounds.
 
 
-shame
-arguments: N/A
+### increment *§
+Arguments: uuid
 
-if you had a failed auth attempt, remove yourself from the deauths list.
+Moves the specified job up one job, or if it's at the top of its priority level, up one priority.
 
 
-refresh
-arguments: N/A
+### decrement *§
+Arguments: uuid
 
-refresh all users. Useful for pushing changes.
+Moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
+
+
+### attr 
+Arguments: uuid, attribute, value
+
+Sets the attribute of job uuid to value. if the config doesn't state that you can do it, you need auth. If it's an auth-requiring action, it applies the Modified gear.
+
+
+### auth
+Arguments: sha1 hash of user-entered password
+
+Enter admin mode if password is correct.
+
+
+### deauth
+Arguments: N/A
+
+Leave admin mode.
+
+
+### null
+Arguments: N/A
+
+Nothing - however, the response will always be an up-to-date queue as JSON. This can be used to refresh the queue. An SID is not needed for this action.
+
+### shame
+Arguments: N/A
+
+If you had a failed auth attempt, remove yourself from the deauths list to acknowledge that you have displayed a "wrong password" dialog.
+
+
+### refresh
+Arguments: N/A
+
+Refresh all users. Useful for pushing changes.
 dependent upon config.allow_force_refresh.
 
 
-uuddlrlrba §
-arguments: N/A
+### uuddlrlrba §
+Arguments: N/A
 
-huehuehue
-dependent upon config.easter_eggs.
+### huehuehue
+Dependent upon config.easter_eggs.
 
+### More:
 
-*: applies the Modified gear.
-§: requires auth by default.
-
-
-Sending to client:
-
-the action tag defines the data sent.
+*: applies the Modified gear. 
+§: requires auth by default
 
 
-display
+## Data returned to client (data to send from backend):
+The action tag determines the data returned.
+
+
+### Display queue
+This will be returned by null, or most calls that change the queue.
+
+```
 {
 	"action": "display"
 	"queue": the queue object.
 	"auths": a list of the first halves of every auth'd sid.
 	"deauths": a list of the first halves of every sid that failed to auth.
 }
+```
 
-refresh the page.
-dependent upon config.allow_force_refresh
+### Refresh the page
+Dependent upon config.allow_force_refresh
+
+```
 {
 	"action":"refresh"
 }
+```
 
-rickroll everyone.
-dependent upon config.easter_eggs
+### Rickroll everyone.
+
+```
+Dependent upon config.easter_eggs
 {
 	"action":"rickroll"
 }
+```

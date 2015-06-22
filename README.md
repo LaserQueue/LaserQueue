@@ -1,14 +1,14 @@
 # LaserQueue
-A queue system for NuVu’s laser cutter, with websockets. [NuVu Studio](https://cambridge.nuvustudio.com/discover) has a lasercutter, and *only* one of them. A lot of people want to use it, and managing it is a pain. This software aims to simplify that with a simple web-based frontend accessible locally and on a TV mounted in the wall. It is developed primarily by [@sdaitzman](https://github.com/sdaitzman) and [@yrsegal](https://github.com/yrsegal).
+A queue system for NuVu’s laser cutter and other CNC hardware. [NuVu Studio](https://cambridge.nuvustudio.com/discover) has a lasercutter, and *only* one of them. A lot of people want to use it, and managing it is a giant pain. This software aims to simplify that with a simple web-based software accessible locally. It is developed primarily by [@sdaitzman](https://github.com/sdaitzman) and [@yrsegal](https://github.com/yrsegal). You can use it to control access to a 3D printer, lasercutter, printer... whatever you want!
 
 ## Getting the software
 Download the latest stable version from [github.com/yrsegal/LaserQueue/releases](https://github.com/yrsegal/LaserQueue/releases) and decompress it.
 
 ## Running the software
 
-Get the latest version by `git clone`ing the repo or downloading a zip. If there's a new update, the program will prompt you on run.  
+Get the latest version by `git clone`ing the repo or downloading a zip. If there's a new update, the program will prompt you on run automatically.  
 
-To start the server, run `start.sh` or `start.py`. You'll need Python 3.4.x or greater.
+To start the server, run `start.sh` or `start.py` or `start.bat` if you're on Windows. You'll need Python 3.4.x or greater.
 
 To change the admin login password, create a plaintext file `password` under backend. This will be hashed upon script run.
 
@@ -29,15 +29,18 @@ To change the admin login password, create a plaintext file `password` under bac
 - `--install-all`: No short option. Installs all dependencies without prompting.
 - `--install-update`: No short option. Installs updates without prompting.
 
+### Backend API
+Want to access the backend? Send it signals? Control your list with a custom frontend? Make changes to the backend or frontend? See [API.md](API.md)!
+
 ## Dependencies
 
 All dependencies should be met the first time you run the program. The program will detect your system and prompt to install them. However, you will definitely need Python at ≥ 3.4.x for WebSockets. If (for some reason) you would like to install these by hand, feel free:
 
-Required to start:  
+###Required to start:  
 - [Python 3.4.x](https://www.python.org/downloads/)
 - pip (`#~ curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python3`)
 
-Other dependencies (installed on runtime):  
+###Other dependencies (installed on runtime):  
 - websockets (`#~ pip3 install websockets`)
 - netifaces (`#~ pip3 install netifaces`)
 - GitPython (`#~ pip3 install GitPython`)
