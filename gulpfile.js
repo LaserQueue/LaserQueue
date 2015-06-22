@@ -40,10 +40,10 @@ gulp.task('sass', function() {
 
 // compile js
 gulp.task('js', function() {
-	return gulp.src(['./www/scripts/*.js', './www/scripts/scripts.js'])
+	return gulp.src('./www/scripts/_*.js')
 		.pipe(jshint())
+		.pipe(jscs())
 		.pipe(sourcemaps.init())
-			.pipe(jscs())
 			.on('error', noop)
 			.pipe(jscsStylish.combineWithHintResults())
 			.pipe(concat('scripts.min.js'))
