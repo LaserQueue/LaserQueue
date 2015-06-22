@@ -40,9 +40,14 @@ gulp.task('sass', function() {
 
 // compile js
 gulp.task('js', function() {
-	return gulp.src(['./www/lib/scripts/_*.js', './www/lib/scripts/scripts.js'])
+	gulp.src(['./www/lib/scripts/*.js'])
 		.pipe(jshint())
-		.pipe(jscs())
+		.pipe(jscs({
+			"excludeFiles": [
+				"prism.js",
+				"konami.js"
+			]
+		}))
 		.pipe(sourcemaps.init())
 			.on('error', noop)
 			.pipe(jscsStylish.combineWithHintResults())
