@@ -13,12 +13,12 @@ $.ajax({
 	url: '/infotext.md',
 	type: 'GET'
 })
-.done(function(request) {
+.done(function writeInfoText(request) {
 	$('.credits-footer').before(
 		marked(request)
 	);
 })
-.fail(function() {
+.fail(function handleInfoTextFail() {
 	console.log('Failed to get infotext.md');
 });
 
