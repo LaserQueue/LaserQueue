@@ -9,7 +9,7 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities, refres
 							'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		renderDirectives = {
 			priority: {
-				html: function(params) {
+				html: function drawCoachMode(params) {
 					return this.priority + (
 						this.coachmodified ? 
 							' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
@@ -18,7 +18,7 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities, refres
 				},
 			},
 			actions: {
-				html: function(params) {
+				html: function actionDirectiveHTML(params) {
 					var data = '';
 					for (var i = 0; i < Object.keys(buttons).length; i++) {
 						var button = Object.keys(buttons)[i];
@@ -39,7 +39,7 @@ SID = uuid.v1();
 window.console.log('SID: ' + SID);
 
 // fetches config file from server
-getConfigFile = $.getJSON('/config.json', function() {
+getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	// config.thing returns thing in the config file
 	config = getConfigFile.responseJSON;
@@ -78,16 +78,12 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 	// render the priorities dropdown
 	if (config.priority_choose) {
-		$('#priority-dropdown').append('
-			<option disabled selected value="-1" class="selected">' + config.priority_input + '</option>
-		');
+		$('#priority-dropdown').append('<option disabled selected value="-1" class="selected">' + config.priority_input + '</option>');
 	}
 	for(var p in priorities) {
 		var disabled = (p < config.default_priority && !config.priority_selection ? 'disabled ' : '');
 		var selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
-		$('#priority-dropdown').append('
-			<option ' + selected + ' value="' + String(priorities.length-p-1) + '"  class="'+ disabled + selected + '">' + priorities[p] + '</option>
-		');
+		$('#priority-dropdown').append('<option ' + selected + ' value="' + String(priorities.length-p-1) + '"  class="'+ disabled + selected + '">' + priorities[p] + '</option>');
 	}
 
 	if (!config.priority_selection) {
@@ -118,30 +114,30 @@ getConfigFile = $.getJSON('/config.json', function() {
 	};
 
 	if (config.admin_mode_enabled) {
-		$('.authorize').click(function() {
+		$('.authorize').click(function handleAuthToggle() {
 			if (authed) {
 				socketSend({'action': 'deauth'});
 				$('.authorize').tooltip('hide');
 			}
 			else {
-				modalMessage('Authenticate', '
-					<form class="login-form">
-						<div class="form-group">
-							<label for="password">Password</label>
-							<input type="password" class="form-control coach-password" id="password" placeholder="Password">
-						</div>
-						<button type="submit" class="btn btn-default">Sign in</button>
-					</form>
-				');
+				modalMessage('Authenticate',
+					'<form class="login-form">' +
+						'<div class="form-group">' +
+							'<label for="password">Password</label>' +
+							'<input type="password" class="form-control coach-password" id="password" placeholder="Password">' +
+						'</div>' +
+						'<button type="submit" class="btn btn-default">Sign in</button>' +
+					'</form>'
+				);
 				$('.authorize').tooltip('hide');
 
-				setTimeout('
+				setTimeout(function focusPasswordField() {
 					$(".coach-password").focus();
-				',500);
+				}, 500);
 
 				
 
-				$('.login-form').submit(function(event) {
+				$('.login-form').submit(function authenticatePassword(event) {
 					event.preventDefault();
 					if($('#password').val() != '') {
 						logText('Password entered. Attempting auth.');
@@ -162,9 +158,9 @@ getConfigFile = $.getJSON('/config.json', function() {
 	} else {
 		logText('Google Analytics tracking is enabled with key ' + config.google_analytics_key);
 
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(function GAisogram(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function googleAnalyticsFunction(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
 		googleAnalytics('create', config.google_analytics_key, {
@@ -176,7 +172,7 @@ getConfigFile = $.getJSON('/config.json', function() {
 
 	logText('LaserCutter software is up. Attempting connection to WebSockets host ' + host);
 	socketSetup();
-	setInterval(function() {
+	setInterval(function tryToReconnect() {
 		if(typeof reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
 			// initialize websockets if closed
 			logText('Attempting connection to WebSockets host', host);
