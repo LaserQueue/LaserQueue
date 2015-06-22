@@ -18,6 +18,9 @@ class Config:
 	def __contains__(self, key):
 		self.reload()
 		return key in self.data
+	def get_data(self):
+		self.reload()
+		return self.data
 	def get(self, k, d=None):
 		self.reload()
 		return self.data.get(k, d)

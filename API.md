@@ -39,25 +39,25 @@ Arguments: uuid
 Removes the specified job from the list
 
 
-### move *§
+### move *
 Arguments: uuid, target index, target priority
 
 Moves the specified job to the target index, and the target priority
 
 
-### relmove *§
+### relmove *
 Arguments: uuid, target index
 
 Moves the specified job to the target index in the master index. Out of bounds will default to the bounds.
 
 
-### increment *§
+### increment *
 Arguments: uuid
 
 Moves the specified job up one job, or if it's at the top of its priority level, up one priority.
 
 
-### decrement *§
+### decrement *
 Arguments: uuid
 
 Moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
@@ -84,7 +84,7 @@ Leave admin mode.
 ### null
 Arguments: N/A
 
-Nothing - however, the response will always be an up-to-date queue as JSON. This can be used to refresh the queue. An SID is not needed for this action.
+Nothing - however, the response will always be an up-to-date queue as JSON. This can be used to refresh the queue.
 
 ### shame
 Arguments: N/A
@@ -92,23 +92,27 @@ Arguments: N/A
 If you had a failed auth attempt, remove yourself from the deauths list to acknowledge that you have displayed a "wrong password" dialog.
 
 
-### refresh
+### config
+Arguments: N/A
+
+Get the current config from the server.
+
+
+### refresh *
 Arguments: N/A
 
 Refresh all users. Useful for pushing changes.
-dependent upon config.allow_force_refresh.
+Dependent upon config.allow_force_refresh.
 
 
-### uuddlrlrba §
+### uuddlrlrba *
 Arguments: N/A
 
-### huehuehue
+huehuehue
 Dependent upon config.easter_eggs.
 
-### More:
+*: requires auth by default
 
-*: applies the Modified gear. 
-§: requires auth by default
 
 
 ## Data returned to client (data to send from backend):
@@ -124,6 +128,14 @@ This will be returned by null, or most calls that change the queue.
 	"queue": the queue object.
 	"auths": a list of the first halves of every auth'd sid.
 	"deauths": a list of the first halves of every sid that failed to auth.
+}
+```
+
+### Update config
+```
+{
+	"action": "config"
+	...
 }
 ```
 

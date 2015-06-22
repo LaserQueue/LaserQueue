@@ -37,15 +37,20 @@ def hello(websocket, path):
 					if message != None and "action" in messagedata:
 						if messagedata["action"] not in ["null", "auth", "uuddlrlrba"]:
 							cprint("Saving message.")
-						messagef = open(os.path.join(temppath, "toscript.json"), "w")
-						json.dump(messagedata, messagef)
-						messagef.close()
+						data = {}
+						if messagedata["action"] == "config":
+							data = config.get_data()
+							data["action"] = "config"
+						else:
+							messagef = open(os.path.join(temppath, "toscript.json"), "w")
+							json.dump(messagedata, messagef)
+							messagef.close()
 
-						time.sleep(0.05)
+							time.sleep(0.05)
 
-						dataf = open(os.path.join(temppath, "topage.json"))
-						data = json.load(dataf)
-						dataf.close()
+							dataf = open(os.path.join(temppath, "topage.json"))
+							data = json.load(dataf)
+							dataf.close()
 						yield from websocket.send(json.dumps(data))
 		except:
 			pass
