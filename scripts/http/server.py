@@ -152,10 +152,13 @@ def cprint(text):
 def cinput(text):
 	prints = text.split("\n")
 	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC
-	print(date_time_string() + originstr + prints[0])
-	for i in prints[1:-1]:
-		print(" "*(26+len(cprintconf.name)) + i)
-	return input(" "*(26+len(cprintconf.name)) + prints[-1] + bcolors.ENDC)
+	if len(prints) > 1: 
+		print(date_time_string() + originstr + prints[0])
+		for i in prints[1:-1]:
+			print(" "*(26+len(cprintconf.name)) + i)
+		return input(" "*(26+len(cprintconf.name)) + prints[-1] + bcolors.ENDC)
+	else:
+		return input(date_time_string() + originstr + prints[0] + bcolors.ENDC)
 
 
 # Default error message template

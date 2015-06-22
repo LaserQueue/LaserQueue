@@ -5,9 +5,7 @@ import tempfile
 import atexit
 
 from scripts.parseargv import args
-from scripts.config import cprint, cinput, bcolors, cprintconf
-cprintconf.color = bcolors.DARKGREEN
-cprintconf.name = "Startup"
+from scripts.config import *
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
@@ -47,7 +45,10 @@ if __name__ == "__main__":
 	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
 	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
 
+	cprintconf.color = bcolors.CYAN
+	cprintconf.name = "Setup"
 	os.chdir("scripts")
+	cprint("Beginning initialization.")
 	initcode = gSystem("initialize.py "+" ".join(sys.argv[1:]))
 	if initcode:
 		if initcode == 2560:
@@ -62,13 +63,25 @@ if __name__ == "__main__":
 
 	output = FNULL if args.shh else None
 
-	backend_server = gPopen(["server.py"]+argvs, stdout=output, stderr=output)
+	backend_port = int(Config(os.path.join("..","www","config.json"))["port"])
+
+	if os.name != "nt" and os.geteuid() and backend_port < 1024:
+		cprintconf.color = bcolors.DARKBLUE
+		cprintconf.name = "Socket"
+		cprint("\
+Root required on ports up to 1023, attempting to elevate permissions. \n\
+(Edit config.json to change ports.)")
+		backend_server = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "server.py"]+argvs, stdout=output, stderr=output)
+	else:
+		backend_server = gPopen(["server.py"]+argvs, stdout=output, stderr=output)
 	backend_main = gPopen(["main.py"]+argvs, stdout=output, stderr=output)
 
 	time.sleep(0.5)
 
 	os.chdir(os.path.join("..", "www"))
 	if os.name != "nt" and os.geteuid() and args.port < 1024:
+		cprintconf.color = bcolors.PURPLE
+		cprintconf.name = "HTTP"
 		cprint("\
 Root required on ports up to 1023, attempting to elevate permissions. \n\
 (Use --port PORT to change ports.)")
