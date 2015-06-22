@@ -54,12 +54,18 @@ def main():
 
 								sids.cache(sessions)
 						if x and type(x) is str:
-							if x == "uuddlrlrba" and config["easter_eggs"]:
-								json.dump({"action":"rickroll"}, open(os.path.join(temppath, "topage.json"), "w"))
-								time.sleep((config["refreshRate"]*1.5)/1000)
-							elif x == "refresh" and config["allow_force_refresh"]:
-								json.dump({"action":"refresh"}, open(os.path.join(temppath, "topage.json"), "w"))
-								time.sleep((config["refreshRate"]*1.5)/1000)
+							if x == "uuddlrlrba":
+								if config["easter_eggs"]:
+									json.dump({"action":"rickroll"}, open(os.path.join(temppath, "topage.json"), "w"))
+									time.sleep((config["refreshRate"]*1.5)/1000)
+								else:
+									cprint(bcolors.YELLOW + "This is a serious establisment, son. I'm dissapointed in you.")
+							elif x == "refresh":
+								if config["allow_force_refresh"]:
+									json.dump({"action":"refresh"}, open(os.path.join(temppath, "topage.json"), "w"))
+									time.sleep((config["refreshRate"]*1.5)/1000)
+								else:
+									cprint(bcolors.YELLOW + "Force refresh isn't enabled. (config.json, allow_force_refresh)")
 							elif x == "sorry":
 								if data["sid"][:int(len(data["sid"])/2)] in shamed:
 									shamed.remove(data["sid"][:int(len(data["sid"])/2)])
