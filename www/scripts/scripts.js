@@ -1,10 +1,10 @@
 // main program
 
 // when jquery is here
-$(document).ready(function() {
+$(document).ready(function documentIsReady() {
 
 	// when submit button clicked
-	$('.btn-submit').click(function(clickAction) {
+	$('.btn-submit').click(function submitForm(clickAction) {
 		clickAction.preventDefault();
 		logText("submit button clicked");
 		var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
@@ -23,7 +23,7 @@ $(document).ready(function() {
 	});
 
 	var easterEgg = new Konami();
-	easterEgg.code = function() {
+	easterEgg.code = function rickRollUser() {
 		rickRoll();
 	};
 	easterEgg.load();
