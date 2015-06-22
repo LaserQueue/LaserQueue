@@ -138,7 +138,7 @@ class bcolors:
 class colorconf:
 	def __init__(self):
 		self.color = bcolors.PURPLE
-		self.name = "HTTP Server"
+		self.name = "HTTP"
 
 cprintconf = colorconf()
 

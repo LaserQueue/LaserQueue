@@ -11,7 +11,7 @@ from parseargv import args
 
 from config import *
 cprintconf.color = bcolors.DARKBLUE
-cprintconf.name = "WS Server"
+cprintconf.name = "Socket"
 config = Config(os.path.join("..","www","config.json"))
 
 temppath = tempfile.gettempdir()
