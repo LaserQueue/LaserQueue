@@ -26,3 +26,28 @@ $.ajax({
 if(!isTouchDevice()) {
 	$('.cut-human-name').focus();
 }
+
+// when submit button clicked
+$('.btn-submit').click(function submitForm(clickAction) {
+	clickAction.preventDefault();
+	logText("submit button clicked");
+	var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
+	socketSend({
+			'action': 'add',
+			'args': [
+				$('.cut-human-name').val(), 
+				+$('.priority-dropdown').val(), 
+				+estimate[0], 
+				$('.cut-material').val()
+			]
+		});
+	resetForm($('.new-cut-form'));
+	$('.cut-human-name').focus();
+	
+});
+
+var easterEgg = new Konami();
+easterEgg.code = function rickRollUser() {
+	rickRoll();
+};
+easterEgg.load();
