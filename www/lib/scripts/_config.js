@@ -5,8 +5,7 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities, refres
 		authed = false,
 		allCuts = [],
 		displayEl = {},
-		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-							'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		renderDirectives = {
 			priority: {
 				html: function drawCoachMode(params) {
