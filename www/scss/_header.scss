@@ -4,6 +4,7 @@
 	margin: 27px;
 	cursor: pointer;
 	transition: transform 0.08s ease-in-out;
+	-webkit-transform-style: preserve-3d;
 	&:hover { transform: scale(1.1); }
 	&:active { transform: scale(0.9); }
 	@media (max-width: 768px) {
