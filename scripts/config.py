@@ -69,7 +69,12 @@ class colorconf:
 cprintconf = colorconf()
 
 
+lastprinted = None
+
 def cprint(text):
+	global lastprinted
+	if text == lastprinted: return
+	lastprinted = text
 	prints = text.split("\n")
 	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC
 	print(date_time_string() + originstr + prints[0] + bcolors.ENDC)
