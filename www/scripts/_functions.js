@@ -3,7 +3,7 @@
 if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) { 
+    return this.replace(/{(\d+)}/g, function(match, number) {
       return typeof args[number] != 'undefined'
         ? args[number]
         : match
@@ -99,7 +99,7 @@ function populateActions() {
 	}
 
 	// handler to remove a job
-	$('.remove-job').click(function() {
+	$('.remove-job').click(function(e) {
 		googleAnalytics('send', 'event', 'action', 'click', 'remove job');
 		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
@@ -107,6 +107,12 @@ function populateActions() {
 			'args': [$($(this).parents()[1]).attr('data-uuid')]
 		});
 	});
+
+  // asks before it removes a job
+  $('.remove-job').popConfirm({
+    content: "Remove this job?",
+    placement: "bottom"
+  });
 
 	// handler to lower a job
 	$('.lower-priority').click(function() {
