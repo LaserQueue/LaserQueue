@@ -3,7 +3,7 @@
 function socketSetup() { // god help me
 
 	// wait until host has a real value
-	while(host == 'undefined') {}
+	while (host == 'undefined') {}
 	socket = new WebSocket(host);
 
 	// when websockets connects
@@ -14,10 +14,14 @@ function socketSetup() { // god help me
 		$('#notify-modal').modal('hide');
 
 		// poll for new data and repeat every refreshRate
-		socketSend({'action': 'config'});
+		socketSend({
+			'action': 'config'
+		});
 		setInterval(function pollForData() {
-			if(socket.readyState != socket.CONNECTING) {
-				socketSend({'action': 'null'});
+			if (socket.readyState != socket.CONNECTING) {
+				socketSend({
+					'action': 'null'
+				});
 			}
 		}, refreshRate);
 	};
@@ -29,21 +33,21 @@ function socketSetup() { // god help me
 		jsonData = JSON.parse(msg.data);
 
 		// if data is new
-		if(JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
-		
+		if (JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
+
 			// deep copy jsonData to oldJsonData
 			oldJsonData = $.extend({}, jsonData);
-			
+
 			// log the new data
 			logText('new JSON received: ' + JSON.stringify(jsonData));
 
 			// if being told to render table
-			if(jsonData.action == 'config') {
+			if (jsonData.action == 'config') {
 				if (config != jsonData) {
 					config = jsonData;
 					applyConfig();
 				}
-			} else if(jsonData.action == 'display') {
+			} else if (jsonData.action == 'display') {
 
 				// reinitialize full list of cuts
 				allCuts = [];
@@ -51,11 +55,9 @@ function socketSetup() { // god help me
 				if (config.admin_mode_enabled) {
 					if (jsonData.auths.indexOf(SID.substring(0, 18)) < 0 && authed) {
 						onDeauth();
-					}
-					else if (jsonData.auths.indexOf(SID.substring(0, 18)) >= 0 && !authed) {
+					} else if (jsonData.auths.indexOf(SID.substring(0, 18)) >= 0 && !authed) {
 						onAuth();
-					}
-					else if (jsonData.deauths.indexOf(SID.substring(0, 18)) >= 0 && !authed) {
+					} else if (jsonData.deauths.indexOf(SID.substring(0, 18)) >= 0 && !authed) {
 						onFailedauth();
 					}
 				}
@@ -70,15 +72,15 @@ function socketSetup() { // god help me
 						displayEl.material = materials[arrayEl.material];
 						displayEl.priority = priorities[arrayEl.priority];
 						var timetotal = arrayEl.esttime;
-						var hours = Math.floor(timetotal/60);
-						timetotal -= hours*60;
+						var hours = Math.floor(timetotal / 60);
+						timetotal -= hours * 60;
 						var minutes = Math.floor(timetotal);
 						timetotal -= minutes;
-						var seconds = +(timetotal*60).toFixed(2);
+						var seconds = +(timetotal * 60).toFixed(2);
 
-						var output = String(hours ? hours+'h' : '') + (minutes && hours ? ' ' : '');
-						output += String(minutes ? minutes+'m' : '') + (seconds && minutes ? ' ' : '');
-						output += String(seconds ? seconds+'s' : '')
+						var output = String(hours ? hours + 'h' : '') + (minutes && hours ? ' ' : '');
+						output += String(minutes ? minutes + 'm' : '') + (seconds && minutes ? ' ' : '');
+						output += String(seconds ? seconds + 's' : '')
 
 						displayEl.esttime = output;
 						// add to full list of cuts
@@ -89,13 +91,13 @@ function socketSetup() { // god help me
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
-		} else if(jsonData.action == 'rickroll') {
-			rickRoll();
-		} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
-			window.location.reload();
+			} else if (jsonData.action == 'rickroll') {
+				rickRoll();
+			} else if (jsonData.action == 'refresh' && config.allow_force_refresh) {
+				window.location.reload();
+			}
 		}
-	}
-};
+	};
 
 	// when websockets error
 	socket.onerror = function handleWebSocketsError(error) {
@@ -104,8 +106,7 @@ function socketSetup() { // god help me
 
 		// set up retry button
 		$('.btn-retry').click(function reloadWithRandom() {
-			window.location = window.location.origin + '?foo=' + Math.floor(Math.random()*11000);
+			window.location = window.location.origin + '?foo=' + Math.floor(Math.random() * 11000);
 		});
 	};
 };
-
