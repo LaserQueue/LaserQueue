@@ -131,7 +131,7 @@ def cprint(text):
 	global lastprinted
 	if text == lastprinted: return
 	lastprinted = text
-	prints = text.split("\n")
+	prints = [i.strip().rstrip() for i in text.split("\n")]
 	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC
 	print(date_time_string() + originstr + prints[0] + bcolors.ENDC)
 	for i in prints[1:]:

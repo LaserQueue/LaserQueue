@@ -51,6 +51,7 @@ if __name__ == "__main__":
 	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
 	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
 	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
+	initFile(os.path.join(selfpath, "www", "infotext.md"))
 
 	cprintconf.color = bcolors.CYAN
 	cprintconf.name = "Setup"
@@ -82,9 +83,8 @@ if __name__ == "__main__":
 		if os.name != "nt" and os.geteuid() and backend_port < 1024:
 			cprintconf.color = bcolors.DARKBLUE
 			cprintconf.name = "Socket"
-			cprint("\
-Root required on ports up to 1023, attempting to elevate permissions. \n\
-(Edit config.json to change ports.)")
+			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
+			          (Edit config.json to change ports.)""")
 			backend_server = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "server.py"]+argvs, stdout=output, stderr=output)
 		else:
 			backend_server = gPopen(["server.py"]+argvs, stdout=output, stderr=output)
@@ -100,9 +100,8 @@ Root required on ports up to 1023, attempting to elevate permissions. \n\
 		if os.name != "nt" and os.geteuid() and args.port < 1024:
 			cprintconf.color = bcolors.PURPLE
 			cprintconf.name = "HTTP"
-			cprint("\
-Root required on ports up to 1023, attempting to elevate permissions. \n\
-(Use --port PORT to change ports.)")
+			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
+			          (Use --port PORT to change ports.)""")
 			frontend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 		else:
 			frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
