@@ -105,11 +105,11 @@ function populateActions() {
 		});
 	});
 
-  // asks before it removes a job
-  $('.remove-job').popConfirm({
-    content: "Remove this job?",
-    placement: "bottom"
-  });
+	// asks before it removes a job
+	$('.remove-job').popConfirm({
+		content: "Remove this job?",
+		placement: "bottom"
+	});
 
 	// handler to lower a job
 	$('.lower-priority').click(function lowerPriority() {
