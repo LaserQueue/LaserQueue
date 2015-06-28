@@ -30,6 +30,11 @@
 		background: darken($nuvu-pink, 5%);
 		border: 1px solid darken($nuvu-pink, 15%);
 	}
+	&:active {
+		background: darken($nuvu-pink, 20%) !important;
+		color: white !important;
+		border: 1px solid darken($nuvu-pink, 10%) !important;
+	}
 }
 
 .cut-form-group * {
