@@ -5,9 +5,7 @@ import os.path
 from copy import deepcopy
 
 from config import *
-config = WalkingConfig(os.path.join("..","www","config.json"), 
-	os.path.join("..","www","defaultconf.json"), 
-	os.path.join("..","www","userconf.json"))
+config = Config(os.path.join("..","www","config.json"))
 
 lpri = len(config["priorities"])-1
 
