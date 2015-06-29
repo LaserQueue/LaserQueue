@@ -92,12 +92,6 @@ Arguments: N/A
 If you had a failed auth attempt, remove yourself from the deauths list to acknowledge that you have displayed a "wrong password" dialog.
 
 
-### config
-Arguments: N/A
-
-Get the current config from the server.
-
-
 ### refresh *
 Arguments: N/A
 
@@ -131,13 +125,6 @@ This will be returned by null, or most calls that change the queue.
 }
 ```
 
-### Update config
-```
-{
-	"action": "config"
-	...
-}
-```
 
 ### Refresh the page
 Dependent upon config.allow_force_refresh

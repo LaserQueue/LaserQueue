@@ -14,14 +14,10 @@ function socketSetup() { // god help me
 		$('#notify-modal').modal('hide');
 
 		// poll for new data and repeat every refreshRate
-		socketSend({
-			'action': 'config'
-		});
+		socketSend({'action': 'null'});
 		setInterval(function pollForData() {
-			if (socket.readyState != socket.CONNECTING) {
-				socketSend({
-					'action': 'null'
-				});
+			if(socket.readyState != socket.CONNECTING) {
+				socketSend({'action': 'null'});
 			}
 		}, refreshRate);
 	};
@@ -42,12 +38,7 @@ function socketSetup() { // god help me
 			logText('new JSON received: ' + JSON.stringify(jsonData));
 
 			// if being told to render table
-			if (jsonData.action == 'config') {
-				if (config != jsonData) {
-					config = jsonData;
-					applyConfig();
-				}
-			} else if (jsonData.action == 'display') {
+			if(jsonData.action == 'display') {
 
 				// reinitialize full list of cuts
 				allCuts = [];
@@ -88,14 +79,16 @@ function socketSetup() { // god help me
 					});
 
 				});
+				
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
-			} else if (jsonData.action == 'rickroll') {
-				rickRoll();
-			} else if (jsonData.action == 'refresh' && config.allow_force_refresh) {
-				window.location.reload();
 			}
+
+		} else if(jsonData.action == 'rickroll') {
+			rickRoll();
+		} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
+			window.location.reload();
 		}
 	};
 
