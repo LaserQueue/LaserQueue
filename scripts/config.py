@@ -129,6 +129,7 @@ lastprinted = None
 
 def cprint(text):
 	global lastprinted
+	text = str(text)
 	if text == lastprinted: return
 	lastprinted = text
 	prints = [i.strip().rstrip() for i in text.split("\n")]
@@ -138,6 +139,7 @@ def cprint(text):
 		print(" "*(26+len(cprintconf.name)) + i + bcolors.ENDC)
 
 def cinput(text):
+	text = str(text)
 	prints = text.split("\n")
 	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC
 	if len(prints) > 1: 

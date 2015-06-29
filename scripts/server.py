@@ -23,19 +23,17 @@ os.chdir(selfpath)
 
 @asyncio.coroutine
 def hello(websocket, path):
-	stamp = time.time()
-	while stamp-time.time()<config["serverRefreshRate"]/1000:
-		if not websocket.open:
-			break
+	while True:
 		message = yield from websocket.recv()
+		cprint(str(type(message)))
+		if not message: break
 		try:
 			messagedata = json.loads(message)
-			if message != None and ("action" in messagedata and messagedata["action"] not in ["null", "auth", "uuddlrlrba"]): 
-				cprint(message)
 			if os.path.exists(os.path.join(temppath, "topage.json")): 
 				if messagedata:
 					if message != None and "action" in messagedata:
 						if messagedata["action"] not in ["null", "auth", "uuddlrlrba"]:
+							cprint(message)
 							cprint("Saving message.")
 						data = {}
 						if messagedata["action"] == "config":
@@ -51,7 +49,9 @@ def hello(websocket, path):
 							dataf = open(os.path.join(temppath, "topage.json"))
 							data = json.load(dataf)
 							dataf.close()
-						yield from websocket.send(json.dumps(data))
+						if websocket.open:
+							_ = yield from websocket.send(json.dumps(data))
+							
 		except:
 			pass
 			
@@ -59,10 +59,10 @@ def hello(websocket, path):
 def main():
 	cprint("Serving WebSockets on 0.0.0.0 port "+config["port"]+" ...")
 	start_server = websockets.serve(hello, "0.0.0.0", config['port'])
-
+	loop = asyncio.get_event_loop()
 	try:
-		asyncio.get_event_loop().run_until_complete(start_server)
-		asyncio.get_event_loop().run_forever()
+		loop.run_until_complete(start_server)
+		loop.run_forever()
 	except KeyboardInterrupt:
 		quit(0)
 
