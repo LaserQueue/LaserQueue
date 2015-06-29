@@ -45,7 +45,7 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	// hide and disable log if not enabled
 	devLog = config.dev_log;
-	if(devLog != true) { $('[for=log-checkbox]').remove(); }
+	if(!devLog) { $('[for=log-checkbox]').remove(); }
 	else {console.log('Recommended: use the in-page log. Most info goes there.');}
 	logText('Log starts here');
 
@@ -66,13 +66,13 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	easterEggs = config.easter_eggs;
 
 	// render the materials dropdown
-	if (config.default_material == "") {
+	if (!config.default_material) {
 		$('#cut-material').append('<option disabled selected value="N/A" class="selected">' + config.material_input + '</option>');
 	}
 	
 	for(var m in materials) {
-		var selected = (m === config.default_material ? 'selected' : '');
-		$('#cut-material').append('<option ' + selected + ' value="' + m + '" class="'+selected+'">' + materials[m] + '</option>');
+		var mat_selected = (m === config.default_material ? 'selected' : '');
+		$('#cut-material').append('<option ' + mat_selected + ' value="' + m + '" class="'+mat_selected+'">' + materials[m] + '</option>');
 	}
 
 	// render the priorities dropdown
@@ -81,8 +81,8 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	}
 	for(var p in priorities) {
 		var disabled = (p < config.default_priority && !config.priority_selection ? 'disabled ' : '');
-		var selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
-		$('#priority-dropdown').append('<option ' + selected + ' value="' + String(priorities.length-p-1) + '"  class="'+ disabled + selected + '">' + priorities[p] + '</option>');
+		var pri_selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
+		$('#priority-dropdown').append('<option ' + pri_selected + ' value="' + String(priorities.length-p-1) + '"  class="'+ disabled + pri_selected + '">' + priorities[p] + '</option>');
 	}
 
 	if (!config.priority_selection) {
@@ -138,7 +138,7 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 				$('.login-form').submit(function authenticatePassword(event) {
 					event.preventDefault();
-					if($('#password').val() != '') {
+					if(!$('#password').val()) {
 						logText('Password entered. Attempting auth.');
 						socketSend({
 							'action': 'auth',
@@ -150,9 +150,9 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 			}
 		});
 		$('.authorize').attr('data-original-title', config.login);
-	};
+	}
 
-	if(config.google_analytics_key == '') {
+	if(!config.google_analytics_key) {
 		logText('Google Analytics tracking is not enabled.');
 	} else {
 		logText('Google Analytics tracking is enabled with key ' + config.google_analytics_key);

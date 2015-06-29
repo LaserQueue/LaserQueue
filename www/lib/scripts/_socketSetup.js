@@ -71,7 +71,7 @@ function socketSetup() { // god help me
 
 						var output = String(hours ? hours + 'h' : '') + (minutes && hours ? ' ' : '');
 						output += String(minutes ? minutes + 'm' : '') + (seconds && minutes ? ' ' : '');
-						output += String(seconds ? seconds + 's' : '')
+						output += String(seconds ? seconds + 's' : '');
 
 						displayEl.esttime = output;
 						// add to full list of cuts
@@ -102,4 +102,4 @@ function socketSetup() { // god help me
 			window.location = window.location.origin + '?foo=' + Math.floor(Math.random() * 11000);
 		});
 	};
-};
+}

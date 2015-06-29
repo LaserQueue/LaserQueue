@@ -25,7 +25,6 @@ os.chdir(selfpath)
 def hello(websocket, path):
 	while True:
 		message = yield from websocket.recv()
-		cprint(str(type(message)))
 		if not message: break
 		try:
 			messagedata = json.loads(message)
