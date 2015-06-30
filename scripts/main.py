@@ -76,7 +76,7 @@ def main():
 							json.dump(comm.generateData(queue, sessions, shamed), open(os.path.join(temppath, "topage.json"), "w"))
 							json.dump({}, open(os.path.join(temppath, "toscript.json"), "w"), {})
 					except Exception as e: 
-						cprint(bcolors.YELLOW + e)
+						cprint(bcolors.YELLOW + str(e))
 					
 			time.sleep(0.01)
 	except KeyboardInterrupt:

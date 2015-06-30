@@ -30,21 +30,21 @@ def runSocketCommand(commandlist, jdata, sessions):
 
 	action = jdata["action"]
 	sid = jdata["sid"]
+	if "args" in jdata:
+		args = jdata["args"]
+	else:
+		args = None
 	authstate = sessions.check(sid)
 
 	if action in config["authactions"] and not authstate: 
 		return "This action requires auth."
 
-	cmd_noargs = {str(i): i for i in commandlist if not i.args}
-	cmd_args = {str(i): i for i in commandlist if i.args}
+	cmds = {str(i): i for i in commandlist}
 
-	if action in cmd_noargs:
-		return cmd_noargs[action].run(None, authstate, sid, sessions)
-	elif "args" not in jdata: 
+	if action in cmds and (not cmds[action].args or args):
+		return cmds[action].run(args=args, authstate=authstate, sid=sid, sessions=sessions)
+	elif not args: 
 		return "Args missing!"
-	elif action in cmd_args:
-		args = jdata["args"]
-		return cmd_args[action].run(args, authstate, sid, sessions)
 	else:
 		return "Bad command name."
 
@@ -55,24 +55,33 @@ class SocketCommand:
 		self.args = arglist
 	def __str__(self):
 		return self.name
-	def run(self, args, authstate, sid, sessions):
+	def run(self, **kwargs):
 		if self.args:
-			if len(args) != len(self.args):
-				return "Expected "+str(len(self.args))+" argument, received "+str(len(args))
-			if not _comparetypes(args, self.args):
+			args = kwargs["args"]
+			if not args:
+				return "Expected {} argument{}, received {}".format(len(self.args), 
+					"s" if len(self.args) != 1 else "", 0)
+			elif len(args) != len(self.args):
+				return "Expected {} argument{}, received {}".format(len(self.args), 
+					"s" if len(self.args) != 1 else "", len(args))
+			elif not _comparetypes(args, self.args):
 				return "Expected "+str(self.args)+", received "+str(_typelist(args))
-			return self.method(args, authstate, sid, sessions)
-		else:
-			return self.method(authstate, sid, sessions)
+		return self.method(**kwargs)
 
 
 # Non-queue functions
-def null(authstate, sid, sessions): sessions.newnull(sid); sessions.update()
-def deauth(authstate, sid, sessions): sessions.deauth(sid)
-def shame(authstate, sid, sessions): return "sorry"
-def refresh(authstate, sid, sessions): return "refresh"
-def uuddlrlrba(authstate, sid, sessions): return "uuddlrlrba"
-def auth(args, authstate, sid, sessions):
+def null(**kwargs): 
+	sid, sessions = kwargs["sid"], kwargs["sessions"]
+	sessions.newnull(sid)
+	sessions.update()
+def deauth(**kwargs): 
+	sid, sessions = kwargs["sid"], kwargs["sessions"]
+	sessions.deauth(kwargs["sid"])
+def shame(**kwargs): return "sorry"
+def refresh(**kwargs): return "refresh"
+def uuddlrlrba(**kwargs): return "uuddlrlrba"
+def auth(**kwargs):
+	args, sid, sessions = kwargs["sid"], kwargs["sessions"]
 	if config["admin_mode_enabled"]:
 		return sessions.auth(sid, args[0])
 

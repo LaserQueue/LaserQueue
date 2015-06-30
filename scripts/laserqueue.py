@@ -74,7 +74,8 @@ class Queue:
 					self.queue[pri].append(item)
 
 
-	def append(self, args, authstate, sid, sessions):
+	def append(self, **kwargs):
+		args, authstate, sid = kwargs["args"], kwargs["authstate"], kwargs["sid"]
 		name, priority, esttime, material = args[0], args[1], args[2], args[3]
 		if not name or material == "N/A" or priority == -1:
 			return
@@ -113,13 +114,15 @@ class Queue:
 				"time": time.time()
 			})
 
-	def remove(self, args, authstate, sid, sessions):
+	def remove(self, **kwargs):
+		args = kwargs["args"]
 		u = args[0]
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					i.remove(j)
-	def passoff(self, args, authstate, sid, sessions):
+	def passoff(self, **kwargs):
+		args, authstate = kwargs["args"], kwargs["authstate"]
 		u = args[0]
 		oindex = -1
 		masterqueue = _concatlist(self.queue)
@@ -145,7 +148,8 @@ class Queue:
 		if authstate: target["coachmodified"] = True
 		self.queue[lpri-tpri].insert(tindex+1, target)
 
-	def relmove(self, args, authstate, sid, sessions):
+	def relmove(self, **kwargs):
+		args, authstate = kwargs["args"], kwargs["authstate"]
 		u, nindex = args[0], args[1]
 		target = None
 		masterqueue = _concatlist(self.queue)
@@ -176,7 +180,8 @@ class Queue:
 		self.queue[bpri].insert(bind, target)
 
 
-	def move(self, args, authstate, sid, sessions):
+	def move(self, **kwargs):
+		args, authstate = kwargs["args"], kwargs["authstate"]
 		u, ni, np = args[0], args[1], args[2]
 		target = None
 		for i in self.queue:
@@ -190,7 +195,8 @@ class Queue:
 		target["priority"] = lpri-np
 		self.queue[lpri-np].insert(ni, target)
 
-	def increment(self, args, authstate, sid, sessions):
+	def increment(self, **kwargs):
+		args, authstate = kwargs["args"], kwargs["authstate"]
 		u = args[0]
 		index = -1
 		priority = -1
@@ -216,7 +222,8 @@ class Queue:
 		item["priority"] = lpri-priority
 		self.queue[max(lpri-priority, 0)].insert(min(index, len(self.queue[max(lpri-priority, 0)])),item)
 
-	def decrement(self, args, authstate, sid, sessions):
+	def decrement(self, **kwargs):
+		args, authstate = kwargs["args"], kwargs["authstate"]
 		u = args[0]
 		index = -1
 		priority = -1
@@ -242,7 +249,8 @@ class Queue:
 		item["priority"] = lpri-priority
 		self.queue[min(lpri-priority, lpri)].insert(max(index, 0),item)
 
-	def attr(self, args, authstate, sid, sessions):
+	def attr(self, **kwargs):
+		args, authstate = kwargs["args"], kwargs["authstate"]
 		u, attrname, value = args[0], args[1], args[2]
 		if attrname not in self.requiredtags or attrname in ["uuid", "sid", "time", "totaldiff"]:
 			return
