@@ -10,7 +10,7 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities, refres
 			priority: {
 				html: function drawCoachMode(params) {
 					return this.priority + (
-						this.coachmodified ? 
+						this.coachmodified ?
 							' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
 							: ''
 					);
@@ -69,7 +69,7 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	if (!config.default_material) {
 		$('#cut-material').append('<option disabled selected value="N/A" class="selected">' + config.material_input + '</option>');
 	}
-	
+
 	for(var m in materials) {
 		var mat_selected = (m === config.default_material ? 'selected' : '');
 		$('#cut-material').append('<option ' + mat_selected + ' value="' + m + '" class="'+mat_selected+'">' + materials[m] + '</option>');
@@ -114,37 +114,40 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	if (config.admin_mode_enabled) {
 		$('.authorize').click(function handleAuthToggle() {
+			// if already authorized, deauth
 			if (authed) {
 				socketSend({'action': 'deauth'});
 				$('.authorize').tooltip('hide');
 			}
 			else {
+				// if not authorized, present auth UI
 				modalMessage('Authenticate',
 					'<form class="login-form">' +
 						'<div class="form-group">' +
 							'<label for="password">Password</label>' +
 							'<input type="password" class="form-control coach-password" id="password" placeholder="Password">' +
 						'</div>' +
-						'<button type="submit" class="btn btn-default">Sign in</button>' +
+						'<button type="submit" class="btn btn-default auth-button">Sign in</button>' +
 					'</form>'
 				);
 				$('.authorize').tooltip('hide');
 
+				// once modal is up, focus password
 				setTimeout(function focusPasswordField() {
 					$(".coach-password").focus();
 				}, 500);
 
-				
 
-				$('.login-form').submit(function authenticatePassword(event) {
+
+				$('.auth-button').click(function authenticatePassword(event) {
 					event.preventDefault();
-					if(!$('#password').val()) {
+					if($('#password').val()) {
 						logText('Password entered. Attempting auth.');
 						socketSend({
 							'action': 'auth',
 							'args': [sha1($('#password').val())]
 						});
-						
+
 					}
 				});
 			}
