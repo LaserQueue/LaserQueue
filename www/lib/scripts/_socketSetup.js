@@ -83,15 +83,13 @@ function socketSetup() { // god help me
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
+			} else if(jsonData.action == 'rickroll') {
+				rickRoll();
+			} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
+				window.location.reload();
 			}
-
-		} else if(jsonData.action == 'rickroll') {
-			rickRoll();
-		} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
-			window.location.reload();
-		}
-	};
-
+		};
+	}
 	// when websockets error
 	socket.onerror = function handleWebSocketsError(error) {
 		// go tell a nerd
