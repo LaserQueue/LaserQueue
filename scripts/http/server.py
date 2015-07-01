@@ -779,7 +779,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 					path = index
 					break
 			else:
-				return self.list_directory(path)
+				self.send_error(404, "File not found")
+				return None
 		ctype = self.guess_type(path)
 		try:
 			f = open(path, 'rb')
