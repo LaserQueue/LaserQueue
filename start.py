@@ -1,7 +1,6 @@
 import os, sys
 import subprocess, time
 import json
-import tempfile
 import atexit
 
 from scripts.parseargv import args
@@ -29,9 +28,7 @@ def gSystem(cmd):
 		return os.system("python3 "+cmd)
 
 def cleanup(): 
-	try: backend_server.kill()
-	except: pass
-	try: backend_main.kill()
+	try: backend.kill()
 	except: pass
 	try: frontend.kill()
 	except: pass
@@ -45,9 +42,6 @@ class dummyProcess:
 atexit.register(cleanup) 
 
 if __name__ == "__main__":
-	temppath = tempfile.gettempdir()
-	initFile(os.path.join(temppath, "topage.json"))
-	initFile(os.path.join(temppath, "toscript.json"))
 	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
 	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
 	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
@@ -79,17 +73,15 @@ if __name__ == "__main__":
 
 	if load_backend:
 		if os.name != "nt" and os.geteuid() and backend_port < 1024:
-			cprintconf.color = bcolors.DARKBLUE
-			cprintconf.name = "Socket"
+			cprintconf.color = bcolors.BLUE
+			cprintconf.name = "Backend"
 			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
 			          (Edit config.json to change ports.)""")
-			backend_server = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "server.py"]+argvs, stdout=output, stderr=output)
+			backend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "main.py"]+argvs, stdout=output, stderr=output)
 		else:
-			backend_server = gPopen(["server.py"]+argvs, stdout=output, stderr=output)
-		backend_main = gPopen(["main.py"]+argvs, stdout=output, stderr=output)
+			backend = gPopen(["main.py"]+argvs, stdout=output, stderr=output)
 	else:
-		backend_server = dummyProcess()
-		backend_main = dummyProcess()
+		backend = dummyProcess()
 
 	time.sleep(0.5)
 
@@ -107,7 +99,7 @@ if __name__ == "__main__":
 		frontend = dummyProcess()
 	
 	try:
-		while not backend_server.returncode and not backend_main.returncode and not frontend.returncode and not args.load_none: time.sleep(0.001)
+		while not backend.returncode and not frontend.returncode and not args.load_none: time.sleep(0.001)
 	except KeyboardInterrupt:
 		print()
 		cprintconf.color = bcolors.RED
