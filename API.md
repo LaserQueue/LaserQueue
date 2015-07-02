@@ -53,7 +53,7 @@ Adds the specified name, priority, etc to the list
 	"args": [
 		<name as Str>,
 		<priority as Int>,
-		<time in minutes as a Float>,
+		<time in minutes as a Float or Int>,
 		<material code as Str>
 	],
 	"sid": <SID>
