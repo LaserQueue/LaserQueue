@@ -52,8 +52,8 @@ Adds the specified name, priority, etc to the list
 	"action": "add",
 	"args": [
 		<name as Str>,
-		<priority as Int as Str>,
-		<time in minutes as Int as Str>,
+		<priority as Int>,
+		<time in minutes as a Float>,
 		<material code as Str>
 	],
 	"sid": <SID>
@@ -107,8 +107,8 @@ Moves the specified job to the target index, and the target priority
 	"action": "move",
 	"args": [
 		<uuid of job as Str>,
-		<target index as Int as Str>,
-		<target priority as Int as Str>
+		<target index as Int>,
+		<target priority as Int>
 	],
 	"sid": <SID>
 }
@@ -127,7 +127,7 @@ Moves the specified job to the target index in the master index. Out of bounds w
 	"action": "relmove",
 	"args": [
 		<uuid of job as Str>,
-		<target index as Int as Str>
+		<target index as Int>
 	],
 	"sid": <SID>
 }
@@ -183,7 +183,7 @@ Sets the attribute of job uuid to value. if the config doesn't state that you ca
 	"args": [
 		<uuid of job as Str>,
 		<key in job to change as Str>,
-		<desired value as Str>
+		<desired value>
 	],
 	"sid": <SID>
 }
