@@ -254,7 +254,7 @@ If you had a failed auth attempt, remove yourself from the deauths list to ackno
 ### refresh *
 Arguments: N/A
 
-Refresh all users. Useful for pushing changes.
+Refresh all users. Useful for pushing changes.  
 Dependent upon config.allow_force_refresh.
 
 #### Sample
@@ -271,7 +271,7 @@ Dependent upon config.allow_force_refresh.
 ### uuddlrlrba *
 Arguments: N/A
 
-huehuehue
+huehuehue  
 Dependent upon config.easter_eggs.
 
 *: requires auth by default
@@ -305,10 +305,8 @@ Dependent upon `config.allow_force_refresh`. The frontend should refresh itself 
 ```
 
 ### Rickroll everyone.
-The title says it all.
-
+The title says it all. Dependent upon config.easter_eggs
 ```
-Dependent upon config.easter_eggs
 {
 	"action":"rickroll"
 }
