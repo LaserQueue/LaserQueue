@@ -231,7 +231,10 @@ Nothing - however, the response will always be an up-to-date queue as JSON. This
 #### Sample
 
 ```
-{"action": "null"}
+{
+	"action": "null",
+	"sid": <SID>
+}
 ```
 
 ### shame
