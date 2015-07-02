@@ -3,7 +3,7 @@
 This overview describes the API that binds the frontend and backend of the LaserQueue.
 
 ## Communication
-Communication will be between some frontend user interface and the backend server using WebSockets. By default, we use port 8763 for this.
+Communication will be between some frontend user interface and the backend server using WebSockets. By default, we use port 8763 for this. Our frontend has a function, `socketSend()` that can be used to send things over WebSockets. It automatically adds the SID.
 
 ## Data format
 JSON formatted as follows:
