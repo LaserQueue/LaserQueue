@@ -70,7 +70,7 @@
 		0.0166666667, 
 		360
 	],
-	"metabump": 900,
+	"metabump": 0,
 	"metabumpmult": 30,	
 	"google_analytics_key": "",
 	"priority_selection": false,
