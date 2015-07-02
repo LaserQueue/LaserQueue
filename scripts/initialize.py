@@ -11,6 +11,10 @@ from math import ceil
 
 from parseargv import args
 
+import ssl
+if hasattr(ssl, '_create_unverified_context'): 
+    ssl._create_default_https_context = ssl._create_unverified_context
+
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
 
