@@ -218,7 +218,6 @@ Leave admin mode.
 ```
 {
 	"action": "deauth",
-	"args": [],
 	"sid": <SID>
 }
 ```
@@ -245,7 +244,6 @@ If you had a failed auth attempt, remove yourself from the deauths list to ackno
 ```
 {
 	"action": "shame",
-	"args": [],
 	"sid": <SID>
 }
 ```
@@ -262,7 +260,6 @@ Dependent upon config.allow_force_refresh.
 ```
 {
 	"action": "refresh",
-	"args": [],
 	"sid": <SID>
 }
 ```
@@ -273,6 +270,15 @@ Arguments: N/A
 
 huehuehue  
 Dependent upon config.easter_eggs.
+
+#### Sample
+
+```
+{
+	"action": "uuddlrlrba",
+	"sid": <SID>
+}
+```
 
 *: requires auth by default
 
