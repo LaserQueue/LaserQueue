@@ -30,6 +30,8 @@ def qsort(l):
 def copyconf(dataoverride = False):
 	if os.path.exists(os.path.join("..", "www", "config.json")) and not dataoverride:
 		currdata = json.load(open(os.path.join("..", "www", "config.json")))
+		if "host" not in currdata or not currdata["host"]:
+			currdata["host"] = getIps()[0]
 	else:
 		currdata = {"host": getIps()[0]}
 	data = json.load(open(os.path.join("..", "www", "defaultconf.json")))
