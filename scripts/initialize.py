@@ -27,14 +27,17 @@ def qsort(l):
 				greater = qsort([x for x in l[1:] if x >= pivot])
 				return lesser + [pivot] + greater
 
-def copyconf():
+def copyconf(dataoverride = False):
+	if os.path.exists(os.path.join("..", "www", "config.json")) and not dataoverride:
+		currdata = json.load(open(os.path.join("..", "www", "config.json")))
+	else:
+		currdata = {"host": getIps()[0]}
 	data = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	if os.path.exists(os.path.join("..", "www", "userconf.json")):
 		userdata = json.load(open(os.path.join("..", "www", "userconf.json")))
 	else:
 		userdata = {}
-	data = _fillblanks(userdata, data)
-	data["host"] = getIps()[0]
+	data = dict(currdata, **dict(data, **userdata))
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
 PACKAGES = [
@@ -85,6 +88,8 @@ def make_tarfile(output_filename, source_dir):
 def update():
 	if args.skipupdate: return
 	config = json.load(open(os.path.join("..", "www", "defaultconf.json")))
+
+
 	try:
 		configpage = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
 		masterconfig = json.loads(configpage)
@@ -131,6 +136,8 @@ to use the new version.\n")
 def main():
 	getpacks()
 	if args.regen:
+		copyconf(True)
+	else:
 		copyconf()
 	if args.host:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
