@@ -89,7 +89,7 @@ Removes the specified job from the list
 {
 	"action": "remove",
 	"args": [
-		<name as Str>
+		<uuid as Str>
 	],
 	"sid": <SID>
 }
