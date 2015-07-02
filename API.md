@@ -18,6 +18,25 @@ JSON formatted as follows:
 ## Session ID
 Each active user has a session ID, a 128-bit unique key. This UUID should be generated at the beginning of a session and sent with every packet except for data refreshes with {"action": "null"}.
 
+## Material types
+The default material types with material codes in parentheses are:
+- a: acrylic
+- w: thin wood
+- p: paper
+- f: fabric
+- c: cardboard
+- tw: thick wood
+- o: other
+
+## Priorities
+The default priority values with names in parentheses are:
+- 0: "Lunch/after NuVu"
+- 1: "Low"
+- 2: "Normal"
+- 3: "Important"
+- 4: "Urgent"
+- 5: "Absolutely Required"
+
 ## Actions:
 
 
@@ -63,7 +82,7 @@ Arguments: uuid
 Moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
 
 
-### attr 
+### attr
 Arguments: uuid, attribute, value
 
 Sets the attribute of job uuid to value. if the config doesn't state that you can do it, you need auth. If it's an auth-requiring action, it applies the Modified gear.
