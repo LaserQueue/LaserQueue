@@ -102,6 +102,10 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	$('.time-header').text(config.time_header);
 	$('.priority-header').text(config.priority_header);
 
+	// configure <select>s in form to hide tooltip on click
+	$('.cut-form-group select').click(function hideTooltip() {
+		$(this).tooltip('hide');
+	});
 
 
 	buttons = {
