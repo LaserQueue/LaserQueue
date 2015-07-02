@@ -45,23 +45,74 @@ Arguments: name, priority, estimated time, material code
 
 Adds the specified name, priority, etc to the list
 
+#### Sample
+
+```
+{
+	"action": "add",
+	"args": [
+		<name as Str>,
+		<priority as Int as Str>,
+		<time in minutes as Int as Str>,
+		<material code as Str>
+	],
+	"sid": <SID>
+}
+```
+
 
 ### pass
 Arguments: uuid
 
 Moves the specified job below the next job
 
+#### Sample
+
+```
+{
+	"action": "pass",
+	"args": [
+		<uuid of job as Str>
+	],
+	"sid": <SID>
+}
+```
 
 ### remove
 Arguments: uuid
 
 Removes the specified job from the list
 
+#### Sample
+
+```
+{
+	"action": "remove",
+	"args": [
+		<name as Str>
+	],
+	"sid": <SID>
+}
+```
 
 ### move *
 Arguments: uuid, target index, target priority
 
 Moves the specified job to the target index, and the target priority
+
+#### Sample
+
+```
+{
+	"action": "move",
+	"args": [
+		<uuid of job as Str>,
+		<target index as Int as Str>,
+		<target priority as Int as Str>
+	],
+	"sid": <SID>
+}
+```
 
 
 ### relmove *
@@ -69,11 +120,36 @@ Arguments: uuid, target index
 
 Moves the specified job to the target index in the master index. Out of bounds will default to the bounds.
 
+#### Sample
+
+```
+{
+	"action": "relmove",
+	"args": [
+		<uuid of job as Str>,
+		<target index as Int as Str>
+	],
+	"sid": <SID>
+}
+```
+
 
 ### increment *
 Arguments: uuid
 
 Moves the specified job up one job, or if it's at the top of its priority level, up one priority.
+
+#### Sample
+
+```
+{
+	"action": "increment",
+	"args": [
+		<uuid of job as Str>
+	],
+	"sid": <SID>
+}
+```
 
 
 ### decrement *
@@ -81,11 +157,37 @@ Arguments: uuid
 
 Moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
 
+#### Sample
+
+```
+{
+	"action": "decrement",
+	"args": [
+		<uuid of job as Str>
+	],
+	"sid": <SID>
+}
+```
+
 
 ### attr
 Arguments: uuid, attribute, value
 
 Sets the attribute of job uuid to value. if the config doesn't state that you can do it, you need auth. If it's an auth-requiring action, it applies the Modified gear.
+
+#### Sample
+
+```
+{
+	"action": "attr",
+	"args": [
+		<uuid of job as Str>,
+		<key in job to change as Str>,
+		<desired value as Str>
+	],
+	"sid": <SID>
+}
+```
 
 
 ### auth
@@ -93,11 +195,33 @@ Arguments: sha1 hash of user-entered password
 
 Enter admin mode if password is correct.
 
+#### Sample
+
+```
+{
+	"action": "auth",
+	"args": [
+		<sha1 hash of user-entered password as Str>
+	],
+	"sid": <SID>
+}
+```
+
 
 ### deauth
 Arguments: N/A
 
 Leave admin mode.
+
+#### Sample
+
+```
+{
+	"action": "deauth",
+	"args": [],
+	"sid": <SID>
+}
+```
 
 
 ### null
@@ -105,10 +229,26 @@ Arguments: N/A
 
 Nothing - however, the response will always be an up-to-date queue as JSON. This can be used to refresh the queue.
 
+#### Sample
+
+```
+{"action": "null"}
+```
+
 ### shame
 Arguments: N/A
 
 If you had a failed auth attempt, remove yourself from the deauths list to acknowledge that you have displayed a "wrong password" dialog.
+
+#### Sample
+
+```
+{
+	"action": "shame",
+	"args": [],
+	"sid": <SID>
+}
+```
 
 
 ### refresh *
@@ -116,6 +256,16 @@ Arguments: N/A
 
 Refresh all users. Useful for pushing changes.
 Dependent upon config.allow_force_refresh.
+
+#### Sample
+
+```
+{
+	"action": "refresh",
+	"args": [],
+	"sid": <SID>
+}
+```
 
 
 ### uuddlrlrba *
@@ -128,12 +278,12 @@ Dependent upon config.easter_eggs.
 
 
 
-## Data returned to client (data to send from backend):
-The action tag determines the data returned.
+## Data returned to client from backend
+The action tag determines the data returned. The front end will receive these JSONs as responses, and should respond as specified.
 
 
 ### Display queue
-This will be returned by null, or most calls that change the queue.
+This will be returned by the null action, or most calls that change the queue. The frontend should render the queue based on data in here. If in `deauths`, the frontend should call the `shame` action to acknowledge its shame (this is when an incorrect password hash has been received). If in `auths`, the frontend should make clear that the user is authed and therefore allowed to perform actions that require auth.
 
 ```
 {
@@ -146,7 +296,7 @@ This will be returned by null, or most calls that change the queue.
 
 
 ### Refresh the page
-Dependent upon config.allow_force_refresh
+Dependent upon `config.allow_force_refresh`. The frontend should refresh itself fully. If a web interface, it should reload.
 
 ```
 {
@@ -155,6 +305,7 @@ Dependent upon config.allow_force_refresh
 ```
 
 ### Rickroll everyone.
+The title says it all.
 
 ```
 Dependent upon config.easter_eggs
