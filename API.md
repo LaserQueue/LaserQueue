@@ -41,8 +41,6 @@ The default priority values with names in parentheses are:
 
 
 ### add
-Arguments: name, priority, estimated time, material code
-
 Adds the specified name, priority, etc to the list
 
 #### Sample
@@ -62,8 +60,6 @@ Adds the specified name, priority, etc to the list
 
 
 ### pass
-Arguments: uuid
-
 Moves the specified job below the next job
 
 #### Sample
@@ -79,8 +75,6 @@ Moves the specified job below the next job
 ```
 
 ### remove
-Arguments: uuid
-
 Removes the specified job from the list
 
 #### Sample
@@ -96,8 +90,6 @@ Removes the specified job from the list
 ```
 
 ### move *
-Arguments: uuid, target index, target priority
-
 Moves the specified job to the target index, and the target priority
 
 #### Sample
@@ -116,8 +108,6 @@ Moves the specified job to the target index, and the target priority
 
 
 ### relmove *
-Arguments: uuid, target index
-
 Moves the specified job to the target index in the master index. Out of bounds will default to the bounds.
 
 #### Sample
@@ -135,8 +125,6 @@ Moves the specified job to the target index in the master index. Out of bounds w
 
 
 ### increment *
-Arguments: uuid
-
 Moves the specified job up one job, or if it's at the top of its priority level, up one priority.
 
 #### Sample
@@ -153,8 +141,6 @@ Moves the specified job up one job, or if it's at the top of its priority level,
 
 
 ### decrement *
-Arguments: uuid
-
 Moves the specified job down one job, or if it's at the bottom of its priority level, down one priority.
 
 #### Sample
@@ -171,8 +157,6 @@ Moves the specified job down one job, or if it's at the bottom of its priority l
 
 
 ### attr
-Arguments: uuid, attribute, value
-
 Sets the attribute of job uuid to value. if the config doesn't state that you can do it, you need auth. If it's an auth-requiring action, it applies the Modified gear.
 
 #### Sample
@@ -191,8 +175,6 @@ Sets the attribute of job uuid to value. if the config doesn't state that you ca
 
 
 ### auth
-Arguments: sha1 hash of user-entered password
-
 Enter admin mode if password is correct.
 
 #### Sample
@@ -209,8 +191,6 @@ Enter admin mode if password is correct.
 
 
 ### deauth
-Arguments: N/A
-
 Leave admin mode.
 
 #### Sample
@@ -224,8 +204,6 @@ Leave admin mode.
 
 
 ### null
-Arguments: N/A
-
 Nothing - however, the response will always be an up-to-date queue as JSON. This can be used to refresh the queue.
 
 #### Sample
@@ -238,8 +216,6 @@ Nothing - however, the response will always be an up-to-date queue as JSON. This
 ```
 
 ### shame
-Arguments: N/A
-
 If you had a failed auth attempt, remove yourself from the deauths list to acknowledge that you have displayed a "wrong password" dialog.
 
 #### Sample
@@ -253,8 +229,6 @@ If you had a failed auth attempt, remove yourself from the deauths list to ackno
 
 
 ### refresh *
-Arguments: N/A
-
 Refresh all users. Useful for pushing changes.  
 Dependent upon config.allow_force_refresh.
 
@@ -269,8 +243,6 @@ Dependent upon config.allow_force_refresh.
 
 
 ### uuddlrlrba *
-Arguments: N/A
-
 huehuehue  
 Dependent upon config.easter_eggs.
 
