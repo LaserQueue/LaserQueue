@@ -132,6 +132,7 @@ class Queue:
 					oindex = masterqueue.index(j)
 		if oindex == -1: return
 		if oindex == len(masterqueue)-1: return
+		if oindex >= config["pass_depth"] and not authstate: return
 		target = masterqueue[oindex]
 		for ii in range(len(self.queue)):
 			i = self.queue[ii]
