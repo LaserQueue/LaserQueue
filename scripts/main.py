@@ -98,12 +98,12 @@ def process(data):
 			elif x == "sorry":
 				if data["sid"][:int(len(data["sid"])/2)] in shamed:
 					shamed.remove(data["sid"][:int(len(data["sid"])/2)])
+			elif x == "authfail":
+				shamed.append(data["sid"][:int(len(data["sid"])/2)])
 			else:
 				cprint(bcolors.YELLOW + x)
 			time.sleep(0.2)
 		else:
-			if x is False:
-				shamed.append(data["sid"][:int(len(data["sid"])/2)])
 			return comm.generateData(queue.serialize(), sessions, shamed)
 
 def main():

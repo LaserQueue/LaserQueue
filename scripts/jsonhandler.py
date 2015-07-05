@@ -83,7 +83,8 @@ def uuddlrlrba(**kwargs): return "uuddlrlrba"
 def auth(**kwargs):
 	args, sid, sessions = kwargs["args"], kwargs["sid"], kwargs["sessions"]
 	if config["admin_mode_enabled"]:
-		return sessions.auth(sid, args[0])
+		if not sessions.auth(sid, args[0]):
+			return "authfail"
 
 def parseData(queue, sessions, jdata):
 	commands = [
