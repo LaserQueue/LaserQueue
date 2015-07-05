@@ -1,0 +1,66 @@
+.nuvu-logo {
+	height: 80px;
+	width: auto;
+	margin: 27px;
+	cursor: pointer;
+	transition: transform 0.08s ease-in-out;
+	-webkit-transform-style: preserve-3d;
+	&:hover { transform: scale(1.1); }
+	&:active { transform: scale(0.9); }
+	@media (max-width: 768px) {
+		display: block;
+		width: 100%;
+		margin: 45px auto 20px;
+	}
+}
+
+.control-panel {
+	margin: 20px;
+	display: inline-block;
+}
+
+.btn-pink, .btn-pink:hover, .btn-pink:focus {
+	color: white;
+}
+
+.btn-pink {
+	background: $nuvu-pink;
+	border: 1px solid darken($nuvu-pink, 15%);
+	&:hover, &:focus {
+		background: darken($nuvu-pink, 5%);
+		border: 1px solid darken($nuvu-pink, 15%);
+	}
+	&:active {
+		background: darken($nuvu-pink, 20%) !important;
+		color: white !important;
+		border: 1px solid darken($nuvu-pink, 10%) !important;
+	}
+}
+
+.cut-form-group * {
+	margin-right: 15px;
+}
+
+.form-control {
+	box-shadow: none !important;
+	&:focus {
+		border-color: $nuvu-pink;
+	}
+}
+
+@media (max-width: 768px) {
+	.control-panel {
+		width: 100vw;
+		margin: 0;
+	}
+
+	.new-cut-form {
+		width: 85vw;
+		margin: 15px auto;
+	}
+
+	.new-cut-form { input, select, select option, button {
+		width: 100% !important;
+		margin: 7.5px 7.5px 7.5px 0;
+	}}
+}

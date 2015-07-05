@@ -1,86 +1,111 @@
 import os, sys
 import subprocess, time
-import http.server
-import multiprocessing
 import json
-from http.server import SimpleHTTPRequestHandler
+import atexit
 
-import argparse
-parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument("-p", "--port", help="Port to host from", dest="port",
-	default=80, type=int)
-parser.add_argument("-n", "--regen-host", help="Regenerate host in config", dest="host",
-	action="store_const",const=True,default=False)
-parser.add_argument("-h", "--help", help="Show this help message and exit", dest="help",
-	action="store_const",const=True,default=False)
-parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
-	action="store_const",const=True,default=False)
-parser.add_argument("-q", "--quiet", help="Makes the script not give output", dest="shh",
-	action="store_const",const=True,default=False)
-parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
-	action="store_const",const=True,default=False)
-parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
-	action="store_const",const=True,default=False)
-parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
-	action="store_const",const=True,default=False)
-parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
-	action="store_const",const=True,default=False)
-args = parser.parse_args()
-
-if args.help:
-	parser.print_help()
-	quit()
+from scripts.parseargv import args
+from scripts.config import *
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
+os.chdir(selfpath)
 
-def startfrontend():
-	http.server.test(HandlerClass=SimpleHTTPRequestHandler, port=args.port)
+def initFile(path, data=""):
+	if not os.path.exists(path):
+		newfile = open(path, "w")
+		newfile.write(data)
+		newfile.close()
+
+def gPopen(cmd, stdin=None, stdout=None, stderr=None):
+	if os.name == "nt":
+		return subprocess.Popen(["py", "-3"] + cmd, stdin, stdout, stderr)
+	else:
+		return subprocess.Popen(["python3"] + cmd, stdin, stdout, stderr)
+
+def gSystem(cmd):
+	if os.name == "nt":
+		return os.system("py -3 "+cmd)
+	else:
+		return os.system("python3 "+cmd)
+
+def cleanup(): 
+	try: backend.kill()
+	except: pass
+	try: frontend.kill()
+	except: pass
+
+class dummyProcess:
+	def __init__(self):
+		self.returncode = None
+	def kill(self):
+		pass
+
+atexit.register(cleanup) 
 
 if __name__ == "__main__":
-	os.chdir(selfpath)
-	if args.shh:
-		newargs = " ".join([i for i in sys.argv[1:] if i != "-q"])
-		os.system("cd "+selfpath+"; ./start.sh {0} >/dev/null".format(newargs))
-		quit()
+	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
+	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
+	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
+	initFile(os.path.join(selfpath, "www", "infotext.md"))
 
-	if os.name != "nt" and os.geteuid():
-		temppath = os.path.join(os.path.sep, "tmp")
-		if not os.path.exists(os.path.join(temppath, "topage.json")):
-			open(os.path.join(temppath, "topage.json"), "w").close()
-		if not os.path.exists(os.path.join(temppath, "toscript.json")):
-			open(os.path.join(temppath, "toscript.json"), "w").close()
-		if not os.path.exists(os.path.join(selfpath, "backend", "cache.json")):
-			json.dump([], open(os.path.join(selfpath, "backend", "cache.json"), "w"))
-		if not os.path.exists(os.path.join(selfpath, "backend", "scache.json")):
-			json.dump({}, open(os.path.join(selfpath, "backend", "scache.json"), "w"))
-		if not os.path.exists(os.path.join(selfpath, "www", "config.json")):
-			json.dump({}, open(os.path.join(selfpath, "www", "config.json"), "w"))
+	cprintconf.color = bcolors.CYAN
+	cprintconf.name = "Setup"
+	os.chdir("scripts")
+	cprint("Beginning initialization.")
+	initcode = gSystem("initialize.py "+" ".join(sys.argv[1:]))
+	if initcode:
+		if initcode == 2560:
+			os.chdir("..")
+			cprint("Update successful! Restarting server...\n\n\n")
+			quit(gSystem("start.py "+" ".join(sys.argv[1:]))/256)
+		else:
+			quit(initcode/256)
 
-	if os.name != "nt" and os.geteuid() and args.port < 1024:
-		prompt = """\"Root required on ports up to 1023, enter your password to elevate permissions.
-(Use --port PORT to change ports.)
-Password: \""""
-		os.system("sudo -p "+prompt+" ./start.sh "+" ".join(sys.argv[1:]))
-		quit()
+	argvs = [i for i in sys.argv[1:] if i != "-q"]
+	FNULL = open(os.devnull, 'w')
 
-	os.chdir(os.path.join(os.getcwd(), "backend"))
-	os.system("python3 initialize.py "+" ".join(sys.argv[1:]))
+	output = FNULL if args.shh else None
 
-	os.chdir(os.path.join(os.getcwd(), "..", "www"))
-	frontend = multiprocessing.Process(target = startfrontend)
-	frontend.start()
+	backend_port = int(Config(os.path.join("..","www","config.json"))["port"])
 
-	time.sleep(0.1)
+	load_frontend = (args.load_frontend or (not args.load_frontend and not args.load_backend)) and not args.load_none
+	load_backend = (args.load_backend or (not args.load_frontend and not args.load_backend)) and not args.load_none
 
-	os.chdir(os.path.join(os.getcwd(), "..", "backend"))
-	backend_server = subprocess.Popen(["python3", "server.py"]+sys.argv[1:])
-	backend_main = subprocess.Popen(["python3", "main.py"]+sys.argv[1:])
 
+	if load_backend:
+		if os.name != "nt" and os.geteuid() and backend_port < 1024:
+			cprintconf.color = bcolors.BLUE
+			cprintconf.name = "Backend"
+			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
+			          (Edit config.json to change ports.)""")
+			backend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "main.py"]+argvs, stdout=output, stderr=output)
+		else:
+			backend = gPopen(["main.py"]+argvs, stdout=output, stderr=output)
+	else:
+		backend = dummyProcess()
+
+	time.sleep(0.5)
+
+	os.chdir(os.path.join("..", "www"))
+	if load_frontend:
+		if os.name != "nt" and os.geteuid() and args.port < 1024:
+			cprintconf.color = bcolors.PURPLE
+			cprintconf.name = "HTTP"
+			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
+			          (Use --port PORT to change ports.)""")
+			frontend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
+		else:
+			frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
+	else:
+		frontend = dummyProcess()
 	
-	while not backend_server.returncode and not backend_main.returncode: time.sleep(0.001)
-	kill_server = subprocess.Popen(['kill', str(backend_server.pid), "1>/dev/null"])
-	kill_main = subprocess.Popen(['kill', str(backend_main.pid), "1>/dev/null"])
-	while not kill_server.returncode and not kill_main.returncode: time.sleep(0.001)
-	frontend.terminate()
+	try:
+		while not backend.returncode and not frontend.returncode and not args.load_none: time.sleep(0.001)
+	except KeyboardInterrupt:
+		print()
+		cprintconf.color = bcolors.RED
+		cprintconf.name = "Cleanup"
+		cprint("Keyboard interrupt recieved, exiting.")
+	finally:
+		quit(0)
 	
 

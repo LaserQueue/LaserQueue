@@ -1,0 +1,6 @@
+{
+	// add rules from http://jscs.info/rules.html
+	"disallowCapitalizedComments": true,
+	"disallowAnonymousFunctions": true,
+	"validateIndentation": "\t"
+}
