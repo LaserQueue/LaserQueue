@@ -25,6 +25,13 @@ def _concatlist(lists):
 def _fillblanks(odict, adict):
 	return dict(adict, **odict)
 
+class QueueObject(dict):
+	def serialize(self):
+		obj = dict(self)
+		del obj["sid"]
+		return obj
+
+
 class Queue:
 	requiredtags = {
 		"priority":0,
@@ -40,12 +47,18 @@ class Queue:
 	def __init__(self):
 		self.queue = [[] for i in config["priorities"]]
 
+	@staticmethod
+	def convert(queue):
+		return [[QueueObject(j) for j in i] for i in queue]
+
+
 	@classmethod
 	def load(cls, fileobj):
 		jdata = json.load(fileobj)
 		self = cls()
 		if type(jdata) is not list:
 			return self
+		jdata = Queue.convert(jdata)
 		if len(jdata) != len(config["priorities"]):
 			if len(jdata) > len(config["priorities"]):
 				self.queue = jdata[:len(config["priorities"])]
@@ -57,8 +70,11 @@ class Queue:
 			i = self.queue[ii]
 			for item in i:
 				item["priority"] = ii
-				item = _fillblanks(item, Queue.requiredtags)
+				item = QueueObject(_fillblanks(item, Queue.requiredtags))
 		return self
+
+	def serialize(self):
+		return [[j.serialize() for j in i] for i in self.queue]
 
 	def metapriority(self):
 		for i in self.queue:
@@ -102,7 +118,7 @@ class Queue:
 			name = name.title()
 
 		if not inqueue or config["allow_multiples"]:
-			self.queue[lpri-priority].append({
+			self.queue[lpri-priority].append(QueueObject({
 				"totaldiff": 0,
 				"priority": lpri-priority,
 				"name": name.strip().rstrip(),
@@ -112,7 +128,7 @@ class Queue:
 				"uuid": str(uuid.uuid1()),
 				"sid": sid,
 				"time": time.time()
-			})
+			}))
 
 	def remove(self, **kwargs):
 		args = kwargs["args"]

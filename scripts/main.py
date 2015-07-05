@@ -77,37 +77,34 @@ def serve():
 def process(data):
 	global queue, shamed, sessions
 	if data:
-		try:
-			queue.metapriority()
-			x = comm.parseData(queue, sessions, data)
-			if "action" in data and data["action"] != "null":
-				sessions.update()
-				if args.backup:
-					json.dump(queue.queue, open("cache.json", "w"), indent=2)
-					sids.cache(sessions)
-			if x and type(x) is str:
-				if x == "uuddlrlrba":
-					if config["easter_eggs"]:
-						serveToAllConnections({"action":"rickroll"})
-					else:
-						cprint(bcolors.YELLOW + "This is a serious establishment, son. I'm dissapointed in you.")
-				elif x == "refresh":
-					if config["allow_force_refresh"]:
-						serveToAllConnections({"action":"refresh"})
-					else:
-						cprint(bcolors.YELLOW + "Force refresh isn't enabled. (config.json, allow_force_refresh)")
-				elif x == "sorry":
-					if data["sid"][:int(len(data["sid"])/2)] in shamed:
-						shamed.remove(data["sid"][:int(len(data["sid"])/2)])
+		queue.metapriority()
+		x = comm.parseData(queue, sessions, data)
+		if "action" in data and data["action"] != "null":
+			sessions.update()
+			if args.backup:
+				json.dump(queue.queue, open("cache.json", "w"), indent=2)
+				sids.cache(sessions)
+		if x and type(x) is str:
+			if x == "uuddlrlrba":
+				if config["easter_eggs"]:
+					serveToAllConnections({"action":"rickroll"})
 				else:
-					cprint(bcolors.YELLOW + x)
-				time.sleep(0.2)
+					cprint(bcolors.YELLOW + "This is a serious establishment, son. I'm dissapointed in you.")
+			elif x == "refresh":
+				if config["allow_force_refresh"]:
+					serveToAllConnections({"action":"refresh"})
+				else:
+					cprint(bcolors.YELLOW + "Force refresh isn't enabled. (config.json, allow_force_refresh)")
+			elif x == "sorry":
+				if data["sid"][:int(len(data["sid"])/2)] in shamed:
+					shamed.remove(data["sid"][:int(len(data["sid"])/2)])
 			else:
-				if x is False:
-					shamed.append(data["sid"][:int(len(data["sid"])/2)])
-				return comm.generateData(queue, sessions, shamed)
-		except Exception as e: 
-			cprint(bcolors.YELLOW + str(e))
+				cprint(bcolors.YELLOW + x)
+			time.sleep(0.2)
+		else:
+			if x is False:
+				shamed.append(data["sid"][:int(len(data["sid"])/2)])
+			return comm.generateData(queue.serialize(), sessions, shamed)
 
 def main():
 	global queue, shamed, sessions

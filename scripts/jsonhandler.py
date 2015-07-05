@@ -106,7 +106,7 @@ def parseData(queue, sessions, jdata):
 
 def generateData(queue, sessions, shamed):
 	jdata = {}
-	jdata["queue"] = queue.queue
+	jdata["queue"] = queue
 	jdata["action"] = "display"
 	jdata["auths"] = sessions.cutauths()
 	jdata["deauths"] = shamed
