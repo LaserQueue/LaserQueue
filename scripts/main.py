@@ -103,8 +103,7 @@ def process(data):
 			else:
 				cprint(bcolors.YELLOW + x)
 			time.sleep(0.2)
-		else:
-			return comm.generateData(queue.serialize(), sessions, shamed)
+		return comm.generateData(queue.serialize(), sessions, shamed)
 
 def main():
 	global queue, shamed, sessions
