@@ -162,8 +162,6 @@ class Queue:
 					i.remove(j)
 		if not target: return
 
-		masterqueue = _concatlist(self.queue)
-
 		if nindex <= 0:
 			bpri = masterqueue[0]["priority"]
 			bind = 0

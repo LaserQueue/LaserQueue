@@ -47,7 +47,6 @@ def server(websocket, path):
 			if "action" in messagedata:
 				if messagedata["action"] not in ["null", "auth"]:
 					cprint(message)
-					cprint("Saving message.")
 				data = process(messagedata)
 				if websocket.open and data:
 					yield from websocket.send(json.dumps(data))
