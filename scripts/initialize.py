@@ -134,6 +134,7 @@ to use the new version.\n")
 
 				repo.git.fetch("--all")
 				repo.git.reset("--hard", "origin/master")
+				json.dump(config, open(os.path.join("..", "www", "config.json"), "w"))
 
 				quit(10)
 	except Exception as e: 
