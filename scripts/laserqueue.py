@@ -32,6 +32,13 @@ class QueueObject(dict):
 		return obj
 
 
+def getIByU(l, u):
+	for ii in range(len(l)):
+		i = l[ii]
+		if i["uuid"] == u:
+			return ii
+	raise ValueError("No such tag!")
+
 class Queue:
 	requiredtags = {
 		"priority":0,
@@ -177,7 +184,7 @@ class Queue:
 					target = deepcopy(j)
 					i.remove(j)
 		if not target: return
-
+		masterqueue = _concatlist(self.queue)
 		if nindex <= 0:
 			bpri = masterqueue[0]["priority"]
 			bind = 0
@@ -187,7 +194,7 @@ class Queue:
 		else:
 			btarget = masterqueue[nindex-1]
 			bpri = btarget["priority"]
-			bind = self.queue[bpri].index(btarget)+1
+			bind = getIByU(self.queue[bpri], btarget["uuid"])+1
 
 		target["time"] = time.time()
 		target["priority"] = bpri
