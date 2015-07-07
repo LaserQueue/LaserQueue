@@ -28,7 +28,7 @@ def _fillblanks(odict, adict):
 class QueueObject(dict):
 	def serialize(self):
 		obj = dict(self)
-		del obj["sid"]
+		obj["sid"] = obj["sid"][:int(len(obj["sid"])/2)]
 		return obj
 
 
