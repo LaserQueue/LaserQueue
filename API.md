@@ -5,6 +5,9 @@ This overview describes the API that binds the frontend and backend of the Laser
 ## Communication
 Communication will be between some frontend user interface and the backend server using WebSockets. By default, we use port 8763 for this. Our frontend has a function, `socketSend()` that can be used to send things over WebSockets. It automatically adds the SID.
 
+## Configuration
+Our backend and frontend pull configuration info from a file, `www/config.json`. This file is created based on `www/defaultconf.json` by the backend server if it does not exist. It consists of JSON key-object pairs. Most should be self-explanatory. Some values, such as the version number and repository, should *not* be edited without a high level of knowledge. These files are in the `www/` directory so that they are accessible to the frontend over HTTP.
+
 ## Data format
 JSON formatted as follows:
 ```
