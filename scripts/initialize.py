@@ -43,7 +43,7 @@ def copyconf(dataoverride = False):
 		userdata = json.load(open(os.path.join("..", "www", "userconf.json")))
 	else:
 		userdata = {}
-	data = dict(currdata, **dict(data, **userdata))
+	data = dict(dict(data, **userdata), **currdata)
 	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
 
 PACKAGES = [
