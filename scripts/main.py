@@ -47,6 +47,12 @@ def server(websocket, path):
 			if "action" in messagedata:
 				if messagedata["action"] not in ["null", "auth"]:
 					cprint(message)
+				elif messagedata["action"] == "auth":
+					displaymessage = json.loads(message)
+					if "args" in displaymessage and len(displaymessage["args"]) > 0:
+						passwordsecret = "*"*len(displaymessage["args"][0])
+						displaymessage["args"] = [passwordsecret]
+					cprint(json.dumps(displaymessage, sort_keys=True))
 				data = process(messagedata)
 				if websocket.open and data:
 					yield from websocket.send(json.dumps(data))
