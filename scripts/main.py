@@ -55,7 +55,7 @@ def server(websocket, path):
 					cprint(json.dumps(displaymessage, sort_keys=True))
 				data = process(messagedata)
 				if websocket.open and data:
-					yield from websocket.send(json.dumps(data))
+					yield from websocket.send(json.dumps(data, sort_keys=True))
 							
 		except Exception as e: 
 			cprint(bcolors.YELLOW + str(e))
@@ -65,7 +65,7 @@ def serveGen(jdata):
 	global socks
 	for i in socks:
 		if i.open:
-			yield from i.send(json.dumps(jdata))
+			yield from i.send(json.dumps(jdata, sort_keys=True))
 
 def serveToAllConnections(jdata):
 	list(serveGen(jdata))
@@ -88,7 +88,7 @@ def process(data):
 		if "action" in data and data["action"] != "null":
 			sessions.update()
 			if args.backup:
-				json.dump(queue.queue, open("cache.json", "w"), indent=2)
+				json.dump(queue.queue, open("cache.json", "w"), indent=2, sort_keys=True)
 				sids.cache(sessions)
 		if x and type(x) is str:
 			if x == "uuddlrlrba":

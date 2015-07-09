@@ -137,7 +137,7 @@ class SIDCache:
 		self._get(uuid).newnull()
 
 def cache(sids):
-	json.dump(sids.serialize(), open("scache.json", "w"), indent=2)
+	json.dump(sids.serialize(), open("scache.json", "w"), indent=2, sort_keys=True)
 
 def loadcache():
 	try:

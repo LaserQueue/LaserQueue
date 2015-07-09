@@ -44,7 +44,7 @@ def copyconf(dataoverride = False):
 	else:
 		userdata = {}
 	data = dict(dict(data, **userdata), **currdata)
-	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
+	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
 
 PACKAGES = [
 	"websockets",
@@ -134,7 +134,7 @@ to use the new version.\n")
 
 				repo.git.fetch("--all")
 				repo.git.reset("--hard", "origin/master")
-				json.dump(config, open(os.path.join("..", "www", "config.json"), "w"))
+				json.dump(config, open(os.path.join("..", "www", "config.json"), "w"), sort_keys=True)
 
 				quit(10)
 	except Exception as e: 
@@ -149,11 +149,11 @@ def main():
 	if args.host:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		data["host"] = getIps()[0]
-		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
+		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
 	if args.local:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		data["host"] = "localhost"
-		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
+		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
 	else:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		if "host" in data and data["host"] == "localhost":
@@ -163,13 +163,13 @@ def main():
 				confirm = cinput("Do you want to regenerate the host? (y/n) ").lower().strip().rstrip()
 			if confirm == "y":
 				data["host"] = getIps()[0]
-			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
+			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
 	data = json.load(open(os.path.join("..", "www", "config.json")))
 	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
 	if "host" not in data:
 		data["host"] = getIps()[0]
 	data["version"] = defaultdata["version"]
-	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2)
+	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
 
 	update()
 				
