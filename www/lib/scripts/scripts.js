@@ -8,6 +8,7 @@
 @@include('../../bower_components/js-sha1/build/sha1.min.js')
 @@include('../../bower_components/marked/marked.min.js')
 @@include('../../bower_components/draggabilly/dist/draggabilly.pkgd.min.js')
+@@include('../../bower_components/bootbox/bootbox.js')
 @@include('konami.js')
 @@include('prism.js')
 @@include('jquery.popconfirm.js')
