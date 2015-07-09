@@ -35,17 +35,25 @@ $('.btn-submit').click(function submitForm(clickAction) {
 	socketSend({
 			'action': 'add',
 			'args': [
-				$('.cut-human-name').val(), 
-				+$('.priority-dropdown').val(), 
-				+estimate[0], 
+				$('.cut-human-name').val(),
+				+$('.priority-dropdown').val(),
+				+estimate[0],
 				$('.cut-material').val()
 			]
 		});
 	resetForm($('.new-cut-form'));
 	$('.cut-human-name').focus();
-	
+
 });
 
+// bind ESC key to hide all dialogs
+$(document).keyup(function hideAllDialogs(e) {
+	if (e.keyCode == 27) {
+		bootbox.hideAll();
+	}
+});
+
+// ready the konami
 $(document).ready(function loadKonami() {
 	var easterEgg = new Konami();
 	easterEgg.code = function rickRollUser() {

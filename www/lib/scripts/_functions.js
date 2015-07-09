@@ -170,9 +170,25 @@ function populateActions() {
 
 // displays message in a bootstrap modal
 function modalMessage(modalTitle, modalBody) {
-	$('.notify-modal-title').html(modalTitle);
-	$('.notify-modal-body').html(modalBody);
-	$('#notify-modal').modal();
+	// hide all dialogs up
+	bootbox.hideAll();
+
+	// show the dialog with message and title
+	bootbox.dialog({
+		title: modalTitle,
+		message: modalBody
+	});
+
+	// spoof our homebaked old modalMessage()
+	$('.bootbox').attr('id', 'notify-modal');
+	$('.modal-title').addClass('notify-modal-title');
+	$('.modal-title').attr('id', 'notify-modal-label');
+	$('.modal-body').addClass('notify-modal-body');
+
+	// bind clicking background to hide modal
+	$('.bootbox').click(function bgClickHideModals() {
+		bootbox.hideAll();
+	});
 }
 
 // reset a form with thanks to http://stackoverflow.com/questions/680241/resetting-a-multi-stage-form-with-jquery
