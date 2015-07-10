@@ -272,9 +272,20 @@ This will be returned by the null action, or most calls that change the queue. T
 ```
 {
 	"action": "display"
-	"queue": the queue object.
-	"auths": a list of the first halves of every auth'd sid.
-	"deauths": a list of the first halves of every sid that failed to auth.
+	"queue": <the queue object as List>.
+	"auths": <the first halves of every authed sid as List>
+	"deauths": <the first halves of every sid that failed to auth as List>
+}
+```
+
+### Display modal
+Displays a modal based on the packet.
+
+```
+{
+	"action": "notification"
+	"title": <the modal title as Str>
+	"text": <the modal body as Str>
 }
 ```
 
@@ -289,7 +300,7 @@ Dependent upon `config.allow_force_refresh`. The frontend should refresh itself 
 ```
 
 ### Rickroll everyone.
-The title says it all. Dependent upon config.easter_eggs
+The title says it all. Dependent upon `config.easter_eggs`.
 ```
 {
 	"action":"rickroll"
