@@ -88,5 +88,6 @@
 	"name_header": "Name",
 	"material_header": "Material",
 	"time_header": "Est. Time",
-	"priority_header": "Priority"
+	"priority_header": "Priority",
+	"send_notifications": true
 }

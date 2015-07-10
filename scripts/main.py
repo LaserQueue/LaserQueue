@@ -58,7 +58,13 @@ def server(websocket, path):
 					yield from websocket.send(json.dumps(data, sort_keys=True))
 							
 		except Exception as e: 
-			cprint(bcolors.YELLOW + str(e))
+			cprint(bcolors.YELLOW + "{0}: {1}".format(e.__name__, str(e))
+			if config["send_notifications"]:
+				yield from websocket.send(json.dumps({
+						"action": "notification",
+						"title": e.__name__,
+						"text": str(e)
+					}, sort_keys = True))
 	socks.remove(websocket)
 			
 def serveGen(jdata):
