@@ -9,6 +9,9 @@ function onAuth() {
 	$('.disabled').prop('disabled', false);
 	$('.authorize').attr('data-original-title', config.logout);
 	$('.nuvu-logo').attr('src', '/dist/img/admin-logo.svg');
+	if (!addEnabled) {
+		$('.cut-form-group').show();
+	}
 }
 
 function onFailedauth() {
@@ -26,5 +29,8 @@ function onDeauth() {
 	$('.nuvu-logo').attr('src', '/dist/img/logo.svg');
 	if (config.authactions.indexOf('relmove') != -1) {
 		$(draggable).draggabilly('disable');
+	}
+	if (!addEnabled) {
+		$('.cut-form-group').hide();
 	}
 }

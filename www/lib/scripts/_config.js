@@ -1,7 +1,7 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, SID, buttons,
+var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, SID, buttons, addEnabled,
 		authed = false,
 		allCuts = [],
 		displayEl = {},
@@ -64,6 +64,11 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	reconnectRate = config.reconnectRate;
 
 	easterEggs = config.easter_eggs;
+
+	addEnabled = (config.authactions.indexOf('add') == -1);
+	if (!addEnabled) {
+		$('.cut-form-group').hide();
+	}
 
 	// render the materials dropdown
 	if (!config.default_material) {
