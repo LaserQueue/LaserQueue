@@ -150,7 +150,7 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 						logText('Password entered. Attempting auth.');
 						socketSend({
 							'action': 'auth',
-							'pass': sha1($('#password').val())
+							'pass': sha256($('#password').val())
 						});
 
 					}

@@ -4,7 +4,7 @@
 @@include('../../bower_components/jquery/dist/jquery.min.js')
 @@include('../../bower_components/bootstrap/dist/js/bootstrap.min.js')
 @@include('../../bower_components/transparency/dist/transparency.min.js')
-@@include('../../bower_components/js-sha1/build/sha1.min.js')
+@@include('../../bower_components/fast-sha256/sha256.min.js')
 @@include('../../bower_components/marked/marked.min.js')
 @@include('../../bower_components/draggabilly/dist/draggabilly.pkgd.min.js')
 @@include('../../bower_components/bootbox/bootbox.js')
