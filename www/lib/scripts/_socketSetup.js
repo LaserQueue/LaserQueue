@@ -9,6 +9,7 @@ function socketSetup() { // god help me
 	// when websockets connects
 	socket.onopen = function handleSocketOpen() {
 		// print to log and consoles
+		onDeauth();
 		logText('WebSockets connection opened successfully');
 
 		$('#notify-modal').modal('hide');
