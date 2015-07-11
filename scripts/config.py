@@ -78,7 +78,24 @@ class WalkingConfig(Config):
 
 
 
+import asyncio
+def serveGen(jdata, socks):
+	for i in socks:
+		if i.open:
+			yield from i.send(json.dumps(jdata, sort_keys=True))
 
+def serveToConnections(jdata, socks):
+	list(serveGen(jdata, socks))
+
+def serveTo(jdata, ws):
+	if ws.open:
+		yield from ws.send(json.dumps(jdata, sort_keys=True))
+
+def serveToConnection(jdata, ws):
+	list(serveTo(jdata, ws))
+
+def getsec(ws):
+	return dict(ws.raw_request_headers)['Sec-WebSocket-Key']
 
 
 
@@ -123,7 +140,6 @@ class colorconf:
 		self.name = "Generic"
 
 cprintconf = colorconf()
-
 
 lastprinted = None
 

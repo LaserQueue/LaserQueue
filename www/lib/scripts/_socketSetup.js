@@ -42,16 +42,6 @@ function socketSetup() { // god help me
 
 				// reinitialize full list of cuts
 				allCuts = [];
-
-				if (config.admin_mode_enabled) {
-					if (jsonData.auths.indexOf(SID.substring(0, 18)) < 0 && authed) {
-						onDeauth();
-					} else if (jsonData.auths.indexOf(SID.substring(0, 18)) >= 0 && !authed) {
-						onAuth();
-					} else if (jsonData.deauths.indexOf(SID.substring(0, 18)) >= 0 && !authed) {
-						onFailedauth();
-					}
-				}
 				// for each priority in list
 				$(jsonData.queue).each(function loopThroughCuts(index, el) {
 
@@ -83,7 +73,13 @@ function socketSetup() { // god help me
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
-			} else if(jsonData.action == 'rickroll') {
+			} else if (jsonData.action == 'authed' && config.admin_mode_enabled && !authed) {
+				onAuth();
+			} else if (jsonData.action == 'authfailed' && config.admin_mode_enabled && !authed) {
+				onFailedauth();
+			} else if (jsonData.action == 'deauthed' && config.admin_mode_enabled && authed) {
+				onDeauth();
+			} else if(jsonData.action == 'rickroll' && config.easter_eggs) {
 				rickRoll();
 			} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
 				window.location.reload();

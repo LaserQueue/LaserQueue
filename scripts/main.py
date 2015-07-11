@@ -7,15 +7,22 @@ import jsonhandler as comm
 import sidhandler as sids
 
 import json
-import os
-import time
-import asyncio
-import websockets
+import os, time
+import asyncio, websockets
+import atexit, multiprocessing
 
 from parseargv import args
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
+
+def cleanup():
+	global upkeepThread
+	try:
+		upkeepThread.terminate()
+	except:
+		pass
+atexit.register(cleanup)
 
 class Sockets:
 	def __init__(self):
@@ -25,20 +32,21 @@ class Sockets:
 	def append(self, obj):
 		self.sockets.append(obj)
 	def remove(self, obj): 
-		key = dict(obj.raw_request_headers)['Sec-WebSocket-Key']
+		key = getsec(obj)
 		get = self.get(key)
 		if get: self.sockets.remove(get)
 	def get(self, key):
 		for i in self.sockets:
-			if dict(i.raw_request_headers)['Sec-WebSocket-Key'] == key:
+			if getsec(key) == key:
 				return i
 
 socks = Sockets()
 
 @asyncio.coroutine
 def server(websocket, path):
-	global socks
+	global queue, socks
 	socks.append(websocket)
+	serveToConnection(comm.generateData(queue.serialize()), websocket)
 	while True:
 		message = yield from websocket.recv()
 		if not message: break
@@ -49,77 +57,54 @@ def server(websocket, path):
 					cprint(message)
 				elif messagedata["action"] == "auth":
 					displaymessage = json.loads(message)
-					if "args" in displaymessage and len(displaymessage["args"]) > 0:
-						passwordsecret = "*"*len(displaymessage["args"][0])
-						displaymessage["args"] = [passwordsecret]
+					if "args" in displaymessage and len(displaymessage["args"]):
+						displaymessage["args"] = ["*"*len(displaymessage["args"][0])]
 					cprint(json.dumps(displaymessage, sort_keys=True))
-				data = process(messagedata)
-				if websocket.open and data:
-					yield from websocket.send(json.dumps(data, sort_keys=True))
-							
+				process(messagedata, websocket)
 		except Exception as e: 
-			cprint(bcolors.YELLOW + "{0}: {1}".format(e.__name__, str(e)))
+			cprint(bcolors.YELLOW + "{}: {}".format(type(e).__name__, str(e)))
 			if config["send_notifications"]:
-				yield from websocket.send(json.dumps({
+				serveToConnection({
 						"action": "notification",
-						"title": e.__name__,
+						"title": type(e).__name__,
 						"text": str(e)
-					}, sort_keys = True))
+					}, websocket)
 	socks.remove(websocket)
-			
-def serveGen(jdata):
-	global socks
-	for i in socks:
-		if i.open:
-			yield from i.send(json.dumps(jdata, sort_keys=True))
 
-def serveToAllConnections(jdata):
-	list(serveGen(jdata))
-
-def serve():
-	cprint("Serving WebSockets on 0.0.0.0 port "+config["port"]+" ...")
-	start_server = websockets.serve(hello, "0.0.0.0", config['port'])
-	loop = asyncio.get_event_loop()
-	try:
-		loop.run_until_complete(start_server)
-		loop.run_forever()
-	except KeyboardInterrupt:
-		quit(0)
-
-def process(data):
-	global queue, shamed, sessions
+def process(data, ws):
+	global queue, sessions, socks, queuehash
 	if data:
-		queue.metapriority()
-		x = comm.parseData(queue, sessions, data)
+		x = comm.parseData(queue, ws, socks, sessions, data)
 		if "action" in data and data["action"] != "null":
-			sessions.update()
 			if args.backup:
 				json.dump(queue.queue, open("cache.json", "w"), indent=2, sort_keys=True)
 				sids.cache(sessions)
 		if x and type(x) is str:
-			if x == "uuddlrlrba":
-				if config["easter_eggs"]:
-					serveToAllConnections({"action":"rickroll"})
-				else:
-					cprint(bcolors.YELLOW + "This is a serious establishment, son. I'm dissapointed in you.")
-			elif x == "refresh":
-				if config["allow_force_refresh"]:
-					serveToAllConnections({"action":"refresh"})
-				else:
-					cprint(bcolors.YELLOW + "Force refresh isn't enabled. (config.json, allow_force_refresh)")
-			elif x == "sorry":
-				if data["sid"][:int(len(data["sid"])/2)] in shamed:
-					shamed.remove(data["sid"][:int(len(data["sid"])/2)])
-			elif x == "authfail":
-				shamed.append(data["sid"][:int(len(data["sid"])/2)])
-			else:
-				cprint(bcolors.YELLOW + x)
-			time.sleep(0.2)
-		return comm.generateData(queue.serialize(), sessions, shamed)
+			serveToConnection(json.dumps({
+					"action": "notification",
+					"title": "Failed to process data",
+					"text": x
+				}, sort_keys = True), ws)
+			cprint(bcolors.YELLOW + x)
+		if queuehash != hash(str(queue.queue)):
+			queuehash = hash(str(queue.queue))
+			serveToConnections(comm.generateData(queue.serialize()), socks)
+
+def upkeep():
+	global queue, authed, sessions
+	while True:
+		sessions.update()
+		newauths = sessions.allauth()
+		if authed != newauths:
+			deauthed = [i for i in authed if i not in newauths]
+			authed = sessions.allauth()
+			for i in deauthed:
+				ws = socks[sessions._get(i, None).seckey]
+				serveToConnection({"action":"deauthed"}, ws)
+		time.sleep(config["refreshRate"]/1000)
 
 def main():
-	global queue, shamed, sessions
-	shamed = []
+	global queue, authed, sessions, queuehash, upkeepThread
 	if args.backup:
 		if os.path.exists("cache.json"):
 			queue = laserqueue.Queue.load(open("cache.json"))
@@ -129,7 +114,13 @@ def main():
 	else:
 		queue = laserqueue.Queue()
 		sessions = sids.SIDCache()
+	authed = sessions.allauth()
+	queuehash = hash(str(queue.queue))
 	cprint("Serving WebSockets on 0.0.0.0 port "+config["port"]+" ...")
+
+	upkeepThread = multiprocessing.Process(target=upkeep)
+	upkeepThread.start()
+
 	start_server = websockets.serve(server, "0.0.0.0", config['port'])
 	loop = asyncio.get_event_loop()
 	try:

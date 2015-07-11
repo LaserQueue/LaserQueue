@@ -22,7 +22,7 @@ def _comparetypes(args, expected):
 class any_type: pass 
 class any_number: pass 
 
-def runSocketCommand(commandlist, jdata, sessions):
+def runSocketCommand(commandlist, ws, socks, sessions, jdata):
 	if "action" not in jdata: 
 		return "Action missing!"
 	if "sid" not in jdata:
@@ -34,7 +34,7 @@ def runSocketCommand(commandlist, jdata, sessions):
 		args = jdata["args"]
 	else:
 		args = None
-	authstate = sessions.check(sid)
+	authstate = sessions.check(sid, getsec(ws))
 
 	if action in config["authactions"] and not authstate: 
 		return "This action requires auth."
@@ -42,7 +42,7 @@ def runSocketCommand(commandlist, jdata, sessions):
 	cmds = {str(i): i for i in commandlist}
 
 	if action in cmds and (not cmds[action].args or args):
-		return cmds[action].run(args=args, authstate=authstate, sid=sid, sessions=sessions)
+		return cmds[action].run(args=args, authstate=authstate, sid=sid, sessions=sessions, ws=ws, sockets=socks)
 	elif not args: 
 		return "Args missing!"
 	else:
@@ -68,29 +68,41 @@ class SocketCommand:
 				return "Expected "+str(self.args)+", received "+str(_typelist(args))
 		return self.method(**kwargs)
 
-
 # Non-queue functions
 def null(**kwargs): 
-	sid, sessions = kwargs["sid"], kwargs["sessions"]
-	sessions.newnull(sid)
+	sid, sessions, sec = kwargs["sid"], kwargs["sessions"], getsec(kwargs["ws"])
+	sessions.newnull(sid, sec)
 	sessions.update()
 def deauth(**kwargs): 
-	sid, sessions = kwargs["sid"], kwargs["sessions"]
-	sessions.deauth(kwargs["sid"])
-def shame(**kwargs): return "sorry"
-def refresh(**kwargs): return "refresh"
-def uuddlrlrba(**kwargs): return "uuddlrlrba"
+	sid, sessions, ws = kwargs["sid"], kwargs["sessions"], kwargs["ws"]
+	sec = getsec(ws)
+	sessions.deauth(kwargs["sid"], sec)
+	serveToConnection({"action":"deauthed"}, ws)
+def refresh(**kwargs): 
+	socks = kwargs["sockets"]
+	if config["allow_force_refresh"]:
+		serveToConnections({"action":"refresh"}, socks)
+	else:
+		cprint(bcolors.YELLOW + "Force refresh isn't enabled. (config.json, allow_force_refresh)")
+def uuddlrlrba(**kwargs):
+	socks = kwargs["sockets"]
+	if config["easter_eggs"]:
+		serveToAllConnections({"action":"rickroll"}, socks)
+	else:
+		cprint(bcolors.YELLOW + "This is a serious establishment, son. I'm dissapointed in you.")
 def auth(**kwargs):
-	args, sid, sessions = kwargs["args"], kwargs["sid"], kwargs["sessions"]
+	args, sid, sessions, ws = kwargs["args"], kwargs["sid"], kwargs["sessions"], kwargs["ws"]
+	sec = getsec(ws)
 	if config["admin_mode_enabled"]:
-		if not sessions.auth(sid, args[0]):
-			return "authfail"
+		if sessions.auth(sid, sec, args[0]):
+			serveToConnection({"action":"authed"}, ws)
+		else:
+			serveToConnection({"action":"authfailed"}, ws)
 
-def parseData(queue, sessions, jdata):
+def parseData(queue, ws, socks, sessions, jdata):
 	commands = [
 		SocketCommand("null", null, None),
 		SocketCommand("deauth", deauth, None),
-		SocketCommand("shame", shame, None),
 		SocketCommand("refresh", refresh, None),
 		SocketCommand("uuddlrlrba", uuddlrlrba, None),
 		SocketCommand("auth", auth, [str]),
@@ -103,22 +115,9 @@ def parseData(queue, sessions, jdata):
 		SocketCommand("decrement", queue.decrement, [str]),
 		SocketCommand("attr", queue.attr, [str, str, any_type])
 	]
-	return runSocketCommand(commands, jdata, sessions)
+	return runSocketCommand(commands, ws, socks, sessions, jdata)
 
-def generateData(queue, sessions, shamed):
-	jdata = {}
+def generateData(queue):
+	jdata = {"action": "display"}
 	jdata["queue"] = queue
-	jdata["action"] = "display"
-	jdata["auths"] = sessions.cutauths()
-	jdata["deauths"] = shamed
 	return jdata
-
-
-
-
-
-
-
-
-
-
