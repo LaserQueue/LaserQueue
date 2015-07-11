@@ -53,13 +53,13 @@ def server(websocket, path):
 		try:
 			messagedata = json.loads(message)
 			if "action" in messagedata:
-				if messagedata["action"] not in ["null", "auth"]:
-					cprint(message)
-				elif messagedata["action"] == "auth":
+				if messagedata["action"] == "auth":
 					displaymessage = json.loads(message)
 					if "args" in displaymessage and len(displaymessage["args"]):
 						displaymessage["args"] = ["*"*len(displaymessage["args"][0])]
 					cprint(json.dumps(displaymessage, sort_keys=True))
+				else:
+					cprint(message)
 				process(messagedata, websocket)
 		except Exception as e: 
 			cprint(bcolors.YELLOW + "{}: {}".format(type(e).__name__, str(e)))
@@ -75,10 +75,9 @@ def process(data, ws):
 	global queue, sessions, socks, queuehash
 	if data:
 		x = comm.parseData(queue, ws, socks, sessions, data)
-		if "action" in data and data["action"] != "null":
-			if args.backup:
-				json.dump(queue.queue, open("cache.json", "w"), indent=2, sort_keys=True)
-				sids.cache(sessions)
+		if args.backup:
+			json.dump(queue.queue, open("cache.json", "w"), indent=2, sort_keys=True)
+			sids.cache(sessions)
 		if x and type(x) is str:
 			serveToConnection(json.dumps({
 					"action": "notification",
@@ -101,6 +100,9 @@ def upkeep():
 			for i in deauthed:
 				ws = socks[sessions._get(i, None).seckey]
 				serveToConnection({"action":"deauthed"}, ws)
+		for i in socks:
+			if not i.open:
+				sessions.sids.remove(sessions._getSec(None, getsec(i)))
 		time.sleep(config["refreshRate"]/1000)
 
 def main():

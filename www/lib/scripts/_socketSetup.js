@@ -12,14 +12,6 @@ function socketSetup() { // god help me
 		logText('WebSockets connection opened successfully');
 
 		$('#notify-modal').modal('hide');
-
-		// poll for new data and repeat every refreshRate
-		socketSend({'action': 'null'});
-		setInterval(function pollForData() {
-			if(socket.readyState != socket.CONNECTING) {
-				socketSend({'action': 'null'});
-			}
-		}, refreshRate);
 	};
 
 	// when websockets message

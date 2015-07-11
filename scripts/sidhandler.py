@@ -36,7 +36,6 @@ class SID:
 		self.timestamp = time.time()
 		self.authstamp = time.time()
 		self.authstate = False
-		self.lastnull = time.time()
 		self.uuid = str(uuid)
 		self.seckey = str(seckey)
 	@classmethod
@@ -46,7 +45,6 @@ class SID:
 		self.timestamp = jdata["stamp"]
 		self.authstamp = jdata["authstamp"]
 		self.authstate = jdata["auth"]
-		self.lastnull = time.time()
 		self.uuid = str(jdata["uuid"])
 		self.seckey = str(jdata.get("seckey"))
 		return self
@@ -72,9 +70,7 @@ class SID:
 		timestamp = time.time()
 		if timestamp-self.authstamp > config["auth_timeout"] and config["auth_timeout"]:
 			self.authstate = False
-		if timestamp-self.lastnull > config["refreshRate"]*0.015:
-			return False
-		elif timestamp-self.lasttimestamp > config["lastuse_timeout"] and config["lastuse_timeout"]:
+		if timestamp-self.lasttimestamp > config["lastuse_timeout"] and config["lastuse_timeout"]:
 			return False
 		elif timestamp-self.timestamp > config["sid_total_timeout"] and config["sid_total_timeout"]:
 			return False
@@ -82,8 +78,6 @@ class SID:
 	def onupdate(self):
 		self.lasttimestamp = time.time()
 		self.authstamp = time.time()
-	def newnull(self):
-		self.lastnull = time.time()
 	def regen(self):
 		self.lasttimestamp = time.time()
 		self.timestamp = time.time()
@@ -150,8 +144,6 @@ class SIDCache:
 	def update(self):
 		for sid in self.sids:
 			self.check(sid.uuid, sid.seckey)
-	def newnull(self, uuid, sec):
-		self._get(uuid, sec).newnull()
 
 def cache(sids):
 	json.dump(sids.serialize(), open("scache.json", "w"), indent=2, sort_keys=True)

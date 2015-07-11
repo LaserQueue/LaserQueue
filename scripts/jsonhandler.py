@@ -69,10 +69,6 @@ class SocketCommand:
 		return self.method(**kwargs)
 
 # Non-queue functions
-def null(**kwargs): 
-	sid, sessions, sec = kwargs["sid"], kwargs["sessions"], getsec(kwargs["ws"])
-	sessions.newnull(sid, sec)
-	sessions.update()
 def deauth(**kwargs): 
 	sid, sessions, ws = kwargs["sid"], kwargs["sessions"], kwargs["ws"]
 	sec = getsec(ws)
@@ -101,7 +97,6 @@ def auth(**kwargs):
 
 def parseData(queue, ws, socks, sessions, jdata):
 	commands = [
-		SocketCommand("null", null, None),
 		SocketCommand("deauth", deauth, None),
 		SocketCommand("refresh", refresh, None),
 		SocketCommand("uuddlrlrba", uuddlrlrba, None),
