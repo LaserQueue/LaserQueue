@@ -24,6 +24,8 @@ parser.add_argument("--frontend", help="Loads frontend but not backend", dest="l
 	action="store_const",const=True,default=False)
 parser.add_argument("--init-only", help="Doesn't load frontend or backend", dest="load_none",
 	action="store_const",const=True,default=False)
+parser.add_argument("--no-init", help="Doesn't run setup", dest="no_init",
+	action="store_const",const=True,default=False)
 parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
 	action="store_const",const=True,default=False)
 parser.add_argument("--install-update", help="Don't ask for confirmation on update", dest="allupdate",

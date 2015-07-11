@@ -26,6 +26,7 @@ To change the admin login password, create a plaintext file `password` under bac
 - `--backend`: No short option. Only runs the backend.
 - `--frontend`: No short option. Only runs the frontend.
 - `--init-only`: No short option. Runs neither the frontend nor the backend.
+- `--no-init`: No short option. Doesn't run the setup.
 - `--install-all`: No short option. Installs all dependencies without prompting.
 - `--install-update`: No short option. Installs updates without prompting.
 
