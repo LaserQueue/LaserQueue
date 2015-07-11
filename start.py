@@ -45,7 +45,7 @@ if __name__ == "__main__":
 	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
 	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
 	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
-	initFile(os.path.join(selfpath, "www", "infotext.md"))
+	initFile(os.path.join(selfpath, "www", "infotext.md"), "To view our code or report an issue, go to [our GitHub repository](https://github.com/yrsegal/LaserQueue).")
 
 	cprintconf.color = bcolors.CYAN
 	cprintconf.name = "Setup"
