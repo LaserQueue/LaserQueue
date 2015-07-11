@@ -19,7 +19,7 @@ JSON formatted as follows:
 ```
 
 ## Session ID
-Each active user has a session ID, a 128-bit unique key. This UUID should be generated at the beginning of a session and sent with every packet except for data refreshes with {"action": "null"}.
+Each active user has a session ID, a 128-bit unique key. This UUID should be generated at the beginning of a session and sent with every packet.
 
 ## Material types
 The default material types with material codes in parentheses are:
@@ -178,7 +178,7 @@ Sets the attribute of job uuid to value. if the config doesn't state that you ca
 
 
 ### auth
-Enter admin mode if password is correct.
+Enter admin mode if password is correct. Dependent upon `config.admin_mode_enabled`.
 
 #### Sample
 
@@ -194,38 +194,13 @@ Enter admin mode if password is correct.
 
 
 ### deauth
-Leave admin mode.
+Leave admin mode. Dependent upon `config.admin_mode_enabled`.
 
 #### Sample
 
 ```
 {
 	"action": "deauth",
-	"sid": <SID>
-}
-```
-
-
-### null
-Nothing - however, the response will always be an up-to-date queue as JSON. This can be used to refresh the queue.
-
-#### Sample
-
-```
-{
-	"action": "null",
-	"sid": <SID>
-}
-```
-
-### shame
-If you had a failed auth attempt, remove yourself from the deauths list to acknowledge that you have displayed a "wrong password" dialog.
-
-#### Sample
-
-```
-{
-	"action": "shame",
 	"sid": <SID>
 }
 ```
@@ -267,14 +242,12 @@ The action tag determines the data returned. The front end will receive these JS
 
 
 ### Display queue
-This will be returned by the null action, or most calls that change the queue. The frontend should render the queue based on data in here. If in `deauths`, the frontend should call the `shame` action to acknowledge its shame (this is when an incorrect password hash has been received). If in `auths`, the frontend should make clear that the user is authed and therefore allowed to perform actions that require auth.
+The frontend should render the queue based on data in here.
 
 ```
 {
 	"action": "display"
-	"queue": <the queue object as List>.
-	"auths": <the first halves of every authed sid as List>
-	"deauths": <the first halves of every sid that failed to auth as List>
+	"queue": <the queue object as List>
 }
 ```
 
@@ -286,6 +259,33 @@ Displays a modal based on the packet.
 	"action": "notification"
 	"title": <the modal title as Str>
 	"text": <the modal body as Str>
+}
+```
+
+### Authed
+Called when the sid gains authstate. Dependent upon `config.admin_mode_enabled`.
+
+```
+{
+	"action":"authed"
+}
+```
+
+### Auth faliure
+Called when auth finds a wrong password. Dependent upon `config.admin_mode_enabled`.
+
+```
+{
+	"action":"authfailed"
+}
+```
+
+### Deauthed
+Called when the sid loses its authstate. Dependent upon `config.admin_mode_enabled`.
+
+```
+{
+	"action":"deauthed"
 }
 ```
 
