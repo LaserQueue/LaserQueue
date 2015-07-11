@@ -62,7 +62,7 @@ def server(websocket, path):
 
 				process(messagedata, websocket)
 		except Exception as e: 
-			cprint(bcolors.YELLOW + "{}: {}".format(type(e).__name__, str(e)))
+			cprint(bcolors.YELLOW + "{} on line {}: {}".format(type(e).__name__, e.__traceback__.tb_lasti, str(e)))
 			if config["send_notifications"]:
 				serveToConnection({
 						"action": "notification",
@@ -99,7 +99,8 @@ def upkeep():
 				authed = sessions.allauth()
 				for i in deauthed:
 					ws = socks[i]
-					serveToConnection({"action":"deauthed"}, ws)
+					if ws:
+						serveToConnection({"action":"deauthed"}, ws)
 			for i in socks:
 				if not i.open:
 					sessions.sids.remove(sessions._get(getsec(i)))
