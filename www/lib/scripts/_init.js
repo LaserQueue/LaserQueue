@@ -33,12 +33,12 @@ $('.btn-submit').click(function submitForm(clickAction) {
 	logText("submit button clicked");
 	var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
 	socketSend({
-			'action': 'add',
-			'name': $('.cut-human-name').val(),
-			'priority': +$('.priority-dropdown').val(),
-			'time': +estimate[0],
-			'material': $('.cut-material').val()
-		});
+		'action': 'add',
+		'name': $('.cut-human-name').val(),
+		'priority': +$('.priority-dropdown').val(),
+		'time': +estimate[0],
+		'material': $('.cut-material').val()
+	});
 	resetForm($('.new-cut-form'));
 	$('.cut-human-name').focus();
 
