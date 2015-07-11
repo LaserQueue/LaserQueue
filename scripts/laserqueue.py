@@ -99,7 +99,7 @@ class Queue:
 
 	def append(self, **kwargs):
 		args, authstate, sec = kwargs["args"], kwargs["authstate"], kwargs["sec"]
-		name, priority, esttime, material = args[0], args[1], args[2], args[3]
+		name, priority, esttime, material = args["name"], args["priority"], args["time"], args["material"]
 		if not name or material == "N/A" or priority == -1:
 			return
 		bounds = config["length_bounds"]
@@ -139,14 +139,14 @@ class Queue:
 
 	def remove(self, **kwargs):
 		args = kwargs["args"]
-		u = args[0]
+		u = args["uuid"]
 		for i in self.queue:
 			for j in i:
 				if j["uuid"] == u:
 					i.remove(j)
 	def passoff(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
-		u = args[0]
+		u = args["uuid"]
 		oindex = -1
 		masterqueue = _concatlist(self.queue)
 		for i in self.queue:
@@ -174,7 +174,7 @@ class Queue:
 
 	def relmove(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
-		u, nindex = args[0], args[1]
+		u, nindex = args["uuid"], args["target_index"]
 		target = None
 		masterqueue = _concatlist(self.queue)
 		if len(masterqueue) <= 1: return
@@ -204,7 +204,7 @@ class Queue:
 
 	def move(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
-		u, ni, np = args[0], args[1], args[2]
+		u, ni, np = args["uuid"], args["target_index"], args["target_priority"]
 		target = None
 		for i in self.queue:
 			for j in i:
@@ -219,7 +219,7 @@ class Queue:
 
 	def increment(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
-		u = args[0]
+		u = args["uuid"]
 		index = -1
 		priority = -1
 		for i in self.queue:
@@ -246,7 +246,7 @@ class Queue:
 
 	def decrement(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
-		u = args[0]
+		u = args["uuid"]
 		index = -1
 		priority = -1
 		for i in self.queue:
@@ -273,7 +273,7 @@ class Queue:
 
 	def attr(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
-		u, attrname, value = args[0], args[1], args[2]
+		u, attrname, value = args["uuid"], args["key"], args["new"]
 		if attrname not in self.requiredtags or attrname in ["uuid", "sec", "time", "totaldiff"]:
 			return
 		if attrname not in config["attr_edit_perms"] and not authstate:

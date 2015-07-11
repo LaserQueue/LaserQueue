@@ -101,7 +101,7 @@ function populateActions() {
 		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
 			'action': 'remove',
-			'args': [$($(this).parents()[1]).attr('data-uuid')]
+			'uuid': $($(this).parents()[1]).attr('data-uuid')
 		});
 	});
 
@@ -117,7 +117,7 @@ function populateActions() {
 		logText('passing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
 			'action': 'pass',
-			'args': [$($(this).parents()[1]).attr('data-uuid')]
+			'uuid': $($(this).parents()[1]).attr('data-uuid')
 		});
 	});
 
@@ -127,7 +127,7 @@ function populateActions() {
 		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
 			'action': 'decrement',
-			'args': [$($(this).parents()[1]).attr('data-uuid')]
+			'uuid': $($(this).parents()[1]).attr('data-uuid')
 		});
 	});
 
@@ -137,7 +137,7 @@ function populateActions() {
 		logText('passing item ' + $($(this).parents()[1]).attr('data-uuid'));
 		socketSend({
 			'action': 'increment',
-			'args': [$($(this).parents()[1]).attr('data-uuid')]
+			'uuid': $($(this).parents()[1]).attr('data-uuid')
 		});
 	});
 
@@ -158,10 +158,9 @@ function populateActions() {
 				$('[data-toggle="tooltip"]').tooltip();
 				socketSend({
 					'action': 'relmove',
-					'args': [
-						$(this).attr('data-uuid'),
-						parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / 37))
-					]
+					'uuid': $(this).attr('data-uuid'),
+					'target_index': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / 37))
+					
 				});
 			});
 		});
@@ -217,7 +216,9 @@ function changeAttr(taskid, attrKey, attrVal) {
 	if(typeof taskid == 'string') {
 		socketSend({
 			'action': 'attr',
-			'args': [taskid, attrKey, attrVal]
+			'uuid': taskid,
+			'key': attrKey,
+			'new': attrVal
 		});
 	} else if(typeof taskid == 'number') {
 		changeAttr(allCuts[taskid].uuid, attrKey, attrVal);

@@ -53,13 +53,13 @@ def server(websocket, path):
 		try:
 			messagedata = json.loads(message)
 			if "action" in messagedata:
-				if messagedata["action"] == "auth":
-					displaymessage = json.loads(message)
-					if "args" in displaymessage and len(displaymessage["args"]):
-						displaymessage["args"] = ["*"*len(displaymessage["args"][0])]
-					cprint(json.dumps(displaymessage, sort_keys=True))
-				else:
-					cprint(message)
+				displaymessage = message[:]
+				if "pass" in messagedata:
+					displaymessage = json.loads(displaymessage)
+					displaymessage["pass"] = "*"*len(displaymessage["pass"])
+					displaymessage = json.dumps(displaymessage, sort_keys=True)
+				cprint(displaymessage)
+
 				process(messagedata, websocket)
 		except Exception as e: 
 			cprint(bcolors.YELLOW + "{}: {}".format(type(e).__name__, str(e)))

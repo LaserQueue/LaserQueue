@@ -17,7 +17,6 @@ function onAuth() {
 function onFailedauth() {
 	modalMessage('Failure', '<p class="lead">Unfortunately, it looks like your password was wrong.</p>');
 	logText('Password was wrong. Added to deauths. Shame activated. You\'re bad and you should feel bad.');
-	socketSend({'action':'shame'});
 }
 
 function onDeauth() {

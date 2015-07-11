@@ -13,7 +13,7 @@ JSON formatted as follows:
 ```
 {
 	"action": action to perform
-	"args": [list, of, Arguments]
+	...
 }
 ```
 
@@ -47,12 +47,10 @@ Adds the specified name, priority, etc to the list
 ```
 {
 	"action": "add",
-	"args": [
-		<name as Str>,
-		<priority as Int>,
-		<time in minutes as a Float or Int>,
-		<material code as Str>
-	]
+	"name": <name as Str>,
+	"priority": <priority as Int>,
+	"time": <time in minutes as a Float or Int>,
+	"material": <material code as Str>
 }
 ```
 
@@ -65,9 +63,7 @@ Moves the specified job below the next job
 ```
 {
 	"action": "pass",
-	"args": [
-		<uuid of job as Str>
-	]
+	"uuid": <uuid of job as Str>
 }
 ```
 
@@ -79,9 +75,7 @@ Removes the specified job from the list
 ```
 {
 	"action": "remove",
-	"args": [
-		<uuid as Str>
-	]
+	"uuid": <uuid of job as Str>
 }
 ```
 
@@ -93,11 +87,9 @@ Moves the specified job to the target index, and the target priority
 ```
 {
 	"action": "move",
-	"args": [
-		<uuid of job as Str>,
-		<target index as Int>,
-		<target priority as Int>
-	]
+	"uuid": <uuid of job as Str>,
+	"target_index": <target index as Int>,
+	"target_priority": <target priority as Int>
 }
 ```
 
@@ -110,10 +102,8 @@ Moves the specified job to the target index in the master index. Out of bounds w
 ```
 {
 	"action": "relmove",
-	"args": [
-		<uuid of job as Str>,
-		<target index as Int>
-	]
+	"uuid": <uuid of job as Str>,
+	"target_index": <target index as Int>
 }
 ```
 
@@ -126,9 +116,7 @@ Moves the specified job up one job, or if it's at the top of its priority level,
 ```
 {
 	"action": "increment",
-	"args": [
-		<uuid of job as Str>
-	]
+	"uuid": <uuid of job as Str>
 }
 ```
 
@@ -141,9 +129,7 @@ Moves the specified job down one job, or if it's at the bottom of its priority l
 ```
 {
 	"action": "decrement",
-	"args": [
-		<uuid of job as Str>
-	]
+	"uuid": <uuid of job as Str>
 }
 ```
 
@@ -156,11 +142,9 @@ Sets the attribute of job uuid to value. if the config doesn't state that you ca
 ```
 {
 	"action": "attr",
-	"args": [
-		<uuid of job as Str>,
-		<key in job to change as Str>,
-		<desired value>
-	]
+	"uuid": <uuid of job as Str>,
+	"key": <key in job to change as Str>,
+	"new": <desired value>
 }
 ```
 
@@ -173,9 +157,7 @@ Enter admin mode if password is correct. Dependent upon `config.admin_mode_enabl
 ```
 {
 	"action": "auth",
-	"args": [
-		<sha1 hash of user-entered password as Str>
-	]
+	"pass": <sha1 hash of user-entered password as Str>
 }
 ```
 
@@ -230,7 +212,7 @@ The frontend should render the queue based on data in here.
 
 ```
 {
-	"action": "display"
+	"action": "display",
 	"queue": <the queue object as List>
 }
 ```
@@ -240,8 +222,8 @@ Displays a modal based on the packet.
 
 ```
 {
-	"action": "notification"
-	"title": <the modal title as Str>
+	"action": "notification",
+	"title": <the modal title as Str>,
 	"text": <the modal body as Str>
 }
 ```

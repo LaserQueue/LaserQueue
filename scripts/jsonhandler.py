@@ -6,17 +6,13 @@ config = Config(os.path.join("..","www","config.json"))
 def _typelist(l):
 	return [type(i) for i in l]
 
-def _comparetypes(args, expected):
-	args = _typelist(args)
-	exp = expected[:]
-	for ii in range(len(exp)):
-		i = exp[ii]
-		if i is any_type:
-			exp[ii] = args[ii]
-		elif i is any_number:
-			if args[ii] in [int, float]:
-				exp[ii] = args[ii]
-	return args == exp
+def _comparetypes(obj, expected):
+	if expected is any_type:
+		return True
+	elif expected is any_number:
+		if type(obj) is int or type(obj) is float:
+			return True
+	return type(obj) is expected
 
 # typelist exceptions
 class any_type: pass 
@@ -28,10 +24,8 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata):
 
 	action = jdata["action"]
 	sec = getsec(ws)
-	if "args" in jdata:
-		args = jdata["args"]
-	else:
-		args = None
+	args = dict(jdata)
+	del args["action"]
 	authstate = sessions.check(sec)
 
 	if action in config["authactions"] and not authstate: 
@@ -54,16 +48,13 @@ class SocketCommand:
 	def __str__(self):
 		return self.name
 	def run(self, **kwargs):
-		if self.args:
-			args = kwargs["args"]
-			if not args:
-				return "Expected {} argument{}, received {}".format(len(self.args), 
-					"s" if len(self.args) != 1 else "", 0)
-			elif len(args) != len(self.args):
-				return "Expected {} argument{}, received {}".format(len(self.args), 
-					"s" if len(self.args) != 1 else "", len(args))
-			elif not _comparetypes(args, self.args):
-				return "Expected "+str(self.args)+", received "+str(_typelist(args))
+		args = kwargs["args"]
+		for i in self.args:
+			if i not in args:
+				return "Expected '{}' argument, but didn't find it.".format(i)
+			if not _comparetypes(args[i], self.args[i]):
+				return "Expected '{}' argument to be an instance of '{}', but found an instance of '{}'.".format(
+					i, self.args[i].__name__, type(args[i]).__name__)
 		return self.method(**kwargs)
 
 # Non-queue functions
@@ -87,25 +78,25 @@ def auth(**kwargs):
 	args, sec, sessions, ws = kwargs["args"], kwargs["sec"], kwargs["sessions"], kwargs["ws"]
 	sec = getsec(ws)
 	if config["admin_mode_enabled"]:
-		if sessions.auth(sec, args[0]):
+		if sessions.auth(sec, args["pass"]):
 			serveToConnection({"action":"authed"}, ws)
 		else:
 			serveToConnection({"action":"authfailed"}, ws)
 
 def parseData(queue, ws, socks, sessions, jdata):
 	commands = [
-		SocketCommand("deauth", deauth, None),
-		SocketCommand("refresh", refresh, None),
-		SocketCommand("uuddlrlrba", uuddlrlrba, None),
-		SocketCommand("auth", auth, [str]),
-		SocketCommand("add", queue.append, [str, int, any_number, str]),
-		SocketCommand("pass", queue.passoff, [str]),
-		SocketCommand("remove", queue.remove, [str]),
-		SocketCommand("move", queue.move, [str, int, int]),
-		SocketCommand("relmove", queue.relmove, [str, int]),
-		SocketCommand("increment", queue.increment, [str]),
-		SocketCommand("decrement", queue.decrement, [str]),
-		SocketCommand("attr", queue.attr, [str, str, any_type])
+		SocketCommand("deauth", deauth, {}),
+		SocketCommand("refresh", refresh, {}),
+		SocketCommand("uuddlrlrba", uuddlrlrba, {}),
+		SocketCommand("auth", auth, {"pass": str}),
+		SocketCommand("add", queue.append, {"name": str, "priority": int, "time": any_number, "material": str}),
+		SocketCommand("pass", queue.passoff, {"uuid": str}),
+		SocketCommand("remove", queue.remove, {"uuid": str}),
+		SocketCommand("move", queue.move, {"uuid": str, "target_priority": int, "target_index": int}),
+		SocketCommand("relmove", queue.relmove, {"uuid": str, "target_index": int}),
+		SocketCommand("increment", queue.increment, {"uuid": str}),
+		SocketCommand("decrement", queue.decrement, {"uuid": str}),
+		SocketCommand("attr", queue.attr, {"uuid": str, "key": str, "new": any_type})
 	]
 	return runSocketCommand(commands, ws, socks, sessions, jdata)
 

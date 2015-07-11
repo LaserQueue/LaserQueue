@@ -34,12 +34,10 @@ $('.btn-submit').click(function submitForm(clickAction) {
 	var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
 	socketSend({
 			'action': 'add',
-			'args': [
-				$('.cut-human-name').val(),
-				+$('.priority-dropdown').val(),
-				+estimate[0],
-				$('.cut-material').val()
-			]
+			'name': $('.cut-human-name').val(),
+			'priority': +$('.priority-dropdown').val(),
+			'time': +estimate[0],
+			'material': $('.cut-material').val()
 		});
 	resetForm($('.new-cut-form'));
 	$('.cut-human-name').focus();
