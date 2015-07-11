@@ -9,20 +9,13 @@ import sidhandler as sids
 import json
 import os, time
 import asyncio, websockets
-import atexit, multiprocessing
+import threading
 
 from parseargv import args
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath)
 
-def cleanup():
-	global upkeepThread
-	try:
-		upkeepThread.terminate()
-	except:
-		pass
-atexit.register(cleanup)
 
 class Sockets:
 	def __init__(self):
@@ -37,10 +30,17 @@ class Sockets:
 		if get: self.sockets.remove(get)
 	def get(self, key):
 		for i in self.sockets:
-			if getsec(key) == key:
+			if getsec(i) == key:
 				return i
+	def __getitem__(self, key):
+		return self.get(key)
 
 socks = Sockets()
+
+sessions = sids.SIDCache()
+queue = laserqueue.Queue()
+authed = sessions.allauth()
+queuehash = hash(str(queue.queue))
 
 @asyncio.coroutine
 def server(websocket, path):
@@ -77,7 +77,6 @@ def process(data, ws):
 		x = comm.parseData(queue, ws, socks, sessions, data)
 		if args.backup:
 			json.dump(queue.queue, open("cache.json", "w"), indent=2, sort_keys=True)
-			sids.cache(sessions)
 		if x and type(x) is str:
 			serveToConnection(json.dumps({
 					"action": "notification",
@@ -92,18 +91,21 @@ def process(data, ws):
 def upkeep():
 	global queue, authed, sessions
 	while True:
-		sessions.update()
-		newauths = sessions.allauth()
-		if authed != newauths:
-			deauthed = [i for i in authed if i not in newauths]
-			authed = sessions.allauth()
-			for i in deauthed:
-				ws = socks[sessions._get(i, None).seckey]
-				serveToConnection({"action":"deauthed"}, ws)
-		for i in socks:
-			if not i.open:
-				sessions.sids.remove(sessions._getSec(None, getsec(i)))
-		time.sleep(config["refreshRate"]/1000)
+		try:
+			sessions.update()
+			newauths = sessions.allauth()
+			if authed != newauths:
+				deauthed = [i for i in authed if i not in newauths]
+				authed = sessions.allauth()
+				for i in deauthed:
+					ws = socks[i]
+					serveToConnection({"action":"deauthed"}, ws)
+			for i in socks:
+				if not i.open:
+					sessions.sids.remove(sessions._get(getsec(i)))
+			time.sleep(config["refreshRate"]/1000)
+		except Exception as e:
+			cprint(bcolors.YELLOW + "{}: {}".format(type(e).__name__, str(e)))
 
 def main():
 	global queue, authed, sessions, queuehash, upkeepThread
@@ -112,15 +114,10 @@ def main():
 			queue = laserqueue.Queue.load(open("cache.json"))
 		else:
 			json.dump({}, open("cache.json", "w"))
-		sessions = sids.loadcache()
-	else:
-		queue = laserqueue.Queue()
-		sessions = sids.SIDCache()
-	authed = sessions.allauth()
-	queuehash = hash(str(queue.queue))
 	cprint("Serving WebSockets on 0.0.0.0 port "+config["port"]+" ...")
 
-	upkeepThread = multiprocessing.Process(target=upkeep)
+	upkeepThread = threading.Thread(target=upkeep)
+	upkeepThread.daemon = True
 	upkeepThread.start()
 
 	start_server = websockets.serve(server, "0.0.0.0", config['port'])

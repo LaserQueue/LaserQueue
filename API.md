@@ -3,7 +3,7 @@
 This overview describes the API that binds the frontend and backend of the LaserQueue.
 
 ## Communication
-Communication will be between some frontend user interface and the backend server using WebSockets. By default, we use port 8763 for this. Our frontend has a function, `socketSend()` that can be used to send things over WebSockets. It automatically adds the SID.
+Communication will be between some frontend user interface and the backend server using WebSockets. By default, we use port 8763 for this. Our frontend has a function, `socketSend()` that can be used to send JSON over WebSockets.
 
 ## Configuration
 Our backend and frontend pull configuration info from a file, `www/config.json`. This file is created based on `www/defaultconf.json` by the backend server if it does not exist. It consists of JSON key-object pairs. Most should be self-explanatory. Some values, such as the version number and repository, should *not* be edited without a high level of knowledge. These files are in the `www/` directory so that they are accessible to the frontend over HTTP.
@@ -14,12 +14,8 @@ JSON formatted as follows:
 {
 	"action": action to perform
 	"args": [list, of, Arguments]
-	"sid": your session ID.
 }
 ```
-
-## Session ID
-Each active user has a session ID, a 128-bit unique key. This UUID should be generated at the beginning of a session and sent with every packet.
 
 ## Material types
 The default material types with material codes in parentheses are:
@@ -56,8 +52,7 @@ Adds the specified name, priority, etc to the list
 		<priority as Int>,
 		<time in minutes as a Float or Int>,
 		<material code as Str>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -72,8 +67,7 @@ Moves the specified job below the next job
 	"action": "pass",
 	"args": [
 		<uuid of job as Str>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -87,8 +81,7 @@ Removes the specified job from the list
 	"action": "remove",
 	"args": [
 		<uuid as Str>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -104,8 +97,7 @@ Moves the specified job to the target index, and the target priority
 		<uuid of job as Str>,
 		<target index as Int>,
 		<target priority as Int>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -121,8 +113,7 @@ Moves the specified job to the target index in the master index. Out of bounds w
 	"args": [
 		<uuid of job as Str>,
 		<target index as Int>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -137,8 +128,7 @@ Moves the specified job up one job, or if it's at the top of its priority level,
 	"action": "increment",
 	"args": [
 		<uuid of job as Str>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -153,8 +143,7 @@ Moves the specified job down one job, or if it's at the bottom of its priority l
 	"action": "decrement",
 	"args": [
 		<uuid of job as Str>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -171,8 +160,7 @@ Sets the attribute of job uuid to value. if the config doesn't state that you ca
 		<uuid of job as Str>,
 		<key in job to change as Str>,
 		<desired value>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -187,8 +175,7 @@ Enter admin mode if password is correct. Dependent upon `config.admin_mode_enabl
 	"action": "auth",
 	"args": [
 		<sha1 hash of user-entered password as Str>
-	],
-	"sid": <SID>
+	]
 }
 ```
 
@@ -200,8 +187,7 @@ Leave admin mode. Dependent upon `config.admin_mode_enabled`.
 
 ```
 {
-	"action": "deauth",
-	"sid": <SID>
+	"action": "deauth"
 }
 ```
 
@@ -214,8 +200,7 @@ Dependent upon config.allow_force_refresh.
 
 ```
 {
-	"action": "refresh",
-	"sid": <SID>
+	"action": "refresh"
 }
 ```
 
@@ -228,8 +213,7 @@ Dependent upon config.easter_eggs.
 
 ```
 {
-	"action": "uuddlrlrba",
-	"sid": <SID>
+	"action": "uuddlrlrba"
 }
 ```
 

@@ -200,17 +200,12 @@ function resetForm(form) {
 	}
 }
 
-// adds SID to JSON and sends over websockets if the connection is stable
+// sends over websockets if the connection is stable
 function socketSend(jdata) {
-	// if a session ID has been set and the socket is ready
-	if(typeof SID != "undefined" && socket.readyState == 1) {
-		jdata.sid = SID;
+	if(socket.readyState == 1) {
 		socket.send(JSON.stringify(jdata));
 	} else {
 		// if not sending, log why
-		if(typeof SID != "undefined") {
-			logText("socketSend() has been called, but SID is undefined.");
-		}
 		if(socket.readyState != 1) {
 			logText("socketSend() has been called, but socket.readyState is not 1. The socket is probably not connected yet.");
 		}

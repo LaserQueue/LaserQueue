@@ -1,7 +1,7 @@
 // gets the config file and parses values
 
 // declare almost all globals here
-var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, SID, buttons, addEnabled,
+var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, buttons, addEnabled,
 		authed = false,
 		allCuts = [],
 		displayEl = {},
@@ -32,10 +32,6 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities, refres
 			}
 		},
 		draggable = [];
-
-// generate a session ID
-SID = uuid.v1();
-window.console.log('SID: ' + SID);
 
 // fetches config file from server
 getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {

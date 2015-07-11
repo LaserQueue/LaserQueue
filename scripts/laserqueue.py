@@ -28,7 +28,7 @@ def _fillblanks(odict, adict):
 class QueueObject(dict):
 	def serialize(self):
 		obj = dict(self)
-		obj["sid"] = obj["sid"][:int(len(obj["sid"])/2)]
+		del obj["sec"]
 		return obj
 
 
@@ -47,7 +47,7 @@ class Queue:
 		"esttime": 0, 
 		"coachmodified": False, 
 		"uuid": "this object is so old that it should be deleted", 
-		"sid": "this object is so old that it should be deleted", 
+		"sec": "this object is so old that it should be deleted", 
 		"time": 2**30,
 		"totaldiff": 0
 	}
@@ -98,7 +98,7 @@ class Queue:
 
 
 	def append(self, **kwargs):
-		args, authstate, sid = kwargs["args"], kwargs["authstate"], kwargs["sid"]
+		args, authstate, sec = kwargs["args"], kwargs["authstate"], kwargs["sec"]
 		name, priority, esttime, material = args[0], args[1], args[2], args[3]
 		if not name or material == "N/A" or priority == -1:
 			return
@@ -133,7 +133,7 @@ class Queue:
 				"esttime": esttime,
 				"coachmodified": authstate,
 				"uuid": str(uuid.uuid1()),
-				"sid": sid,
+				"sec": sec,
 				"time": time.time()
 			}))
 
@@ -274,7 +274,7 @@ class Queue:
 	def attr(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
 		u, attrname, value = args[0], args[1], args[2]
-		if attrname not in self.requiredtags or attrname in ["uuid", "sid", "time", "totaldiff"]:
+		if attrname not in self.requiredtags or attrname in ["uuid", "sec", "time", "totaldiff"]:
 			return
 		if attrname not in config["attr_edit_perms"] and not authstate:
 			return

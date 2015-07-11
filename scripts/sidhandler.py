@@ -31,12 +31,11 @@ if os.path.exists("hashpassword"):
 	PASSWORD = open("hashpassword").read().strip().rstrip()
 
 class SID:
-	def __init__(self, uuid=None, seckey=None):
+	def __init__(self, seckey=None):
 		self.lasttimestamp = time.time()
 		self.timestamp = time.time()
 		self.authstamp = time.time()
 		self.authstate = False
-		self.uuid = str(uuid)
 		self.seckey = str(seckey)
 	@classmethod
 	def load(cls, jdata):
@@ -45,7 +44,6 @@ class SID:
 		self.timestamp = jdata["stamp"]
 		self.authstamp = jdata["authstamp"]
 		self.authstate = jdata["auth"]
-		self.uuid = str(jdata["uuid"])
 		self.seckey = str(jdata.get("seckey"))
 		return self
 	def serialize(self):
@@ -54,7 +52,6 @@ class SID:
 			"laststamp": self.lasttimestamp,
 			"authstamp": self.authstamp,
 			"auth": self.authstate,
-			"uuid": self.uuid,
 			"seckey": self.seckey
 		}
 	def auth(self, password):
@@ -95,64 +92,38 @@ class SIDCache:
 		for sid in jdata:
 			self.sids.append(SID.load(sid))
 		return self
-	def check(self, uuid, sec):
-		csid = self._get(uuid, sec)
+	def check(self, sec):
+		csid = self._get(sec)
 		if not csid:               return False
 		elif not csid.checkstate(): 
 			self.sids.remove(csid);  return False
 		csid.onupdate()
 		if not csid.authstate:     return False
 		return True
-	def auth(self, uuid, sec, password):
-		if self.check(uuid, sec) or self._get(uuid, sec).auth(password): 
+	def auth(self, sec, password):
+		if self.check(sec) or self._get(sec).auth(password): 
 			return True
 		return False
-	def deauth(self, uuid, sec):
-		self._get(uuid, sec).deauth()
+	def deauth(self, sec):
+		self._get(sec).deauth()
 	def serialize(self):
 		return [sid.serialize() for sid in self.sids]
 	def allauth(self):
-		return [sid.uuid for sid in self.sids if sid.authstate]
-	def cutauths(self):
-		return [sid.uuid[:int(len(sid.uuid)/2)] for sid in self.sids if sid.authstate]
+		return [sid.seckey for sid in self.sids if sid.authstate]
 	def allnonauth(self):
-		return [sid.uuid for sid in self.sids if not sid.authstate]
-	def _isin(self, uuid):
-		for i in self.sids:
-			if i.uuid == uuid:
-				return True
-		return False
-	def _isinsec(self, sec):
+		return [sid.seckey for sid in self.sids if not sid.authstate]
+	def _isin(self, sec):
 		for i in self.sids:
 			if i.seckey == sec:
 				return True
 		return False
-	def _get(self, uuid, sec):
-		if not self._isin(uuid):
-			if sec:
-				self.sids.append(SID(uuid, sec))
-		for sid in self.sids:
-			if sid.uuid == uuid:
-				return sid
-	def _getSec(self, uuid, sec):
-		if not self._isinsec(sec):
-			if uuid:
-				self.sids.append(SID(uuid, sec))
+	def _get(self, sec):
+		if not self._isin(sec):
+			self.sids.append(SID(sec))
 		for sid in self.sids:
 			if sid.seckey == sec:
 				return sid
 	def update(self):
 		for sid in self.sids:
-			self.check(sid.uuid, sid.seckey)
-
-def cache(sids):
-	json.dump(sids.serialize(), open("scache.json", "w"), indent=2, sort_keys=True)
-
-def loadcache():
-	try:
-		if os.path.exists("scache.json"):
-			return SIDCache.load(json.load(open("scache.json")))
-	except: pass
-	json.dump({}, open("scache.json", "w"))
-	return SIDCache()
+			self.check(sid.seckey)
 

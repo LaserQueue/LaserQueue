@@ -25,16 +25,14 @@ class any_number: pass
 def runSocketCommand(commandlist, ws, socks, sessions, jdata):
 	if "action" not in jdata: 
 		return "Action missing!"
-	if "sid" not in jdata:
-		return "Session ID missing!"
 
 	action = jdata["action"]
-	sid = jdata["sid"]
+	sec = getsec(ws)
 	if "args" in jdata:
 		args = jdata["args"]
 	else:
 		args = None
-	authstate = sessions.check(sid, getsec(ws))
+	authstate = sessions.check(sec)
 
 	if action in config["authactions"] and not authstate: 
 		return "This action requires auth."
@@ -42,7 +40,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata):
 	cmds = {str(i): i for i in commandlist}
 
 	if action in cmds and (not cmds[action].args or args):
-		return cmds[action].run(args=args, authstate=authstate, sid=sid, sessions=sessions, ws=ws, sockets=socks)
+		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks)
 	elif not args: 
 		return "Args missing!"
 	else:
@@ -70,9 +68,8 @@ class SocketCommand:
 
 # Non-queue functions
 def deauth(**kwargs): 
-	sid, sessions, ws = kwargs["sid"], kwargs["sessions"], kwargs["ws"]
-	sec = getsec(ws)
-	sessions.deauth(kwargs["sid"], sec)
+	sec, sessions, ws = kwargs["sec"], kwargs["sessions"], kwargs["ws"]
+	sessions.deauth(sec)
 	serveToConnection({"action":"deauthed"}, ws)
 def refresh(**kwargs): 
 	socks = kwargs["sockets"]
@@ -87,10 +84,10 @@ def uuddlrlrba(**kwargs):
 	else:
 		cprint(bcolors.YELLOW + "This is a serious establishment, son. I'm dissapointed in you.")
 def auth(**kwargs):
-	args, sid, sessions, ws = kwargs["args"], kwargs["sid"], kwargs["sessions"], kwargs["ws"]
+	args, sec, sessions, ws = kwargs["args"], kwargs["sec"], kwargs["sessions"], kwargs["ws"]
 	sec = getsec(ws)
 	if config["admin_mode_enabled"]:
-		if sessions.auth(sid, sec, args[0]):
+		if sessions.auth(sec, args[0]):
 			serveToConnection({"action":"authed"}, ws)
 		else:
 			serveToConnection({"action":"authfailed"}, ws)
