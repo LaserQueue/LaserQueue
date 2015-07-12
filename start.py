@@ -77,7 +77,7 @@ if __name__ == "__main__":
 			cprintconf.color = bcolors.BLUE
 			cprintconf.name = "Backend"
 			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
-			          (Edit config.json to change ports.)""")
+			          (Edit config.json to change ports.)""", strip=True)
 			backend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "main.py"]+argvs, stdout=output, stderr=output)
 		else:
 			backend = gPopen(["main.py"]+argvs, stdout=output, stderr=output)
@@ -92,7 +92,7 @@ if __name__ == "__main__":
 			cprintconf.color = bcolors.PURPLE
 			cprintconf.name = "HTTP"
 			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
-			          (Use --port PORT to change ports.)""")
+			          (Use --port PORT to change ports.)""", strip=True)
 			frontend = subprocess.Popen(["sudo", "-p", " "*(26+len(cprintconf.name)) +"Password: ", "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 		else:
 			frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)

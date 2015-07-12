@@ -62,8 +62,7 @@ def server(websocket, path):
 
 				process(messagedata, websocket)
 		except Exception as e: 
-			cprint(bcolors.YELLOW + "File {} line {}\n{}: {}".format(e.__traceback__.tb_frame.f_code.co_filename,
-			 e.__traceback__.tb_lasti, type(e).__name__, str(e)))
+			cprint(tbformat(e, "Error while serving WebSockets:"), color=bcolors.YELLOW)
 			if config["send_notifications"]:
 				serveToConnection({
 						"action": "notification",
@@ -84,7 +83,7 @@ def process(data, ws):
 					"title": "Failed to process data",
 					"text": x
 				}, sort_keys = True), ws)
-			cprint(bcolors.YELLOW + x)
+			cprint(x, color=bcolors.YELLOW)
 		if queuehash != hash(str(queue.queue)):
 			queuehash = hash(str(queue.queue))
 			serveToConnections(comm.generateData(queue.serialize()), socks)
@@ -107,7 +106,7 @@ def upkeep():
 					sessions.sids.remove(sessions._get(getsec(i)))
 			time.sleep(config["refreshRate"]/1000)
 		except Exception as e:
-			cprint(bcolors.YELLOW + "{}: {}".format(type(e).__name__, str(e)))
+			cprint(tbformat(e, "Error in upkeep thread:"), color=bcolors.YELLOW)
 
 def main():
 	global queue, authed, sessions, queuehash, upkeepThread

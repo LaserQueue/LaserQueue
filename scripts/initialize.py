@@ -63,14 +63,14 @@ def getpacks():
 		while confirm not in ["y", "n"]:
 			confirm = cinput("Install dependency "+pack+"? (y/n) ").lower().strip().rstrip()
 		if confirm == "n": 
-			cprint(bcolors.YELLOW + "WARNING: Program may not run without this library.")
+			cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
 			continue
 		if pip.main(["install", pack]) and os.name != "nt":
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = cinput(bcolors.RED + "Install failed, try again with elevated permissions? (y/n) ").lower().strip().rstrip()
+				confirm = cinput( + "Install failed, try again with elevated permissions? (y/n) ", color=bcolors.RED).lower().strip().rstrip()
 			if confirm == "n": 
-				cprint(bcolors.YELLOW + "WARNING: Program may not run without this library.")
+				cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
 				continue
 			if not os.system("sudo pip3 install "+pack):
 				pl.append(pack)
@@ -79,7 +79,7 @@ def getpacks():
 	if installed:
 		for pack in PACKAGES:
 			if pack not in pl:
-				cprint(bcolors.DARKRED + "Failed to install dependency "+pack+".")
+				cprint("Failed to install dependency "+pack+".", color=bcolors.DARKRED)
 				installed = False
 	if installed:
 		cprint("Sucessfully installed all dependencies!")
@@ -138,7 +138,7 @@ to use the new version.\n")
 
 				quit(10)
 	except Exception as e: 
-		cprint(bcolors.DARKRED + "Error updating: "+str(e))
+		cprint("Error updating: \n"+tbformat(e), color=bcolors.DARKRED)
 
 def main():
 	getpacks()

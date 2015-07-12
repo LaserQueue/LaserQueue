@@ -3,6 +3,19 @@ import os, json, time
 def _fillblanks(odict, adict):
 	return dict(adict, **odict)
 
+import traceback
+def tbformat(e, text="Traceback (most recent call last):"):
+	trace = traceback.extract_tb(e.__traceback__)
+	error = "{}\n".format(text) 
+	for filename,lineno,function,message in trace:
+		error += "  File \"{}\", line {}, in {}\n".format(filename, lineno, function)
+		if message: 
+			error += "    {}\n".format(message)
+	error += str(type(e).__name__)
+	if str(e):
+		error += ": {}".format(str(e))
+	return error 
+
 class Config:
 	def __init__(self, path):
 		self.path = path
@@ -143,25 +156,31 @@ cprintconf = colorconf()
 
 lastprinted = None
 
-def cprint(text):
+def cprint(text, color="", strip=False):
 	global lastprinted
 	text = str(text)
 	if text == lastprinted: return
 	lastprinted = text
-	prints = [i.strip().rstrip() for i in text.split("\n")]
+	if strip:
+		prints = [i.strip().rstrip() for i in text.split("\n")]
+	else:
+		prints = text.split("\n")
 	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC
-	print(date_time_string() + originstr + prints[0] + bcolors.ENDC)
+	print(date_time_string() + originstr + color + prints[0] + bcolors.ENDC)
 	for i in prints[1:]:
-		print(" "*(26+len(cprintconf.name)) + i + bcolors.ENDC)
+		print(" "*(26+len(cprintconf.name)) + color + i + bcolors.ENDC)
 
-def cinput(text):
+def cinput(text, color="", strip=False):
 	text = str(text)
-	prints = text.split("\n")
+	if strip:
+		prints = [i.strip().rstrip() for i in text.split("\n")]
+	else:
+		prints = text.split("\n")
 	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC
 	if len(prints) > 1: 
-		print(date_time_string() + originstr + prints[0])
+		print(date_time_string() + originstr + color + prints[0] + bcolors.ENDC)
 		for i in prints[1:-1]:
-			print(" "*(26+len(cprintconf.name)) + i)
-		return input(" "*(26+len(cprintconf.name)) + prints[-1] + bcolors.ENDC)
+			print(" "*(26+len(cprintconf.name)) + color + i + bcolors.ENDC)
+		return input(" "*(26+len(cprintconf.name)) + color + prints[-1] + bcolors.ENDC)
 	else:
-		return input(date_time_string() + originstr + prints[0] + bcolors.ENDC)
+		return input(date_time_string() + originstr + color + prints[0] + bcolors.ENDC)
