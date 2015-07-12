@@ -1,39 +1,4 @@
-// gets the config file and parses values
-
-// declare almost all globals here
-var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, buttons, addEnabled,
-		authed = false,
-		allCuts = [],
-		displayEl = {},
-		months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		renderDirectives = {
-			priority: {
-				html: function drawCoachMode(params) {
-					return this.priority + (
-						this.coachmodified ?
-							' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
-							: ''
-					);
-				},
-			},
-			actions: {
-				html: function actionDirectiveHTML(params) {
-					var data = '';
-					for (var i = 0; i < Object.keys(buttons).length; i++) {
-						var button = Object.keys(buttons)[i];
-						if (config.authactions.indexOf(button) == -1 || authed) {
-							if (button != "pass" || !(params.index >= config.pass_depth && config.pass_depth || authed)) {
-								data += buttons[button];
-							}
-						}
-					}
-					return data;
-				},
-			}
-		},
-		draggable = [];
-
-// fetches config file from server
+// gets the config file, parses and applies values
 getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	// config.thing returns thing in the config file

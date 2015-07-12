@@ -13,6 +13,9 @@
 @@include('./libraries/jquery.popconfirm.js')
 
 
+// variables
+@@include('_variables.js');
+
 // general functions and utilities
 @@include('_functions.js')
 
