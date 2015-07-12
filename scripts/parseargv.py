@@ -1,10 +1,9 @@
 import argparse
+
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("-p", "--port", help="Port to host from", dest="port",
 	default=80, type=int)
 parser.add_argument("-n", "--regen-host", help="Regenerate host in config", dest="host",
-	action="store_const",const=True,default=False)
-parser.add_argument("-h", "--help", help="Show this help message and exit", dest="help",
 	action="store_const",const=True,default=False)
 parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
 	action="store_const",const=True,default=False)
@@ -18,6 +17,8 @@ parser.add_argument("-s", "--skip-install", help="Skip package installation", de
 	action="store_const",const=True,default=False)
 parser.add_argument("-nu", "--no-update", help="Skip update", dest="skipupdate",
 	action="store_const",const=True,default=False)
+parser.add_argument("--new-password", help="Set a new password", dest="newpass",
+	action="store", required=False, const=True, nargs="?")
 parser.add_argument("--backend", help="Loads backend but not frontend", dest="load_backend",
 	action="store_const",const=True,default=False)
 parser.add_argument("--frontend", help="Loads frontend but not backend", dest="load_frontend",
@@ -30,8 +31,5 @@ parser.add_argument("--install-all", help="Don't ask for confirmation on install
 	action="store_const",const=True,default=False)
 parser.add_argument("--install-update", help="Don't ask for confirmation on update", dest="allupdate",
 	action="store_const",const=True,default=False)
+parser.add_argument("-h", "--help", help="Show this help message and exit", action="help")
 args = parser.parse_args()
-
-if args.help:
-	parser.print_help()
-	quit()

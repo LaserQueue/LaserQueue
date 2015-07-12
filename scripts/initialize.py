@@ -142,10 +142,23 @@ to use the new version.\n")
 
 def main():
 	getpacks()
-	if args.regen:
-		copyconf(True)
-	else:
-		copyconf()
+	copyconf(args.regen)
+
+	if args.newpass:
+		if type(args.newpass) is bool:
+			# here goes input stuff
+			pass
+		else:
+			try:
+				hash_object = hashlib.sha256(args.newpass.encode()).hexdigest()
+				hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
+				hashed = open("hashpassword", "w")
+				hashed.write(hashed_final)
+				hashed.close()
+				cprint("Password changed to {}.".format("*"*len(args.newpass))
+			except Exception as e:
+				cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
+
 	if args.host:
 		data = json.load(open(os.path.join("..", "www", "config.json")))
 		data["host"] = getIps()[0]
