@@ -160,7 +160,7 @@ function populateActions() {
 					'action': 'relmove',
 					'uuid': $(this).attr('data-uuid'),
 					'target_index': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / 37))
-					
+
 				});
 			});
 		});
@@ -201,12 +201,13 @@ function resetForm(form) {
 
 // sends over websockets if the connection is stable
 function socketSend(jdata) {
-	if(socket.readyState == 1) {
+	var socketState = socket.readyState;
+	if(socketState == 1) {
 		socket.send(JSON.stringify(jdata));
 	} else {
 		// if not sending, log why
 		if(socket.readyState != 1) {
-			logText("socketSend() has been called, but socket.readyState is not 1. The socket is probably not connected yet.");
+			logText('socketSend() has been called, but socket.readyState is ' + socketState + '. The socket is probably not connected yet.');
 		}
 	}
 }
