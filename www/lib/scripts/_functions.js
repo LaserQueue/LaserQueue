@@ -169,23 +169,31 @@ function populateActions() {
 }
 
 // displays message in a bootstrap modal
-function modalMessage(modalTitle, modalBody) {
+function modalMessage(modalTitle, modalBody, dialogOptions) {
 	// hide all dialogs up
 	bootbox.hideAll();
 
-	// show the dialog with message and title
-	bootbox.dialog({
+	// the object to pass to bootbox
+	var dialogObj = {
 		title: modalTitle,
 		message: modalBody
-	});
+	};
 
-	// spoof our homebaked old modalMessage()
+	// include all modal options
+	if (!(typeof dialogOptions === 'undefined')) {
+		dialogObj = $.extend(dialogObj, dialogOptions);
+	}
+
+	// show the dialog with message and title
+	bootbox.dialog(dialogObj);
+
+	// insert the hooks we want
 	$('.bootbox').attr('id', 'notify-modal');
 	$('.modal-title').addClass('notify-modal-title');
 	$('.modal-title').attr('id', 'notify-modal-label');
 	$('.modal-body').addClass('notify-modal-body');
 
-	// bind clicking background to hide modal
+	// bind clicking background to hiding modal
 	$('.bootbox').click(function bgClickHideModals() {
 		bootbox.hideAll();
 	});
