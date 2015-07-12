@@ -1,6 +1,6 @@
-// a function to set up WebSockets
+// basically this handles everything WebSockets
 
-function socketSetup() { // god help me
+function socketSetup() {
 
 	// wait until host has a real value
 	while (host == 'undefined') {}
@@ -62,7 +62,7 @@ function socketSetup() { // god help me
 					});
 
 				});
-				
+
 				// render allCuts into table
 				$('.cutting-table-template').render(allCuts, renderDirectives);
 				populateActions();
@@ -76,6 +76,8 @@ function socketSetup() { // god help me
 				rickRoll();
 			} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
 				window.location.reload();
+			} else if(jsonData.action == 'notification') {
+				modalMessage(jsonData.title, jsonData.text)
 			}
 		}
 	};
