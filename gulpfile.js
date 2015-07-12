@@ -29,8 +29,8 @@ gulp.task('sass', function() {
 	.pipe(notify({message: 'SCSS has been compiled'}))
 });
 
-// compile js
-gulp.task('js', function() {
+// compile js for development
+gulp.task('js-dev', function() {
 	gulp.src('./www/lib/scripts/_*.js')
 		.pipe(jshint())
 		.pipe(jscs())
@@ -41,10 +41,20 @@ gulp.task('js', function() {
 		.pipe(fileinclude())
 			.on('error', noop)
 			.pipe(concat('scripts.min.js'))
-			.pipe(uglify())
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/js/'))
-	.pipe(notify({message: 'JS has been compiled'}))
+	.pipe(notify({message: 'JS has been compiled for development'}))
+});
+
+// compile js for production
+gulp.task('js-prod', function() {
+	gulp.src('./www/lib/scripts/scripts.js')
+		.pipe(fileinclude())
+			.on('error', noop)
+			.pipe(concat('scripts.min.js'))
+			.pipe(uglify())
+	.pipe(gulp.dest('./www/dist/js/'))
+	.pipe(notify({message: 'JS has been compiled for production'}))
 });
 
 // watch sass and compile
@@ -55,9 +65,9 @@ gulp.task('sass-watch', function() {
 
 // watch js and compile
 gulp.task('js-watch', function() {
-	gulp.start(['js']);
-	gulp.watch('./www/lib/scripts/*.js', ['js']);
-	gulp.watch('./.jscsrc', ['js']);
+	gulp.start(['js-dev']);
+	gulp.watch('./www/lib/scripts/*.js', ['js-dev']);
+	gulp.watch('./.jscsrc', ['js-dev']);
 });
 
 // make cache manifest

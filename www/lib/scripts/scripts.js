@@ -9,8 +9,8 @@
 @@include('../../bower_components/draggabilly/dist/draggabilly.pkgd.min.js')
 @@include('../../bower_components/bootbox/bootbox.js')
 @@include('../../bower_components/konami-js/konami.js')
-@@include('prism.js')
-@@include('jquery.popconfirm.js')
+@@include('./libraries/prism.js')
+@@include('./libraries/jquery.popconfirm.js')
 
 
 // general functions and utilities
