@@ -138,7 +138,7 @@ to use the new version.\n")
 
 				quit(10)
 	except Exception as e: 
-		cprint("Error updating: \n"+tbformat(e), color=bcolors.DARKRED)
+		cprint(tbformat(e, "Error updating:"), color=bcolors.DARKRED)
 
 def main():
 	getpacks()
