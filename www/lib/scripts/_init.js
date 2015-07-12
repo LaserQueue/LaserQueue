@@ -44,6 +44,11 @@ $('.btn-submit').click(function submitForm(clickAction) {
 
 });
 
+// configure <select>s in form to hide tooltip on click
+$('.cut-form-group select').click(function hideTooltip() {
+	$(this).tooltip('hide');
+});
+
 // bind ESC key to hide all dialogs
 $(document).keyup(function hideAllDialogs(e) {
 	if (e.keyCode == 27) {
