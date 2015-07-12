@@ -36,9 +36,9 @@ gulp.task('js', function() {
 		.pipe(jscs())
 		.pipe(jscsStylish.combineWithHintResults())
 		.pipe(jshint.reporter('jshint-stylish'));
-	gulp.src(['./www/lib/scripts/scripts.js'])
-		.pipe(fileinclude())
+	gulp.src('./www/lib/scripts/scripts.js')
 		.pipe(sourcemaps.init())
+		.pipe(fileinclude())
 			.on('error', noop)
 			.pipe(concat('scripts.min.js'))
 			.pipe(uglify())
@@ -106,5 +106,5 @@ gulp.task('size', function() {
 
 // Default task, just runs dev
 gulp.task('default', function() {
-	gulp.start(['sass-watch', 'js-watch', 'manifest-watch', 'size']).on('error', function() {});
+	gulp.start(['sass-watch', 'js-watch']).on('error', function() {});
 });
