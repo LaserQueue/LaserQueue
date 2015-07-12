@@ -12,6 +12,7 @@ function onAuth() {
 	if (!addEnabled) {
 		$('.cut-form-group').show();
 	}
+	populateActions();
 }
 
 function onFailedauth() {

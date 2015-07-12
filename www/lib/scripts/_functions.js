@@ -8,6 +8,7 @@ if (!String.prototype.format) {
 		});
 	};
 }
+
 if (!String.prototype.repeat) {
 	String.prototype.repeat = function countThrough(count) {
 		'use strict';
