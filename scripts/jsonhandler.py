@@ -29,6 +29,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata):
 	authstate = sessions.check(sec)
 
 	if action in config["authactions"] and not authstate: 
+		serveToConnection({"action":"deauthed"}, ws)
 		return "This action requires auth."
 
 	cmds = {str(i): i for i in commandlist}
