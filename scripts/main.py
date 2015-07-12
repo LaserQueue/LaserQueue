@@ -62,7 +62,8 @@ def server(websocket, path):
 
 				process(messagedata, websocket)
 		except Exception as e: 
-			cprint(bcolors.YELLOW + "{} on line {}: {}".format(type(e).__name__, e.__traceback__.tb_lasti, str(e)))
+			cprint(bcolors.YELLOW + "File {} line {}\n{}: {}".format(e.__traceback__.tb_frame.f_code.co_filename,
+			 e.__traceback__.tb_lasti, type(e).__name__, str(e)))
 			if config["send_notifications"]:
 				serveToConnection({
 						"action": "notification",
