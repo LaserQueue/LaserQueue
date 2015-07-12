@@ -33,4 +33,5 @@ function onDeauth() {
 	if (!addEnabled) {
 		$('.cut-form-group').hide();
 	}
+	populateActions();
 }
