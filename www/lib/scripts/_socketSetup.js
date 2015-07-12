@@ -77,7 +77,7 @@ function socketSetup() {
 			} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
 				window.location.reload();
 			} else if(jsonData.action == 'notification') {
-				modalMessage(jsonData.title, jsonData.text)
+				modalMessage(jsonData.title, jsonData.text);
 			}
 		}
 	};
