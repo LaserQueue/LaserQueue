@@ -17,7 +17,7 @@
 @@include('_functions.js')
 
 // config loading and parsing
-@@include('_config.js')
+@@include('_applyConfig.js')
 
 // initialization
 @@include('_init.js')
