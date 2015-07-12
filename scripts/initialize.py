@@ -7,6 +7,7 @@ import gzip
 import urllib.request
 import tarfile
 import time
+import getpass, hashlib
 from math import ceil
 
 from parseargv import args
@@ -146,18 +147,18 @@ def main():
 
 	if args.newpass:
 		if type(args.newpass) is bool:
-			# here goes input stuff
-			pass
+			newpass = cinput("New password: ", func=getpass.getpass)
 		else:
-			try:
-				hash_object = hashlib.sha256(args.newpass.encode()).hexdigest()
-				hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
-				hashed = open("hashpassword", "w")
-				hashed.write(hashed_final)
-				hashed.close()
-				cprint("Password changed to {}.".format("*"*len(args.newpass))
-			except Exception as e:
-				cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
+			newpass = args.newpass
+		try:
+			hash_object = hashlib.sha256(newpass.encode()).hexdigest()
+			hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
+			hashed = open("hashpassword", "w")
+			hashed.write(hashed_final)
+			hashed.close()
+			cprint("Password changed to {}.".format("*"*len(newpass)))
+		except Exception as e:
+			cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
 
 	if args.host:
 		data = json.load(open(os.path.join("..", "www", "config.json")))

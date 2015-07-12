@@ -170,7 +170,7 @@ def cprint(text, color="", strip=False):
 	for i in prints[1:]:
 		print(" "*(26+len(cprintconf.name)) + color + i + bcolors.ENDC)
 
-def cinput(text, color="", strip=False):
+def cinput(text, color="", strip=False, func=input):
 	text = str(text)
 	if strip:
 		prints = [i.strip().rstrip() for i in text.split("\n")]
@@ -181,6 +181,6 @@ def cinput(text, color="", strip=False):
 		print(date_time_string() + originstr + color + prints[0] + bcolors.ENDC)
 		for i in prints[1:-1]:
 			print(" "*(26+len(cprintconf.name)) + color + i + bcolors.ENDC)
-		return input(" "*(26+len(cprintconf.name)) + color + prints[-1] + bcolors.ENDC)
+		return func(" "*(26+len(cprintconf.name)) + color + prints[-1] + bcolors.ENDC)
 	else:
-		return input(date_time_string() + originstr + color + prints[0] + bcolors.ENDC)
+		return func(date_time_string() + originstr + color + prints[0] + bcolors.ENDC)
