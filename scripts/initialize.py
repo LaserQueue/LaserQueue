@@ -32,20 +32,43 @@ def qsort(l):
 				greater = qsort([x for x in l[1:] if x >= pivot])
 				return lesser + [pivot] + greater
 
-def copyconf(dataoverride = False):
-	if os.path.exists(os.path.join("..", "www", "config.json")) and not dataoverride:
-		currdata = json.load(open(os.path.join("..", "www", "config.json")))
+
+confpath = os.path.join("..", "www", "config.json")
+uconfpath = os.path.join("..", "www", "userconf.json")
+dconfpath = os.path.join("..", "www", "defaultconf.json")
+
+
+def openconf():
+	return json.load(open(confpath))
+
+def saveconf(data):
+	return json.dump(data, open(confpath, "w"), indent=2, sort_keys=True)
+
+def copyconf():
+	if os.path.exists(confpath) and not args.regen:
+		currdata = openconf()
 		if "host" not in currdata or not currdata["host"]:
 			currdata["host"] = getIps()[0]
 	else:
 		currdata = {"host": getIps()[0]}
-	data = json.load(open(os.path.join("..", "www", "defaultconf.json")))
-	if os.path.exists(os.path.join("..", "www", "userconf.json")):
-		userdata = json.load(open(os.path.join("..", "www", "userconf.json")))
+	data = json.load(open(dconfpath))
+	if os.path.exists(uconfpath):
+		userdata = json.load(open(uconfpath))
 	else:
 		userdata = {}
 	data = dict(dict(data, **userdata), **currdata)
-	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
+	saveconf(data)
+
+
+def getIps():
+	from netifaces import interfaces, ifaddresses, AF_INET
+	ips = []
+	for ifaceName in interfaces():
+		addresses = [i['addr'] for i in ifaddresses(ifaceName).get(AF_INET, [{"addr":"not found"}])]
+		if "not found" not in addresses and "127.0.0.1" not in addresses:
+			ips += addresses
+	return ips
+
 
 PACKAGES = [
 	"websockets",
@@ -85,6 +108,9 @@ def getpacks():
 	if installed:
 		cprint("Sucessfully installed all dependencies!")
 
+
+
+
 def _fillblanks(odict, adict):
 	return dict(adict, **odict)
 
@@ -94,30 +120,43 @@ def make_tarfile(output_filename, source_dir):
 
 def update():
 	if args.skipupdate: return
-	config = json.load(open(os.path.join("..", "www", "defaultconf.json")))
-
+	import git
+	config = json.load(open(dconfpath))
 
 	try:
 		configpage = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
 		masterconfig = json.loads(configpage)
-		if "version" not in masterconfig: return
-		if masterconfig["version"] > config["version"]:
-			cprint("New update found: Version "+masterconfig["version"]+".")
+
+		if "version" in masterconfig and masterconfig["version"] > config["version"]:
+
+			cprint("New update found: Version {}.".format(masterconfig["version"]))
+
+			prefix = "{}-".format(os.path.basename(os.path.abspath("..")))
+			updatedir = os.path.join("..","..",prefix+masterconfig["version"])
+			backupfile = os.path.join("..", "..", prefix+config["version"]+".tar.gz")
+
+			prompt = """Do you want to get version {} to {}? 
+				          The fetch option will update into {}.
+				          The overwrite option will backup to {}, and fetch master.
+				          (fetch / overwrite / cancel) """.format(config["version"], masterconfig["version"], 
+				          	os.path.abspath(updatedir), os.path.abspath(backupfile))
+
 			confirm = ("overwrite" if args.allupdate else "")
-			prefix = os.path.basename(os.path.abspath(".."))+"-"
-
 			while confirm not in ["fetch", "overwrite", "cancel"]:
-				confirm = cinput("Do you want to get version "+config["version"]+" to "+masterconfig["version"]+"? \n\
-The fetch option will update into "+os.path.abspath(os.path.join("..", "..", prefix+masterconfig["version"]))+". \n\
-The overwrite option will backup to "+os.path.abspath(os.path.join("..", "..", prefix+config["version"]+".tar.gz"))+", and fetch master. \n\
-(fetch / overwrite / cancel) ").lower().strip().rstrip()
-			import git
-			if confirm == "fetch":
-				git.Repo.clone_from(config["update_repo"], os.path.join("..","..",prefix+masterconfig["version"]))
+				confirm = cinput(prompt, strip=True).lower().strip().rstrip()
 
-				cprint("\nNew version located in "+os.path.abspath(os.path.join("..","..",prefix+masterconfig["version"]))+". Run \n\
-"+os.path.abspath(os.path.join("..","..",prefix+masterconfig["version"], "start.py"))+" \n\
-to use the new version.\n")
+			if confirm == "fetch":
+				git.Repo.clone_from(config["update_repo"], updatedir)
+
+				cprint("""\nNew version located in: 
+				            {}
+				            Run the following: 
+				            {} 
+				            to use the new version.""".format(
+				            	os.path.abspath(updatedir),
+				            	os.path.abspath(os.path.join(updatedir, "start.py"))
+				            ), strip=True)
+
 			elif confirm == "overwrite":
 				if not os.path.exists(os.path.join("..", ".git")):
 					repo = git.Repo.init("..")
@@ -127,76 +166,76 @@ to use the new version.\n")
 					origin = repo.create_remote("origin", config["update_repo"])
 					origin.fetch()
 				try:
-					tarchive = open(os.path.join("..", "..", prefix+config["version"]+".tar.gz"), 'wb')
+					tarchive = open(backupfile, 'wb')
 					repo.archive(tarchive)
 					gzip.GzipFile(fileobj=tarchive, mode='wb')
 				except:
-					make_tarfile(os.path.join("..", "..", prefix+config["version"]+".tar.gz"), "..")
+					make_tarfile(backupfile, "..")
 
 				repo.git.fetch("--all")
 				repo.git.reset("--hard", "origin/master")
-				json.dump(config, open(os.path.join("..", "www", "config.json"), "w"), sort_keys=True)
-
-				quit(10)
+				json.dump(config, open(confpath, "w"), sort_keys=True)
+				quit(10) # Tells the start script to restart
 	except Exception as e: 
 		cprint(tbformat(e, "Error updating:"), color=bcolors.DARKRED)
 
-def main():
-	getpacks()
-	copyconf(args.regen)
 
-	if args.newpass:
-		if type(args.newpass) is bool:
-			newpass = cinput("New password: ", func=getpass.getpass)
-		else:
-			newpass = args.newpass
-		try:
-			hash_object = hashlib.sha256(newpass.encode()).hexdigest()
-			hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
-			hashed = open("hashpassword", "w")
-			hashed.write(hashed_final)
-			hashed.close()
-			cprint("Password changed to {}.".format("*"*len(newpass)))
-		except Exception as e:
-			cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
 
-	if args.host:
-		data = json.load(open(os.path.join("..", "www", "config.json")))
-		data["host"] = getIps()[0]
-		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
-	if args.local:
-		data = json.load(open(os.path.join("..", "www", "config.json")))
-		data["host"] = "localhost"
-		json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
+def changepass():
+	if type(args.newpass) is bool:
+		newpass = cinput("New password: ", func=getpass.getpass)
 	else:
-		data = json.load(open(os.path.join("..", "www", "config.json")))
+		newpass = args.newpass
+	try:
+		hash_object = hashlib.sha256(newpass.encode()).hexdigest()
+		hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
+		hashed = open("hashpassword", "w")
+		hashed.write(hashed_final)
+		hashed.close()
+		cprint("Password changed to {}.".format("*"*len(newpass)))
+	except Exception as e:
+		cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
+
+
+def confirmhost():
+	if args.host:
+		data = openconf()
+		data["host"] = getIps()[0]
+		saveconf(data)
+	if args.local:
+		data = openconf()
+		data["host"] = "localhost"
+		saveconf(data)
+	else:
+		data = openconf()
 		if "host" in data and data["host"] == "localhost":
 			cprint("Last time you ran this program, it was in local mode.")
+
 			confirm = ""
 			while confirm not in ["y", "n"]:
 				confirm = cinput("Do you want to regenerate the host? (y/n) ").lower().strip().rstrip()
+
 			if confirm == "y":
 				data["host"] = getIps()[0]
-			json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
-	data = json.load(open(os.path.join("..", "www", "config.json")))
-	defaultdata = json.load(open(os.path.join("..", "www", "defaultconf.json")))
+			saveconf(data)
+
+	data = openconf()
+	defaultdata = json.load(open(dconfpath))
 	if "host" not in data:
 		data["host"] = getIps()[0]
 	data["version"] = defaultdata["version"]
-	json.dump(data, open(os.path.join("..", "www", "config.json"), "w"), indent=2, sort_keys=True)
+	saveconf(data)
 
+
+
+def main():
+	getpacks()
+	copyconf()
+	if args.newpass: changepass()	
+	confirmhost()
 	update()
 				
 	cprint("Initialization complete.")
-
-def getIps():
-	from netifaces import interfaces, ifaddresses, AF_INET
-	ips = []
-	for ifaceName in interfaces():
-		addresses = [i['addr'] for i in ifaddresses(ifaceName).get(AF_INET, [{"addr":"not found"}])]
-		if "not found" not in addresses and "127.0.0.1" not in addresses:
-			ips += addresses
-	return ips
 
 if __name__ == "__main__":
 	main()
