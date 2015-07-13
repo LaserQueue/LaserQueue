@@ -19,14 +19,6 @@ import hashlib
 from config import *
 config = Config(os.path.join("..","www","config.json"))
 
-if os.path.exists("password"):
-	opass = open("password").read().strip().rstrip()
-	hash_object = hashlib.sha256(opass.encode()).hexdigest()
-	hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
-	hashed = open("hashpassword", "w")
-	hashed.write(hashed_final)
-	hashed.close()
-	os.remove("password")
 if os.path.exists("hashpassword"):
 	PASSWORD = open("hashpassword").read().strip().rstrip()
 

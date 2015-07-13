@@ -10,7 +10,7 @@ Get the latest version by `git clone`ing the repo or downloading a zip. If there
 
 To start the server, run `start.sh` or `start.py` or `start.bat` if you're on Windows. You'll need Python 3.4.x or greater.
 
-To change the admin login password, create a plaintext file `password` under backend. This will be hashed upon script run.
+To change the admin login password, run the script with `--new-password`.
 
 ### Flags:
 
