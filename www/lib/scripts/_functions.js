@@ -180,7 +180,7 @@ function modalMessage(modalTitle, modalBody, dialogOptions) {
 	};
 
 	// include all modal options
-	if (!(typeof dialogOptions === 'undefined')) {
+	if (typeof dialogOptions !== 'undefined') {
 		dialogObj = $.extend(dialogObj, dialogOptions);
 	}
 
