@@ -23,39 +23,37 @@ if os.path.exists("hashpassword"):
 	PASSWORD = open("hashpassword").read().strip().rstrip()
 
 class SID:
+	"""
+	A single session instance.
+	"""
 	def __init__(self, seckey=None):
 		self.lasttimestamp = time.time()
 		self.timestamp = time.time()
 		self.authstamp = time.time()
 		self.authstate = False
 		self.seckey = str(seckey)
-	@classmethod
-	def load(cls, jdata):
-		self = cls()
-		self.lasttimestamp = jdata["laststamp"]
-		self.timestamp = jdata["stamp"]
-		self.authstamp = jdata["authstamp"]
-		self.authstate = jdata["auth"]
-		self.seckey = str(jdata.get("seckey"))
-		return self
-	def serialize(self):
-		return {
-			"stamp": self.timestamp,
-			"laststamp": self.lasttimestamp,
-			"authstamp": self.authstamp,
-			"auth": self.authstate,
-			"seckey": self.seckey
-		}
+
 	def auth(self, password):
+		"""
+		Attempt to auth using `password`, by checking it against PASSWORD.
+		"""
 		if os.path.exists("hashpassword"):
 			hash_object = hashlib.sha256(password.strip().rstrip().encode()).hexdigest()
 			if hash_object.strip().rstrip() == PASSWORD: 
 				self.authstate = True
 				return True
 		return False
+
 	def deauth(self):
+		"""
+		Remove this session's authstate.
+		"""
 		self.authstate = False
+
 	def checkstate(self):
+		"""
+		Check this session's state, making sure that nothing has timed out yet.
+		"""
 		timestamp = time.time()
 		if timestamp-self.authstamp > config["auth_timeout"] and config["auth_timeout"]:
 			self.authstate = False
@@ -64,58 +62,77 @@ class SID:
 		elif timestamp-self.timestamp > config["sid_total_timeout"] and config["sid_total_timeout"]:
 			return False
 		return True
+
 	def onupdate(self):
+		"""
+		Update the session's timestamps.
+		"""
 		self.lasttimestamp = time.time()
 		self.authstamp = time.time()
-	def regen(self):
-		self.lasttimestamp = time.time()
-		self.timestamp = time.time()
-		self.authstamp = time.time()
-		self.authstate = False
 
 
 
 class SIDCache:
+	"""
+	A collection of session instances.
+	"""
 	def __init__(self):
 		self.sids = []
-	@classmethod
-	def load(cls, jdata):
-		self = cls()
-		for sid in jdata:
-			self.sids.append(SID.load(sid))
-		return self
+
 	def check(self, sec):
+		"""
+		Get the authstate of the specified key, and regen if needed.
+		"""
 		csid = self._get(sec)
-		if not csid:               return False
+		if not csid:               return False # If the key doesn't exist, return False
 		elif not csid.checkstate(): 
-			self.sids.remove(csid);  return False
+			self.sids.remove(csid);  return False # If the key has been destroyed, return False
 		csid.onupdate()
-		if not csid.authstate:     return False
-		return True
+		if not csid.authstate:     return False # If the key isn't authed, return False
+		return True # Otherwise, return True
 	def auth(self, sec, password):
+		"""
+		Attempt to auth `sec` using `password`.
+		"""
 		if self.check(sec) or self._get(sec).auth(password): 
-			return True
+			return True # If the key's already authed or the auth succeeded, return True
 		return False
+
 	def deauth(self, sec):
+		"""
+		Deauth `sec`.
+		"""
 		self._get(sec).deauth()
-	def serialize(self):
-		return [sid.serialize() for sid in self.sids]
+
 	def allauth(self):
+		"""
+		Return a list of every authed key.
+		"""
 		return [sid.seckey for sid in self.sids if sid.authstate]
-	def allnonauth(self):
-		return [sid.seckey for sid in self.sids if not sid.authstate]
+
 	def _isin(self, sec):
+		"""
+		Check if the key is in the cache.
+		"""
 		for i in self.sids:
 			if i.seckey == sec:
 				return True
 		return False
+
 	def _get(self, sec):
-		if not self._isin(sec):
+		"""
+		Get the session for the key given.
+		"""
+		if not self._isin(sec): # If it doesn't exist, make it
 			self.sids.append(SID(sec))
+
 		for sid in self.sids:
 			if sid.seckey == sec:
 				return sid
 	def update(self):
+		"""
+		Iterate through every session and update it.
+		"""
 		for sid in self.sids:
 			self.check(sid.seckey)
 
