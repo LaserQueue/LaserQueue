@@ -141,6 +141,11 @@ class colorconf:
 		Return the tag for pretty printing from the config.
 		"""
 		return "{}[{}] {}".format(self.color, self.name, bcolors.ENDC)
+	def whitespace(self):
+		"""
+		Return the whitespace for non-printed lines.
+		"""
+		return " "*(26+len(self.name))
 
 cprintconf = colorconf() # create the instance of colorconf used to configure cprint and cinput
 
@@ -170,7 +175,7 @@ def cprint(text, color="", strip=False):
 	                        color, prints[0])) # Print the first line with a timestamp
 
 	for i in prints[1:]:
-			print("{}{}{}".format(" "*(26+len(cprintconf.name)), 
+			print("{}{}{}".format(cprintconf.whitespace(), 
 			                      color, i)) # Print all consecutive lines
 
 def cinput(text, color="", strip=False, func=input):
@@ -193,10 +198,10 @@ def cinput(text, color="", strip=False, func=input):
 		                        color, prints[0]))
 
 		for i in prints[1:-1]:
-			print("{}{}{}".format(" "*(26+len(cprintconf.name)), 
+			print("{}{}{}".format(cprintconf.whitespace(), 
 			                      color, i))
 
-		return func("{}{}{}{}".format(" "*(26+len(cprintconf.name)), color,
+		return func("{}{}{}{}".format(cprintconf.whitespace(), color,
 		                              prints[-1], bcolors.ENDC))
 	else:
 		return func("{}{}{}{}{}".format(date_time_string(), originstr, color,
