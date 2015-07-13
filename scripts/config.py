@@ -174,6 +174,7 @@ def cinput(text, color="", strip=False, func=input):
 	text = str(text)
 	if strip:
 		prints = [i.strip().rstrip() for i in text.split("\n")]
+		prints[-1] += " "
 	else:
 		prints = text.split("\n")
 	originstr = cprintconf.color + "[" + cprintconf.name + "] " + bcolors.ENDC

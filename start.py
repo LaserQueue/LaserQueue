@@ -51,7 +51,6 @@ if __name__ == "__main__":
 	cprintconf.name = "Setup"
 	os.chdir("scripts")
 	if not args.no_init:
-		cprint("Beginning initialization.")
 		initcode = gSystem("initialize.py "+" ".join(sys.argv[1:]))
 		if initcode:
 			if initcode == 2560:
