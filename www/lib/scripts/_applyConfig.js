@@ -16,10 +16,10 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	logText('Begin log');
 
 	// log entire config file
-	logText('Config file follows: ' + JSON.stringify(config, null, 2));
+	logText('Config file follows: {0}'.format(JSON.stringify(config, null, 2)));
 
 	// set WebSockets hostname and port from config
-	host = 'ws://' + config.host + ':' + config.port;
+	host = 'ws://{0}:{1}'.format(config.host, config.port);
 
 	// set materials and priorities from config
 	materials = config.materials;
@@ -40,21 +40,23 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	// render materials dropdown
 	if (!config.default_material) {
-		$('#cut-material').append('<option disabled selected value="N/A" class="selected">' + config.material_input + '</option>');
+		$('#cut-material').append('<option disabled selected value="N/A" class="selected">{0}</option>'.format(config.material_input));
 	}
 	for(var m in materials) {
 		var mat_selected = (m === config.default_material ? 'selected' : '');
-		$('#cut-material').append('<option ' + mat_selected + ' value="' + m + '" class="' + mat_selected + '">' + materials[m] + '</option>');
+		$('#cut-material').append('<option {0} value="{1}" class="{0}">{2}</option>'.format(
+			mat_selected, m, materials[m]));
 	}
 
 	// render the priorities dropdown
 	if (config.priority_choose) {
-		$('#priority-dropdown').append('<option disabled selected value="-1" class="selected">' + config.priority_input + '</option>');
+		$('#priority-dropdown').append('<option disabled selected value="-1" class="selected">{0}</option>'.format(config.priority_input));
 	}
 	for(var p in priorities) {
-		var disabled = (p < config.default_priority && !config.priority_selection ? 'disabled ' : '');
+		var disabled = (p < config.default_priority && !config.priority_selection ? 'disabled' : '');
 		var pri_selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
-		$('#priority-dropdown').append('<option ' + pri_selected + ' value="' + String(priorities.length-p-1) + '"  class="'+ disabled + pri_selected + '">' + priorities[p] + '</option>');
+		$('#priority-dropdown').append('<option {0} value="{1}"  class="{2} {0}">{3}</option>'.format(
+			pri_selected, String(priorities.length-p-1), disabled, priorities[p]));
 	}
 	if (!config.priority_selection) {
 		$('.disabled').prop('disabled', true);
@@ -79,11 +81,11 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	// set up action buttons from config
 	buttons = {
-		'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="' + config.remove_hover + '"></a>',
-		'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="' + config.incr_hover + '"></a>',
-		'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="' + config.decr_hover + '"></a>',
-		'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="' + config.pass_hover + '"></a>',
-		'relmove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="' + config.drag_hover + '"></a>'
+		'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.remove_hover),
+		'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.incr_hover),
+		'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.decr_hover),
+		'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.pass_hover),
+		'relmove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.drag_hover)
 	};
 
 	// set up admin mode if enabled
@@ -147,7 +149,7 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	}
 
 	// log status
-	logText('LaserQueue is up and config is loaded and parsed. Attempting connection to WebSockets host at ' + host);
+	logText('LaserQueue is up and config is loaded and parsed. Attempting connection to WebSockets host at {0}.'.format(host));
 
 	// attempt WebSockets connection
 	socketSetup();
@@ -156,7 +158,7 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	setInterval(function tryToReconnect() {
 		if(typeof reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
 			// initialize websockets if closed
-			logText('Attempting connection to WebSockets host', host);
+			logText('Attempting connection to WebSockets host {0}.'.format(host));
 			socketSetup();
 		}
 	}, reconnectRate);

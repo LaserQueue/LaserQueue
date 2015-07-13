@@ -10,7 +10,7 @@ var getConfigFile, config, host, jsonData, socket, materials, priorities, refres
 			html: function drawCoachMode(params) {
 				return this.priority + (
 					this.coachmodified ?
-						' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="' + config.modified_hover + '"></span>'
+						' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="{0}"></span>'.format(config.modified_hover)
 						: ''
 				);
 			},

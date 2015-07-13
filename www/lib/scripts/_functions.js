@@ -13,7 +13,7 @@ if (!String.prototype.repeat) {
 	String.prototype.repeat = function countThrough(count) {
 		'use strict';
 		if (this === null) {
-			throw new TypeError('can\'t convert ' + this + ' to object');
+			throw new TypeError('can\'t convert {0} to object'.format(this));
 		}
 		var str = '' + this;
 		count = +count;
@@ -58,26 +58,26 @@ function ensureNumberStringLength(number, len) {
 
 // logs text to devlog on page
 function logText(text) {
-	var currentTime = new Date();
-	var currentDay = ensureNumberStringLength(currentTime.getDate(), 2);
-	var currentMonth = months[currentTime.getMonth()];
-	var currentYear = currentTime.getFullYear();
-	var currentHours = ensureNumberStringLength(currentTime.getHours(), 2);
-	var currentMinutes = ensureNumberStringLength(currentTime.getMinutes(), 2);
-	var currentSeconds = ensureNumberStringLength(currentTime.getSeconds(), 2);
-
-	var timestamp = '[{0}/{1}/{2} {3}:{4}:{5}] '.format(currentDay, currentMonth, currentYear,
-		currentHours, currentMinutes, currentSeconds);
 	if(devLog) {
+		var currentTime = new Date();
+		var currentDay = ensureNumberStringLength(currentTime.getDate(), 2);
+		var currentMonth = months[currentTime.getMonth()];
+		var currentYear = currentTime.getFullYear();
+		var currentHours = ensureNumberStringLength(currentTime.getHours(), 2);
+		var currentMinutes = ensureNumberStringLength(currentTime.getMinutes(), 2);
+		var currentSeconds = ensureNumberStringLength(currentTime.getSeconds(), 2);
+
+		var timestamp = '[{0}/{1}/{2} {3}:{4}:{5}] '.format(currentDay, currentMonth, currentYear,
+			currentHours, currentMinutes, currentSeconds);
 
 		var textArray = text.split('\n');
 
 		for (var i = textArray.length - 1; i > 0; i--) {
-			$('.log-pre').prepend('<span class="log-time">' + ' '.repeat(23) + '</span> ' + textArray[i] + '\n');
+			$('.log-pre').prepend('<span class="log-time">{0}</span> {1}\n'.format(' '.repeat(23), textArray[i]));
 		}
-		$('.log-pre').prepend('<span class="log-time"> ' + timestamp + '</span>' + textArray[0] + '\n');
+		$('.log-pre').prepend('<span class="log-time"> {0}</span>{1}\n'.format(timestamp, textArray[0]));
 	} else {
-		window.console.log(timestamp+text);
+		window.console.log(text);
 	}
 }
 
@@ -216,7 +216,7 @@ function socketSend(jdata) {
 	} else {
 		// if not sending, log why
 		if(socket.readyState != 1) {
-			logText('socketSend() has been called, but socket.readyState is ' + socketState + '. The socket is probably not connected yet.');
+			logText('socketSend() has been called, but socket.readyState is {0}. The socket is probably not connected yet.'.format(socketState));
 		}
 	}
 }

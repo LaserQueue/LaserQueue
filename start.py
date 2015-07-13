@@ -89,7 +89,7 @@ if __name__ == "__main__":
 	load_backend = (args.load_backend or (not args.load_frontend and not args.load_backend)) and not args.load_none
 
 
-	passprompt = "{}Password".format(cprintconf.whitespace())
+	passprompt = "{}Password: ".format(cprintconf.whitespace()[1:])
 
 	if load_backend: # Make sure that we're at the correct permission level
 		if os.name != "nt" and os.geteuid() and backend_port < 1024:
