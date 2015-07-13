@@ -228,10 +228,7 @@ def changepass():
 	"""
 	if args.newpass:
 		# Get password
-		if type(args.newpass) is bool:
-			newpass = cinput("New password: ", func=getpass.getpass)
-		else:
-			newpass = args.newpass
+		newpass = cinput("New password: ", func=getpass.getpass)
 
 		try:
 			# Hash the new password

@@ -23,6 +23,7 @@ To change the admin login password, create a plaintext file `password` under bac
 - `-n`, `--regen-host`: Regenerate the host in the config. Does not affect any other config values. 
 - `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
 - `-nu`, `--no-update`: Does not install or prompt for updates.
+- `--new-password`: No short option. Allows you to reset the admin password from within the program.
 - `--backend`: No short option. Only runs the backend.
 - `--frontend`: No short option. Only runs the frontend.
 - `--init-only`: No short option. Runs neither the frontend nor the backend.
