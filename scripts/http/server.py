@@ -1232,6 +1232,10 @@ def test(HandlerClass=BaseHTTPRequestHandler,
 		httpd.server_close()
 		sys.exit(0)
 
+def main(port):
+	test(HandlerClass=SimpleHTTPRequestHandler, port=port)
+
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--cgi', action='store_true',
