@@ -111,7 +111,7 @@ def getpacks():
 			# Ask again, with minor error colors
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = cinput( + "Install failed, try again with elevated permissions? (y/n) ", color=bcolors.RED).lower().strip().rstrip()
+				confirm = cinput("Install failed, try again with elevated permissions? (y/n) ", color=bcolors.RED).lower().strip().rstrip()
 
 			if confirm == "n": # If the person chose not to install the dependency
 				cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
