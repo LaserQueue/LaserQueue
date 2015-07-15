@@ -72,6 +72,7 @@
 	],
 	"metabump": 0,
 	"metabumpmult": 30,	
+	"metabumpmax": -1,
 	"google_analytics_key": "",
 	"priority_selection": false,
 	"allow_force_refresh": false,

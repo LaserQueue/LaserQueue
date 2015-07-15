@@ -114,7 +114,7 @@ def upkeep():
 	"""
 	Thread to perform tasks asynchronously.
 	"""
-	global queue, authed, sessions
+	global queue, authed, sessions, queuehash
 	while True:
 		try:
 			# Keep everything in line
@@ -132,6 +132,13 @@ def upkeep():
 			for i in socks:
 				if not i.open:
 					sessions.sids.remove(sessions._get(getsec(i)))
+
+			# If the queue changed, serve it
+			queue.metapriority()
+			if queuehash != hash(str(queue.queue)):
+				queuehash = hash(str(queue.queue))
+				serveToConnections(comm.generateData(queue.serialize()), socks)
+
 			time.sleep(config["refreshRate"]/1000)
 		except Exception as e: # Error reporting
 			cprint(tbformat(e, "Error in upkeep thread:"), color=bcolors.YELLOW)

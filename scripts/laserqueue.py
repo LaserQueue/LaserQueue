@@ -88,7 +88,10 @@ class Queue:
 			for item in i:
 				if time.time()-item["time"] > (config["metabump"] + config["metabumpmult"]*item["priority"]) and config["metabump"]:
 					pri = item["priority"]-1
-					if pri < 0:
+					maxbump = config["metabumpmax"]
+					if maxbump < 0:
+						maxbump = lpri
+					if pri < (lpri-maxbump):
 						item["time"] = time.time()
 						continue
 					i.remove(item)
