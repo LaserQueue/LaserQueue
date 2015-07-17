@@ -536,11 +536,10 @@ class BaseHTTPRequestHandler(socketserver.StreamRequestHandler):
 
 		"""
 
-		sys.stderr.write(date_time_string() + "{0}{1} - {2}{3}\n".format(
-			cprintconf.tag(),
+		cprint("{} - {}\n".format
 			self.address_string(),
-			format%args,
-			bcolors.ENDC)) 
+			format%args), 
+			func=sys.stderr.write) 
 
 	def version_string(self):
 		"""Return the server software version string."""

@@ -151,9 +151,9 @@ cprintconf = colorconf() # create the instance of colorconf used to configure cp
 
 lastprinted = None
 
-def cprint(text, color="", strip=False):
+def cprint(text, color="", strip=False, func=print):
 	"""
-	Pretty print `text`, with `color` as its color. 
+	Pretty print `text`, with `color` as its color, using `func`.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
 	global lastprinted
@@ -171,11 +171,11 @@ def cprint(text, color="", strip=False):
 
 
 	originstr = cprintconf.tag()
-	print("{}{}{}{}".format(date_time_string(), originstr, 
+	func("{}{}{}{}".format(date_time_string(), originstr, 
 	                        color, prints[0])) # Print the first line with a timestamp
 
 	for i in prints[1:]:
-			print("{}{}{}".format(cprintconf.whitespace(), 
+			func("{}{}{}".format(cprintconf.whitespace(), 
 			                      color, i)) # Print all consecutive lines
 
 def cinput(text, color="", strip=False, func=input):
