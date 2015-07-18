@@ -151,7 +151,7 @@ cprintconf = colorconf() # create the instance of colorconf used to configure cp
 
 lastprinted = None
 
-def cprint(text, color="", strip=False, func=print):
+def cprint(text, color="", strip=False, func=print, add_newline=False):
 	"""
 	Pretty print `text`, with `color` as its color, using `func`.
 	If `strip`, then remove whitespace from both sides of each line.
@@ -173,12 +173,14 @@ def cprint(text, color="", strip=False, func=print):
 	originstr = cprintconf.tag()
 	func("{}{}{}{}".format(date_time_string(), originstr, 
 	                        color, prints[0])) # Print the first line with a timestamp
+	if add_newline: func("\n")
 
 	for i in prints[1:]:
 			func("{}{}{}".format(cprintconf.whitespace(), 
 			                      color, i)) # Print all consecutive lines
+			if add_newline: func("\n")
 
-def cinput(text, color="", strip=False, func=input):
+def cinput(text, color="", strip=False, func=input, add_newline=False):
 	"""
 	Pretty print `text`, with `color` as its color. Take input using `func` on the last line.
 	If `strip`, then remove whitespace from both sides of each line.
@@ -196,14 +198,18 @@ def cinput(text, color="", strip=False, func=input):
 	if len(prints) > 1: 
 		print("{}{}{}{}".format(date_time_string(), originstr, 
 		                        color, prints[0]))
+		if add_newline: func("\n")
 
 		for i in prints[1:-1]:
 			print("{}{}{}".format(cprintconf.whitespace(), 
 			                      color, i))
+			if add_newline: func("\n")
 
 		return func("{}{}{}{}".format(cprintconf.whitespace(), color,
 		                              prints[-1], bcolors.ENDC))
+		if add_newline: func("\n")
 	else:
 		return func("{}{}{}{}{}".format(date_time_string(), originstr, color,
 		                                prints[0], bcolors.ENDC))
+		if add_newline: func("\n")
 
