@@ -536,7 +536,7 @@ class BaseHTTPRequestHandler(socketserver.StreamRequestHandler):
 
 		"""
 
-		cprint("{} - {}\n".format
+		cprint("{} - {}\n".format(
 			self.address_string(),
 			format%args), 
 			func=sys.stderr.write) 
