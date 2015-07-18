@@ -36,7 +36,7 @@ def gSystem(cmd):
 	else:
 		return os.system("python3 "+cmd)
 
-def cleanup(): 
+def cleanup():
 	"""
 	Clean up threads left behind.
 	"""
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 			frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 	else: # If we aren't loading the frontend, use a dummyProcess so the program doesn't get confused
 		frontend = dummyProcess()
-	
+
 	try:
 		# Wait for something to quit
 		while not backend.returncode and not frontend.returncode and not args.load_none: time.sleep(0.001)
@@ -128,8 +128,6 @@ if __name__ == "__main__":
 		print()
 		cprintconf.color = bcolors.RED
 		cprintconf.name = "Cleanup"
-		cprint("Keyboard interrupt recieved, exiting.")
+		cprint("Keyboard interrupt received, exiting.")
 	finally: # And then, quit
 		quit(0)
-	
-
