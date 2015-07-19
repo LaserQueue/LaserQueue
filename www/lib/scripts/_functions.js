@@ -97,20 +97,46 @@ function populateActions() {
 	}
 
 	// handler to remove a job
-	$('.remove-job').click(function removeJob() {
-		googleAnalytics('send', 'event', 'action', 'click', 'remove job');
-		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
-		socketSend({
-			'action': 'remove',
-			'uuid': $($(this).parents()[1]).attr('data-uuid')
-		});
+	$('.remove-job').click(function removeJob(event) {
+		if(event.altKey) {
+			googleAnalytics('send', 'event', 'action', 'click', 'remove job');
+			logText('removing item ' + $(this).parents('tr').attr('data-uuid'));
+			socketSend({
+				'action': 'remove',
+				'uuid': $(this).parents('tr').attr('data-uuid')
+			});
+		} else {
+			$(event.toElement).tooltip('hide');
+			$('.remove-job').popover('hide');
+			$(event.toElement).popover({
+				placement: 'bottom',
+				html: true,
+				content: function confirmModalContents() {
+					return '<button class="btn btn-default btn-lg btn-block cancel-remove">No</button>' +
+						'<button class="btn btn-danger btn-lg btn-block confirm-remove">Yes</button>';
+				}
+			});
+			$(event.toElement).popover('show');
+			$('.confirm-remove').focus();
+			$('.cancel-remove').click(function cancelRemove(event) {
+				$('.remove-job').popover('hide');
+			});
+			$('.confirm-remove').click(function confirmRemove(event) {
+				googleAnalytics('send', 'event', 'action', 'click', 'remove job');
+				logText('removing item ' + $(this).parents('tr').attr('data-uuid'));
+				socketSend({
+					'action': 'remove',
+					'uuid': $(this).parents('tr').attr('data-uuid')
+				});
+			});
+		}
 	});
 
 	// asks before it removes a job
-	$('.remove-job').popConfirm({
-		content: "Remove this job?",
-		placement: "bottom"
-	});
+	// $('.remove-job').popConfirm({
+	// 	content: "Remove this job?",
+	// 	placement: "bottom"
+	// });
 
 	// handler to lower a job
 	$('.lower-priority').click(function lowerPriority() {

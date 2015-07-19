@@ -53,6 +53,7 @@ $('.cut-form-group select').click(function hideTooltip() {
 $(document).keyup(function hideAllDialogs(e) {
 	if (e.keyCode == 27) {
 		bootbox.hideAll();
+		$('.remove-job').popover('hide');
 	}
 });
 
