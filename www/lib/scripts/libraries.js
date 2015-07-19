@@ -10,22 +10,3 @@
 @@include('../../bower_components/bootbox/bootbox.js')
 @@include('../../bower_components/konami-js/konami.js')
 @@include('./libraries/prism.js')
-
-
-// variables
-@@include('_variables.js');
-
-// general functions and utilities
-@@include('_functions.js')
-
-// config loading and parsing
-@@include('_applyConfig.js')
-
-// initialization
-@@include('_init.js')
-
-// socket communication setup
-@@include('_socketSetup.js')
-
-// authentication and coachmode
-@@include('_auth.js')

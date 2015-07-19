@@ -36,7 +36,7 @@ gulp.task('js-dev', function() {
 		.pipe(jscs())
 		.pipe(jscsStylish.combineWithHintResults())
 		.pipe(jshint.reporter('jshint-stylish'));
-	gulp.src('./www/lib/scripts/scripts.js')
+	gulp.src(['./www/lib/scripts/libraries.js', './www/lib/scripts/_*.js'])
 		.pipe(sourcemaps.init())
 		.pipe(fileinclude())
 			.on('error', noop)
@@ -48,11 +48,13 @@ gulp.task('js-dev', function() {
 
 // compile js for production
 gulp.task('js-prod', function() {
-	gulp.src('./www/lib/scripts/scripts.js')
+	gulp.src(['./www/lib/scripts/libraries.js', './www/lib/scripts/_*.js'])
+		.pipe(sourcemaps.init())
 		.pipe(fileinclude())
 			.on('error', noop)
 			.pipe(concat('scripts.min.js'))
 			.pipe(uglify())
+		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/js/'))
 	.pipe(notify({message: 'JS has been compiled for production'}))
 });
