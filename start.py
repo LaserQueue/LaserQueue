@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
 import os, sys
+if(sys.version_info.major <= 2):
+	print('WARNING: You appear to be running Python <= 2. Please use Python3.')
 import subprocess, time
 import json
 import atexit
