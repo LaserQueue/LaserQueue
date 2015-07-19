@@ -24,28 +24,28 @@ $.ajax({
 
 // focus the first form element on not-mobile
 if(!isTouchDevice()) {
-	$('.cut-human-name').focus();
+	$('.job-human-name').focus();
 }
 
 // when submit button clicked
 $('.btn-submit').click(function submitForm(clickAction) {
 	clickAction.preventDefault();
 	logText("submit button clicked");
-	var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
+	var estimate = $('.job-time-estimate').val().match(/\d*(\.\d+)?/);
 	socketSend({
 		'action': 'add',
-		'name': $('.cut-human-name').val(),
-		'priority': +$('.priority-dropdown').val(),
+		'name': $('.job-human-name').val(),
+		'priority': +$('.job-priority').val(),
 		'time': +estimate[0],
-		'material': $('.cut-material').val()
+		'material': $('.job-material').val()
 	});
-	resetForm($('.new-cut-form'));
-	$('.cut-human-name').focus();
+	resetForm($('.new-job-form'));
+	$('.job-human-name').focus();
 
 });
 
 // configure <select>s in form to hide tooltip on click
-$('.cut-form-group select').click(function hideTooltip() {
+$('.job-form-group select').click(function hideTooltip() {
 	$(this).tooltip('hide');
 });
 

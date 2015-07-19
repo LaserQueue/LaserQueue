@@ -5,12 +5,12 @@ function onAuth() {
 	setTimeout(function hideModal() {
 		$("#notify-modal").modal("hide");
 	}, 1000);
-	$('.cutting-table-template').render(allCuts, renderDirectives);
+	$('.jobs-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', false);
 	$('.authorize').attr('data-original-title', config.logout);
 	$('.nuvu-logo').attr('src', '/dist/img/admin-logo.svg');
 	if (!addEnabled) {
-		$('.cut-form-group').show();
+		$('.job-form-group').show();
 	}
 	populateActions();
 }
@@ -23,7 +23,7 @@ function onFailedauth() {
 function onDeauth() {
 	authed = false;
 	logText('User has been deauthed.');
-	$('.cutting-table-template').render(allCuts, renderDirectives);
+	$('.jobs-table-template').render(allCuts, renderDirectives);
 	$('.disabled').prop('disabled', true);
 	$('.authorize').attr('data-original-title', config.login);
 	$('.nuvu-logo').attr('src', '/dist/img/logo.svg');
@@ -31,7 +31,7 @@ function onDeauth() {
 		$(draggable).draggabilly('disable');
 	}
 	if (!addEnabled) {
-		$('.cut-form-group').hide();
+		$('.job-form-group').hide();
 	}
 	populateActions();
 }

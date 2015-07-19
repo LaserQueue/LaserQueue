@@ -35,27 +35,27 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	// hide task add form if auth is required to add
 	addEnabled = (config.authactions.indexOf('add') == -1);
 	if (!addEnabled) {
-		$('.cut-form-group').hide();
+		$('.job-form-group').hide();
 	}
 
 	// render materials dropdown
 	if (!config.default_material) {
-		$('#cut-material').append('<option disabled selected value="N/A" class="selected">{0}</option>'.format(config.material_input));
+		$('#job-material').append('<option disabled selected value="N/A" class="selected">{0}</option>'.format(config.material_input));
 	}
 	for(var m in materials) {
 		var mat_selected = (m === config.default_material ? 'selected' : '');
-		$('#cut-material').append('<option {0} value="{1}" class="{0}">{2}</option>'.format(
+		$('#job-material').append('<option {0} value="{1}" class="{0}">{2}</option>'.format(
 			mat_selected, m, materials[m]));
 	}
 
 	// render the priorities dropdown
 	if (config.priority_choose) {
-		$('#priority-dropdown').append('<option disabled selected value="-1" class="selected">{0}</option>'.format(config.priority_input));
+		$('#job-priority').append('<option disabled selected value="-1" class="selected">{0}</option>'.format(config.priority_input));
 	}
 	for(var p in priorities) {
 		var disabled = (p < config.default_priority && !config.priority_selection ? 'disabled' : '');
 		var pri_selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
-		$('#priority-dropdown').append('<option {0} value="{1}"  class="{2} {0}">{3}</option>'.format(
+		$('#job-priority').append('<option {0} value="{1}"  class="{2} {0}">{3}</option>'.format(
 			pri_selected, String(priorities.length-p-1), disabled, priorities[p]));
 	}
 	if (!config.priority_selection) {
@@ -63,14 +63,14 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	}
 
 	// set textbox placeholders from config
-	$('.cut-human-name').attr('placeholder', config.name_input);
-	$('.cut-time-estimate').attr('placeholder', config.time_input);
+	$('.job-human-name').attr('placeholder', config.name_input);
+	$('.job-time-estimate').attr('placeholder', config.time_input);
 
 	// set tooltips from config
-	$('.cut-human-name').attr('title', config.name_hover);
-	$('.cut-time-estimate').attr('title', config.time_hover);
-	$('.cut-material').attr('title', config.material_hover);
-	$('.priority-dropdown').attr('title', config.priority_hover);
+	$('.job-human-name').attr('title', config.name_hover);
+	$('.job-time-estimate').attr('title', config.time_hover);
+	$('.job-material').attr('title', config.material_hover);
+	$('.job-priority').attr('title', config.priority_hover);
 
 	// set table headers from config
 	$('.action-header').text(config.action_header);

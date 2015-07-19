@@ -1,4 +1,4 @@
-.cutting-table-header td {
+.jobs-table-header td {
 	border: none;
 	font-size: 1.3em;
 	background: $nuvu-pink;
@@ -9,7 +9,7 @@ td {
 	text-align: center;
 }
 
-.cutting-table tr:not(.table-first-row) td:nth-child(1), .cutting-table tr:not(.table-first-row) td:nth-child(1) a {
+.jobs-table tr:not(.table-first-row) td:nth-child(1), .jobs-table tr:not(.table-first-row) td:nth-child(1) a {
 	user-select: none;
 	text-decoration: none;
 	&:focus {
@@ -19,7 +19,7 @@ td {
 	}
 }
 
-.cutting-table tr:last-child td:nth-child(1) .lower-priority {
+.jobs-table tr:last-child td:nth-child(1) .lower-priority {
 	display: none;
 }
 
@@ -54,7 +54,7 @@ td {
 	&:hover { transform: rotate(1080deg) scale(1.5); }
 }
 
-.cutting-table-template tr.is-dragging {
+.jobs-table-template tr.is-dragging {
 	* {
 		background: lighten(lightgray, 10%);
 		cursor: move;

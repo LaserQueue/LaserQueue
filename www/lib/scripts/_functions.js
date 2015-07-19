@@ -85,7 +85,7 @@ function logText(text) {
 function populateActions() {
 	logText('Populating actions');
 
-	$('.cutting-table-template tr').each(function dataToTable(index, el) {
+	$('.jobs-table-template tr').each(function dataToTable(index, el) {
 		$(el).attr('data-uuid', allCuts[index].uuid);
 		$(el).attr('data-pos', index);
 		$(el).unbind('click');
@@ -169,19 +169,19 @@ function populateActions() {
 	});
 
 	if (authed || config.authactions.indexOf('relmove') == -1) {
-		$('.cutting-table-template tr').each(function makeRowsDraggable(index, el) {
+		$('.jobs-table-template tr').each(function makeRowsDraggable(index, el) {
 			draggable[index] = this;
 			$(this).draggabilly({
 				axis: 'y',
-				container: $('.cutting-table-template')//,
+				container: $('.jobs-table-template')//,
 				// grid: [ 37, 37 ]
 			});
 			$(this).on('dragStart', function handleDragStart() {
 				$('[data-toggle="tooltip"]').tooltip('destroy');
-				$('.cutting-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').addClass('animate-hide');
+				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').addClass('animate-hide');
 			});
 			$(this).on('dragEnd', function handleDragEnd(event, pointer) {
-				$('.cutting-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').removeClass('animate-hide');
+				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').removeClass('animate-hide');
 				$('[data-toggle="tooltip"]').tooltip();
 				socketSend({
 					'action': 'relmove',
@@ -231,7 +231,7 @@ function modalMessage(modalTitle, modalBody, dialogOptions) {
 function resetForm(form) {
 	form.find('input:text, input:password, input[type=number], input:file, textarea').val(''); // removed 'select'
 	form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
-	if($(form).selector == '.new-cut-form') {
+	if($(form).selector == '.new-job-form') {
 		form.find('.selected').prop('selected', true);
 	}
 }

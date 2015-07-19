@@ -64,7 +64,7 @@ function socketSetup() {
 				});
 
 				// render allCuts into table
-				$('.cutting-table-template').render(allCuts, renderDirectives);
+				$('.jobs-table-template').render(allCuts, renderDirectives);
 				populateActions();
 			} else if (jsonData.action == 'authed' && config.admin_mode_enabled && !authed) {
 				onAuth();
