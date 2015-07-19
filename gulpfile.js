@@ -1,3 +1,5 @@
+#!/usr/bin/env gulp
+
 var gulp         = require('gulp');
 var sass         = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
@@ -6,7 +8,6 @@ var notify       = require('gulp-notify');
 var jscs         = require('gulp-jscs');
 var jscsStylish  = require('gulp-jscs-stylish');
 var jshint       = require('gulp-jshint');
-var noop         = function() {};
 var uglify       = require('gulp-uglify');
 var UglifyJS     = require('uglify-js');
 var rename       = require('gulp-rename');
@@ -16,6 +17,7 @@ var livereload   = require('gulp-livereload');
 var watch        = require('gulp-watch');
 var sourcemaps   = require('gulp-sourcemaps');
 var sizereport   = require('gulp-sizereport');
+var noop         = function() {};
 
 // compile sass
 gulp.task('sass', function() {
