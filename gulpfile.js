@@ -11,7 +11,8 @@ var uglify       = require('gulp-uglify');
 var UglifyJS     = require('uglify-js');
 var rename       = require('gulp-rename');
 var concat       = require('gulp-concat');
-var fileinclude  = require('gulp-file-include')
+var fileinclude  = require('gulp-file-include');
+var livereload   = require('gulp-livereload');
 var watch        = require('gulp-watch');
 var sourcemaps   = require('gulp-sourcemaps');
 var sizereport   = require('gulp-sizereport');
@@ -26,6 +27,7 @@ gulp.task('sass', function() {
 			.pipe(rename({suffix: '.min'}))
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/css'))
+	.pipe(livereload())
 	.pipe(notify({message: 'SCSS has been compiled'}))
 });
 
@@ -43,6 +45,7 @@ gulp.task('js-dev', function() {
 			.pipe(concat('scripts.min.js'))
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/js/'))
+	.pipe(livereload())
 	.pipe(notify({message: 'JS has been compiled for development'}))
 });
 
@@ -90,5 +93,6 @@ gulp.task('size', function() {
 
 // Default task, just runs dev
 gulp.task('default', function() {
+	livereload.listen();
 	gulp.start(['sass-watch', 'js-watch']).on('error', function() {});
 });
