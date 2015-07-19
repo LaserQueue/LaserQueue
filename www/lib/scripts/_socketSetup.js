@@ -37,7 +37,6 @@ function socketSetup() {
 				allCuts = [];
 				// for each priority in list
 				$(jsonData.queue).each(function loopThroughCuts(index, el) {
-
 					// for each cut in priority
 					$(el).each(function loopThroughCut(arrayIndex, arrayEl) {
 						// at this point nothing is human-readable
