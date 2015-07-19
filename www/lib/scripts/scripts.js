@@ -10,7 +10,6 @@
 @@include('../../bower_components/bootbox/bootbox.js')
 @@include('../../bower_components/konami-js/konami.js')
 @@include('./libraries/prism.js')
-@@include('./libraries/jquery.popconfirm.js')
 
 
 // variables
