@@ -21,6 +21,11 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	// set WebSockets hostname and port from config
 	host = 'ws://{0}:{1}'.format(config.host, config.port);
 
+	// set page title
+	if (config.page_title) {
+		$('title').text(config.page_title);
+	}
+
 	// set materials and priorities from config
 	materials = config.materials;
 	priorities = config.priorities;

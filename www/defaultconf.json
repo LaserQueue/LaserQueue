@@ -2,6 +2,7 @@
 	"version": "0.0.5",
 	"update_target": "https://raw.githubusercontent.com/yrsegal/LaserQueue/master/www/defaultconf.json",
 	"update_repo": "https://github.com/yrsegal/LaserQueue.git",
+	"page_title": "LaserQueue",
 	"host": "",
 	"port": "8763",
 	"serverRefreshRate": 300000,
@@ -20,7 +21,7 @@
 		"Urgent",
 		"Important",
 		"Normal",
-		"Low", 
+		"Low",
 		"Lunch/After NuVu"
 	],
 	"materials": {
@@ -67,11 +68,11 @@
 	"lastuse_timeout": 1800,
 	"sid_total_timeout": 3600,
 	"length_bounds": [
-		0.0166666667, 
+		0.0166666667,
 		360
 	],
 	"metabump": 0,
-	"metabumpmult": 30,	
+	"metabumpmult": 30,
 	"metabumpmax": -1,
 	"google_analytics_key": "",
 	"priority_selection": false,
