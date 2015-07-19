@@ -13,9 +13,11 @@ td {
 	user-select: none;
 	text-decoration: none;
 	&:focus {
-		transform: scale(1.4);
 		outline: none;
 		border: none;
+		&:not(:active) {
+			transform: scale(1.4);
+		}
 	}
 }
 
