@@ -3,7 +3,7 @@
 var gulp         = require('gulp');
 var sass         = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
-var csso         = require('gulp-csso');
+var minifyCSS    = require('gulp-minify-css');
 var notify       = require('gulp-notify');
 var jscs         = require('gulp-jscs');
 var jscsStylish  = require('gulp-jscs-stylish');
@@ -25,7 +25,7 @@ gulp.task('sass', function() {
 		.pipe(sourcemaps.init())
 			.pipe(sass().on('error', sass.logError))
 			.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-			.pipe(csso())
+			.pipe(minifyCSS())
 			.pipe(rename({suffix: '.min'}))
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/css'))
