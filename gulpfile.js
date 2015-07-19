@@ -11,11 +11,9 @@ var uglify       = require('gulp-uglify');
 var UglifyJS     = require('uglify-js');
 var rename       = require('gulp-rename');
 var concat       = require('gulp-concat');
-var groupConcat  = require('gulp-group-concat');
-var fileinclude  = require('gulp-file-include');
+var fileinclude  = require('gulp-file-include')
 var watch        = require('gulp-watch');
 var sourcemaps   = require('gulp-sourcemaps');
-var manifest     = require('gulp-manifest');
 var sizereport   = require('gulp-sizereport');
 
 // compile sass
@@ -72,34 +70,6 @@ gulp.task('js-watch', function() {
 	gulp.start(['js-dev']);
 	gulp.watch('./www/lib/scripts/*.js', ['js-dev']);
 	gulp.watch('./.jscsrc', ['js-dev']);
-});
-
-// make cache manifest
-gulp.task('manifest', function() {
-	return gulp.src(['./www/'])
-		.pipe(manifest({
-			hash: true,
-			timestamp: true,
-			preferOnline: true,
-			network: ['*', 'app.manifest', 'index.html'],
-			filename: 'app.manifest',
-			exclude: ['app.manifest', 'index.html'],
-			cache: [
-				'dist/img/logo.svg',
-				'dist/img/laserQueue.png',
-				'bower_components/js-sha1/build/sha1.min.js',
-				'bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2',
-				'bower_components/bootstrap/dist/css/bootstrap.min.css',
-				'bower_components/bootstrap/dist/js/bootstrap.min.js',
-				'bower_components/jquery/dist/jquery.min.js'
-			]
-		}))
-		.pipe(gulp.dest('./www'));
-})
-
-// watch and make cache manifest
-gulp.task('manifest-watch', function() {
-	gulp.watch('./www/**/*', ['manifest']);
 });
 
 // js size report
