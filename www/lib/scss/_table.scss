@@ -9,7 +9,7 @@ td {
 	text-align: center;
 }
 
-.cutting-table tr:not(.table-first-row) td:nth-child(1), .cutting-table tr:not(.table-first-row) td:nth-child(1) * {
+.cutting-table tr:not(.table-first-row) td:nth-child(1), .cutting-table tr:not(.table-first-row) td:nth-child(1) a {
 	user-select: none;
 	text-decoration: none;
 	&:focus {
