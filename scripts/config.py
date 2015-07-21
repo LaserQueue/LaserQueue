@@ -127,6 +127,8 @@ class bcolors: # All color codes
 	MAGENTA = '\033[95m'
 	CYAN = '\033[96m'
 	WHITE = '\033[97m'
+	ORANGE = '\033[38;5;202m'
+	DARKPURPLE = '\033[38;5;53m'
 	ENDC = '\033[0m'
 
 class colorconf:

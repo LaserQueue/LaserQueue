@@ -1,5 +1,6 @@
 import json, os
 
+from parseargv import args as argvs
 from config import *
 config = Config(os.path.join("..","www","config.json"))
 
@@ -81,13 +82,21 @@ def deauth(**kwargs):
 	sessions.deauth(sec)
 	serveToConnection({"action":"deauthed"}, ws)
 
+	# If the verbose flag is used, print report
+	if argvs.loud:
+		cprint("Client successfully deauthed.")
+
 def refresh(**kwargs): 
 	"""
 	Refresh all clients. (if the config allows it)
 	"""
-	socks = kwargs["sockets"]
+	socks, authstate = kwargs["sockets"], kwargs["authstate"]
 	if config["allow_force_refresh"]:
 		serveToConnections({"action":"refresh"}, socks)
+
+		if argvs.loud: # If the verbose flag is used, print report
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Refreshed all clients.", color=color)
 	else:
 		cprint("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=bcolors.YELLOW)
 
@@ -95,9 +104,16 @@ def uuddlrlrba(**kwargs):
 	"""
 	Huehuehue all clients. (if the config allows it)
 	"""
-	socks = kwargs["sockets"]
+	socks, authstate = kwargs["sockets"], kwargs["authstate"]
 	if config["easter_eggs"]:
-		serveToAllConnections({"action":"rickroll"}, socks)
+		serveToConnections({"action":"rickroll"}, socks)
+
+		if argvs.loud: # If the verbose flag is used, print report
+			color = bcolors.MAGENTA if authstate else bcolors.ENDC
+			rainbow = "{}T{}r{}o{}l{}l{}e{}d{} all clients.".format(
+				bcolors.RED, bcolors.ORANGE, bcolors.YELLOW, bcolors.GREEN, 
+				bcolors.BLUE, bcolors.PURPLE, bcolors.DARKPURPLE, color) # RAINBOW \o/
+			cprint(rainbow)
 	else:
 		cprint("This is a serious establishment, son. I'm dissapointed in you.", color=bcolors.YELLOW)
 
@@ -110,8 +126,12 @@ def auth(**kwargs):
 	if config["admin_mode_enabled"]:
 		if sessions.auth(sec, args["pass"]):
 			serveToConnection({"action":"authed"}, ws)
+			if argvs.loud: # If the verbose flag is used, print report
+				cprint("Auth succeeded.", color=bcolors.MAGENTA)
 		else:
 			serveToConnection({"action":"authfailed"}, ws)
+			if argvs.loud: # If the verbose flag is used, print report
+				cprint("Auth failed.")
 
 def parseData(queue, ws, socks, sessions, jdata):
 	"""

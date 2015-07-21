@@ -4,6 +4,7 @@ import time
 import os.path
 from copy import deepcopy
 
+from parseargv import args as argvs
 from config import *
 config = Config(os.path.join("..","www","config.json"))
 
@@ -133,6 +134,8 @@ class Queue:
 		if config["recalc_priority"]:
 			priority = _calcpriority(priority, esttime)
 
+		name = name.strip().rstrip()
+
 		inqueue = False
 		for i in self.queue:
 			for j in i: 
@@ -145,15 +148,19 @@ class Queue:
 		if config["recapitalize"]:
 			name = name.title()
 
+		uuid = str(uuid.uuid1())
+
 		if not inqueue or config["allow_multiples"]:
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Added {} to the queue.\n({})".format(name, uuid), color=color)
 			self.queue[lpri-priority].append(QueueObject({
 				"totaldiff": 0,
 				"priority": lpri-priority,
-				"name": name.strip().rstrip(),
+				"name": name,
 				"material": material,
 				"esttime": esttime,
 				"coachmodified": authstate,
-				"uuid": str(uuid.uuid1()),
+				"uuid": uuid,
 				"sec": sec,
 				"time": time.time()
 			}))
@@ -163,6 +170,9 @@ class Queue:
 		u = args["uuid"]
 		job, masterindex, priority, index = self.getQueueObject(u)
 		self.queue[priority].remove(job)
+		if argvs.loud:
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Removed {} from the queue.\n({})".format(job["name"], job["uuid"]), color=color)
 
 	def passoff(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
@@ -183,6 +193,10 @@ class Queue:
 
 		job.update(new_priority, authstate)
 		self.queue[new_priority].insert(new_index+1, job)
+
+		if argvs.loud:
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Passed {} from the queue.\n({})".format(job["name"], job["uuid"]), color=color)
 
 
 	def relmove(self, **kwargs):
@@ -210,6 +224,11 @@ class Queue:
 		job.update(bpri, authstate)
 		self.queue[bpri].insert(bind, job)
 
+		if argvs.loud:
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Moved {} from position {} to {}.\n({})".format(
+				job["name"], masterindex, nindex, job["uuid"]), color=color)
+
 
 	def move(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
@@ -220,6 +239,11 @@ class Queue:
 
 		job.update(lpri-np, authstate)
 		self.queue[lpri-np].insert(ni, job)
+
+		if argvs.loud:
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Moved {} to index {} within priority {}.\n({})".format(
+				job["name"], ni, np, job["uuid"]), color=color)
 
 	def increment(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
@@ -245,6 +269,11 @@ class Queue:
 		job.update(priority, authstate)
 		self.queue[priority].insert(index, job)
 
+		if argvs.loud:
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Moved {} from position {} to {}.\n({})".format(
+				job["name"], masterindex, masterindex - 1, job["uuid"]), color=color)
+
 	def decrement(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
 		u = args["uuid"]
@@ -267,16 +296,23 @@ class Queue:
 		job.update(priority, authstate)
 		self.queue[priority].insert(index ,job)
 
+		if argvs.loud:
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Moved {} from position {} to {}.\n({})".format(
+				job["name"], masterindex, masterindex + 1, job["uuid"]), color=color)
+
 	def attr(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
 		u, attrname, value = args["uuid"], args["key"], args["new"]
-		if attrname not in self.requiredtags or attrname in ["uuid", "sec", "time", "totaldiff"]:
-			return
-		if attrname not in config["attr_edit_perms"] and not authstate:
-			return
 
+		if attrname not in self.requiredtags or attrname in ["uuid", "sec", "time", "totaldiff"]:
+			return "Cannot change the `{}` value of a job.".format(attrname)
+		if attrname not in config["attr_edit_perms"] and not authstate:
+			return "Changing a job's `{}` value requires auth.".format(attrname)
 
 		job, masterindex, priority, index = self.getQueueObject(u)
+
+		oldval = job[attrname]
 
 		if attrname not in config["attr_edit_perms"] and attrname != "coachmodified":
 			job["coachmodified"] = True
@@ -312,4 +348,10 @@ class Queue:
 
 		elif attrname == "coachmodified": 
 			job["coachmodified"] = bool(value)
+
+		if argvs.loud:
+			newval = job[attrname]
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Changed {}'s `{}` value from {} to {}.\n({})".format(
+				job["name"], attrname, oldval, newval, job["uuid"]), color=color)
 
