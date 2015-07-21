@@ -57,11 +57,11 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	if (config.priority_choose) {
 		$('#job-priority').append('<option disabled selected value="-1" class="selected">{0}</option>'.format(config.priority_input));
 	}
-	for(var p in priorities) {
-		var disabled = (p < config.default_priority && !config.priority_selection ? 'disabled' : '');
+	for(var p = priorities.length-1; p > -1; p--) {
+		var disabled = (p > config.default_priority && !config.priority_selection ? 'disabled' : '');
 		var pri_selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
-		$('#job-priority').append('<option {0} value="{1}"  class="{2} {0}">{3}</option>'.format(
-			pri_selected, String(priorities.length-p-1), disabled, priorities[p]));
+		$('#job-priority').append('<option {0} value="{1}" class="{2} {0}">{3}</option>'.format(
+			pri_selected, p, disabled, priorities[p]));
 	}
 	if (!config.priority_selection) {
 		$('.disabled').prop('disabled', true);

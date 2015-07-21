@@ -17,12 +17,12 @@
 		60
 	],
 	"priorities": [
-		"Absolutely Required",
-		"Urgent",
-		"Important",
-		"Normal",
+		"Lunch/After NuVu",
 		"Low",
-		"Lunch/After NuVu"
+		"Normal",
+		"Important",
+		"Urgent",
+		"Absolutely Required"
 	],
 	"materials": {
 		"w": "Thin Wood",
@@ -34,7 +34,7 @@
 		"o": "Other"
 	},
 	"default_material": "w",
-	"default_priority": 3,
+	"default_priority": 2,
 	"name_input": "What is it they call you?",
 	"time_input": "Estimated time (min)",
 	"material_input": "Choose a material...",

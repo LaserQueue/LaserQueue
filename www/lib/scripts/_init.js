@@ -63,7 +63,7 @@ var logClickTimeout = 0;
 $('.log-toggler').mousedown(function maybeDownloadLog(evt) {
 	if(evt.altKey) {
 		logClickTimeout = setTimeout(function downloadLog() {
-			window.open('data:application/octet-stream;,' + encodeURI($('.log-pre').text()))
+			window.open('data:application/octet-stream;,' + encodeURI($('.log-pre').text()));
 		}, 1000);
 	}
 }).bind('mouseup mouseleave', function doNotDownloadLog() {

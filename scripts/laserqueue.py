@@ -97,7 +97,7 @@ class Queue:
 
 	def getQueueObject(self, u):
 		target = None
-		masterqueue = _concatlist(self.queue)
+		masterqueue = self.masterqueue()
 		for i in self.queue:
 				for j in i:
 					if j["uuid"] == u:
@@ -114,7 +114,8 @@ class Queue:
 		_, target_index, target_priority, target_internal_index = self.getQueueObject(job["uuid"])
 		return target_index, target_priority, target_internal_index
 
-
+	def masterqueue(self):
+		return _concatlist(self.queue[::-1])
 
 	def append(self, **kwargs):
 		args, authstate, sec = kwargs["args"], kwargs["authstate"], kwargs["sec"]
@@ -129,7 +130,7 @@ class Queue:
 			esttime = min(bounds[1], esttime)
 
 		if not config["priority_selection"] and not authstate:
-			priority = min(lpri-config["default_priority"], priority)
+			priority = min(config["default_priority"], priority)
 
 		if config["recalc_priority"]:
 			priority = _calcpriority(priority, esttime)
@@ -148,19 +149,19 @@ class Queue:
 		if config["recapitalize"]:
 			name = name.title()
 
-		uuid = str(uuid.uuid1())
+		job_uuid = str(uuid.uuid1())
 
 		if not inqueue or config["allow_multiples"]:
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Added {} to the queue.\n({})".format(name, uuid), color=color)
-			self.queue[lpri-priority].append(QueueObject({
+			cprint("Added {} to the queue.\n({})".format(name, job_uuid), color=color)
+			self.queue[priority].append(QueueObject({
 				"totaldiff": 0,
-				"priority": lpri-priority,
+				"priority": priority,
 				"name": name,
 				"material": material,
 				"esttime": esttime,
 				"coachmodified": authstate,
-				"uuid": uuid,
+				"uuid": job_uuid,
 				"sec": sec,
 				"time": time.time()
 			}))
@@ -179,7 +180,7 @@ class Queue:
 		u = args["uuid"]
 		job, masterindex, priority, index = self.getQueueObject(u)
 
-		masterqueue = _concatlist(self.queue)
+		masterqueue = self.masterqueue()
 
 		pass_depth = min(len(masterqueue)-1, config["pass_depth"])
 
@@ -196,20 +197,20 @@ class Queue:
 
 		if argvs.loud:
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Passed {} from the queue.\n({})".format(job["name"], job["uuid"]), color=color)
+			cprint("Passed {} down the queue.\n({})".format(job["name"], job["uuid"]), color=color)
 
 
 	def relmove(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
 		u, nindex = args["uuid"], args["target_index"]
-		masterqueue = _concatlist(self.queue)
+		masterqueue = self.masterqueue()
 
 		if len(masterqueue) <= 1: return
 
 		job, masterindex, priority, index = self.getQueueObject(u)
 		self.queue[priority].remove(job)
 
-		masterqueue = _concatlist(self.queue)
+		masterqueue = self.masterqueue()
 		if nindex <= 0:
 			bpri = masterqueue[0]["priority"]
 			bind = 0
@@ -237,8 +238,8 @@ class Queue:
 		job, masterindex, priority, index = self.getQueueObject(u)
 		self.queue[priority].remove(job)
 
-		job.update(lpri-np, authstate)
-		self.queue[lpri-np].insert(ni, job)
+		job.update(np, authstate)
+		self.queue[np].insert(ni, job)
 
 		if argvs.loud:
 			color = bcolors.MAGENTA if authstate else ""
@@ -249,20 +250,19 @@ class Queue:
 		args, authstate = kwargs["args"], kwargs["authstate"]
 		u = args["uuid"]
 
-
 		job, masterindex, priority, index = self.getQueueObject(u)
-		if not priority and not index:
+		if priority == lpri and not index:
 			return
 		self.queue[priority].remove(job)
 
 		index -= 1
 		if index < 0:
-			priority -= 1
-			if priority < 0:
+			priority += 1
+			if priority > lpri:
 				index = 0
-				priority = 0
+				priority = lpri
 			else:
-				index = len(self.queue[max(priority, 0)])
+				index = len(self.queue[min(priority, lpri)])
 
 		priority = min(priority, lpri)
 		index = min(index, len(self.queue[priority]))
@@ -279,16 +279,16 @@ class Queue:
 		u = args["uuid"]
 
 		job, masterindex, priority, index = self.getQueueObject(u)
-		if priority == lpri and len(self.queue[priority]) < index:
+		if not priority and len(self.queue[priority]) <= index:
 			return
 		self.queue[priority].remove(job)
 
 		index += 1
 		if len(self.queue[priority]) < index:
-			priority += 1
-			if priority > lpri:
-				index = len(self.queue[min(priority, lpri)])
-				priority = lpri
+			priority -= 1
+			if priority < 0:
+				index = len(self.queue[max(priority, 0)])
+				priority = 0
 			else:
 				index = 0
 		priority = max(priority, 0)
@@ -305,7 +305,7 @@ class Queue:
 		args, authstate = kwargs["args"], kwargs["authstate"]
 		u, attrname, value = args["uuid"], args["key"], args["new"]
 
-		if attrname not in self.requiredtags or attrname in ["uuid", "sec", "time", "totaldiff"]:
+		if attrname not in self.requiredtags or attrname in ["uuid", "sec", "time", "totaldiff", "priority"]:
 			return "Cannot change the `{}` value of a job.".format(attrname)
 		if attrname not in config["attr_edit_perms"] and not authstate:
 			return "Changing a job's `{}` value requires auth.".format(attrname)
@@ -339,10 +339,11 @@ class Queue:
 					newpriority -= 1
 					job["totaldiff"] -= 10
 
-				newpriority = min(newpriority, lpri)
-				job["priority"] = lpri-newpriority
-				self.queue[priority].pop(index)
-				self.queue[newpriority].append(job)
+				newpriority = max(newpriority, 0)
+				job["priority"] = newpriority
+				if priority != newpriority:
+					self.queue[priority].pop(index)
+					self.queue[newpriority].append(job)
 			elif authstate and config["recalc_priority"]:
 				job["coachmodified"] = True
 

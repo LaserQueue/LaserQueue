@@ -1,5 +1,27 @@
 // basically this handles everything WebSockets
 
+function loopThroughCut(arrayIndex, arrayEl) {
+	// at this point nothing is human-readable
+	// make material human-readable
+	displayEl = $.extend({}, arrayEl); // deepcopy
+	displayEl.material = materials[arrayEl.material];
+	displayEl.priority = priorities[arrayEl.priority];
+	var timetotal = arrayEl.esttime;
+	var hours = Math.floor(timetotal / 60);
+	timetotal -= hours * 60;
+	var minutes = Math.floor(timetotal);
+	timetotal -= minutes;
+	var seconds = +(timetotal * 60).toFixed(2);
+
+	var output = String(hours ? hours + 'h' : '') + (minutes && hours ? ' ' : '');
+	output += String(minutes ? minutes + 'm' : '') + (seconds && minutes ? ' ' : '');
+	output += String(seconds ? seconds + 's' : '');
+
+	displayEl.esttime = output;
+	// add to full list of cuts
+	allCuts = allCuts.concat(displayEl);
+}
+
 function socketSetup() {
 
 	// wait until host has a real value
@@ -36,31 +58,13 @@ function socketSetup() {
 				// reinitialize full list of cuts
 				allCuts = [];
 				// for each priority in list
-				$(jsonData.queue).each(function loopThroughCuts(index, el) {
+
+				for (var priority = jsonData.queue.length; priority >= 0; priority--) {
+					el = jsonData.queue[priority];
 					// for each cut in priority
-					$(el).each(function loopThroughCut(arrayIndex, arrayEl) {
-						// at this point nothing is human-readable
-						// make material human-readable
-						displayEl = $.extend({}, arrayEl); // deepcopy
-						displayEl.material = materials[arrayEl.material];
-						displayEl.priority = priorities[arrayEl.priority];
-						var timetotal = arrayEl.esttime;
-						var hours = Math.floor(timetotal / 60);
-						timetotal -= hours * 60;
-						var minutes = Math.floor(timetotal);
-						timetotal -= minutes;
-						var seconds = +(timetotal * 60).toFixed(2);
+					$(el).each(loopThroughCut);
 
-						var output = String(hours ? hours + 'h' : '') + (minutes && hours ? ' ' : '');
-						output += String(minutes ? minutes + 'm' : '') + (seconds && minutes ? ' ' : '');
-						output += String(seconds ? seconds + 's' : '');
-
-						displayEl.esttime = output;
-						// add to full list of cuts
-						allCuts = allCuts.concat(displayEl);
-					});
-
-				});
+				}
 
 				// render allCuts into table
 				$('.jobs-table-template').render(allCuts, renderDirectives);
