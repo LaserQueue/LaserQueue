@@ -7,6 +7,8 @@ parser.add_argument("-n", "--regen-host", help="Regenerate host in config", dest
 	action="store_true")
 parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
 	action="store_true")
+parser.add_argument("-v", "--verbose", help="Makes the script give extra output", dest="loud",
+	action="store_true")
 parser.add_argument("-q", "--quiet", help="Makes the script not give output", dest="shh",
 	action="store_true")
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
