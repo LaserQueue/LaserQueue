@@ -171,13 +171,13 @@ def cprint(text, color="", strip=False, func=print, add_newline=False):
 
 
 	originstr = cprintconf.tag()
-	func("{}{}{}{}".format(date_time_string(), originstr, 
-	                        color, prints[0])) # Print the first line with a timestamp
+	func("{}{}{}{}{}".format(date_time_string(), originstr, 
+	                        color, prints[0], bcolors.ENDC)) # Print the first line with a timestamp
 	if add_newline: func("\n")
 
 	for i in prints[1:]:
-			func("{}{}{}".format(cprintconf.whitespace(), 
-			                      color, i)) # Print all consecutive lines
+			func("{}{}{}{}".format(cprintconf.whitespace(), 
+			                      color, i, bcolors.ENDC)) # Print all consecutive lines
 			if add_newline: func("\n")
 
 def cinput(text, color="", strip=False, func=input, add_newline=False):
