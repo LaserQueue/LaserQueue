@@ -1,16 +1,31 @@
 #!/usr/bin/env python3
 import os, sys
-if(sys.version_info.major <= 2):
-	print('WARNING: You appear to be running Python <= 2. Please use Python3.')
 import subprocess, time
 import json
 import atexit
 
-from scripts.parseargv import args
-from scripts.config import *
-
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath) # Make sure we're in the right directory
+
+if sys.version_info.major < 3 or (sys.version_info.major >= 3 and sys.version_info.minor < 4):
+	from cprints import cprint, cprintconf, bcolors
+
+	cprintconf.color = bcolors.DARKRED
+	cprintconf.name = "Error"
+	version = sys.version.split(" ")[0]
+
+	cprint("""The version of Python is outdated.
+		Found: {}
+		Required: 3.4+
+		Please update to the correct version.""".format(version), 
+		color=bcolors.DARKRED, strip=True)
+	quit()
+
+# Allow importing from scripts
+sys.path.append(
+	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
+from parseargv import args
+from config import *
 
 def initFile(path, data=""):
 	"""
