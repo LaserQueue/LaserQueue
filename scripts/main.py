@@ -50,7 +50,7 @@ def server(websocket, path):
 	"""
 	The process that's spawned for each websocket connection.
 	"""
-	global queue, socks
+	global queue, socks, sessions
 	# Allow all processes to serve to this
 	socks.append(websocket)
 	# Serve the latest queue to this socket
@@ -72,7 +72,9 @@ def server(websocket, path):
 					# Replace the password with asterisks
 					displaymessage["pass"] = "*"*len(displaymessage["pass"])
 					displaymessage = json.dumps(displaymessage, sort_keys=True)
-				cprint(displaymessage)
+				authstate = sessions.check(getsec(websocket))
+				color = bcolors.MAGENTA if authstate and args.loud else ""
+				cprint(displaymessage, color=color)
 				# Run the processing subroutine
 				process(messagedata, websocket)
 		except Exception as e: # Error reporting
@@ -99,11 +101,11 @@ def process(data, ws):
 			json.dump(queue.queue, open("cache.json", "w"), indent=2, sort_keys=True)
 		# If the socket handler had an error, report it to the socket
 		if x and type(x) is str:
-			serveToConnection(json.dumps({
+			serveToConnection({
 					"action": "notification",
 					"title": "Failed to process data",
 					"text": x
-				}, sort_keys = True), ws)
+				}, ws)
 			cprint(x, color=bcolors.YELLOW)
 		# If the queue changed, serve it
 		if queuehash != hash(str(queue.queue)):
