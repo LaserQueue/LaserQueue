@@ -47,8 +47,14 @@ def copyconf():
 	Make sure the config has the required data in it.
 	If args.regen, it will pretend as though the original config was empty.
 	"""
-	if os.path.exists(confpath) and not args.regen:
+	if os.path.exists(confpath) and args.regen is not []:
 		currdata = openconf()
+
+		if args.regen: # Regenerate everything after -r
+			for i in args.regen:
+				if i in currdata:
+					del currdata[i]
+
 		if "host" not in currdata or not currdata["host"]:
 			currdata["host"] = getIps()[0]
 		if "version" in currdata: # Version should always be latest

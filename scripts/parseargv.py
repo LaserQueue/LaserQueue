@@ -14,7 +14,7 @@ parser.add_argument("-q", "--quiet", help="Makes the script not give output", de
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
 	action="store_true")
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
-	action="store_true")
+	action="store", required=False, default=False, nargs="*")
 parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
 	action="store_true")
 parser.add_argument("-nu", "--no-update", help="Skip update", dest="skipupdate",
