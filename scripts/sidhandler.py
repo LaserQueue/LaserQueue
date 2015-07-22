@@ -1,15 +1,4 @@
-# sid handler. it will hold sids (and cache them with -b), and return their validity.
-
-
-# SID logic:
-# 	if sid doesn't exist:
-# 		return False on auth, add sid to list with timestamp of connection; lasttimestamp is now
-# 	if sid exists and is not authorized:
-# 		return False on auth, set lasttimestamp to now
-# 	if sid exists and is over 60 minutes old:
-# 		destroy, return False
-# 	if sid exists and has gone 20 minutes since lasttimestamp:
-# 		destroy, return False
+# sid handler. it will hold sids and return their validity.
 
 import time
 import json
@@ -27,9 +16,7 @@ class SID:
 	A single session instance.
 	"""
 	def __init__(self, seckey=None):
-		self.lasttimestamp = time.time()
-		self.timestamp = time.time()
-		self.authstamp = time.time()
+		self.stamp = time.time()
 		self.authstate = False
 		self.seckey = str(seckey)
 
@@ -55,20 +42,14 @@ class SID:
 		Check this session's state, making sure that nothing has timed out yet.
 		"""
 		timestamp = time.time()
-		if timestamp-self.authstamp > config["auth_timeout"] and config["auth_timeout"]:
-			self.authstate = False
-		if timestamp-self.lasttimestamp > config["lastuse_timeout"] and config["lastuse_timeout"]:
-			return False
-		elif timestamp-self.timestamp > config["sid_total_timeout"] and config["sid_total_timeout"]:
-			return False
-		return True
+		if timestamp-self.stamp > config["auth_timeout"] and config["auth_timeout"]:
+			self.deauth()
 
 	def onupdate(self):
 		"""
 		Update the session's timestamps.
 		"""
-		self.lasttimestamp = time.time()
-		self.authstamp = time.time()
+		self.stamp = time.time()
 
 
 
@@ -85,9 +66,11 @@ class SIDCache:
 		"""
 		csid = self._get(sec)
 		if not csid:               return False # If the key doesn't exist, return False
-		elif not csid.checkstate(): 
-			self.sids.remove(csid);  return False # If the key has been destroyed, return False
+
+		# update the SID
+		csid.checkstate() 
 		csid.onupdate()
+
 		if not csid.authstate:     return False # If the key isn't authed, return False
 		return True # Otherwise, return True
 	def auth(self, sec, password):
