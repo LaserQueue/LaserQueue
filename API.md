@@ -3,6 +3,24 @@
 This overview describes the API that binds the frontend and backend of the LaserQueue.
 
 ## Communication
+```
+         ┌──────────────────────────────┐
+         │                              │
+      ┌─▶│     LaserQueue frontend      │
+      │  │                              │
+      │  └──────────────────────────────┘
+      │                  ▲               
+  Website                │               
+   hosted            JSON over           
+ over HTTP          WebSockets           
+      │                  │               
+      │                  ▼               
+      │  ┌──────────────────────────────┐
+      │  │                              │
+      └──│      LaserQueue backend      │
+         │                              │
+         └──────────────────────────────┘
+```
 Communication will be between some frontend user interface and the backend server using WebSockets. By default, we use port 8763 for this. Our frontend has a function, `socketSend()` that can be used to send JSON over WebSockets.
 
 ## Configuration
