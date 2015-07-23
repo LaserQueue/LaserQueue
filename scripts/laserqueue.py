@@ -334,17 +334,15 @@ class Queue:
 		masterqueue = self.masterqueue()
 		# If the index is too low, use the lowest index possible
 		if nindex <= 0:
-			bpri = masterqueue[0]["priority"]
-			bind = 0
+			btarget = masterqueue[0]
 		# If the index is too high, use the highest index possible
 		elif nindex >= len(masterqueue):
-			bpri = masterqueue[-1]["priority"]
-			bind = len(self.queue[bpri])
+			btarget = masterqueue[-1]
 		# Get the index for the specific position
 		else:
 			btarget = masterqueue[nindex-1]
-			_, bpri, bind = self.getQueueData(btarget)
-			bind += 1
+		_, bpri, bind = self.getQueueData(btarget)
+		bind += 1
 
 		# Update the job and reinsert
 		job.update(bpri, authstate)
