@@ -46,10 +46,11 @@ class QueueObject(dict):
 		"time": 2**30,
 		"totaldiff": 0
 	}
-	def __init__(self, *args, **kwargs):
+	def __init__(self, maindict, *args, **kwargs):
 		"""
 		Initialize this class using requiredtags as a base.
 		"""
+		kwargs = dict(maindict, **kwargs)
 		kwargs = dict(QueueObject.requiredtags, **kwargs)
 		super(self.__class__, self).__init__(*args, **kwargs)
 
