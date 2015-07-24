@@ -207,8 +207,8 @@ class Queue:
 		if not name or material == "N/A" or priority == -1:
 			# Tell the client then don't add the object
 			serveToConnection({
-				"action": "notification".
-				"title": "Incomplete data"
+				"action": "notification",
+				"title": "Incomplete data",
 				"text": "Please fill out the submission form fully."
 				}, ws)
 			if args.loud:
