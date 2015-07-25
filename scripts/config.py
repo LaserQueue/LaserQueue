@@ -153,12 +153,14 @@ cprintconf = colorconf() # create the instance of colorconf used to configure cp
 
 lastprinted = None
 
-def cprint(text, color="", strip=False, func=print, add_newline=False):
+def cprint(text, color="", strip=False, func=print, add_newline=False, colorconfig = None):
 	"""
 	Pretty print `text`, with `color` as its color, using `func`.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
 	global lastprinted
+	if not colorconfig:
+		colorconfig = colorconf
 	text = str(text)
 
 	# Make sure not to print the same thing twice
@@ -182,11 +184,13 @@ def cprint(text, color="", strip=False, func=print, add_newline=False):
 			                      color, i, bcolors.ENDC)) # Print all consecutive lines
 			if add_newline: func("\n")
 
-def cinput(text, color="", strip=False, func=input, add_newline=False):
+def cinput(text, color="", strip=False, func=input, add_newline=False, colorconfig = None):
 	"""
 	Pretty print `text`, with `color` as its color. Take input using `func` on the last line.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
+	if not colorconfig:
+		colorconfig = colorconf
 	text = str(text)
 	# Split the text by lines
 	if strip:
