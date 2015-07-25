@@ -6,7 +6,7 @@ cprintconf.name = "Plugins"
 
 PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "plugins"))
 sys.path.append(PLUGINDIR)
-sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources")
+sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 
 def getPlugins():
 	pluginFiles = os.listdir(PLUGINDIR)
