@@ -1,5 +1,14 @@
 """
 The ActionFramework for LaserQueue plugins.
+
+Every method used for a SocketCommand should accept only **kwargs. These are the things passed currently:
+`args`: a dictionary of all arguments in the json sent over the socket, minus `action`.
+`authstate`: a boolean that contains whether the session is authenticated.
+`sec`: the identifier for the session, used to change/get its authstate.
+`sessions`: the global instance of sidhandler.SIDCache.
+`ws`: the websocket for this session.
+`sockets`: a main.Sockets object that contains all the current sessions.
+`queue`: the laserqueue.Queue object holding the jobs.
 """
 
 def _comparetypes(obj, expected):

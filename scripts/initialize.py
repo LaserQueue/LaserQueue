@@ -25,9 +25,9 @@ cprintconf.color = bcolors.CYAN
 cprintconf.name = "Setup"
 
 # All the config paths
-confpath = os.path.join("..", "www", "config.json")
-userconfpath = os.path.join("..", "www", "userconf.json")
-defaultconfpath = os.path.join("..", "www", "defaultconf.json")
+confpath = os.path.join(os.path.pardir, "www", "config.json")
+userconfpath = os.path.join(os.path.pardir, "www", "userconf.json")
+defaultconfpath = os.path.join(os.path.pardir, "www", "defaultconf.json")
 
 # Config functions
 def openconf():
@@ -168,9 +168,9 @@ def update():
 
 			cprint("New update found: Version {}.".format(masterconfig["version"]))
 
-			prefix = "{}-".format(os.path.basename(os.path.abspath(".."))) # Prefix for new or old versions
-			updatedir = os.path.join("..","..",prefix+masterconfig["version"]) # Directory if fetch updating
-			backupfile = os.path.join("..", "..", prefix+config["version"]+".tar.gz") # Backup file if overwrite updating
+			prefix = "{}-".format(os.path.basename(os.path.abspath(os.path.pardir))) # Prefix for new or old versions
+			updatedir = os.path.join(os.path.pardir,os.path.pardir,prefix+masterconfig["version"]) # Directory if fetch updating
+			backupfile = os.path.join(os.path.pardir, os.path.pardir, prefix+config["version"]+".tar.gz") # Backup file if overwrite updating
 
 			prompt = """Do you want to get version {} to {}? 
 				          The fetch option will update into {}.
@@ -200,10 +200,10 @@ def update():
 			# If they want to overwrite their repository
 			elif confirm == "overwrite":
 				# Get a git repo object for the folder
-				if not os.path.exists(os.path.join("..", ".git")):
-					repo = git.Repo.init("..")
+				if not os.path.exists(os.path.join(os.path.pardir, ".git")):
+					repo = git.Repo.init(os.path.pardir)
 				else:
-					repo = git.Repo("..")
+					repo = git.Repo(os.path.pardir)
 
 				# If the repo doesn't have a connection to the remote, make one
 				if "origin" not in [i.name for i in repo.remotes]:
@@ -216,7 +216,7 @@ def update():
 					repo.archive(tarchive)
 					gzip.GzipFile(fileobj=tarchive, mode='wb')
 				except:
-					make_tarfile(backupfile, "..")
+					make_tarfile(backupfile, os.path.pardir)
 
 				# Reset the repository
 				repo.git.fetch("--all")

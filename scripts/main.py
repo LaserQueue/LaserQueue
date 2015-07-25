@@ -2,7 +2,7 @@ import laserqueue
 from config import *
 cprintconf.color = bcolors.BLUE
 cprintconf.name = "Backend"
-config = Config(os.path.join("..","www","config.json"))
+config = Config(CONFIGDIR)
 import jsonhandler as comm
 import sidhandler as sids
 import plugins

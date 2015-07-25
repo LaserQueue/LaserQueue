@@ -6,7 +6,7 @@ import os
 import hashlib
 
 from config import *
-config = Config(os.path.join("..","www","config.json"))
+config = Config(CONFIGDIR)
 
 if os.path.exists("hashpassword"):
 	PASSWORD = open("hashpassword").read().strip().rstrip()

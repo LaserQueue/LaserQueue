@@ -4,7 +4,7 @@ from config import *
 cprintconf.color = bcolors.DARKGRAY
 cprintconf.name = "Plugins"
 
-PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "plugins"))
+PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "plugins"))
 sys.path.append(PLUGINDIR)
 sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 

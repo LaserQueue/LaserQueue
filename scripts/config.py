@@ -215,3 +215,5 @@ def cinput(text, color="", strip=False, func=input, add_newline=False):
 		                                prints[0], bcolors.ENDC))
 		if add_newline: func("\n")
 
+
+CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "config.json"))
