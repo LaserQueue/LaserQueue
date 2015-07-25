@@ -9,6 +9,16 @@ PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pard
 sys.path.append(PLUGINDIR)
 sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 
+def tryImport(name):
+	try:
+		return __import__(name)
+	except Exception as e:
+		cprint(tbformat(e, "Error importing {}:".format(name)), color=bcolors.DARKRED, colorconfig = plugprintconf)
+
+def pluginFilter(module):
+	return (hasattr(module, "upkeep") or
+		hasattr(module, "socketCommands"))
+
 def getPlugins():
 	if args.noPlugins:
 		return []
@@ -16,14 +26,8 @@ def getPlugins():
 	pluginFiles = os.listdir(PLUGINDIR)
 	pluginPyfiles = filter(lambda x: x.endswith(".py"), pluginFiles)
 
-	def tryImport(name):
-		try:
-			return __import__(name)
-		except Exception as e:
-			cprint(tbformat(e, "Error importing {}:".format(name)), color=bcolors.DARKRED, colorconfig = plugprintconf)
-
 	pluginModules = (tryImport(x[:-3]) for x in pluginPyfiles)
-	pluginModules = filter(lambda module: (hasattr(module, "upkeep") or hasattr(module, "socketCommands")), pluginModules)
+	pluginModules = filter(pluginFilter, pluginModules)
 	if pluginModules:
 		cprint("Finished loading plugins.", colorconfig = plugprintconf)
 	else:
