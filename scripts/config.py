@@ -160,7 +160,7 @@ def cprint(text, color="", strip=False, func=print, add_newline=False, colorconf
 	"""
 	global lastprinted
 	if not colorconfig:
-		colorconfig = colorconf
+		colorconfig = cprintconf
 	text = str(text)
 
 	# Make sure not to print the same thing twice
@@ -174,13 +174,13 @@ def cprint(text, color="", strip=False, func=print, add_newline=False, colorconf
 		prints = text.split("\n")
 
 
-	originstr = cprintconf.tag()
+	originstr = colorconfig.tag()
 	func("{}{}{}{}{}".format(date_time_string(), originstr, 
 	                        color, prints[0], bcolors.ENDC)) # Print the first line with a timestamp
 	if add_newline: func("\n")
 
 	for i in prints[1:]:
-			func("{}{}{}{}".format(cprintconf.whitespace(), 
+			func("{}{}{}{}".format(colorconfig.whitespace(), 
 			                      color, i, bcolors.ENDC)) # Print all consecutive lines
 			if add_newline: func("\n")
 
@@ -190,7 +190,7 @@ def cinput(text, color="", strip=False, func=input, add_newline=False, colorconf
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
 	if not colorconfig:
-		colorconfig = colorconf
+		colorconfig = cprintconf
 	text = str(text)
 	# Split the text by lines
 	if strip:
@@ -199,7 +199,7 @@ def cinput(text, color="", strip=False, func=input, add_newline=False, colorconf
 	else:
 		prints = text.split("\n")
 
-	originstr = cprintconf.tag()
+	originstr = colorconfig.tag()
 	# Print in order if there's more than one line
 	if len(prints) > 1: 
 		print("{}{}{}{}".format(date_time_string(), originstr, 
@@ -207,11 +207,11 @@ def cinput(text, color="", strip=False, func=input, add_newline=False, colorconf
 		if add_newline: func("\n")
 
 		for i in prints[1:-1]:
-			print("{}{}{}".format(cprintconf.whitespace(), 
+			print("{}{}{}".format(colorconfig.whitespace(), 
 			                      color, i))
 			if add_newline: func("\n")
 
-		return func("{}{}{}{}".format(cprintconf.whitespace(), color,
+		return func("{}{}{}{}".format(colorconfig.whitespace(), color,
 		                              prints[-1], bcolors.ENDC))
 		if add_newline: func("\n")
 	else:

@@ -166,7 +166,7 @@ def main():
 			json.dump({}, open("cache.json", "w"))
 
 	pluginList = plugins.getPlugins()
-	pluginUpkeeps = filter(lambda module: hasattr(module, "upkeep"), pluginList)
+	pluginUpkeeps = list(filter(lambda module: hasattr(module, "upkeep"), pluginList))
 	comm.buildCommands(pluginList)
 
 	cprint("Serving WebSockets on 0.0.0.0 port {} ...".format(config["port"]))
