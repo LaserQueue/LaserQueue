@@ -160,12 +160,15 @@ commands = [
 
 def buildCommands(plugins):
 	"""
-	Build the list of commands
+	Build the list of commands.
 	"""
 	global commands
 	for module in plugins:
 		if hasattr(module, "socketCommands"):
-			commands += module.socketCommands
+			for cmd in module.socketCommands:
+				if cmd in commands:
+					commands = filter(lambda command: str(command) != str(cmd), commands)
+				commands.append(cmd)
 
 def parseData(queue, ws, socks, sessions, jdata):
 	"""

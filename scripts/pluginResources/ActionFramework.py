@@ -1,49 +1,5 @@
-"""
-The ActionFramework for LaserQueue plugins.
+import sys, os
+sys.path.append(
+	os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
-Every method used for a SocketCommand should accept only **kwargs. These are the things passed currently:
-`args`: a dictionary of all arguments in the json sent over the socket, minus `action`.
-`authstate`: a boolean that contains whether the session is authenticated.
-`sec`: the identifier for the session, used to change/get its authstate.
-`sessions`: the global instance of sidhandler.SIDCache.
-`ws`: the websocket for this session.
-`sockets`: a main.Sockets object that contains all the current sessions.
-`queue`: the laserqueue.Queue object holding the jobs.
-"""
-
-def _comparetypes(obj, expected):
-	"""
-	Compare types, allowing exceptions.
-	"""
-	if expected is any_type:
-		return True
-	elif expected is any_number:
-		if type(obj) is int or type(obj) is float:
-			return True
-	return type(obj) is expected
-
-# Type exceptions
-class any_type: pass 
-class any_number: pass 
-
-class SocketCommand:
-	"""
-	A class used to define a socket command usable by `runSocketCommand`.
-	"""
-	def __init__(self, actionname, method, arglist):
-		self.name = actionname
-		self.method = method
-		self.args = arglist
-	def __str__(self):
-		return self.name
-	def run(self, **kwargs):
-		args = kwargs["args"]
-		# Check that each argument is correct
-		for i in self.args:
-			if i not in args:
-				return "Expected '{}' argument, but didn't find it.".format(i)
-			if not _comparetypes(args[i], self.args[i]):
-				return "Expected '{}' argument to be an instance of '{}', but found an instance of '{}'.".format(
-					i, self.args[i].__name__, type(args[i]).__name__)
-		# Run the command if all is in order
-		return self.method(**kwargs)
+from jsonhandler import SocketCommand, any_type, any_number
