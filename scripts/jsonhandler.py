@@ -2,7 +2,7 @@ import json, os
 
 from parseargv import args as argvs
 from config import *
-config = Config(os.path.join("..","www","config.json"))
+config = Config(CONFIGDIR)
 
 def _comparetypes(obj, expected):
 	"""
@@ -19,7 +19,7 @@ def _comparetypes(obj, expected):
 class any_type: pass 
 class any_number: pass 
 
-def runSocketCommand(commandlist, ws, socks, sessions, jdata):
+def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
 	"""
 	Run a command based on `jdata`, from `commandlist`.
 	"""
@@ -43,7 +43,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata):
 
 	# If the command can be run, run it
 	if action in cmds and (not cmds[action].args or args):
-		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks)
+		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks, queue=queue)
 	# If the action being bad is the problem, return that
 	elif action not in cmds: 
 		return "Bad command name."
@@ -133,25 +133,49 @@ def auth(**kwargs):
 			if argvs.loud: # If the verbose flag is used, print report
 				cprint("Auth failed.")
 
+# Relative wrappers for queue actions
+def append(**kwargs): kwargs["queue"].append(**kwargs)
+def passoff(**kwargs): kwargs["queue"].passoff(**kwargs)
+def remove(**kwargs): kwargs["queue"].remove(**kwargs)
+def move(**kwargs): kwargs["queue"].move(**kwargs)
+def relmove(**kwargs): kwargs["queue"].relmove(**kwargs)
+def increment(**kwargs): kwargs["queue"].increment(**kwargs)
+def decrement(**kwargs): kwargs["queue"].decrement(**kwargs)
+def attr(**kwargs): kwargs["queue"].attr(**kwargs)
+
+commands = [
+	SocketCommand("deauth", deauth, {}),
+	SocketCommand("refresh", refresh, {}),
+	SocketCommand("uuddlrlrba", uuddlrlrba, {}),
+	SocketCommand("auth", auth, {"pass": str}),
+	SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str}),
+	SocketCommand("pass", passoff, {"uuid": str}),
+	SocketCommand("remove", remove, {"uuid": str}),
+	SocketCommand("move", move, {"uuid": str, "target_priority": int, "target_index": int}),
+	SocketCommand("relmove", relmove, {"uuid": str, "target_index": int}),
+	SocketCommand("increment", increment, {"uuid": str}),
+	SocketCommand("decrement", decrement, {"uuid": str}),
+	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type})
+]
+
+def buildCommands(plugins):
+	"""
+	Build the list of commands.
+	"""
+	global commands
+	for module in plugins:
+		if hasattr(module, "socketCommands"):
+			for cmd in module.socketCommands:
+				if cmd in commands:
+					commands = filter(lambda command: str(command) != str(cmd), commands)
+				commands.append(cmd)
+
 def parseData(queue, ws, socks, sessions, jdata):
 	"""
-	Build a list of acceptable commands and run them.
+	Run the socket commands using the data given.
 	"""
-	commands = [
-		SocketCommand("deauth", deauth, {}),
-		SocketCommand("refresh", refresh, {}),
-		SocketCommand("uuddlrlrba", uuddlrlrba, {}),
-		SocketCommand("auth", auth, {"pass": str}),
-		SocketCommand("add", queue.append, {"name": str, "priority": int, "time": any_number, "material": str}),
-		SocketCommand("pass", queue.passoff, {"uuid": str}),
-		SocketCommand("remove", queue.remove, {"uuid": str}),
-		SocketCommand("move", queue.move, {"uuid": str, "target_priority": int, "target_index": int}),
-		SocketCommand("relmove", queue.relmove, {"uuid": str, "target_index": int}),
-		SocketCommand("increment", queue.increment, {"uuid": str}),
-		SocketCommand("decrement", queue.decrement, {"uuid": str}),
-		SocketCommand("attr", queue.attr, {"uuid": str, "key": str, "new": any_type})
-	]
-	return runSocketCommand(commands, ws, socks, sessions, jdata)
+	global commands
+	return runSocketCommand(commands, ws, socks, sessions, jdata, queue)
 
 def generateData(queue):
 	"""

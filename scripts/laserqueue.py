@@ -6,7 +6,7 @@ from copy import deepcopy
 
 from parseargv import args as argvs
 from config import *
-config = Config(os.path.join("..","www","config.json"))
+config = Config(CONFIGDIR)
 
 maximum_priority = len(config["priorities"])-1
 

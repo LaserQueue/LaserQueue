@@ -153,12 +153,14 @@ cprintconf = colorconf() # create the instance of colorconf used to configure cp
 
 lastprinted = None
 
-def cprint(text, color="", strip=False, func=print, add_newline=False):
+def cprint(text, color="", strip=False, func=print, add_newline=False, colorconfig = None):
 	"""
 	Pretty print `text`, with `color` as its color, using `func`.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
 	global lastprinted
+	if not colorconfig:
+		colorconfig = cprintconf
 	text = str(text)
 
 	# Make sure not to print the same thing twice
@@ -172,21 +174,23 @@ def cprint(text, color="", strip=False, func=print, add_newline=False):
 		prints = text.split("\n")
 
 
-	originstr = cprintconf.tag()
+	originstr = colorconfig.tag()
 	func("{}{}{}{}{}".format(date_time_string(), originstr, 
 	                        color, prints[0], bcolors.ENDC)) # Print the first line with a timestamp
 	if add_newline: func("\n")
 
 	for i in prints[1:]:
-			func("{}{}{}{}".format(cprintconf.whitespace(), 
+			func("{}{}{}{}".format(colorconfig.whitespace(), 
 			                      color, i, bcolors.ENDC)) # Print all consecutive lines
 			if add_newline: func("\n")
 
-def cinput(text, color="", strip=False, func=input, add_newline=False):
+def cinput(text, color="", strip=False, func=input, add_newline=False, colorconfig = None):
 	"""
 	Pretty print `text`, with `color` as its color. Take input using `func` on the last line.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
+	if not colorconfig:
+		colorconfig = cprintconf
 	text = str(text)
 	# Split the text by lines
 	if strip:
@@ -195,7 +199,7 @@ def cinput(text, color="", strip=False, func=input, add_newline=False):
 	else:
 		prints = text.split("\n")
 
-	originstr = cprintconf.tag()
+	originstr = colorconfig.tag()
 	# Print in order if there's more than one line
 	if len(prints) > 1: 
 		print("{}{}{}{}".format(date_time_string(), originstr, 
@@ -203,11 +207,11 @@ def cinput(text, color="", strip=False, func=input, add_newline=False):
 		if add_newline: func("\n")
 
 		for i in prints[1:-1]:
-			print("{}{}{}".format(cprintconf.whitespace(), 
+			print("{}{}{}".format(colorconfig.whitespace(), 
 			                      color, i))
 			if add_newline: func("\n")
 
-		return func("{}{}{}{}".format(cprintconf.whitespace(), color,
+		return func("{}{}{}{}".format(colorconfig.whitespace(), color,
 		                              prints[-1], bcolors.ENDC))
 		if add_newline: func("\n")
 	else:
@@ -215,3 +219,5 @@ def cinput(text, color="", strip=False, func=input, add_newline=False):
 		                                prints[0], bcolors.ENDC))
 		if add_newline: func("\n")
 
+
+CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "config.json"))

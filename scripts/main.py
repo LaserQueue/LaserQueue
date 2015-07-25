@@ -2,9 +2,10 @@ import laserqueue
 from config import *
 cprintconf.color = bcolors.BLUE
 cprintconf.name = "Backend"
-config = Config(os.path.join("..","www","config.json"))
+config = Config(CONFIGDIR)
 import jsonhandler as comm
 import sidhandler as sids
+import plugins
 
 import json
 import os, time
@@ -116,7 +117,7 @@ def upkeep():
 	"""
 	Thread to perform tasks asynchronously.
 	"""
-	global queue, authed, sessions, queuehash
+	global socks, queue, authed, sessions, queuehash, pluginUpkeeps
 	while True:
 		try:
 			# Keep everything in line
@@ -135,6 +136,13 @@ def upkeep():
 				if not i.open:
 					sessions.sids.remove(sessions._get(getsec(i)))
 
+			for module in pluginUpkeeps:
+				try:
+					module.upkeep(queue=queue, sessions=sessions, sockets=socks)
+				except:
+					cprint(tbformat(e, "Error while processing {}.upkeep:".format(module.__name__)), color=bcolors.YELLOW)
+					pluginUpkeeps.remove(module)
+
 			# If the queue changed, serve it
 			queue.metapriority()
 			if queuehash != hash(str(queue.queue)):
@@ -149,13 +157,17 @@ def main():
 	"""
 	Setup and run all subroutines.
 	"""
-	global queue, authed, sessions, queuehash, upkeepThread
+	global socks, queue, authed, sessions, queuehash, upkeepThread, pluginUpkeeps
 	# Load the queue if -b is used
 	if args.backup:
 		if os.path.exists("cache.json"):
 			queue = laserqueue.Queue.load(open("cache.json"))
 		else:
 			json.dump({}, open("cache.json", "w"))
+
+	pluginList = plugins.getPlugins()
+	pluginUpkeeps = list(filter(lambda module: hasattr(module, "upkeep"), pluginList))
+	comm.buildCommands(pluginList)
 
 	cprint("Serving WebSockets on 0.0.0.0 port {} ...".format(config["port"]))
 
