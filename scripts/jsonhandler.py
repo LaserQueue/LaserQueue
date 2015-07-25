@@ -19,7 +19,7 @@ def _comparetypes(obj, expected):
 class any_type: pass 
 class any_number: pass 
 
-def runSocketCommand(commandlist, ws, socks, sessions, jdata):
+def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
 	"""
 	Run a command based on `jdata`, from `commandlist`.
 	"""
@@ -133,25 +133,37 @@ def auth(**kwargs):
 			if argvs.loud: # If the verbose flag is used, print report
 				cprint("Auth failed.")
 
-def parseData(queue, ws, socks, sessions, jdata):
+# Relative wrappers for queue actions
+def append(**kwargs): kwargs["queue"].append(**kwargs)
+def passoff(**kwargs): kwargs["queue"].passoff(**kwargs)
+def remove(**kwargs): kwargs["queue"].remove(**kwargs)
+def move(**kwargs): kwargs["queue"].move(**kwargs)
+def relmove(**kwargs): kwargs["queue"].relmove(**kwargs)
+def increment(**kwargs): kwargs["queue"].increment(**kwargs)
+def decrement(**kwargs): kwargs["queue"].decrement(**kwargs)
+def attr(**kwargs): kwargs["queue"].attr(**kwargs)
+
+commands = [
+	SocketCommand("deauth", deauth, {}),
+	SocketCommand("refresh", refresh, {}),
+	SocketCommand("uuddlrlrba", uuddlrlrba, {}),
+	SocketCommand("auth", auth, {"pass": str}),
+	SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str}),
+	SocketCommand("pass", passoff, {"uuid": str}),
+	SocketCommand("remove", remove, {"uuid": str}),
+	SocketCommand("move", move, {"uuid": str, "target_priority": int, "target_index": int}),
+	SocketCommand("relmove", relmove, {"uuid": str, "target_index": int}),
+	SocketCommand("increment", increment, {"uuid": str}),
+	SocketCommand("decrement", decrement, {"uuid": str}),
+	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type})
+]
+
+
+def parseData(queue, ws, socks, sessions, jdata, commands):
 	"""
 	Build a list of acceptable commands and run them.
 	"""
-	commands = [
-		SocketCommand("deauth", deauth, {}),
-		SocketCommand("refresh", refresh, {}),
-		SocketCommand("uuddlrlrba", uuddlrlrba, {}),
-		SocketCommand("auth", auth, {"pass": str}),
-		SocketCommand("add", queue.append, {"name": str, "priority": int, "time": any_number, "material": str}),
-		SocketCommand("pass", queue.passoff, {"uuid": str}),
-		SocketCommand("remove", queue.remove, {"uuid": str}),
-		SocketCommand("move", queue.move, {"uuid": str, "target_priority": int, "target_index": int}),
-		SocketCommand("relmove", queue.relmove, {"uuid": str, "target_index": int}),
-		SocketCommand("increment", queue.increment, {"uuid": str}),
-		SocketCommand("decrement", queue.decrement, {"uuid": str}),
-		SocketCommand("attr", queue.attr, {"uuid": str, "key": str, "new": any_type})
-	]
-	return runSocketCommand(commands, ws, socks, sessions, jdata)
+	return runSocketCommand(commands, ws, socks, sessions, jdata, queue)
 
 def generateData(queue):
 	"""
