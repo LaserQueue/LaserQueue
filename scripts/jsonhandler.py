@@ -43,7 +43,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
 
 	# If the command can be run, run it
 	if action in cmds and (not cmds[action].args or args):
-		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks)
+		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks, queue=queue)
 	# If the action being bad is the problem, return that
 	elif action not in cmds: 
 		return "Bad command name."
@@ -158,11 +158,20 @@ commands = [
 	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type})
 ]
 
+def buildCommands(plugins):
+	"""
+	Build the list of commands
+	"""
+	global commands
+	for module in plugins:
+		if hasattr(module, "socketCommands"):
+			commands += module.socketCommands
 
-def parseData(queue, ws, socks, sessions, jdata, commands):
+def parseData(queue, ws, socks, sessions, jdata):
 	"""
-	Build a list of acceptable commands and run them.
+	Run the socket commands using the data given.
 	"""
+	global commands
 	return runSocketCommand(commands, ws, socks, sessions, jdata, queue)
 
 def generateData(queue):
