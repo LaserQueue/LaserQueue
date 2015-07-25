@@ -9,6 +9,7 @@ sys.path.append(PLUGINDIR)
 sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 
 def getPlugins():
+	cprint("Loading plugins...")
 	pluginFiles = os.listdir(PLUGINDIR)
 	pluginPyfiles = filter(lambda x: x.endswith(".py"), pluginFiles)
 
@@ -20,4 +21,8 @@ def getPlugins():
 
 	pluginModules = (tryImport(x[:-3]) for x in pluginPyfiles)
 	pluginModules = filter(lambda module: (hasattr(module, "upkeep") or hasattr(module, "socketCommands")), pluginModules)
+	if pluginModules:
+		cprint("Finished loading plugins.")
+	else:
+		cprint("No plugins found.")
 	return pluginModules

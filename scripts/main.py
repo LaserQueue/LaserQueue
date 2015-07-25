@@ -5,6 +5,7 @@ cprintconf.name = "Backend"
 config = Config(os.path.join("..","www","config.json"))
 import jsonhandler as comm
 import sidhandler as sids
+import plugins
 
 import json
 import os, time
@@ -156,6 +157,9 @@ def main():
 			queue = laserqueue.Queue.load(open("cache.json"))
 		else:
 			json.dump({}, open("cache.json", "w"))
+
+	pluginList = plugins.getPlugins()
+	comm.buildCommands(pluginList)
 
 	cprint("Serving WebSockets on 0.0.0.0 port {} ...".format(config["port"]))
 
