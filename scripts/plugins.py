@@ -1,5 +1,5 @@
 import sys, os
-
+from parseargv import args
 from config import *
 plugprintconf = colorconf()
 plugprintconf.color = bcolors.DARKGRAY
@@ -10,6 +10,8 @@ sys.path.append(PLUGINDIR)
 sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 
 def getPlugins():
+	if args.noPlugins:
+		return []
 	cprint("Loading plugins...", colorconfig = plugprintconf)
 	pluginFiles = os.listdir(PLUGINDIR)
 	pluginPyfiles = filter(lambda x: x.endswith(".py"), pluginFiles)

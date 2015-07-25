@@ -19,6 +19,8 @@ parser.add_argument("-s", "--skip-install", help="Skip package installation", de
 	action="store_true")
 parser.add_argument("-nu", "--no-update", help="Skip update", dest="skipupdate",
 	action="store_true")
+parser.add_argument("-np", "--no-plugin", help="Don't load plugins", dest="noPlugins",
+	action="store_true")
 parser.add_argument("--new-password", help="Set a new password", dest="newpass",
 	action="store_true")
 parser.add_argument("--backend", help="Loads backend but not frontend", dest="load_backend",
