@@ -4,9 +4,9 @@ Here as a very basic idea of how to construct a plugin.
 """
 
 # from QueueConfig import *
-# pluginconfig = colorconf()
-# pluginconfig.name = "Test Plugin"
+# printer = PluginPrinterInstance()
+# printer.setname("Test Plugin")
 
 
 # def upkeep(**kwargs):
-# 	cprint("hi", colorconfig = pluginconfig)
+# 	printer.cprint("hi")

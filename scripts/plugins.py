@@ -1,9 +1,9 @@
 import sys, os
 from parseargv import args
-from config import *
-plugprintconf = colorconf()
-plugprintconf.color = bcolors.DARKGRAY
-plugprintconf.name = "Plugins"
+from pluginResources.QueueConfig import *
+printer = PluginPrinterInstance()
+printer.setcolor(bcolors.DARKGRAY)
+printer.setname("Plugins")
 
 PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "plugins"))
 sys.path.append(PLUGINDIR)
@@ -13,7 +13,7 @@ def tryImport(name):
 	try:
 		return __import__(name)
 	except Exception as e:
-		cprint(tbformat(e, "Error importing {}:".format(name)), color=bcolors.DARKRED, colorconfig = plugprintconf)
+		printer.cprint(tbformat(e, "Error importing {}:".format(name)), color=bcolors.DARKRED)
 
 def pluginFilter(module):
 	return (hasattr(module, "upkeep") or
@@ -22,14 +22,14 @@ def pluginFilter(module):
 def getPlugins():
 	if args.noPlugins:
 		return []
-	cprint("Loading plugins...", colorconfig = plugprintconf)
+	printer.cprint("Loading plugins...")
 	pluginFiles = os.listdir(PLUGINDIR)
 	pluginPyfiles = filter(lambda x: x.endswith(".py"), pluginFiles)
 
 	pluginModules = (tryImport(x[:-3]) for x in pluginPyfiles)
 	pluginModules = filter(pluginFilter, pluginModules)
-	if pluginModules:
-		cprint("Finished loading plugins.", colorconfig = plugprintconf)
+	if list(pluginModules):
+		printer.cprint("Finished loading plugins.")
 	else:
-		cprint("No plugins found.", colorconfig = plugprintconf)
+		printer.cprint("No plugins found.")
 	return pluginModules

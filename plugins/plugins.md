@@ -32,3 +32,10 @@ Every method used for a SocketCommand should accept only **kwargs. These are the
 * `ws`: the websocket for this session.
 * `sockets`: a main.Sockets object that contains all the current sessions.
 * `queue`: the laserqueue.Queue object holding the jobs.
+
+## Printing
+Unlike in a normal program, you shouldn't just edit `cprintconf`. This will edit the process's `cprintconf`, meaning that the `[Backend]` in the log will become your plugin's name. Instead, you use `PluginPrinterInstance`, included in `QueueConfig`.  
+
+`PluginPrinterInstance` can emulate any function of cprint. You may pass it an existing `colorconf` when you make it. If you don't, it will be a blank one.  
+You can use `PluginPrinterInstance.colorconfig` to change the name and color, or you can call `PluginPrinterInstance.setname(string)` or `PluginPrinterInstance.setcolor(string)` to do it for you.  
+To print/get input, use `PluginPrinterInstance.cprint` and `PluginPrinterInstance.cinput`. They function exactly like the other ones, but they aren't affected by the "colorconfig" argument.
