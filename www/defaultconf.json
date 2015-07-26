@@ -1,7 +1,7 @@
 {
 	"version": "0.0.5",
-	"update_target": "https://raw.githubusercontent.com/yrsegal/LaserQueue/master/www/defaultconf.json",
-	"update_repo": "https://github.com/yrsegal/LaserQueue.git",
+	"update_target": "https://raw.githubusercontent.com/LaserQueue/LaserQueue/master/www/defaultconf.json",
+	"update_repo": "https://github.com/LaserQueue/LaserQueue.git",
 	"page_title": "LaserQueue",
 	"host": "",
 	"port": "8763",
