@@ -7,11 +7,15 @@ Two modules that have been made available you might find helpful:
 `QueueConfig` is a clone of the normal `config` file, and `ActionFramework` supplies `SocketCommand`, `any_number`, and `any_type`.  
 
 ## Plugin functions
-Each plugin can have one or both of these:
+Each plugin must have at least one of these:
 ### Upkeep
 `upkeep`, which is a function recieving **kwargs. It will be run every `config.refreshRate` These arguments, for now, include `queue`, `sessions`, and `sockets`. These allow you to manipulate the queue quite readily.
-### Socket Commands
+### Socket commands
 `socketCommands`, a list of SocketCommand objects usable for recieving and processing data.
+### Hidden from the client
+`hideFromClient` is a list of tags to be added to the blacklist in `QueueObject.serialize`.
+### Required tags
+`requiredTags` is a dict of tags required for QueueObjects. Merged under the existing.
 
 ## SocketCommand
 SocketCommand accepts these arguments:  

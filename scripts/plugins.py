@@ -11,13 +11,23 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 
 def tryImport(name):
 	try:
-		return __import__(name)
+		if args.loud:
+			printer.cprint("Loading {}...".format(name))
+		imported =  __import__(name)
+		if args.loud:
+			if pluginFilter(imported):
+				printer.cprint("{} successfully loaded.".format(name))
+			else:
+				printer.cprint("{} not a plugin.".format(name))
+		return imported
 	except Exception as e:
 		printer.cprint(tbformat(e, "Error importing {}:".format(name)), color=bcolors.DARKRED)
 
 def pluginFilter(module):
 	return (hasattr(module, "upkeep") or
-		hasattr(module, "socketCommands"))
+		hasattr(module, "socketCommands") or
+		hasattr(module, "hideFromClient") or
+		hasattr(module, "requiredTags"))
 
 def getPlugins():
 	if args.noPlugins:

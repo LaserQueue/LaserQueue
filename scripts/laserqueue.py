@@ -29,29 +29,44 @@ def _concatlist(lists):
 			masterlist.append(j)
 	return masterlist
 
+# Tags which need to exist in a queue object.
+requiredtags = {
+	"priority":0,
+	"name":"DEFAULT",
+	"material":"o", 
+	"esttime": 0, 
+	"coachmodified": False, 
+	"uuid": "this object is so old that it should be deleted", 
+	"sec": "this object is so old that it should be deleted", 
+	"time": 2**30,
+	"totaldiff": 0
+}
+
+# Tags which will not be sent to the client.
+hideFromClient = [
+	"sec"
+]
+
+def buildLists(modules):
+	global requiredtags, hideFromClient
+	for module in modules:
+		if hasattr(module, "requiredTags"):
+			requiredtags = dict(d, **module.requiredTags)
+		if hasattr(module, "hideFromClient"):
+			hideFromClient += module.hideFromClient
+
 class QueueObject(dict):
 	"""
 	An extension to `dict` that has special methods for queue manipulation.
 	"""
 
-	# Tags which need to exist in a queue object.
-	requiredtags = {
-		"priority":0,
-		"name":"DEFAULT",
-		"material":"o", 
-		"esttime": 0, 
-		"coachmodified": False, 
-		"uuid": "this object is so old that it should be deleted", 
-		"sec": "this object is so old that it should be deleted", 
-		"time": 2**30,
-		"totaldiff": 0
-	}
 	def __init__(self, maindict, *args, **kwargs):
 		"""
 		Initialize this class using requiredtags as a base.
 		"""
+		global requiredtags
 		kwargs = dict(maindict, **kwargs)
-		kwargs = dict(QueueObject.requiredtags, **kwargs)
+		kwargs = dict(requiredtags, **kwargs)
 		super(self.__class__, self).__init__(*args, **kwargs)
 
 	@classmethod
@@ -65,8 +80,10 @@ class QueueObject(dict):
 		"""
 		Returns a version of this object without the Sec-key, which shouldn't be sent to clients.
 		"""
+		global hideFromClient
 		obj = dict(self)
-		del obj["sec"]
+		for i in hideFromClient:
+			del obj[i]
 		return obj
 
 	def update(self, priority, authstate=False):

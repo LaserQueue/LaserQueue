@@ -158,16 +158,18 @@ def main():
 	Setup and run all subroutines.
 	"""
 	global socks, queue, authed, sessions, queuehash, upkeepThread, pluginUpkeeps
+
+	pluginList = plugins.getPlugins()
+	pluginUpkeeps = list(filter(lambda module: hasattr(module, "upkeep"), pluginList))
+	comm.buildCommands(pluginList)
+	queue.buildLists(pluginList)
+
 	# Load the queue if -b is used
 	if args.backup:
 		if os.path.exists("cache.json"):
 			queue = laserqueue.Queue.load(open("cache.json"))
 		else:
 			json.dump({}, open("cache.json", "w"))
-
-	pluginList = plugins.getPlugins()
-	pluginUpkeeps = list(filter(lambda module: hasattr(module, "upkeep"), pluginList))
-	comm.buildCommands(pluginList)
 
 	cprint("Serving WebSockets on 0.0.0.0 port {} ...".format(config["port"]))
 
