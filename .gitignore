@@ -78,6 +78,9 @@ sftp-config.json
 ### Gulp ###
 node_modules/
 
+### JS symbol analysis ###
+.tags*
+
 ### Program specific ###
 config.json
 userconfig.json
