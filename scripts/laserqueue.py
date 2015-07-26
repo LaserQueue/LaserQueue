@@ -167,7 +167,7 @@ class Queue:
 					job["priority"] = pri
 					self.queue[pri].append(job)
 
-	def getQueueObject(self, job_uuid):
+	def getQueueObject(self, job_uuid, graceful = False):
 		"""
 		Get a queue object by `job_uuid`.
 		"""
@@ -186,16 +186,18 @@ class Queue:
 
 		# If it was never found, raise an error
 		if not target:
+			if graceful:
+				return None, None, None, None
 			raise ValueError("No such tag: {}".format(job_uuid))
 
 		return target, target_index, target_priority, target_internal_index
 
-	def getQueueData(self, job):
+	def getQueueData(self, job, graceful = False):
 		"""
 		Get a queue object that's similar to `job`
 		"""
 		# Extract `job`'s uuid and use it with getQueueObject, and return the results
-		_, target_index, target_priority, target_internal_index = self.getQueueObject(job["uuid"])
+		_, target_index, target_priority, target_internal_index = self.getQueueObject(job["uuid"], graceful)
 		return target_index, target_priority, target_internal_index
 
 	def masterqueue(self):
