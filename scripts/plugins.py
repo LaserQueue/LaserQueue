@@ -21,6 +21,7 @@ def pluginFilter(module):
 
 def getPlugins():
 	if args.noPlugins:
+		printer.cprint("Skipping plugin load.")
 		return []
 	printer.cprint("Loading plugins...")
 	pluginFiles = os.listdir(PLUGINDIR)

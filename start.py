@@ -94,6 +94,8 @@ if __name__ == "__main__":
 				quit(gSystem("start.py "+" ".join(sys.argv[1:]))/256) # Restart this script
 			else:
 				quit(initcode/256) # Quit if something went wrong
+	else:
+		cprint("Skipping initialization.", color=bcolors.YELLOW)
 
 	argvs = [i for i in sys.argv[1:] if i != "-q"]
 	FNULL = open(os.devnull, 'w') # If the silent arg is called, this is where data will go.

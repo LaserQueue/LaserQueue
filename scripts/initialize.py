@@ -92,7 +92,9 @@ def getpacks():
 	"""
 	Go through PACKAGES and install everything missing.
 	"""
-	if args.skip: return
+	if args.skip: 
+		cprint("Skipping package install.", color=bcolors.YELLOW)
+		return
 
 	# Gets a list of installed packages
 	pl = [str(i).split(" ")[0] for i in pip.get_installed_distributions()]
@@ -155,7 +157,9 @@ def update():
 	"""
 	Try to update LaserQueue to the latest version.
 	"""
-	if args.skipupdate: return
+	if args.skipupdate: 
+		cprint("Skipping updating.", color=bcolors.YELLOW)
+		return
 
 	import git
 	config = json.load(open(defaultconfpath))
