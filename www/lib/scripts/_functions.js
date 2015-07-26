@@ -97,14 +97,18 @@ function populateActions() {
 	}
 
 	// handler to remove a job
-	$('.remove-job').click(function removeJob(event) {
-		if(event.altKey) {
+	$('.remove-job').click(function handleRemove(event) {
+		// remove job based on action button
+		var removeJob = function removeJob(actionButton) {
 			googleAnalytics('send', 'event', 'action', 'click', 'remove job');
-			logText('removing item ' + $(this).parents('tr').attr('data-uuid'));
+			logText('removing item ' + $(actionButton).parents('tr').attr('data-uuid'));
 			socketSend({
 				'action': 'remove',
-				'uuid': $(this).parents('tr').attr('data-uuid')
+				'uuid': $(actionButton).parents('tr').attr('data-uuid')
 			});
+		}
+		if(event.altKey) {
+			removeJob(this);
 		} else {
 			$(event.toElement).tooltip('hide');
 			$('.remove-job').popover('hide');
@@ -122,12 +126,7 @@ function populateActions() {
 				$('.remove-job').popover('hide');
 			});
 			$('.confirm-remove').click(function confirmRemove(event) {
-				googleAnalytics('send', 'event', 'action', 'click', 'remove job');
-				logText('removing item ' + $(this).parents('tr').attr('data-uuid'));
-				socketSend({
-					'action': 'remove',
-					'uuid': $(this).parents('tr').attr('data-uuid')
-				});
+				removeJob(this);
 			});
 		}
 	});
