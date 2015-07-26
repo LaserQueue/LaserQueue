@@ -278,8 +278,6 @@ def confirmhost():
 	# Otherwise, reset the host from localhost (ignored by definition if -n is used)
 	else:
 		if "host" in data and data["host"] == "localhost":
-			cprint("")
-
 			# Confirm they want to reset the host
 			confirm = ""
 			while confirm not in ["y", "n"]:
