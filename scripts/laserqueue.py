@@ -231,7 +231,7 @@ class Queue:
 				"title": "Incomplete data",
 				"text": "Please fill out the submission form fully."
 				}, ws)
-			if args.loud:
+			if argvs.loud:
 				cprint("Insufficient data to add job to queue.", color=bcolors.YELLOW)
 			return
 
