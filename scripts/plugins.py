@@ -26,7 +26,7 @@ def tryImport(name):
 def tryLoadJS(folder, name):
 	try:
 		with open(os.path.join(folder, name)) as f:
-			return f.read().strip().rstrip()
+			return f.read().strip().rstrip().strip("\n").rstrip("\n").strip().rstrip()
 	except Exception as e:
 		printer.cprint(tbformat(e, "Error loading {}:".format(name)), color=bcolors.DARKRED)
 
@@ -90,8 +90,8 @@ def getPluginJs():
 		for j in pluginJsFiles:
 			pluginModules.append(tryLoadJs(i, j))
 	
-	if pluginModules:
+	if pluginJs:
 		printer.cprint("Finished loading JS plugins.")
 	else:
 		printer.cprint("No JS plugins found.")
-	return pluginModules
+	return pluginJs

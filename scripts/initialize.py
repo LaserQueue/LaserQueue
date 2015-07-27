@@ -10,6 +10,7 @@ import time
 import getpass, hashlib
 from math import ceil
 
+import plugins
 from parseargv import args
 
 import ssl
@@ -25,6 +26,7 @@ cprintconf.color = bcolors.CYAN
 cprintconf.name = "Setup"
 
 # All the config paths
+pluginjspath = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
 confpath = os.path.join(os.path.pardir, "www", "config.json")
 userconfpath = os.path.join(os.path.pardir, "www", "userconf.json")
 defaultconfpath = os.path.join(os.path.pardir, "www", "defaultconf.json")
@@ -81,6 +83,12 @@ def getIps():
 		if "not found" not in addresses and "127.0.0.1" not in addresses:
 			ips += addresses
 	return ips
+
+def concatJsPlugins():
+	js = plugins.getPluginJs()
+	concatjs = "\n".join(js)
+	with open(pluginjspath, "w") as f:
+		f.write(concatjs)
 
 
 PACKAGES = [
@@ -301,6 +309,7 @@ def main():
 	changepass()	
 	confirmhost()
 	update()
+	concatJsPlugins()
 				
 	cprint("Initialization complete.")
 
