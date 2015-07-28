@@ -105,31 +105,70 @@ def date_time_string(timestamp=None):
 		day, monthname[month], year, hh, mm, ss)
 	return s
 
+def supports_color():
+    """
+    Returns True if the running system's terminal supports color, and False
+    otherwise.
+    """
+    plat = sys.platform
+    supported_platform = plat != 'Pocket PC' and (plat != 'win32' or
+                                                  'ANSICON' in os.environ)
+    # isatty is not always implemented, #6223.
+    is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
+    if not supported_platform or not is_a_tty:
+        return False
+    return True
 
 
-class bcolors: # All color codes
-	"""
-	A helper class containing colors (for pretty printing.)
-	"""
-	BLACK = '\033[30m'
-	DARKRED = '\033[31m'
-	DARKGREEN = '\033[32m'
-	DARKYELLOW = '\033[33m'
-	DARKBLUE = '\033[34m'
-	PURPLE = '\033[35m'
-	DARKCYAN = '\033[36m'
-	GRAY = '\033[37m'
-	DARKGRAY = '\033[90m'
-	RED = '\033[91m'
-	GREEN = '\033[92m'
-	YELLOW = '\033[93m'
-	BLUE = '\033[94m'
-	MAGENTA = '\033[95m'
-	CYAN = '\033[96m'
-	WHITE = '\033[97m'
-	ORANGE = '\033[38;5;202m'
-	DARKPURPLE = '\033[38;5;53m'
-	ENDC = '\033[0m'
+
+if supports_color():
+	class bcolors: # All color codes
+		"""
+		A helper class containing colors (for pretty printing.)
+		"""
+		BLACK = '\033[30m'
+		DARKRED = '\033[31m'
+		DARKGREEN = '\033[32m'
+		DARKYELLOW = '\033[33m'
+		DARKBLUE = '\033[34m'
+		PURPLE = '\033[35m'
+		DARKCYAN = '\033[36m'
+		GRAY = '\033[37m'
+		DARKGRAY = '\033[90m'
+		RED = '\033[91m'
+		GREEN = '\033[92m'
+		YELLOW = '\033[93m'
+		BLUE = '\033[94m'
+		MAGENTA = '\033[95m'
+		CYAN = '\033[96m'
+		WHITE = '\033[97m'
+		ORANGE = '\033[38;5;202m'
+		DARKPURPLE = '\033[38;5;53m'
+		ENDC = '\033[0m'
+else:
+	class bcolors: # No color codes
+		"""
+		A helper class containing no colors, allowing systems that don't support ANSI to continue running without strange logs.
+		"""
+		BLACK = ''
+		DARKRED = ''
+		DARKGREEN = ''
+		DARKYELLOW = ''
+		DARKBLUE = ''
+		PURPLE = ''
+		DARKCYAN = ''
+		GRAY = ''
+		DARKGRAY = ''
+		RED = ''
+		GREEN = ''
+		YELLOW = ''
+		BLUE = ''
+		MAGENTA = ''
+		CYAN = ''
+		WHITE = ''
+		ORANGE = ''
+		DARKPURPLE = ''
+		ENDC = ''
 
 class colorconf:
 	"""
