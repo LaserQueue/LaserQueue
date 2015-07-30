@@ -471,7 +471,7 @@ class Queue:
 		job_uuid, attrname, value = args["uuid"], args["key"], args["new"]
 
 		# Make sure `attrname` is allowed to be changed (no changing timestamps, etc)
-		if attrname not in self.requiredtags or attrname in ["uuid", "sec", "time", "totaldiff", "priority"]:
+		if attrname not in requiredtags or attrname in ["uuid", "sec", "time", "totaldiff", "priority"]:
 			return "Cannot change the `{}` value of a job.".format(attrname)
 		# Make sure the user is allowed to edit `attrname`.
 		if attrname not in config["attr_edit_perms"] and not authstate:
