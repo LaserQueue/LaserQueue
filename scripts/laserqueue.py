@@ -151,13 +151,15 @@ class Queue:
 				# If enough time has passed to overtake the threshold, bump upwards
 				if time.time()-job["time"] > (config["metabump"] + config["metabumpmult"]*job["priority"]):
 					# Increment priority
-					pri = job["priority"]-1
+					pri = job["priority"]+1
 
 					# The maximum priority that can be bumped to, which can't be higher than the true maximum
-					maxbump = max(config["metabumpmax"], 0)
+					maxbump = min(config["metabumpmax"], maximum_priority)
+					if maxbump < 0:
+						maxbump = maximum_priority
 
 					# If the priority is high enough it can't be bumped further, reset the timestamp and pass by
-					if pri < maxbump:
+					if pri > maxbump:
 						job["time"] = time.time()
 						continue
 
