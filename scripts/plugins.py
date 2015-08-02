@@ -32,11 +32,11 @@ def tryLoadJS(folder, name):
 
 
 def pluginFilter(module):
-	return hasattr(module, "upkeep") or
+	return (hasattr(module, "upkeep") or
 		hasattr(module, "socketCommands") or
 		hasattr(module, "hideFromClient") or
 		hasattr(module, "requiredTags") or
-		hasattr(module, "requiresAuth")
+		hasattr(module, "requiresAuth"))
 
 def hasPy(filename):
 	subFiles = os.listdir(os.path.join(PLUGINDIR, filename))
@@ -90,7 +90,7 @@ def getPluginJs():
 		pluginJsFiles = filter(lambda filename: filename.endswith(".js"), pluginJsFiles)
 		for j in pluginJsFiles:
 			pluginModules.append(tryLoadJs(i, j))
-	
+
 	if pluginJs:
 		printer.cprint("Finished loading JS plugins.")
 	else:
