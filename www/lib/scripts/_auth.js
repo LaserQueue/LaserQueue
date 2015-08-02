@@ -1,3 +1,7 @@
+// functions for auth
+
+'use strict';
+
 function onAuth() {
 	authed = true;
 	logText('Displaying authed modal.');

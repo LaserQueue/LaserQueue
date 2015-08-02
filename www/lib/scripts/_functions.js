@@ -1,4 +1,6 @@
-// put any utilities and functions etc in here
+// utilities and functions etc
+
+'use strict';
 
 if (!String.prototype.format) {
 	String.prototype.format = function stringPrototypeFormat() {

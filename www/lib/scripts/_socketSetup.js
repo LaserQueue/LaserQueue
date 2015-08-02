@@ -1,5 +1,7 @@
 // basically this handles everything WebSockets
 
+'use strict';
+
 function loopThroughCut(arrayIndex, arrayEl) {
 	// at this point nothing is human-readable
 	// make material human-readable
@@ -25,7 +27,7 @@ function loopThroughCut(arrayIndex, arrayEl) {
 function socketSetup() {
 
 	// wait until host has a real value
-	while (host == 'undefined') {}
+	while (host === 'undefined') {}
 	socket = new WebSocket(host);
 
 	// when websockets connects
