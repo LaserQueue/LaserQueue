@@ -19,10 +19,13 @@ def _comparetypes(obj, expected):
 class any_type: pass 
 class any_number: pass 
 
+authactions = config["authactions"]
+
 def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
 	"""
 	Run a command based on `jdata`, from `commandlist`.
 	"""
+	global authactions
 	if "action" not in jdata: 
 		return "Action missing!"
 
@@ -34,7 +37,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
 	authstate = sessions.check(sec)
 
 	# Stop actions that need auth if the client isn't auth
-	if action in config["authactions"] and not authstate: 
+	if action in authactions and not authstate: 
 		serveToConnection({"action":"deauthed"}, ws)
 		return "This action requires auth."
 
@@ -162,13 +165,15 @@ def buildCommands(plugins):
 	"""
 	Build the list of commands.
 	"""
-	global commands
+	global commands, authactions
 	for module in plugins:
 		if hasattr(module, "socketCommands"):
 			for cmd in module.socketCommands:
 				if cmd in commands:
 					commands = filter(lambda command: str(command) != str(cmd), commands)
 				commands.append(cmd)
+		if hasattr(module, "requiresAuth"):
+			authactions += module.requiresAuth
 
 def parseData(queue, ws, socks, sessions, jdata):
 	"""

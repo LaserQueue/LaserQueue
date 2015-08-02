@@ -32,10 +32,11 @@ def tryLoadJS(folder, name):
 
 
 def pluginFilter(module):
-	return (hasattr(module, "upkeep") or
+	return hasattr(module, "upkeep") or
 		hasattr(module, "socketCommands") or
 		hasattr(module, "hideFromClient") or
-		hasattr(module, "requiredTags"))
+		hasattr(module, "requiredTags") or
+		hasattr(module, "requiresAuth")
 
 def hasPy(filename):
 	subFiles = os.listdir(os.path.join(PLUGINDIR, filename))

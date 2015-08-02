@@ -16,6 +16,8 @@ Each plugin must have at least one of these:
 `hideFromClient` is a list of tags to be added to the blacklist in `QueueObject.serialize`.
 ### Required tags
 `requiredTags` is a dict of tags required for QueueObjects. Merged under the existing.
+### Auth-requiring actions
+`requiresAuth` is a list of names of commands that require auth.
 
 ## SocketCommand
 SocketCommand accepts these arguments:  
