@@ -87,7 +87,7 @@ def getPluginJs():
 
 	for i in pluginsJs:
 		pluginJsFiles = os.listdir(os.path.join(PLUGINDIR, i))
-		pluginJsFiles = filter(lambda filename: filename.endswith(".js"), pluginJsFiles)
+		pluginJsFiles = filter(lambda filename: filename.endswith(".min.js"), pluginJsFiles)
 		for j in pluginJsFiles:
 			pluginModules.append(tryLoadJs(i, j))
 
