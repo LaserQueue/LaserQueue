@@ -38,7 +38,7 @@ function socketSetup() {
 	};
 
 	// when websockets message
-	socket.onmessage = function handleNewMessage(msg) {
+	socket.onmessage = function handleMessage(msg) {
 
 		// loads JSON data
 		jsonData = JSON.parse(msg.data);
