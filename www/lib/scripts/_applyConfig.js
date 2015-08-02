@@ -3,14 +3,10 @@
 'use strict';
 
 getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
-
 	// config.thing returns thing in the config file
 	config = getConfigFile.responseJSON;
 
-	// hide and disable log if not enabled
-	devLog = config.dev_log;
-
-	if(!devLog) {
+	if(!config.dev_log) {
 		$('[for=log-checkbox]').remove();
 	} else {
 		console.log('Recommended: use the in-page log. Most info goes there.');
@@ -29,20 +25,11 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		$('title').text(config.page_title);
 	}
 
-	// set materials and priorities from config
-	materials = config.materials;
-	priorities = config.priorities;
-
-	// set refreshRate and reconnectRate from config
-	refreshRate = config.refreshRate;
-	reconnectRate = config.reconnectRate;
-
 	// take easter eggs boolean from config
 	easterEggs = config.easter_eggs;
 
 	// hide task add form if auth is required to add
-	addEnabled = (config.authactions.indexOf('add') == -1);
-	if (!addEnabled) {
+	if (!(config.authactions.indexOf('add') == -1)) {
 		$('.job-form-group').hide();
 	}
 
@@ -50,21 +37,21 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	if (!config.default_material) {
 		$('#job-material').append('<option disabled selected value="N/A" class="selected">{0}</option>'.format(config.material_input));
 	}
-	for(var m in materials) {
+	for(var m in config.materials) {
 		var mat_selected = (m === config.default_material ? 'selected' : '');
 		$('#job-material').append('<option {0} value="{1}" class="{0}">{2}</option>'.format(
-			mat_selected, m, materials[m]));
+			mat_selected, m, config.materials[m]));
 	}
 
 	// render the priorities dropdown
 	if (config.priority_choose) {
 		$('#job-priority').append('<option disabled selected value="-1" class="selected">{0}</option>'.format(config.priority_input));
 	}
-	for(var p = priorities.length-1; p > -1; p--) {
+	for(var p = config.priorities.length-1; p > -1; p--) {
 		var disabled = (p > config.default_priority && !config.priority_selection ? 'disabled' : '');
 		var pri_selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
 		$('#job-priority').append('<option {0} value="{1}" class="{2} {0}">{3}</option>'.format(
-			pri_selected, p, disabled, priorities[p]));
+			pri_selected, p, disabled, config.priorities[p]));
 	}
 	if (!config.priority_selection) {
 		$('.disabled').prop('disabled', true);
@@ -164,11 +151,11 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	// maintain connection if dropped
 	setInterval(function tryToReconnect() {
-		if(typeof reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
+		if(typeof config.reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
 			// initialize websockets if closed
 			logText('Attempting connection to WebSockets host {0}.'.format(host));
 			socketSetup();
 		}
-	}, reconnectRate);
+	}, config.reconnectRate);
 
 });

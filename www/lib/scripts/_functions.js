@@ -60,7 +60,7 @@ function ensureNumberStringLength(number, len) {
 
 // logs text to devlog on page
 function logText(text) {
-	if(devLog) {
+	if(config.dev_log) {
 		var currentTime = new Date();
 		var currentDay = ensureNumberStringLength(currentTime.getDate(), 2);
 		var currentMonth = months[currentTime.getMonth()];
@@ -264,7 +264,7 @@ function changeAttr(taskid, attrKey, attrVal) {
 
 // read the function name, it says it all
 function rickRoll() {
-	if (easterEggs) {
+	if (config.easter_eggs) {
 		modalMessage('Never gonna give you up', '<iframe width="420" height="315" src="http://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&disablekb=1&controls=0&loop=1&showinfo=0&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>');
 		$('html').addClass('lol');
 	}

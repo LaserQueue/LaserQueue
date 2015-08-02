@@ -13,7 +13,7 @@ function onAuth() {
 	$('.disabled').prop('disabled', false);
 	$('.authorize').attr('data-original-title', config.logout);
 	$('.nuvu-logo').attr('src', '/dist/img/admin-logo.svg');
-	if (!addEnabled) {
+	if (!(config.authactions.indexOf('add') == -1)) {
 		$('.job-form-group').show();
 	}
 	populateActions();
@@ -34,7 +34,7 @@ function onDeauth() {
 	if (config.authactions.indexOf('relmove') != -1) {
 		$(draggable).draggabilly('disable');
 	}
-	if (!addEnabled) {
+	if (!(config.authactions.indexOf('add') == -1)) {
 		$('.job-form-group').hide();
 	}
 	populateActions();

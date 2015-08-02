@@ -2,7 +2,7 @@
 
 'use strict';
 
-var getConfigFile, config, host, jsonData, socket, materials, priorities, refreshRate, reconnectRate, easterEggs, buttons, addEnabled,
+var getConfigFile, config, host, jsonData, socket, buttons,
 	authed = false,
 	allCuts = [],
 	draggable = [],

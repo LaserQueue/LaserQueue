@@ -6,8 +6,8 @@ function loopThroughCut(arrayIndex, arrayEl) {
 	// at this point nothing is human-readable
 	// make material human-readable
 	displayEl = $.extend({}, arrayEl); // deepcopy
-	displayEl.material = materials[arrayEl.material];
-	displayEl.priority = priorities[arrayEl.priority];
+	displayEl.material = config.materials[arrayEl.material];
+	displayEl.priority = config.priorities[arrayEl.priority];
 	var timetotal = arrayEl.esttime;
 	var hours = Math.floor(timetotal / 60);
 	timetotal -= hours * 60;
