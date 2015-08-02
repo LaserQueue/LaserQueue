@@ -1,14 +1,13 @@
 {
   "name": "konami-js",
   "homepage": "https://github.com/snaptortoise/konami-js",
-  "_release": "6a471762af",
+  "_release": "06c0c68099",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "6a471762affef4022b7c8ade204ef33b27f3fbf4"
+    "commit": "06c0c68099eae5417532d67c0549ad0ab0de8ae1"
   },
   "_source": "git://github.com/snaptortoise/konami-js.git",
   "_target": "*",
-  "_originalSource": "konami-js",
-  "_direct": true
+  "_originalSource": "konami-js"
 }
