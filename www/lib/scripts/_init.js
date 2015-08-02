@@ -1,7 +1,5 @@
 // initialize the things
 
-'use strict';
-
 // holds old and new JSON
 // for comparison to minimize layout thrashing n stuff
 var oldJsonData = 'uninitialized';

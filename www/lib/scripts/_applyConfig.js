@@ -1,7 +1,5 @@
 // gets the config file, parses and applies values
 
-'use strict';
-
 getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	// config.thing returns thing in the config file
 	config = getConfigFile.responseJSON;

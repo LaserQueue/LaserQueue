@@ -1,7 +1,5 @@
 // utilities and functions etc
 
-'use strict';
-
 if (!String.prototype.format) {
 	String.prototype.format = function stringPrototypeFormat() {
 		var args = arguments;

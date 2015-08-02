@@ -1,7 +1,5 @@
 // basically this handles everything WebSockets
 
-'use strict';
-
 function loopThroughCut(arrayIndex, arrayEl) {
 	// at this point nothing is human-readable
 	// make material human-readable

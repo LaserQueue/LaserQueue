@@ -1,7 +1,5 @@
 // declare almost all globals here
 
-'use strict';
-
 var getConfigFile, config, host, jsonData, socket, buttons,
 	authed = false,
 	allCuts = [],
