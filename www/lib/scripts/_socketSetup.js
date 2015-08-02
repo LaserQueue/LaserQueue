@@ -1,8 +1,7 @@
 // basically this handles everything WebSockets
 
-function loopThroughCut(arrayIndex, arrayEl) {
-	// at this point nothing is human-readable
-	// make material human-readable
+function parseCut(arrayIndex, arrayEl) {
+	// parse cut
 	displayEl = $.extend({}, arrayEl); // deepcopy
 	displayEl.material = config.materials[arrayEl.material];
 	displayEl.priority = config.priorities[arrayEl.priority];
@@ -13,11 +12,12 @@ function loopThroughCut(arrayIndex, arrayEl) {
 	timetotal -= minutes;
 	var seconds = +(timetotal * 60).toFixed(2);
 
-	var output = String(hours ? hours + 'h' : '') + (minutes && hours ? ' ' : '');
-	output += String(minutes ? minutes + 'm' : '') + (seconds && minutes ? ' ' : '');
-	output += String(seconds ? seconds + 's' : '');
+	var timeEstimate = String(hours ? hours + 'h' : '') + (minutes && hours ? ' ' : '');
+	timeEstimate += String(minutes ? minutes + 'm' : '') + (seconds && minutes ? ' ' : '');
+	timeEstimate += String(seconds ? seconds + 's' : '');
 
-	displayEl.esttime = output;
+	displayEl.esttime = timeEstimate;
+
 	// add to full list of cuts
 	allCuts = allCuts.concat(displayEl);
 }
