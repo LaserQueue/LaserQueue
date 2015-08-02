@@ -1,10 +1,9 @@
-// declare almost all globals here
+// declare all globals here
 
-var getConfigFile, config, host, jsonData, socket, buttons,
+var config, jsonData, socket, buttons,
 	authed = false,
 	allCuts = [],
 	draggable = [],
-	months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 	displayEl = {},
 	renderDirectives = {
 		priority: {

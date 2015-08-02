@@ -61,7 +61,7 @@ function logText(text) {
 	if(config.dev_log) {
 		var currentTime = new Date();
 		var currentDay = ensureNumberStringLength(currentTime.getDate(), 2);
-		var currentMonth = months[currentTime.getMonth()];
+		var currentMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][currentTime.getMonth()];
 		var currentYear = currentTime.getFullYear();
 		var currentHours = ensureNumberStringLength(currentTime.getHours(), 2);
 		var currentMinutes = ensureNumberStringLength(currentTime.getMinutes(), 2);
@@ -106,7 +106,7 @@ function populateActions() {
 				'action': 'remove',
 				'uuid': $(actionButton).parents('tr').attr('data-uuid')
 			});
-		}
+		};
 		if(event.altKey) {
 			removeJob(this);
 		} else {

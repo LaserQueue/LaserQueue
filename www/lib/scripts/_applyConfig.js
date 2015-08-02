@@ -1,6 +1,6 @@
 // gets the config file, parses and applies values
 
-getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
+var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	// config.thing returns thing in the config file
 	config = getConfigFile.responseJSON;
 
