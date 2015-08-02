@@ -25,9 +25,6 @@ getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		$('title').text(config.page_title);
 	}
 
-	// take easter eggs boolean from config
-	easterEggs = config.easter_eggs;
-
 	// hide task add form if auth is required to add
 	if (!(config.authactions.indexOf('add') == -1)) {
 		$('.job-form-group').hide();
