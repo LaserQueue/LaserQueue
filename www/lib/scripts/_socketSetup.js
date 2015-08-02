@@ -62,7 +62,7 @@ function socketSetup() {
 				for (var priority = jsonData.queue.length; priority >= 0; priority--) {
 					el = jsonData.queue[priority];
 					// for each cut in priority
-					$(el).each(loopThroughCut);
+					$(el).each(parseCut);
 
 				}
 
