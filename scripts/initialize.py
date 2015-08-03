@@ -49,7 +49,7 @@ def copyconf():
 	Make sure the config has the required data in it.
 	If args.regen, it will pretend as though the original config was empty.
 	"""
-	if os.path.exists(confpath) and args.regen is not []:
+	if os.path.exists(confpath) and args.regen != []:
 		currdata = openconf()
 
 		if args.regen: # Regenerate everything after -r
