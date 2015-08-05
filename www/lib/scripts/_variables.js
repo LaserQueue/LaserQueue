@@ -30,7 +30,8 @@ var config, jsonData, socket, buttons,
 		},
 		"rickroll": function rickRollUser(data) {
 			if(config.easter_eggs) rickRoll();
-		}, "refresh": function refreshPage(data) {
+		}, 
+		"refresh": function refreshPage(data) {
 			if(config.allow_force_refresh) window.location.reload();
 		},
 		"notification": function displayNotification(data) {

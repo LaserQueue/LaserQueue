@@ -44,7 +44,7 @@ function socketSetup() {
 		jsonData = JSON.parse(msg.data);
 
 		// if data is new
-		if (JSON.stringify(jsonData) !== JSON.stringify(oldJsonData)) {
+		if (JSON.stringify(jsonData) !== JSON.stringify(oldJsonData) && 'action' in jsonData) {
 
 			// deep copy jsonData to oldJsonData
 			oldJsonData = $.extend({}, jsonData);
@@ -53,34 +53,8 @@ function socketSetup() {
 			logText('new JSON received: {0}'.format(JSON.stringify(jsonData)));
 
 			// if being told to render table
-			if(jsonData.action == 'display') {
-
-				// reinitialize full list of cuts
-				allCuts = [];
-				// for each priority in list
-
-				for (var priority = jsonData.queue.length; priority >= 0; priority--) {
-					el = jsonData.queue[priority];
-					// for each cut in priority
-					$(el).each(parseCut);
-
-				}
-
-				// render allCuts into table
-				$('.jobs-table-template').render(allCuts, renderDirectives);
-				populateActions();
-			} else if (jsonData.action == 'authed' && config.admin_mode_enabled && !authed) {
-				onAuth();
-			} else if (jsonData.action == 'authfailed' && config.admin_mode_enabled && !authed) {
-				onFailedauth();
-			} else if (jsonData.action == 'deauthed' && config.admin_mode_enabled && authed) {
-				onDeauth();
-			} else if(jsonData.action == 'rickroll' && config.easter_eggs) {
-				rickRoll();
-			} else if(jsonData.action == 'refresh' && config.allow_force_refresh) {
-				window.location.reload();
-			} else if(jsonData.action == 'notification') {
-				modalMessage(jsonData.title, jsonData.text);
+			if (jsonData.action in acceptedAPIs) {
+				acceptedAPIs[jsonData.action](jsonData)
 			}
 		}
 	};
