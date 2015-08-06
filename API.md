@@ -72,6 +72,26 @@ Adds the specified name, priority, etc to the list
 }
 ```
 
+#### add: Optional arguments
+
+`extras` is a dict of extra objects to add to the queue object. This is meant to be used by plugins wishing to add custom data to the queue object.
+
+##### Sample
+
+```
+{
+	"action": "add",
+	"name": <name as Str>,
+	"priority": <priority as Int>,
+	"time": <time in minutes as a Float or Int>,
+	"material": <material code as Str>,
+	"extras": {
+		<key as Str>: <associated data>,
+		...
+	}
+}
+```
+
 
 ### pass
 Moves the specified job below the next job

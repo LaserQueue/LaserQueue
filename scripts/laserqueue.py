@@ -225,6 +225,9 @@ class Queue:
 		args, authstate, sec, ws = kwargs["args"], kwargs["authstate"], kwargs["sec"], kwargs["ws"]
 		name, priority, esttime, material = args["name"], args["priority"], args["time"], args["material"]
 
+		extra_objects = args.get("extras", {}) # Get the extras and make sure it's the right format
+		if not isinstance(extra_objects, dict): extra_objects = {}
+
 		# If the priority or the material aren't set up, or the name isn't defined
 		if not name or material == "N/A" or priority == -1:
 			# Tell the client then don't add the object
@@ -271,8 +274,7 @@ class Queue:
 
 		if not inqueue or config["allow_multiples"]: # If the job is allowed to be created
 			# Add it to the queue
-			self.queue[priority].append(QueueObject({
-				"totaldiff": 0,
+			newJob = QueueObject({
 				"priority": priority,
 				"name": name,
 				"material": material,
@@ -281,7 +283,11 @@ class Queue:
 				"uuid": job_uuid,
 				"sec": sec,
 				"time": time.time()
-			}))
+			})
+			for key in extra_objects:
+				if key not in newJob:
+					newJob[key] = extra_object[key]
+			self.queue[priority].append(newJob)
 
 			if argvs.loud: # If -v, report success
 				color = bcolors.MAGENTA if authstate else ""
