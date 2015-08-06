@@ -15,7 +15,7 @@ from parseargv import args
 
 import ssl
 if hasattr(ssl, '_create_unverified_context'): # Some operating systems don't have the default https context.
-    ssl._create_default_https_context = ssl._create_unverified_context
+		ssl._create_default_https_context = ssl._create_unverified_context
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath) # Make sure we're in the correct directory
@@ -30,6 +30,14 @@ pluginjspath = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
 confpath = os.path.join(os.path.pardir, "www", "config.json")
 userconfpath = os.path.join(os.path.pardir, "www", "userconf.json")
 defaultconfpath = os.path.join(os.path.pardir, "www", "defaultconf.json")
+
+# Utility function to test for internet connection.
+def connected_to_internet(url='http://www.github.com/', timeout=2):
+	try:
+		_ = urllib.request.urlopen(url, timeout)
+		return True
+	except urllib.request.URLError:
+		return False
 
 # Config functions
 def openconf():
@@ -113,6 +121,10 @@ def getpacks():
 	for pack in PACKAGES:
 		if pack in pl:
 			continue # Don't do anything if the package is installed
+		if not connected_to_internet():
+			if not connected_to_internet("http://www.google.com"):
+				cprint("No internet connection. Skipping package install.", color=bcolors.YELLOW)
+				return
 		installed = True
 
 		# Ask if they want to install this dependency
@@ -168,6 +180,11 @@ def update():
 	if args.skipupdate: 
 		cprint("Skipping updating.", color=bcolors.YELLOW)
 		return
+
+	if not connected_to_internet():
+		if not connected_to_internet("http://www.google.com"):
+			cprint("No internet connection. Skipping update.", color=bcolors.YELLOW)
+			return
 
 	import git
 	config = json.load(open(defaultconfpath))
