@@ -6,7 +6,7 @@ var config, jsonData, socket, buttons,
 	draggable = [],
 	displayEl = {},
 	acceptedAPIs = {
-		"display": function displayData(data) {
+		"display": [function displayData(data) {
 			// reinitialize full list of cuts
 			allCuts = [];
 			// for each priority in list:
@@ -18,25 +18,25 @@ var config, jsonData, socket, buttons,
 			// render allCuts into table
 			$('.jobs-table-template').render(allCuts, renderDirectives);
 			populateActions();
-		},
-		"authed": function authUser(data) {
+		}],
+		"authed": [function authUser(data) {
 			if (config.admin_mode_enabled && !authed) onAuth();
-		},
-		"authfailed": function deauthUser(data) {
+		}],
+		"authfailed": [function deauthUser(data) {
 			if (config.admin_mode_enabled && !authed) onFailedauth();
-		},
-		"deauthed": function userFailedAuth(data) {
+		}],
+		"deauthed": [function userFailedAuth(data) {
 			if(config.admin_mode_enabled && authed) onDeauth();
-		},
-		"rickroll": function rickRollUser(data) {
+		}],
+		"rickroll": [function rickRollUser(data) {
 			if(config.easter_eggs) rickRoll();
-		}, 
-		"refresh": function refreshPage(data) {
+		}], 
+		"refresh": [function refreshPage(data) {
 			if(config.allow_force_refresh) window.location.reload();
-		},
-		"notification": function displayNotification(data) {
+		}],
+		"notification": [function displayNotification(data) {
 			modalMessage(data.title, data.text);
-		}
+		}]
 	},
 	renderDirectives = {
 		priority: {
