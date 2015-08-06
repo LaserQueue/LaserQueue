@@ -24,7 +24,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	}
 
 	// hide task add form if auth is required to add
-	if (!(config.authactions.indexOf('add') == -1)) {
+	if (config.authactions.indexOf('add') != -1) {
 		$('.job-form-group').hide();
 	}
 
