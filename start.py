@@ -83,8 +83,8 @@ class dummyProcess:
 atexit.register(cleanup) # Make sure cleanup gets called on exit
 
 if __name__ == "__main__":
-	cprintconf.name = "Startup"
-	cprintconf.color = bcolors.GREEN
+	cprintconf.color = bcolors.CYAN
+	cprintconf.name = "Setup"
 	# Initialize all needed files
 	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
 	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
@@ -93,8 +93,6 @@ if __name__ == "__main__":
 	initFile(os.path.join(selfpath, "www", "dist", "js", "plugins.js"))
 
 	# Do setup
-	cprintconf.color = bcolors.CYAN
-	cprintconf.name = "Setup"
 	os.chdir("scripts") # Move to the right directory
 	if not args.no_init:
 		initcode = gSystem("initialize.py "+" ".join(sys.argv[1:])) # Run initialize with all arguments
