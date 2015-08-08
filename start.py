@@ -37,7 +37,10 @@ def initFile(path, data=""):
 		newfile.close()
 		if os.name != "nt" and not os.geteuid():
 			try:
-				os.chown(path, int(os.environ.get('SUDO_UID')), int(os.environ.get('SUDO_GID')))
+				uid = os.environ.get('SUDO_UID')
+				gid = os.environ.get('SUDO_GID')
+				if uid:
+					os.chown(path, int(uid), int(gid))
 			except: 
 				cprint("WARNING: {} created as root.".format(os.path.basename(path)), color=bcolors.YELLOW)
 
