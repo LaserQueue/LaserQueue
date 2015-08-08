@@ -35,6 +35,11 @@ def initFile(path, data=""):
 		newfile = open(path, "w")
 		newfile.write(data)
 		newfile.close()
+		if os.name != "nt" and not os.geteuid():
+			try:
+				os.chown(path, int(os.environ.get('SUDO_UID')), int(os.environ.get('SUDO_GID')))
+			except: 
+				cprint("WARNING: {} created as root.".format(os.path.basename(path)), color=bcolors.YELLOW)
 
 def gPopen(cmd, stdin=None, stdout=None, stderr=None):
 	"""
@@ -75,6 +80,8 @@ class dummyProcess:
 atexit.register(cleanup) # Make sure cleanup gets called on exit
 
 if __name__ == "__main__":
+	cprintconf.name = "Startup"
+	cprintconf.color = bcolors.GREEN
 	# Initialize all needed files
 	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
 	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
