@@ -66,7 +66,7 @@ def getPlugins():
 			imported = tryImport(j[:-3])
 			pluginModules.append(imported)
 
-	pluginModules = filter(pluginFilter, pluginModules)
+	pluginModules = list(filter(pluginFilter, pluginModules))
 	if pluginModules:
 		printer.cprint("Finished loading Python plugins.")
 	else:
