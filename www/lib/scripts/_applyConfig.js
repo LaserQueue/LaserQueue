@@ -28,7 +28,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		$('.job-form-group').hide();
 	}
 
-	// render the form
+	// set up form options
 	formOptions = {
 		"name": {
 			"type": "string",
@@ -60,7 +60,15 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		}
 	};
 
+	// render the form
 	renderForm();
+
+	// set table headers from config
+	$('.action-header').text(config.action_header);
+	$('.name-header').text(config.name_header);
+	$('.material-header').text(config.material_header);
+	$('.time-header').text(config.time_header);
+	$('.priority-header').text(config.priority_header);
 
 	// set up action buttons from config
 	buttons = {

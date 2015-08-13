@@ -248,13 +248,14 @@ function renderForm() {
 	$('.job-form-group').html('<button type="submit" class="btn btn-default btn-pink btn-submit">Submit</button>');
 	for(var i in formOptions) {
 		var classes = '';
-		for(var classI in formOptions[i].classes) classes += formOptions[i].classes + ' ';
-		if(formOptions[i].type === 'string') {
-			$('<input type="text" placeholder="' + formOptions[i].placeholder + '" class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom">').insertBefore('.btn-submit');
-		} else if (formOptions[i].type === 'select') {
-			$('<select name="' + i + '" id="job-' + i + '" class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom"></select>').insertBefore('.btn-submit');
+		var el = formOptions[i];
+		for(var classI in el.classes) classes += el.classes + ' ';
+		if(el.type === 'string') {
+			$('<input type="text" placeholder="' + el.placeholder + '"class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom" title="' + el.tooltip + '">').insertBefore('.btn-submit');
+		} else if (el.type === 'select') {
+			$('<select name="' + i + '" id="job-' + i + '" class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom" title="' + el.tooltip + '"></select>').insertBefore('.btn-submit');
 		} else {
-			logText('Unhandled input type ' + formOptions[i].type);
+			logText('Unhandled input type ' + el.type);
 		}
 	}
 
@@ -281,19 +282,6 @@ function renderForm() {
 	if (!config.priority_selection) {
 		$('.disabled').prop('disabled', true);
 	}
-
-	// set tooltips from config
-	$('.job-human-name').attr('title', config.name_hover);
-	$('.job-time-estimate').attr('title', config.time_hover);
-	$('.job-material').attr('title', config.material_hover);
-	$('.job-priority').attr('title', config.priority_hover);
-
-	// set table headers from config
-	$('.action-header').text(config.action_header);
-	$('.name-header').text(config.name_header);
-	$('.material-header').text(config.material_header);
-	$('.time-header').text(config.time_header);
-	$('.priority-header').text(config.priority_header);
 
 	// reconfigure tooltips
 	$('.form-group').children('[data-toggle="tooltip"]').tooltip();
