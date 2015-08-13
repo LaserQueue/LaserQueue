@@ -292,8 +292,22 @@ class Queue:
 			if argvs.loud: # If -v, report success
 				color = bcolors.MAGENTA if authstate else ""
 				cprint("Added {} to the queue.\n({})".format(name, job_uuid), color=color)
-		elif argvs.loud: # If -v, report failures
-			cprint("Cannot add {} to the queue.".format(name), color=bcolors.YELLOW)
+		else:
+			if config["allow_multiple_materials"]:
+				serveToConnection({
+					"action": "notification",
+					"title": "Duplicate job",
+					"text": "You may not create two jobs with the same name and material."
+					}, ws)
+			else:
+				serveToConnection({
+					"action": "notification",
+					"title": "Duplicate job",
+					"text": "You may not create two jobs with the same name."
+					}, ws)
+
+			if argvs.loud: # If -v, report failures
+				cprint("Cannot add {} to the queue.".format(name), color=bcolors.YELLOW)
 
 	def remove(self, **kwargs):
 		"""
