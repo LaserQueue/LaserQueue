@@ -242,7 +242,10 @@ function socketSend(jdata) {
 	}
 }
 
+// render the job submission form
 function renderForm() {
+	logText('rendering form');
+	$('.job-form-group').html('<button type="submit" class="btn btn-default btn-pink btn-submit">Submit</button>');
 	for(var i in formOptions) {
 		var classes = '';
 		for(var classI in formOptions[i].classes) classes += formOptions[i].classes + ' ';
@@ -254,6 +257,50 @@ function renderForm() {
 			logText('Unhandled input type ' + formOptions[i].type);
 		}
 	}
+
+	// render materials dropdown
+	if (!config.default_material) {
+		$('#job-material').append('<option disabled selected value="N/A" class="selected">{0}</option>'.format(config.material_input));
+	}
+	for(var m in config.materials) {
+		var mat_selected = (m === config.default_material ? 'selected' : '');
+		$('#job-material').append('<option {0} value="{1}" class="{0}">{2}</option>'.format(
+			mat_selected, m, config.materials[m]));
+	}
+
+	// render the priorities dropdown
+	if (config.priority_choose) {
+		$('#job-priority').append('<option disabled selected value="-1" class="selected">{0}</option>'.format(config.priority_input));
+	}
+	for(var p = config.priorities.length-1; p > -1; p--) {
+		var disabled = (p > config.default_priority && !config.priority_selection ? 'disabled' : '');
+		var pri_selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
+		$('#job-priority').append('<option {0} value="{1}" class="{2} {0}">{3}</option>'.format(
+			pri_selected, p, disabled, config.priorities[p]));
+	}
+	if (!config.priority_selection) {
+		$('.disabled').prop('disabled', true);
+	}
+
+	// set textbox placeholders from config
+	$('.job-human-name').attr('placeholder', config.name_input);
+	$('.job-time-estimate').attr('placeholder', config.time_input);
+
+	// set tooltips from config
+	$('.job-human-name').attr('title', config.name_hover);
+	$('.job-time-estimate').attr('title', config.time_hover);
+	$('.job-material').attr('title', config.material_hover);
+	$('.job-priority').attr('title', config.priority_hover);
+
+	// set table headers from config
+	$('.action-header').text(config.action_header);
+	$('.name-header').text(config.name_header);
+	$('.material-header').text(config.material_header);
+	$('.time-header').text(config.time_header);
+	$('.priority-header').text(config.priority_header);
+
+	// reconfigure tooltips
+	$('.form-group').children('[data-toggle="tooltip"]').tooltip();
 }
 
 // wrapper for socketSend that changes an item's attribute
