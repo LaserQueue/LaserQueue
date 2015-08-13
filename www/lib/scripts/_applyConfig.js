@@ -28,6 +28,50 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		$('.job-form-group').hide();
 	}
 
+	// render the form
+	formOptions = {
+		"name": {
+			"type": "string",
+			"placeholder": config.name_input,
+			"tooltip": config.name_hover,
+			"classes": ["job-human-name"]
+		},
+		"esttime": {
+			"type": "string",
+			"placeholder": config.time_input,
+			"tooltip": config.time_hover,
+			"classes": ["job-time-estimate"]
+		},
+		"material": {
+			"type": "select",
+			"header": config.material_header,
+			"tooltip": config.material_hover,
+			"default": config.material_input,
+			"options": config.materials,
+			"classes": ["job-material"]
+		},
+		"priority": {
+			"type": "select",
+			"header": config.priority_header,
+			"tooltip": config.priority_hover,
+			"default": config.priority_input,
+			"options": config.priorities,
+			"classes": ["job-priority"]
+		}
+	};
+
+	for(var i in formOptions) {
+		var classes = '';
+		for(var classI in formOptions[i].classes) classes += formOptions[i].classes + ' ';
+		if(formOptions[i].type === 'string') {
+			$('<input type="text" class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom">').insertBefore('.btn-submit');
+		} else if (formOptions[i].type === 'select') {
+			$('<select name="material" id="job-material" class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom"></select>').insertBefore('.btn-submit');
+		} else {
+			logText('Unhandled input type ' + formOptions[i].type);
+		}
+	}
+
 	// render materials dropdown
 	if (!config.default_material) {
 		$('#job-material').append('<option disabled selected value="N/A" class="selected">{0}</option>'.format(config.material_input));

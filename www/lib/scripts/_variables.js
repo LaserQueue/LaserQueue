@@ -1,6 +1,6 @@
 // declare all globals here
 
-var config, jsonData, socket, buttons,
+var config, jsonData, socket, buttons, formOptions,
 	authed = false,
 	allCuts = [],
 	draggable = [],
@@ -30,7 +30,7 @@ var config, jsonData, socket, buttons,
 		}],
 		"rickroll": [function rickRollUser(data) {
 			if(config.easter_eggs) rickRoll();
-		}], 
+		}],
 		"refresh": [function refreshPage(data) {
 			if(config.allow_force_refresh) window.location.reload();
 		}],
