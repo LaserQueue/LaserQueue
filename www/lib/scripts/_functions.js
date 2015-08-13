@@ -242,6 +242,20 @@ function socketSend(jdata) {
 	}
 }
 
+function renderForm() {
+	for(var i in formOptions) {
+		var classes = '';
+		for(var classI in formOptions[i].classes) classes += formOptions[i].classes + ' ';
+		if(formOptions[i].type === 'string') {
+			$('<input type="text" class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom">').insertBefore('.btn-submit');
+		} else if (formOptions[i].type === 'select') {
+			$('<select name="' + i + '" id="job-' + i + '" class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom"></select>').insertBefore('.btn-submit');
+		} else {
+			logText('Unhandled input type ' + formOptions[i].type);
+		}
+	}
+}
+
 // wrapper for socketSend that changes an item's attribute
 function changeAttr(taskid, attrKey, attrVal) {
 	if(typeof taskid == 'string') {
