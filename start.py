@@ -133,7 +133,13 @@ if __name__ == "__main__":
 	else: # If we aren't loading the backend, use a dummyProcess so the program doesn't get confused
 		backend = dummyProcess()
 
-	time.sleep(0.5)
+	try: time.sleep(0.5)
+	except KeyboardInterrupt:
+		print()
+		cprintconf.color = bcolors.RED
+		cprintconf.name = "Cleanup"
+		cprint("Keyboard interrupt received, exiting.")
+		quit(0)
 
 	os.chdir(os.path.join("..", "www"))
 	if load_frontend: # Make sure we're at the correct permission level

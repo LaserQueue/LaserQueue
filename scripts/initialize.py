@@ -320,13 +320,18 @@ def main():
 	Run all subroutines for initialization.
 	"""
 	cprint("Beginning initialization.")
-
-	getpacks()
-	copyconf()
-	changepass()	
-	confirmhost()
-	update()
-	concatJsPlugins()
+	try: getpacks()
+	except KeyboardInterrupt: print()
+	try: copyconf()
+	except KeyboardInterrupt: print()
+	try: changepass()	
+	except KeyboardInterrupt: print()
+	try: confirmhost()
+	except KeyboardInterrupt: print()
+	try: update()
+	except KeyboardInterrupt: print()
+	try: concatJsPlugins()
+	except KeyboardInterrupt: print()
 				
 	cprint("Initialization complete.")
 
