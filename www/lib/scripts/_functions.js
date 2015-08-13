@@ -301,6 +301,27 @@ function renderForm() {
 
 	// reconfigure tooltips
 	$('.form-group').children('[data-toggle="tooltip"]').tooltip();
+
+	// set up form submission
+	$('.btn-submit').click(function submitForm(clickAction) {
+		clickAction.preventDefault();
+		logText("submit button clicked");
+		var estimate = $('.job-time-estimate').val().match(/\d*(\.\d+)?/);
+		socketSend({
+			'action': 'add',
+			'name': $('.job-human-name').val(),
+			'priority': +$('.job-priority').val(),
+			'time': +estimate[0],
+			'material': $('.job-material').val()
+		});
+		resetForm($('.new-job-form'));
+		$('.job-human-name').focus();
+	});
+
+	// configure <select>s in form to hide tooltip on click
+	$('.job-form-group select').click(function hideTooltip() {
+		$(this).tooltip('hide');
+	});
 }
 
 // wrapper for socketSend that changes an item's attribute
