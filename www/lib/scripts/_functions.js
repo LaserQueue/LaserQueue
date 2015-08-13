@@ -112,7 +112,7 @@ function populateActions() {
 		// remove job based on action button
 		var removeJob = function removeJob(actionButton) {
 			googleAnalytics('send', 'event', 'action', 'click', 'remove job');
-			logText('removing item ' + $(actionButton).parents('tr').attr('data-uuid'));
+			logText('removing item {uuid}'.format({uuid: $($(this).parents()[1]).attr('data-uuid')}));
 			socketSend({
 				'action': 'remove',
 				'uuid': $(actionButton).parents('tr').attr('data-uuid')
@@ -145,7 +145,7 @@ function populateActions() {
 	// handler to lower a job
 	$('.lower-priority').click(function lowerPriority() {
 		googleAnalytics('send', 'event', 'action', 'click', 'pass job');
-		logText('passing item ' + $($(this).parents()[1]).attr('data-uuid'));
+		logText('passing item {uuid}'.format({uuid: $($(this).parents()[1]).attr('data-uuid')}));
 		socketSend({
 			'action': 'pass',
 			'uuid': $($(this).parents()[1]).attr('data-uuid')
@@ -155,7 +155,7 @@ function populateActions() {
 	// handler to decrement a job
 	$('.decrement-job').click(function decrementJob() {
 		googleAnalytics('send', 'event', 'action', 'click', 'decrement job');
-		logText('removing item ' + $($(this).parents()[1]).attr('data-uuid'));
+		logText('removing item {uuid}'.format({uuid: $($(this).parents()[1]).attr('data-uuid')}));
 		socketSend({
 			'action': 'decrement',
 			'uuid': $($(this).parents()[1]).attr('data-uuid')
@@ -165,7 +165,7 @@ function populateActions() {
 	// handler to increment a job
 	$('.increment-job').click(function incrementJob() {
 		googleAnalytics('send', 'event', 'action', 'click', 'increment job');
-		logText('passing item ' + $($(this).parents()[1]).attr('data-uuid'));
+		logText('passing item {uuid}'.format({uuid: $($(this).parents()[1]).attr('data-uuid')}));
 		socketSend({
 			'action': 'increment',
 			'uuid': $($(this).parents()[1]).attr('data-uuid')
@@ -262,11 +262,19 @@ function renderForm() {
 		var el = formOptions[i];
 		for(var classI in el.classes) classes += el.classes + ' ';
 		if(el.type === 'string') {
-			$('<input type="text" placeholder="' + el.placeholder + '"class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom" title="' + el.tooltip + '">').insertBefore('.btn-submit');
+			$('<input type="text" placeholder="{placeholder}"class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}">'.format({
+				placeholder: el.placeholder,
+				classes: classes,
+				tooltip: el.tooltip
+			})).insertBefore('.btn-submit');
 		} else if (el.type === 'select') {
-			$('<select name="' + i + '" id="job-' + i + '" class="form-control ' + classes + '" data-toggle="tooltip" data-placement="bottom" title="' + el.tooltip + '"></select>').insertBefore('.btn-submit');
+			$('<select name="{action}" id="job-{action}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}"></select>'.format({
+				action: i,
+				classes: classes,
+				tooltip: el.tooltip
+			})).insertBefore('.btn-submit');
 		} else {
-			logText('Unhandled input type ' + el.type);
+			logText('Unhandled input type: {type}.'.format({type: el.type}));
 		}
 	}
 
