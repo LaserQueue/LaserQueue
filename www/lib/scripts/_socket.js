@@ -50,7 +50,7 @@ function socketSetup() {
 			oldJsonData = $.extend({}, jsonData);
 
 			// log the new data
-			logText('new JSON received: {0}'.format(JSON.stringify(jsonData)));
+			logText('new JSON received: {json}'.format({json: JSON.stringify(jsonData)}));
 
 			// if being told to render table
 			if (jsonData.action in acceptedAPIs) {
@@ -63,11 +63,15 @@ function socketSetup() {
 	// when websockets error
 	socket.onerror = function handleWebSocketsError(error) {
 		// go tell a nerd
-		modalMessage('Error 4', 'Could not connect to socket at {0}. Maybe the backend is not running? This page will try to reconnect every few seconds. <br><br> <button class="btn btn-default btn-pink btn-retry">Retry</button>'.format(host));
+		modalMessage('Error 4', 'Could not connect to socket at {host}. Maybe the backend is not running? This page will try to reconnect every few seconds. <br><br> <button class="btn btn-default btn-pink btn-retry">Retry</button>'.format({host: host}));
 
 		// set up retry button
 		$('.btn-retry').click(function reloadWithRandom() {
-			window.location = window.location.origin + '?foo=' + Math.floor(Math.random() * 11000);
+			window.location = "{origin}?foo={randnum}".format({
+				origin: window.location.origin,
+				randnum: Math.floor(Math.random() * 11000)
+			});
 		});
 	};
 }
+

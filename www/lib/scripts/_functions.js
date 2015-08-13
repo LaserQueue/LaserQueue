@@ -1,15 +1,16 @@
 // utilities and functions etc
 
 if (!String.prototype.format) {
-	String.prototype.format = function() {
+	String.prototype.format = function formatString() {
 		var str = this.toString();
 		if (!arguments.length)
 			return str;
-		var args = typeof arguments[0],
-			args = (("string" == args || "number" == args) ? arguments : arguments[0]);
-		for (arg in args)
+		var args = typeof arguments[0];
+		args = (("string" == args || "number" == args) ? arguments : arguments[0]);
+		for (var arg in args)
 			str = str.replace(RegExp("\\{" + arg + "\\}", "gi"), args[arg]);
 		return str;
+	};
 }
 
 
@@ -17,7 +18,7 @@ if (!String.prototype.repeat) {
 	String.prototype.repeat = function countThrough(count) {
 		'use strict';
 		if (this === null) {
-			throw new TypeError('can\'t convert {0} to object'.format(this));
+			throw new TypeError('can\'t convert {object} to object'.format({object: this}));
 		}
 		var str = '' + this;
 		count = +count;
@@ -71,15 +72,21 @@ function logText(text) {
 		var currentMinutes = ensureNumberStringLength(currentTime.getMinutes(), 2);
 		var currentSeconds = ensureNumberStringLength(currentTime.getSeconds(), 2);
 
-		var timestamp = '[{0}/{1}/{2} {3}:{4}:{5}] '.format(currentDay, currentMonth, currentYear,
-			currentHours, currentMinutes, currentSeconds);
+		var timestamp = ' [{dd}/{month}/{yyyy} {hh}:{mm}:{ss}] '.format({
+			dd: currentDay, month: currentMonth, yyyy: currentYear,
+			hh: currentHours, mm: currentMinutes, ss: currentSeconds
+		});
 
 		var textArray = text.split('\n');
 
 		for (var i = textArray.length - 1; i > 0; i--) {
-			$('.log-pre').prepend('<span class="log-time">{0}</span> {1}\n'.format(' '.repeat(23), textArray[i]));
+			$('.log-pre').prepend('<span class="log-time">{whitespace}</span>{text}\n'.format({
+				whitespace: ' '.repeat(24), 
+				text: textArray[i]}));
 		}
-		$('.log-pre').prepend('<span class="log-time"> {0}</span>{1}\n'.format(timestamp, textArray[0]));
+		$('.log-pre').prepend('<span class="log-time">{stamp}</span>{text}\n'.format({
+			stamp: timestamp, 
+			text: textArray[0]}));
 	} else {
 		window.console.log(text);
 	}
@@ -241,7 +248,7 @@ function socketSend(jdata) {
 	} else {
 		// if not sending, log why
 		if(socket.readyState != 1) {
-			logText('socketSend() has been called, but socket.readyState is {0}. The socket is probably not connected yet.'.format(socketState));
+			logText('socketSend() has been called, but socket.readyState is {state}. The socket is probably not connected yet.'.format({state: socketState}));
 		}
 	}
 }
@@ -265,23 +272,28 @@ function renderForm() {
 
 	// render materials dropdown
 	if (!config.default_material) {
-		$('#job-material').append('<option disabled selected value="N/A" class="selected">{0}</option>'.format(config.material_input));
+		$('#job-material').append('<option disabled selected value="N/A" class="selected">{text}</option>'.format({text: config.material_input}));
 	}
 	for(var m in config.materials) {
 		var mat_selected = (m === config.default_material ? 'selected' : '');
-		$('#job-material').append('<option {0} value="{1}" class="{0}">{2}</option>'.format(
-			mat_selected, m, config.materials[m]));
+		$('#job-material').append('<option {selected} value="{index}" class="{selected}">{text}</option>'.format({
+			selected: mat_selected, 
+			index: m, 
+			text: config.materials[m]}));
 	}
 
 	// render the priorities dropdown
 	if (config.priority_choose) {
-		$('#job-priority').append('<option disabled selected value="-1" class="selected">{0}</option>'.format(config.priority_input));
+		$('#job-priority').append('<option disabled selected value="-1" class="selected">{text}</option>'.format({text: config.priority_input}));
 	}
 	for(var p = config.priorities.length-1; p > -1; p--) {
 		var disabled = (p > config.default_priority && !config.priority_selection ? 'disabled' : '');
 		var pri_selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
-		$('#job-priority').append('<option {0} value="{1}" class="{2} {0}">{3}</option>'.format(
-			pri_selected, p, disabled, config.priorities[p]));
+		$('#job-priority').append('<option {selected} value="{index}" class="{disabled} {selected}">{text}</option>'.format({
+			selected: pri_selected, 
+			index: p, 
+			disabled: disabled, 
+			text: config.priorities[p]}));
 	}
 	if (!config.priority_selection) {
 		$('.disabled').prop('disabled', true);

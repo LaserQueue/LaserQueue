@@ -13,10 +13,10 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	logText('Begin log');
 
 	// log entire config file
-	logText('Config file follows: {0}'.format(JSON.stringify(config, null, 2)));
+	logText('Config file follows: {config}'.format({config: JSON.stringify(config, null, 2)}));
 
 	// set WebSockets hostname and port from config
-	host = 'ws://{0}:{1}'.format(config.host, config.port);
+	host = 'ws://{host}:{port}'.format({host: config.host, port: config.port});
 
 	// set page title
 	if (config.page_title) {
@@ -72,11 +72,11 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	// set up action buttons from config
 	buttons = {
-		'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.remove_hover),
-		'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.incr_hover),
-		'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.decr_hover),
-		'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.pass_hover),
-		'relmove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="{0}"></a>'.format(config.drag_hover)
+		'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.remove_hover}),
+		'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.incr_hover}),
+		'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.decr_hover}),
+		'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.pass_hover}),
+		'relmove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.drag_hover})
 	};
 
 	// set up admin mode if enabled
@@ -149,7 +149,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	setInterval(function tryToReconnect() {
 		if(typeof config.reconnectRate != 'undefined' && (typeof socket == 'undefined' || socket.readyState == socket.CLOSED)) {
 			// initialize websockets if closed
-			logText('Attempting connection to WebSockets host {0}.'.format(host));
+			logText('Attempting connection to WebSockets host {host}.'.format({host: host}));
 			socketSetup();
 		}
 	}, config.reconnectRate);
