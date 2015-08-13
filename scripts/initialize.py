@@ -33,11 +33,7 @@ defaultconfpath = os.path.join(os.path.pardir, "www", "defaultconf.json")
 
 # Utility function to test for internet connection.
 def connected_to_internet(url='http://www.github.com/'):
-	try:
-		_ = urllib.request.urlopen(url)
-		return True
-	except urllib.request.URLError:
-		return False
+	return bool(getIps(test=True))
 
 # Config functions
 def openconf():
@@ -80,7 +76,7 @@ def copyconf():
 	saveconf(data)
 
 
-def getIps():
+def getIps(test=False):
 	"""
 	Get the IPs this device controls.
 	"""
@@ -90,6 +86,9 @@ def getIps():
 		addresses = [i['addr'] for i in ifaddresses(ifaceName).get(AF_INET, [{"addr":"not found"}])]
 		if "not found" not in addresses and "127.0.0.1" not in addresses:
 			ips += addresses
+	if not ips and not test: 
+		ips.append("localhost")
+		cprint("WARNING: No internet connection. Using -l behavior.", color=bcolors.YELLOW)
 	return ips
 
 def concatJsPlugins():
@@ -122,9 +121,8 @@ def getpacks():
 		if pack in pl:
 			continue # Don't do anything if the package is installed
 		if not connected_to_internet():
-			if not connected_to_internet("http://www.google.com"):
-				cprint("No internet connection. Skipping package install.", color=bcolors.YELLOW)
-				return
+			cprint("No internet connection. Skipping package install.", color=bcolors.YELLOW)
+			return
 		installed = True
 
 		# Ask if they want to install this dependency
@@ -182,9 +180,8 @@ def update():
 		return
 
 	if not connected_to_internet():
-		if not connected_to_internet("http://www.google.com"):
-			cprint("No internet connection. Skipping update.", color=bcolors.YELLOW)
-			return
+		cprint("No internet connection. Skipping update.", color=bcolors.YELLOW)
+		return
 
 	import git
 	config = json.load(open(defaultconfpath))
