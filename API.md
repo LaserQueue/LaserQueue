@@ -74,7 +74,7 @@ Adds the specified name, priority, etc to the list
 
 #### add: Optional arguments
 
-`extras` is a dict of extra objects to add to the queue object. This is meant to be used by plugins wishing to add custom data to the queue object.
+`extras` is an object of extra key/value pairs to add to the queue object. This is meant to be used by plugins wishing to add custom data to the queue object.
 
 ##### Sample
 
