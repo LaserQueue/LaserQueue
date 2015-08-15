@@ -140,7 +140,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	}
 
 	// log status
-	logText('LaserQueue is up and config is loaded and parsed. Attempting connection to WebSockets host at {0}.'.format(host));
+	logText('LaserQueue is up and config is loaded and parsed. Attempting connection to WebSockets host at {host}.'.format({host: host}));
 
 	// attempt WebSockets connection
 	socketSetup();
