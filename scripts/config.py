@@ -1,4 +1,4 @@
-import os, json, time, sys
+import os, json, time, sys, re
 
 import traceback
 def tbformat(e, text="Traceback (most recent call last):"):
@@ -44,6 +44,11 @@ class Config:
 		self.reload()
 		return self.data.get(k, d)
 
+def format(string, **kwargs):
+	for arg in kwargs:
+		regex = re.compile("\\{" + arg + "\\}", re.IGNORECASE)
+		string = regex.sub(args[kwargs], string)
+	return string
 
 # Functions for serving to sockets
 import asyncio
