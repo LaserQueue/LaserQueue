@@ -2,7 +2,7 @@ import sys, os
 sys.path.append(
 	os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
-from config import *
+from util import *
 
 class PluginPrinterInstance:
 	def __init__(self, colorobj=None):

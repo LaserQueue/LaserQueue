@@ -21,7 +21,7 @@ selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath) # Make sure we're in the correct directory
 
 # Set up pretty printing
-from config import *
+from util import *
 cprintconf.color = bcolors.CYAN
 cprintconf.name = "Setup"
 

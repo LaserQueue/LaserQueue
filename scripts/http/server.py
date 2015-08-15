@@ -102,7 +102,7 @@ import argparse
 
 sys.path.append(
 	os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-from config import *
+from util import *
 cprintconf.color = bcolors.PURPLE
 cprintconf.name = "HTTP"
 

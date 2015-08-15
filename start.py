@@ -25,7 +25,7 @@ if sys.version_info.major < 3 or (sys.version_info.major >= 3 and sys.version_in
 sys.path.append(
 	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
 from parseargv import args
-from config import *
+from util import *
 
 def initFile(path, data=""):
 	"""

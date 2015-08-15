@@ -1,7 +1,7 @@
 import json, os
 
 from parseargv import args as argvs
-from config import *
+from util import *
 config = Config(CONFIGDIR)
 
 def _comparetypes(obj, expected):

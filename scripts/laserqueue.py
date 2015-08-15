@@ -5,7 +5,7 @@ import os.path
 from copy import deepcopy
 
 from parseargv import args as argvs
-from config import *
+from util import *
 config = Config(CONFIGDIR)
 
 maximum_priority = len(config["priorities"])-1

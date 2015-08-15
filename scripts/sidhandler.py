@@ -5,7 +5,7 @@ import json
 import os
 import hashlib
 
-from config import *
+from util import *
 config = Config(CONFIGDIR)
 
 if os.path.exists("hashpassword"):

@@ -1,5 +1,5 @@
 import laserqueue
-from config import *
+from util import *
 cprintconf.color = bcolors.BLUE
 cprintconf.name = "Backend"
 config = Config(CONFIGDIR)
