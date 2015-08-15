@@ -1,6 +1,6 @@
 # LaserQueue API
 
-This overview describes the API that binds the frontend and backend of the LaserQueue. For info related to plugins, please see [plugins/plugins.md](plugins.md) in the plugins folder.
+This overview describes the API that binds the frontend and backend of the LaserQueue. For info related to plugins, please see [plugins.md](./plugins/plugins.md) in the plugins folder.
 
 
 ## Communication
