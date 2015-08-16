@@ -192,17 +192,20 @@ def update():
 
 		if "version" in masterconfig and masterconfig["version"] > config["version"]: # If the remote version is greater than the one here
 
-			cprint("New update found: Version {}.".format(masterconfig["version"]))
+			cprint(format("New update found: Version {ver}.", version=masterconfig["version"]))
 
-			prefix = "{}-".format(os.path.basename(os.path.abspath(os.path.pardir))) # Prefix for new or old versions
+			prefix = format("{path}-", path=os.path.basename(os.path.abspath(os.path.pardir))) # Prefix for new or old versions
 			updatedir = os.path.join(os.path.pardir,os.path.pardir,prefix+masterconfig["version"]) # Directory if fetch updating
 			backupfile = os.path.join(os.path.pardir, os.path.pardir, prefix+config["version"]+".tar.gz") # Backup file if overwrite updating
 
-			prompt = """Do you want to get version {} to {}? 
-				          The fetch option will update into {}.
-				          The overwrite option will backup to {}, and fetch master.
-				          (fetch / overwrite / cancel) """.format(config["version"], masterconfig["version"], 
-				          	os.path.abspath(updatedir), os.path.abspath(backupfile))
+			prompt = format("""Do you want to get version {current} to {latest}? 
+				                 The fetch option will update into {updatedir}.
+				                 The overwrite option will backup to {backupfile}, and fetch master.
+				                 (fetch / overwrite / cancel) """, 
+				                 current=config["version"], 
+				                 lastest=masterconfig["version"], 
+				                 updatedir=os.path.abspath(updatedir), 
+				                 backupfile=os.path.abspath(backupfile))
 
 			# Check what the user wants to do
 			confirm = ("overwrite" if args.allupdate else "")
@@ -214,14 +217,14 @@ def update():
 				git.Repo.clone_from(config["update_repo"], updatedir) # Get the new repository
 
 				# Inform them about it
-				cprint("""\nNew version located in: 
-				            {}
-				            Run the following: 
-				            {} 
-				            to use the new version.""".format(
-				            	os.path.abspath(updatedir),
-				            	os.path.abspath(os.path.join(updatedir, "start.py"))
-				            ), strip=True)
+				cprint(format("""\nNew version located in: 
+				                  {updatedir}
+				                  Run the following: 
+				                  {startscript} 
+				                  to use the new version.""",
+				                  	updatedir=os.path.abspath(updatedir),
+				                  	startscript=os.path.abspath(os.path.join(updatedir, "start.py"))
+				                  ), strip=True)
 
 			# If they want to overwrite their repository
 			elif confirm == "overwrite":
@@ -258,15 +261,18 @@ def changepass():
 	"""
 	Change the password if --new-password used.
 	"""
-	if args.newpass:
+	if args.newpass or not os.path.exists("hashpassword"):
 		# Get password
-		newpass = cinput("New password: ", func=getpass.getpass)
+		if args.newpass:
+			newpass = cinput("New password: ", func=getpass.getpass)
+		else:
+			newpass = cinput("Please set the admin login password: ", func=getpass.getpass)
 
-		try:
-			# Hash the new password
-			hash_object = hashlib.sha256(newpass.encode()).hexdigest()
-			hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
+		# Hash the new password
+		hash_object = hashlib.sha256(newpass.encode()).hexdigest()
+		hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
 
+		if os.path.exists("hashpassword"):
 			# Read the old password
 			oldfile = open("hashpassword")
 			old = oldfile.read()
@@ -277,11 +283,12 @@ def changepass():
 				cprint("Passwords identical. No action taken.")
 				return
 
+		try:
 			# Write the password to the file
 			hashed = open("hashpassword", "w")
 			hashed.write(hashed_final)
 			hashed.close()
-			cprint("Password changed to {}.".format("*"*len(newpass)))
+			cprint(format("Password changed to {starredpass}.", starredpass="*"*len(newpass)))
 		except Exception as e: # Error reporting
 			cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
 
@@ -292,7 +299,7 @@ def confirmhost():
 	"""
 	data = openconf()
 	# Regenerate the host if -n was used, or if it doesn't exist
-	if args.host or "host" not in data:
+	if args.host or "host" not in data and args.regen != []:
 		data["host"] = getIps()[0]
 	# Change the host to localhost if -l was used (overriding -n)
 	if args.local:
