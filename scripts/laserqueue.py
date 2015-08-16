@@ -190,7 +190,7 @@ class Queue:
 		if not target:
 			if graceful:
 				return None, None, None, None
-			raise ValueError("No such tag: {}".format(job_uuid))
+			raise ValueError(format("No such tag: {uuid}", uuid = job_uuid))
 
 		return target, target_index, target_priority, target_internal_index
 
@@ -291,7 +291,7 @@ class Queue:
 
 			if argvs.loud: # If -v, report success
 				color = bcolors.MAGENTA if authstate else ""
-				cprint("Added {} to the queue.\n({})".format(name, job_uuid), color=color)
+				cprint(format("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid), color=color)
 		else:
 			if config["allow_multiple_materials"]:
 				serveToConnection({
@@ -307,7 +307,7 @@ class Queue:
 					}, ws)
 
 			if argvs.loud: # If -v, report failures
-				cprint("Cannot add {} to the queue.".format(name), color=bcolors.YELLOW)
+				cprint(format("Cannot add {name} to the queue.", name=name), color=bcolors.YELLOW)
 
 	def remove(self, **kwargs):
 		"""
@@ -321,7 +321,7 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Removed {} from the queue.\n({})".format(job["name"], job["uuid"]), color=color)
+			cprint(format("Removed {name} from the queue.\n({uuid})", name=job["name"], uuid=job["uuid"]), color=color)
 
 	def passoff(self, **kwargs):
 		"""
@@ -355,7 +355,7 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Passed {} down the queue.\n({})".format(job["name"], job["uuid"]), color=color)
+			cprint(format("Passed {} down the queue.\n({})", name=job["name"], uuid=job["uuid"]), color=color)
 
 
 	def relmove(self, **kwargs):
@@ -392,8 +392,11 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Moved {} from position {} to {}.\n({})".format(
-				job["name"], masterindex, nindex, job["uuid"]), color=color)
+			cprint(format("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+				name = job["name"], 
+				prevind = masterindex, 
+				newind = nindex, 
+				uuid = job["uuid"]), color=color)
 
 
 	def move(self, **kwargs):
@@ -411,8 +414,11 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Moved {} to index {} within priority {}.\n({})".format(
-				job["name"], ni, np, job["uuid"]), color=color)
+			cprint(format("Moved {name} to index {newind} within priority {newpri}.\n({uuid})",
+				name = job["name"], 
+				newind = ni, 
+				newpri = np, 
+				uuid = job["uuid"]), color=color)
 
 	def increment(self, **kwargs):
 		"""
@@ -448,8 +454,11 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Moved {} from position {} to {}.\n({})".format(
-				job["name"], masterindex, masterindex - 1, job["uuid"]), color=color)
+			cprint(format("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+				name = job["name"], 
+				prevind = masterindex, 
+				newind = masterindex-1, 
+				uuid = job["uuid"]), color=color)
 
 	def decrement(self, **kwargs):
 		"""
@@ -485,8 +494,11 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Moved {} from position {} to {}.\n({})".format(
-				job["name"], masterindex, masterindex + 1, job["uuid"]), color=color)
+			cprint(format("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+				name = job["name"], 
+				prevind = masterindex, 
+				newind = masterindex+1, 
+				uuid = job["uuid"]), color=color)
 
 	def attr(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
@@ -494,10 +506,10 @@ class Queue:
 
 		# Make sure `attrname` is allowed to be changed (no changing timestamps, etc)
 		if attrname not in requiredtags or attrname in ["uuid", "sec", "time", "totaldiff", "priority"]:
-			return "Cannot change the `{}` value of a job.".format(attrname)
+			return format("Cannot change the `{attribute}` value of a job.", attribute=attrname)
 		# Make sure the user is allowed to edit `attrname`.
 		if attrname not in config["attr_edit_perms"] and not authstate:
-			return "Changing a job's `{}` value requires auth.".format(attrname)
+			return format("Changing a job's `{attribute}` value requires auth.", attribute=attrname)
 
 		# Fetch the job and cache the old value of `attrname`
 		job, masterindex, priority, index = self.getQueueObject(job_uuid)
@@ -555,6 +567,10 @@ class Queue:
 		if argvs.loud: # if -v, report success
 			newval = job[attrname]
 			color = bcolors.MAGENTA if authstate else ""
-			cprint("Changed {}'s `{}` value from {} to {}.\n({})".format(
-				job["name"], attrname, oldval, newval, job["uuid"]), color=color)
+			cprint(format("Changed {name}'s `{attributename}` value from {oldvalue} to {newvalue}.\n({uuid})",
+				name = job["name"], 
+				attributename = attrname, 
+				oldvalue = oldval, 
+				newvalue = newval, 
+				uuid = job["uuid"]), color=color)
 
