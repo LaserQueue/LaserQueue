@@ -241,8 +241,8 @@ def rainbonify(string):
 		for i in string:
 			nstring += colors[cind] + i
 			cind += 1
-			cind %= len(cind)
-		return nstring
+			cind %= len(colors)
+		return nstring + bcolors.ENDC
 
 class colorconf:
 	"""
