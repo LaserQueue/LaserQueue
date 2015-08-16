@@ -231,6 +231,19 @@ else:
 			"endc": ENDC
 		}
 
+def rainbonify(string):
+	if not supports_color(): return string
+	else:
+		colors = [bcolors.RED, bcolors.ORANGE, bcolors.YELLOW, bcolors.GREEN, 
+				bcolors.BLUE, bcolors.PURPLE, bcolors.DARKPURPLE]
+		nstring = ""
+		cind = 0
+		for i in string:
+			nstring += colors[cind] + i
+			cind += 1
+			cind %= len(cind)
+		return nstring
+
 class colorconf:
 	"""
 	An object used to configure cprint and cinput.

@@ -69,10 +69,12 @@ class SocketCommand:
 		# Check that each argument is correct
 		for i in self.args:
 			if i not in args:
-				return "Expected '{}' argument, but didn't find it.".format(i)
+				return format("Expected '{nameofarg}' argument, but didn't find it.", nameofarg=i)
 			if not _comparetypes(args[i], self.args[i]):
-				return "Expected '{}' argument to be an instance of '{}', but found an instance of '{}'.".format(
-					i, self.args[i].__name__, type(args[i]).__name__)
+				return format("Expected '{nameofarg}' argument to be an instance of '{typeexpected}', but found an instance of '{typeofarg}'.",
+					nameofarg = i, 
+					typeexpected = self.args[i].__name__, 
+					typeofarg = type(args[i]).__name__)
 		# Run the command if all is in order
 		return self.method(**kwargs)
 
@@ -113,9 +115,9 @@ def uuddlrlrba(**kwargs):
 
 		if argvs.loud: # If the verbose flag is used, print report
 			color = bcolors.MAGENTA if authstate else bcolors.ENDC
-			rainbow = "{}T{}r{}o{}l{}l{}e{}d{} all clients.".format(
-				bcolors.RED, bcolors.ORANGE, bcolors.YELLOW, bcolors.GREEN, 
-				bcolors.BLUE, bcolors.PURPLE, bcolors.DARKPURPLE, color) # RAINBOW \o/
+			rainbow = format("{Trolled}{color} all clients."
+				Trolled = rainbonify("Trolled"), 
+				color = color) # RAINBOW \o/
 			cprint(rainbow)
 	else:
 		cprint("This is a serious establishment, son. I'm dissapointed in you.", color=bcolors.YELLOW)
