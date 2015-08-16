@@ -140,7 +140,7 @@ def upkeep():
 				try:
 					module.upkeep(queue=queue, sessions=sessions, sockets=socks)
 				except:
-					cprint(tbformat(e, "Error while processing {}.upkeep:".format(module.__name__)), color=bcolors.YELLOW)
+					cprint(tbformat(e, format("Error while processing {plugin}.upkeep:", plugin=module.__name__)), color=bcolors.YELLOW)
 					pluginUpkeeps.remove(module)
 
 			# If the queue changed, serve it
@@ -171,7 +171,7 @@ def main():
 		else:
 			json.dump({}, open("cache.json", "w"))
 
-	cprint("Serving WebSockets on 0.0.0.0 port {} ...".format(config["port"]))
+	cprint(format("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"]))
 
 	# Create the upkeep thread
 	upkeepThread = threading.Thread(target=upkeep)

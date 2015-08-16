@@ -12,23 +12,23 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 def tryImport(name):
 	try:
 		if args.loud:
-			printer.cprint("Loading {}...".format(name))
+			printer.cprint(format("Loading {name}...", name=name)
 		imported =  __import__(name)
 		if args.loud:
 			if pluginFilter(imported):
-				printer.cprint("{} successfully loaded.".format(name))
+				printer.cprint(format("{name} successfully loaded.", name=name)
 			else:
-				printer.cprint("{} not a plugin.".format(name))
+				printer.cprint(format("{name} not a plugin.", name=name))
 		return imported
 	except Exception as e:
-		printer.cprint(tbformat(e, "Error importing {}:".format(name)), color=bcolors.DARKRED)
+		printer.cprint(tbformat(e, format("Error importing {name}:", name=name)), color=bcolors.DARKRED)
 
 def tryLoadJS(folder, name):
 	try:
 		with open(os.path.join(folder, name)) as f:
 			return f.read().strip().rstrip().strip("\n").rstrip("\n").strip().rstrip()
 	except Exception as e:
-		printer.cprint(tbformat(e, "Error loading {}:".format(name)), color=bcolors.DARKRED)
+		printer.cprint(tbformat(e, format("Error loading {name}:", name=name)), color=bcolors.DARKRED)
 
 
 def pluginFilter(module):

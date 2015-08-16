@@ -87,7 +87,6 @@ if __name__ == "__main__":
 	cprintconf.name = "Setup"
 	# Initialize all needed files
 	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
-	initFile(os.path.join(selfpath, "scripts", "scache.json"), "{}")
 	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
 	initFile(os.path.join(selfpath, "www", "infotext.md"), "To view our code or report an issue, go to [our GitHub repository](https://github.com/LaserQueue/LaserQueue).")
 	initFile(os.path.join(selfpath, "www", "dist", "js", "plugins.js"))
