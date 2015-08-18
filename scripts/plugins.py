@@ -12,11 +12,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 def tryImport(name):
 	try:
 		if args.loud:
-			printer.cprint(format("Loading {name}...", name=name)
+			printer.cprint(format("Loading {name}...", name=name))
 		imported =  __import__(name)
 		if args.loud:
 			if pluginFilter(imported):
-				printer.cprint(format("{name} successfully loaded.", name=name)
+				printer.cprint(format("{name} successfully loaded.", name=name))
 			else:
 				printer.cprint(format("{name} not a plugin.", name=name))
 		return imported
