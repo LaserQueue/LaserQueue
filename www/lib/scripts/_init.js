@@ -22,11 +22,6 @@ $.ajax({
 	console.log('Failed to get infotext.md');
 });
 
-// focus the first form element on not-mobile
-if(!isTouchDevice()) {
-	$('.job-human-name').focus();
-}
-
 // bind ESC key to hide all dialogs
 $(document).keyup(function hideAllDialogs(e) {
 	if (e.keyCode == 27) {

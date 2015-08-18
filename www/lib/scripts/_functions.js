@@ -305,6 +305,9 @@ function renderForm() {
 		$('.disabled').prop('disabled', true);
 	}
 
+	// focus the first form element on not-mobile
+	if(!isTouchDevice()) $('.' + formOptions.name.classes[0] + ':first').focus();
+
 	// reconfigure tooltips
 	$('.form-group').children('[data-toggle="tooltip"]').tooltip();
 
