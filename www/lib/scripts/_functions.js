@@ -307,7 +307,7 @@ function renderForm() {
 	}
 
 	// focus the first form element on not-mobile
-	if(!isTouchDevice()) $('.' + formOptions.name.classes[0] + ':first').focus();
+	if(!isTouchDevice()) $('.{formObject}:first'.format({formObject: formOptions.name.classes[0]})).focus();
 
 	// reconfigure tooltips
 	$('.form-group').children('[data-toggle="tooltip"]').tooltip();
