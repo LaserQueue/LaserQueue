@@ -44,17 +44,15 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		},
 		"material": {
 			"type": "select",
-			"header": config.material_header,
 			"tooltip": config.material_hover,
-			"default": config.material_input,
+			"header": config.material_input,
 			"options": config.materials,
 			"classes": ["job-material"]
 		},
 		"priority": {
 			"type": "select",
-			"header": config.priority_header,
 			"tooltip": config.priority_hover,
-			"default": config.priority_input,
+			"header": config.priority_input,
 			"options": config.priorities,
 			"classes": ["job-priority"]
 		}
