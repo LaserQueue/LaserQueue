@@ -32,7 +32,7 @@ userconfpath = os.path.join(os.path.pardir, "www", "userconf.json")
 defaultconfpath = os.path.join(os.path.pardir, "www", "defaultconf.json")
 
 # Utility function to test for internet connection.
-def connected_to_internet(url='http://www.github.com/'):
+def connected_to_internet():
 	return bool(getIps(test=True))
 
 # Config functions
