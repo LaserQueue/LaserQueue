@@ -139,8 +139,8 @@ def supports_color():
     return True
 
 
-
-if supports_color():
+color_supported = supports_color()
+if color_supported:
 	class bcolors: # All color codes
 		"""
 		A helper class containing colors (for pretty printing.)
@@ -163,6 +163,7 @@ if supports_color():
 		WHITE = '\033[97m'
 		ORANGE = '\033[38;5;202m'
 		DARKPURPLE = '\033[38;5;53m'
+		REMAKELINE = '\033[F\033[K'
 		ENDC = '\033[0m'
 		COLORS = {
 			"black": BLACK,
@@ -183,6 +184,7 @@ if supports_color():
 			"white": WHITE,
 			"orange": ORANGE,
 			"darkpurple": DARKPURPLE,
+			"remakeline": REMAKELINE,
 			"endc": ENDC
 		}
 else:
@@ -208,6 +210,7 @@ else:
 		WHITE = ''
 		ORANGE = ''
 		DARKPURPLE = ''
+		REMAKELINE = ''
 		ENDC = ''
 		COLORS = {
 			"black": BLACK,
@@ -228,6 +231,7 @@ else:
 			"white": WHITE,
 			"orange": ORANGE,
 			"darkpurple": DARKPURPLE,
+			"remakeline": REMAKELINE,
 			"endc": ENDC
 		}
 
@@ -279,7 +283,9 @@ def cprint(text, color="", strip=False, func=print, add_newline=False, colorconf
 	text = str(text)
 
 	# Make sure not to print the same thing twice
-	if text == lastprinted: return
+	if text == lastprinted: 
+		if not color_supported: return
+		print(bcolors.REMAKELINE, end="")
 	lastprinted = text
 
 	# Split the text by lines
