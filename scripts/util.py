@@ -17,6 +17,10 @@ def tbformat(e, text="Traceback (most recent call last):"):
 	"""
 	Format a traceback into a printable string.
 	"""
+	if not hasattr(e, "__traceback__"):
+		if str(e):
+			return str(type(e).__name__) + ": " + str(e)
+		return str(type(e).__name__)
 	trace = traceback.extract_tb(e.__traceback__) # Get the traceback object
 	error = format("{text}\n", text=text) # Start out with `text`
 
