@@ -315,6 +315,15 @@ function renderForm() {
 		);
 	}
 
+	if(!authed) {
+		var priorityOptions = $('.job-priority').children(':not([disabled])');
+		for(var p = 0; p < priorityOptions.length; p++) {
+			if($(priorityOptions[p]).val() > config.default_priority && !config.priority_selection) {
+				$(priorityOptions[p]).prop('disabled', true);
+			}
+		}
+	}
+
 	// todo: KILL THE FOLLOWING THREE LINES WITH FIRE
 	if (!config.priority_selection) {
 		$('.disabled').prop('disabled', true);
