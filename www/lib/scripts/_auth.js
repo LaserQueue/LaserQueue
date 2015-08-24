@@ -15,6 +15,7 @@ function onAuth() {
 		$('.job-form-group').show();
 	}
 	populateActions();
+	renderForm();
 }
 
 function onFailedauth() {
@@ -36,4 +37,5 @@ function onDeauth() {
 		$('.job-form-group').hide();
 	}
 	populateActions();
+	renderForm();
 }
