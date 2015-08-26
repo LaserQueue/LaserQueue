@@ -171,7 +171,7 @@ def main():
 		else:
 			json.dump({}, open("cache.json", "w"))
 
-	cprint(format("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"]))
+	cprint("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"])
 
 	# Create the upkeep thread
 	upkeepThread = threading.Thread(target=upkeep)

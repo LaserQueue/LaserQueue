@@ -115,10 +115,9 @@ def uuddlrlrba(**kwargs):
 
 		if argvs.loud: # If the verbose flag is used, print report
 			color = bcolors.MAGENTA if authstate else bcolors.ENDC
-			rainbow = format("{Trolled}{color} all clients.",
-				Trolled = rainbonify("Trolled"), 
-				color = color) # RAINBOW \o/
-			cprint(rainbow)
+			cprint("{Trolled}{c} all clients.",
+				Trolled = rainbonify("Trolled"),
+				c = color) # RAINBOW \o/
 	else:
 		cprint("This is a serious establishment, son. I'm dissapointed in you.", color=bcolors.YELLOW)
 

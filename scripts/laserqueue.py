@@ -291,7 +291,7 @@ class Queue:
 
 			if argvs.loud: # If -v, report success
 				color = bcolors.MAGENTA if authstate else ""
-				cprint(format("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid), color=color)
+				cprint("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
 		else:
 			if config["allow_multiple_materials"]:
 				serveToConnection({
@@ -307,7 +307,7 @@ class Queue:
 					}, ws)
 
 			if argvs.loud: # If -v, report failures
-				cprint(format("Cannot add {name} to the queue.", name=name), color=bcolors.YELLOW)
+				cprint("Cannot add {name} to the queue.", name=name, color=bcolors.YELLOW)
 
 	def remove(self, **kwargs):
 		"""
@@ -321,7 +321,7 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint(format("Removed {name} from the queue.\n({uuid})", name=job["name"], uuid=job["uuid"]), color=color)
+			cprint("Removed {name} from the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
 
 	def passoff(self, **kwargs):
 		"""
@@ -339,7 +339,7 @@ class Queue:
 		# If the pass can't happen, return
 		if masterindex >= len(masterqueue)-1: return
 		if masterindex >= config["pass_depth"] and not authstate: 
-			cprint("Passing at this depth requires auth.", color=bcolors.YELLOW)
+			cprint("Passing at depth {masterindex} requires auth.", masterindex=masterindex, color=bcolors.YELLOW)
 			return
 
 		# Remove the job
@@ -355,7 +355,7 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint(format("Passed {} down the queue.\n({})", name=job["name"], uuid=job["uuid"]), color=color)
+			cprint("Passed {name} down the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
 
 
 	def relmove(self, **kwargs):
@@ -392,11 +392,12 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint(format("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			cprint("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"], 
 				prevind = masterindex, 
 				newind = nindex, 
-				uuid = job["uuid"]), color=color)
+				uuid = job["uuid"],
+				color=color)
 
 
 	def move(self, **kwargs):
@@ -414,11 +415,12 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint(format("Moved {name} to index {newind} within priority {newpri}.\n({uuid})",
+			cprint("Moved {name} to index {newind} within priority {newpri}.\n({uuid})",
 				name = job["name"], 
 				newind = ni, 
 				newpri = np, 
-				uuid = job["uuid"]), color=color)
+				uuid = job["uuid"], 
+				color=color)
 
 	def increment(self, **kwargs):
 		"""
@@ -454,11 +456,12 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint(format("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			cprint("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"], 
 				prevind = masterindex, 
 				newind = masterindex-1, 
-				uuid = job["uuid"]), color=color)
+				uuid = job["uuid"], 
+				color=color)
 
 	def decrement(self, **kwargs):
 		"""
@@ -494,11 +497,12 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = bcolors.MAGENTA if authstate else ""
-			cprint(format("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			cprint("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"], 
 				prevind = masterindex, 
 				newind = masterindex+1, 
-				uuid = job["uuid"]), color=color)
+				uuid = job["uuid"], 
+				color=color)
 
 	def attr(self, **kwargs):
 		args, authstate = kwargs["args"], kwargs["authstate"]
@@ -567,10 +571,11 @@ class Queue:
 		if argvs.loud: # if -v, report success
 			newval = job[attrname]
 			color = bcolors.MAGENTA if authstate else ""
-			cprint(format("Changed {name}'s `{attributename}` value from {oldvalue} to {newvalue}.\n({uuid})",
+			cprint("Changed {name}'s `{attributename}` value from {oldvalue} to {newvalue}.\n({uuid})",
 				name = job["name"], 
 				attributename = attrname, 
 				oldvalue = oldval, 
 				newvalue = newval, 
-				uuid = job["uuid"]), color=color)
+				uuid = job["uuid"], 
+				color=color)
 

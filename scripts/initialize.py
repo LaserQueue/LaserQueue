@@ -128,7 +128,7 @@ def getpacks():
 		# Ask if they want to install this dependency
 		confirm = ("y" if args.all else "")
 		while confirm not in ["y", "n"]:
-			confirm = cinput("Install dependency "+pack+"? (y/n) ").lower().strip().rstrip()
+			confirm = cinput("Install dependency {dep}? (y/n) ", dep=pack).lower().strip().rstrip()
 
 		if confirm == "n": # If the person chose not to install the dependency
 			cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
@@ -149,7 +149,7 @@ def getpacks():
 	if installed:
 		for pack in PACKAGES:
 			if pack not in pl:
-				cprint("Failed to install dependency "+pack+".", color=bcolors.DARKRED)
+				cprint("Failed to install dependency {dep}.", color=bcolors.DARKRED, dep=pack)
 				installed = False # If not everything's been installed, don't say it was successful
 
 	if installed:
@@ -192,7 +192,7 @@ def update():
 
 		if "version" in masterconfig and masterconfig["version"] > config["version"]: # If the remote version is greater than the one here
 
-			cprint(format("New update found: Version {ver}.", version=masterconfig["version"]))
+			cprint("New update found: Version {ver}.", ver=masterconfig["version"])
 
 			prefix = format("{path}-", path=os.path.basename(os.path.abspath(os.path.pardir))) # Prefix for new or old versions
 			updatedir = os.path.join(os.path.pardir,os.path.pardir,prefix+masterconfig["version"]) # Directory if fetch updating
@@ -217,14 +217,14 @@ def update():
 				git.Repo.clone_from(config["update_repo"], updatedir) # Get the new repository
 
 				# Inform them about it
-				cprint(format("""\nNew version located in: 
-				                  {updatedir}
-				                  Run the following: 
-				                  {startscript} 
-				                  to use the new version.""",
-				                  	updatedir=os.path.abspath(updatedir),
-				                  	startscript=os.path.abspath(os.path.join(updatedir, "start.py"))
-				                  ), strip=True)
+				cprint("""\nNew version located in: 
+				            {updatedir}
+				            Run the following: 
+				            {startscript} 
+				            to use the new version.""",
+				            	updatedir=os.path.abspath(updatedir),
+				            	startscript=os.path.abspath(os.path.join(updatedir, "start.py")),
+				            	strip=True)
 
 			# If they want to overwrite their repository
 			elif confirm == "overwrite":
@@ -288,7 +288,7 @@ def changepass():
 			hashed = open("hashpassword", "w")
 			hashed.write(hashed_final)
 			hashed.close()
-			cprint(format("Password changed to {starredpass}.", starredpass="*"*len(newpass)))
+			cprint("Password changed to {starredpass}.", starredpass="*"*len(newpass))
 		except Exception as e: # Error reporting
 			cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
 
