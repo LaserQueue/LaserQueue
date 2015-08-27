@@ -323,6 +323,7 @@ def cinput(text, color="", strip=False, func=input, add_newline=False, colorconf
 		colorconfig = cprintconf
 	if "whitespace" not in kwargs:
 		kwargs["whitespace"] = colorconfig.whitespace()
+	kwargs["color"] = color
 	text = format(str(text), **kwargs)
 	# Split the text by lines
 	if strip:
