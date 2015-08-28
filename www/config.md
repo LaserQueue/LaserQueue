@@ -24,9 +24,11 @@ Allows people to submit cuts with different materials but same name
 #### Default: `true`
 ---
 ### `allow_multiples` : `boolean`
+Allows people to submit different cuts with the same name
 #### Default: `false`
 ---
 ### `attr_edit_perms` : `object`
+The tags non-authenticated users are allowed to edit with the `attr` action.
 #### Default: `name,material,esttime`
 ---
 ### `auth_timeout` : `number`
@@ -104,6 +106,7 @@ An object of acceptable material codes and their names. See API.md for default m
 #### Default: `[object Object]`
 ---
 ### `metabump` : `number`
+Number of seconds before a metabump occurs. Set to 0 to disable.
 #### Default: `900`
 ---
 ### `metabumpmax` : `number`
@@ -113,18 +116,23 @@ An object of acceptable material codes and their names. See API.md for default m
 #### Default: `30`
 ---
 ### `modified_hover` : `string`
+Tooltip for coach-modified tag
 #### Default: `Modified`
 ---
 ### `name_header` : `string`
+Header for job name table column
 #### Default: `Name`
 ---
 ### `name_hover` : `string`
+Tooltip for name textbox
 #### Default: `Who are you?`
 ---
 ### `name_input` : `string`
+Placeholder text for name textbox
 #### Default: `What is it they call you?`
 ---
 ### `page_title` : `string`
+Title of page
 #### Default: `LaserQueue`
 ---
 ### `pass_depth` : `number`
@@ -134,42 +142,53 @@ An object of acceptable material codes and their names. See API.md for default m
 #### Default: `Move job down`
 ---
 ### `port` : `string`
+Port for WebSockets backend server
 #### Default: `8763`
 ---
 ### `priorities` : `object`
+An array of priority names, from lowest to highest
 #### Default: `Lunch/After NuVu,Low,Normal,Important,Urgent,Absolutely Required`
 ---
 ### `priority_choose` : `boolean`
 #### Default: `false`
 ---
 ### `priority_header` : `string`
+Header for priority column of table
 #### Default: `Priority`
 ---
 ### `priority_hover` : `string`
+Tooltip for priority textbox
 #### Default: `How important is this? The system will factor your thoughts in, but may raise or lower your cut's actual priority.`
 ---
 ### `priority_input` : `string`
+Title text for priority dropdown
 #### Default: `Choose a priority...`
 ---
 ### `priority_selection` : `boolean`
 #### Default: `false`
 ---
 ### `priority_thresh` : `object`
+Thresholds for bumping longer jobs down
 #### Default: `10,20,30,40,50,60`
 ---
 ### `recalc_priority` : `boolean`
+Whether to recalculate priority intelligently based on job length
 #### Default: `true`
 ---
 ### `recapitalize` : `boolean`
+When true, names get capitalized intelligently
 #### Default: `true`
 ---
 ### `reconnectRate` : `number`
+How frequenetly to try reconnecting to the backend when connection drops
 #### Default: `5000`
 ---
 ### `refreshRate` : `number`
+How often to poll for new data.
 #### Default: `1000`
 ---
 ### `remove_hover` : `string`
+Tooltip for job removal button
 #### Default: `Cancel this job`
 ---
 ### `send_notifications` : `boolean`
@@ -182,21 +201,27 @@ An object of acceptable material codes and their names. See API.md for default m
 #### Default: `3600`
 ---
 ### `time_header` : `string`
+Header for time column in table
 #### Default: `Est. Time`
 ---
 ### `time_hover` : `string`
+Tooltip for job time textbox
 #### Default: `Please enter a number (minutes)`
 ---
 ### `time_input` : `string`
+Placeholder for job time textbox 
 #### Default: `Estimated time (min)`
 ---
 ### `update_repo` : `string`
+Repository to update from
 #### Default: `https://github.com/LaserQueue/LaserQueue.git`
 ---
 ### `update_target` : `string`
+`defaultconf.json` file to watch for updates
 #### Default: `https://raw.githubusercontent.com/LaserQueue/LaserQueue/master/www/defaultconf.json`
 ---
 ### `version` : `string`
+Software's current version
 #### Default: `0.0.5`
 ---
-This file automatically generated at Thu Aug 27 2015 08:44:11 GMT-0400 (EDT)
+This file automatically generated at Fri Aug 28 2015 10:17:17 GMT-0400 (EDT)
