@@ -1,10 +1,12 @@
 // declare all globals here
 
-var config, jsonData, socket, buttons, formOptions,
+var config, jsonData, socket, buttons,
 	authed = false,
 	allCuts = [],
 	draggable = [],
 	displayEl = {},
+	formOptions = {},
+	oldFormOptions = {"renderFormCalled": false},
 	acceptedAPIs = {
 		"display": [function displayData(data) {
 			// reinitialize full list of cuts

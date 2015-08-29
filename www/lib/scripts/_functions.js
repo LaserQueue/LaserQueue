@@ -253,124 +253,133 @@ function socketSend(jdata) {
 
 // render the job submission form
 function renderForm() {
-	logText('rendering form');
-	// clear the form group aside from submit button
-	$('.job-form-group').html('<button type="submit" class="btn btn-default btn-pink btn-submit">Submit</button>');
+	if(formOptions === {}) {
+		logText('renderForm() called but formOptions is blank. Not rendering.');
+	} else if(JSON.stringify(formOptions) === JSON.stringify(oldFormOptions)) {
+		logText('renderForm() called but formOptions match cached old formOptions. Not rendering.');
+	} else {
+		logText('rendering form');
+		// clear the form group aside from submit button
+		$('.job-form-group').html('<button type="submit" class="btn btn-default btn-pink btn-submit">Submit</button>');
 
-	// for each form option
-	for(var i in formOptions) {
-		var classes = '';
-		var el = formOptions[i];
+		// for each form option
+		for(var i in formOptions) {
+			var classes = '';
+			var el = formOptions[i];
 
-		// set classes to all classes in array
-		for(var classI in el.classes) classes += el.classes + ' ';
+			// set classes to all classes in array
+			for(var classI in el.classes) classes += el.classes + ' ';
 
-		if(el.type === 'string') {
-			// if this form option wants a string
-			$('<input type="text" placeholder="{placeholder}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}">'.format({
-				placeholder: el.placeholder,
-				classes: classes,
-				tooltip: el.tooltip
-			})).insertBefore('.btn-submit');
-		} else if (el.type === 'select') {
-			// if this form option wants a dropdown
-			var optionsType = Object.prototype.toString.call(el.options); // is el.options an array or an object?
+			if(el.type === 'string') {
+				// if this form option wants a string
+				$('<input type="text" placeholder="{placeholder}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}">'.format({
+					placeholder: el.placeholder,
+					classes: classes,
+					tooltip: el.tooltip
+				})).insertBefore('.btn-submit');
+			} else if (el.type === 'select') {
+				// if this form option wants a dropdown
+				var optionsType = Object.prototype.toString.call(el.options); // is el.options an array or an object?
 
-			// inserts the select at the end of the form
-			$('<select name="{action}" id="job-{action}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}"></select>'.format({
-				action: i,
-				classes: classes,
-				tooltip: el.tooltip
-			})).insertBefore('.btn-submit');
+				// inserts the select at the end of the form
+				$('<select name="{action}" id="job-{action}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}"></select>'.format({
+					action: i,
+					classes: classes,
+					tooltip: el.tooltip
+				})).insertBefore('.btn-submit');
 
-			// add a disabled header if one is set
-			if(el.header !== '' && el.header !== undefined && el.header !== null) {
-				$('.' + el.classes[0]).append('<option disabled>{text}</option>'.format({text: el.header}));
-			}
-
-
-			if(optionsType === '[object Array]') {
-				// if the options supplied are an array
-				for(var optionI = el.options.length-1; optionI > -1; optionI--) { // for each option, from last to first
-					// put the <option> in the <select>
-					$('.' + el.classes[0]).append('<option value="{index}">{text}</option>'.format({
-						index: optionI,
-						text: config.priorities[optionI]
-					}));
-
+				// add a disabled header if one is set
+				if(el.header !== '' && el.header !== undefined && el.header !== null) {
+					$('.' + el.classes[0]).append('<option disabled>{text}</option>'.format({text: el.header}));
 				}
-			} else if(optionsType === '[object Object]') {
-				// if the options supplied are an object
-				for(var optionI in el.options) {
-					// put the <option> in the <select>
-					$('.' + el.classes[0]).append('<option value="{index}">{text}</option>'.format({
-						index: optionI,
-						text: config.materials[optionI]
-					}));
+
+
+				if(optionsType === '[object Array]') {
+					// if the options supplied are an array
+					for(var optionI = el.options.length-1; optionI > -1; optionI--) { // for each option, from last to first
+						// put the <option> in the <select>
+						$('.' + el.classes[0]).append('<option value="{index}">{text}</option>'.format({
+							index: optionI,
+							text: config.priorities[optionI]
+						}));
+
+					}
+				} else if(optionsType === '[object Object]') {
+					// if the options supplied are an object
+					for(var optionI in el.options) {
+						// put the <option> in the <select>
+						$('.' + el.classes[0]).append('<option value="{index}">{text}</option>'.format({
+							index: optionI,
+							text: config.materials[optionI]
+						}));
+					}
 				}
-			}
-		} else {
-			// if this form option wants something we don't recognize (yet)
-			logText('Unhandled input type: {type}.'.format({type: el.type}));
-		}
-	}
-
-	// if there is a default material set
-	if(typeof config.default_material === 'string' && config.default_material !== '') {
-		// select it
-		$('.job-material').prop(
-			'selectedIndex',
-			$('.job-material').children('[value={material}]'.format({material: config.default_material})).index()
-		);
-	}
-
-	// if there is a default priority set
-	if(typeof config.default_priority === 'number') {
-		// select it
-		$('.job-priority').prop(
-			'selectedIndex',
-			$('.job-priority').children('[value={priority}]'.format({priority: config.default_priority})).index()
-		);
-	}
-
-	// if not authed, disable privileged-only priorities
-	if(!authed) {
-		var priorityOptions = $('.job-priority').children(':not([disabled])');
-		for(var p = 0; p < priorityOptions.length; p++) {
-			if($(priorityOptions[p]).val() > config.default_priority && !config.priority_selection) {
-				$(priorityOptions[p]).prop('disabled', true);
+			} else {
+				// if this form option wants something we don't recognize (yet)
+				logText('Unhandled input type: {type}.'.format({type: el.type}));
 			}
 		}
-	}
 
-	// focus the first form element on not-mobile
-	if(!isTouchDevice()) $('.{formObject}:first'.format({formObject: formOptions.name.classes[0]})).focus();
+		// if there is a default material set
+		if(typeof config.default_material === 'string' && config.default_material !== '') {
+			// select it
+			$('.job-material').prop(
+				'selectedIndex',
+				$('.job-material').children('[value={material}]'.format({material: config.default_material})).index()
+			);
+		}
 
-	// reconfigure tooltips
-	$('.form-group').children('[data-toggle="tooltip"]').tooltip();
+		// if there is a default priority set
+		if(typeof config.default_priority === 'number') {
+			// select it
+			$('.job-priority').prop(
+				'selectedIndex',
+				$('.job-priority').children('[value={priority}]'.format({priority: config.default_priority})).index()
+			);
+		}
 
-	// set up form submission
-	$('.btn-submit').click(function submitForm(clickAction) {
-		clickAction.preventDefault();
-		logText("submit button clicked");
-		var estimate = $('.job-time-estimate').val().match(/\d*(\.\d+)?/);
-		socketSend({
-			'action': 'add',
-			'name': $('.job-human-name').val(),
-			'priority': +$('.job-priority').val(),
-			'time': +estimate[0],
-			'material': $('.job-material').val()
+		// if not authed, disable privileged-only priorities
+		if(!authed) {
+			var priorityOptions = $('.job-priority').children(':not([disabled])');
+			for(var p = 0; p < priorityOptions.length; p++) {
+				if($(priorityOptions[p]).val() > config.default_priority && !config.priority_selection) {
+					$(priorityOptions[p]).prop('disabled', true);
+				}
+			}
+		}
+
+		// focus the first form element on not-mobile
+		if(!isTouchDevice()) $('.{formObject}:first'.format({formObject: formOptions.name.classes[0]})).focus();
+
+		// reconfigure tooltips
+		$('.form-group').children('[data-toggle="tooltip"]').tooltip();
+
+		// set up form submission
+		$('.btn-submit').click(function submitForm(clickAction) {
+			clickAction.preventDefault();
+			logText("submit button clicked");
+			var estimate = $('.job-time-estimate').val().match(/\d*(\.\d+)?/);
+			socketSend({
+				'action': 'add',
+				'name': $('.job-human-name').val(),
+				'priority': +$('.job-priority').val(),
+				'time': +estimate[0],
+				'material': $('.job-material').val()
+			});
+			resetForm($('.new-job-form'));
+
+			// focus name textbox
+			$('.job-human-name').focus();
 		});
-		resetForm($('.new-job-form'));
 
-		// focus name textbox
-		$('.job-human-name').focus();
-	});
+		// configure <select>s in form to hide tooltip on click
+		$('.job-form-group select').click(function hideTooltip() {
+			$(this).tooltip('hide');
+		});
 
-	// configure <select>s in form to hide tooltip on click
-	$('.job-form-group select').click(function hideTooltip() {
-		$(this).tooltip('hide');
-	});
+		// cache current formOptions
+		oldFormOptions = $.extend({}, formOptions);
+	}
 }
 
 // wrapper for socketSend that changes an item's attribute
