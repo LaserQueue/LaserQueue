@@ -262,7 +262,9 @@ function renderForm() {
 
 		// cache form elements
 		$('.form-group > *:not(.btn-submit)').each(function cacheFormElements() {
-			formOptions[$(this).data('formEl')].cachedVal = $(this).val();
+			if (formOptions[$(this).data('formEl')]) {
+				formOptions[$(this).data('formEl')].cachedVal = $(this).val();
+			}
 		});
 
 		// clear the form group aside from submit button
