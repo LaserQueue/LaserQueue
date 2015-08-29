@@ -256,33 +256,53 @@ function renderForm() {
 	logText('rendering form');
 	// clear the form group aside from submit button
 	$('.job-form-group').html('<button type="submit" class="btn btn-default btn-pink btn-submit">Submit</button>');
+
+	// for each form option
 	for(var i in formOptions) {
 		var classes = '';
 		var el = formOptions[i];
+
+		// set classes to all classes in array
 		for(var classI in el.classes) classes += el.classes + ' ';
+
 		if(el.type === 'string') {
+			// if this form option wants a string
 			$('<input type="text" placeholder="{placeholder}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}">'.format({
 				placeholder: el.placeholder,
 				classes: classes,
 				tooltip: el.tooltip
 			})).insertBefore('.btn-submit');
 		} else if (el.type === 'select') {
-			var optionsType = Object.prototype.toString.call(el.options);
+			// if this form option wants a dropdown
+			var optionsType = Object.prototype.toString.call(el.options); // is el.options an array or an object?
+
+			// inserts the select at the end of the form
 			$('<select name="{action}" id="job-{action}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}"></select>'.format({
 				action: i,
 				classes: classes,
 				tooltip: el.tooltip
 			})).insertBefore('.btn-submit');
-			if(el.header !== '' && el.header !== undefined && el.header !== null) $('.' + el.classes[0]).append('<option disabled>{text}</option>'.format({text: el.header}));
+
+			// add a disabled header if one is set
+			if(el.header !== '' && el.header !== undefined && el.header !== null) {
+				$('.' + el.classes[0]).append('<option disabled>{text}</option>'.format({text: el.header}));
+			}
+
+
 			if(optionsType === '[object Array]') {
-				for(var optionI = el.options.length-1; optionI > -1; optionI--) {
+				// if the options supplied are an array
+				for(var optionI = el.options.length-1; optionI > -1; optionI--) { // for each option, from last to first
+					// put the <option> in the <select>
 					$('.' + el.classes[0]).append('<option value="{index}">{text}</option>'.format({
 						index: optionI,
 						text: config.priorities[optionI]
 					}));
+
 				}
 			} else if(optionsType === '[object Object]') {
+				// if the options supplied are an object
 				for(var optionI in el.options) {
+					// put the <option> in the <select>
 					$('.' + el.classes[0]).append('<option value="{index}">{text}</option>'.format({
 						index: optionI,
 						text: config.materials[optionI]
@@ -290,31 +310,30 @@ function renderForm() {
 				}
 			}
 		} else {
+			// if this form option wants something we don't recognize (yet)
 			logText('Unhandled input type: {type}.'.format({type: el.type}));
 		}
 	}
 
-	// todo: select and disable appropriate dropdown options here:
-	// var pri_selected = 'selected';
-	// var disabled = '';
-
-	// var disabled = (p > config.default_priority && !config.priority_selection ? 'disabled' : '');
-	// var pri_selected = (p == config.default_priority && !config.priority_choose ? 'selected' : '');
-
+	// if there is a default material set
 	if(typeof config.default_material === 'string' && config.default_material !== '') {
+		// select it
 		$('.job-material').prop(
 			'selectedIndex',
 			$('.job-material').children('[value={material}]'.format({material: config.default_material})).index()
 		);
 	}
 
+	// if there is a default priority set
 	if(typeof config.default_priority === 'number') {
+		// select it
 		$('.job-priority').prop(
 			'selectedIndex',
 			$('.job-priority').children('[value={priority}]'.format({priority: config.default_priority})).index()
 		);
 	}
 
+	// if not authed, disable privileged-only priorities
 	if(!authed) {
 		var priorityOptions = $('.job-priority').children(':not([disabled])');
 		for(var p = 0; p < priorityOptions.length; p++) {
@@ -322,11 +341,6 @@ function renderForm() {
 				$(priorityOptions[p]).prop('disabled', true);
 			}
 		}
-	}
-
-	// todo: KILL THE FOLLOWING THREE LINES WITH FIRE
-	if (!config.priority_selection) {
-		$('.disabled').prop('disabled', true);
 	}
 
 	// focus the first form element on not-mobile
@@ -348,6 +362,8 @@ function renderForm() {
 			'material': $('.job-material').val()
 		});
 		resetForm($('.new-job-form'));
+
+		// focus name textbox
 		$('.job-human-name').focus();
 	});
 
