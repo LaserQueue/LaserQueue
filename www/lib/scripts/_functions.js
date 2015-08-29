@@ -259,6 +259,12 @@ function renderForm() {
 		logText('renderForm() called but formOptions match cached old formOptions. Not rendering.');
 	} else {
 		logText('rendering form');
+
+		// cache form elements
+		$('.form-group > *:not(.btn-submit)').each(function cacheFormElements() {
+			formOptions[$(this).data('formEl')].cachedVal = $(this).val();
+		});
+
 		// clear the form group aside from submit button
 		$('.job-form-group').html('<button type="submit" class="btn btn-default btn-pink btn-submit">Submit</button>');
 
@@ -349,6 +355,14 @@ function renderForm() {
 				}
 			}
 		}
+
+		// refill form based on cached values
+		$('.form-group > *:not(.btn-submit)').each(function refillFormElements() {
+			var formEl = formOptions[$(this).data('formEl')];
+			if (formEl.cachedVal) {
+				$(this).val(formEl.cachedVal);
+			}
+		});
 
 		// focus the first form element on not-mobile
 		if(!isTouchDevice()) $('.{formObject}:first'.format({formObject: formOptions.name.classes[0]})).focus();
