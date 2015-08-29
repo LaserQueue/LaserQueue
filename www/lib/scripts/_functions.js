@@ -379,6 +379,7 @@ function renderForm() {
 
 		// cache current formOptions
 		oldFormOptions = $.extend({}, formOptions);
+		oldFormOptions = $.extend(true, formOptions);
 	}
 }
 
