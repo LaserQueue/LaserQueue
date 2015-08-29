@@ -36,7 +36,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 			"tooltip": config.name_hover,
 			"classes": ["job-human-name"]
 		},
-		"esttime": {
+		"time": {
 			"type": "string",
 			"placeholder": config.time_input,
 			"tooltip": config.time_hover,

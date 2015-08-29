@@ -360,14 +360,32 @@ function renderForm() {
 		$('.btn-submit').click(function submitForm(clickAction) {
 			clickAction.preventDefault();
 			logText("submit button clicked");
-			var estimate = $('.job-time-estimate').val().match(/\d*(\.\d+)?/);
-			socketSend({
-				'action': 'add',
-				'name': $('.job-human-name').val(),
-				'priority': +$('.job-priority').val(),
-				'time': +estimate[0],
-				'material': $('.job-material').val()
+			var job = {
+				"action": "add",
+				"extras": {}
+			};
+
+			// for each direct child of '.form-group' that is not the submit button
+			$('.form-group > *:not(.btn-submit)').each(function parseFormElements() {
+				var formEl = $(this).data('formEl');
+
+				if (formEl === 'name' || formEl === 'material') {
+					// if name or material, just send value
+					job[formEl] = $(this).val();
+				} else if (formEl === 'priority') {
+					// if priority, send value as number
+					job[formEl] = +$(this).val();
+				} else  if (formEl === 'time'){
+					// if time estimate, send value parsed as time and as number
+					job[formEl] = +$('.job-time-estimate').val().match(/\d*(\.\d+)?/)[0];
+				} else if (formEl) {
+					// otherwise, toss into extras
+					job.extras[formEl] = $(this).val();
+				}
 			});
+
+			// send job to server and reset form
+			socketSend(job);
 			resetForm($('.new-job-form'));
 
 			// focus name textbox
@@ -380,7 +398,6 @@ function renderForm() {
 		});
 
 		// cache current formOptions
-		oldFormOptions = $.extend({}, formOptions);
 		oldFormOptions = $.extend(true, formOptions);
 	}
 }
