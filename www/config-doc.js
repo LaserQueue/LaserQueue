@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 
-// generates documentation based on config.json and defaultconf.json
+// config.json + defaultconf.json + config-doc.json --> config.md
 
 var fs = require('fs');
 var date = new Date();
 
-var exitCode = 0;
-
+// fetch ALL OF THE JSON
 var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 var defaultConf = JSON.parse(fs.readFileSync('./defaultconf.json', 'utf8'));
 var configDoc = JSON.parse(fs.readFileSync('./config-doc.json', 'utf8'));
 
+// string formatting function
 String.prototype.format = function formatString() {
 	var str = this.toString();
 	if (!arguments.length)
@@ -22,6 +22,7 @@ String.prototype.format = function formatString() {
 	return str;
 };
 
+// print documentation header
 console.log(
     '# config.json reference\n'
     + 'This file documents `config.json`, the LaserQueue configuration file.\n'
@@ -33,16 +34,26 @@ console.log(
     + '## Keys and values\n'
 );
 
+// for each config value
 for(var i  in config) {
+	// check if param is an array
 	var parameterType = (config[i].constructor === Array ? 'array' : typeof config[i]);
-    console.log('### `{key}` : `{type}`'.format({
+
+	// print key and type as third-level header
+	console.log('### `{key}` : `{type}`'.format({
         key: i,
         type: parameterType
     }));
-    if (configDoc[i]) console.log(configDoc[i]);
-    console.log('#### Default: `{default}`'.format({
+
+	// if config-doc.json has a note, print it
+	if (configDoc[i]) console.log(configDoc[i]);
+
+	// print default value as 4th-level header
+	console.log('#### Default: `{default}`'.format({
         default: defaultConf[i]
     }));
+
+	// print break
     console.log('---');
 }
 
