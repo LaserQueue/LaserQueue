@@ -272,7 +272,8 @@ function renderForm() {
 
 			if(el.type === 'string') {
 				// if this form option wants a string
-				$('<input type="text" placeholder="{placeholder}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}">'.format({
+				$('<input data-form-el="{formEl}" type="text" placeholder="{placeholder}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}">'.format({
+					formEl: i,
 					placeholder: el.placeholder,
 					classes: classes,
 					tooltip: el.tooltip
@@ -282,7 +283,8 @@ function renderForm() {
 				var optionsType = Object.prototype.toString.call(el.options); // is el.options an array or an object?
 
 				// inserts the select at the end of the form
-				$('<select name="{action}" id="job-{action}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}"></select>'.format({
+				$('<select data-form-el="{formEl}" name="{action}" id="job-{action}" class="form-control {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}"></select>'.format({
+					formEl: i,
 					action: i,
 					classes: classes,
 					tooltip: el.tooltip
