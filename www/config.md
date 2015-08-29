@@ -27,7 +27,7 @@ Allows people to submit cuts with different materials but same name
 Allows people to submit different cuts with the same name
 #### Default: `false`
 ---
-### `attr_edit_perms` : `object`
+### `attr_edit_perms` : `array`
 The tags non-authenticated users are allowed to edit with the `attr` action.
 #### Default: `name,material,esttime`
 ---
@@ -35,7 +35,7 @@ The tags non-authenticated users are allowed to edit with the `attr` action.
 Timeout before authed user is deauthed
 #### Default: `600`
 ---
-### `authactions` : `object`
+### `authactions` : `array`
 Actions that require authentication
 #### Default: `move,relmove,increment,decrement,refresh,uuddlrlrba`
 ---
@@ -78,7 +78,7 @@ Tooltip for increment button
 ### `lastuse_timeout` : `number`
 #### Default: `1800`
 ---
-### `length_bounds` : `object`
+### `length_bounds` : `array`
 #### Default: `0.0166666667,360`
 ---
 ### `login` : `string`
@@ -145,7 +145,7 @@ Title of page
 Port for WebSockets backend server
 #### Default: `8763`
 ---
-### `priorities` : `object`
+### `priorities` : `array`
 An array of priority names, from lowest to highest
 #### Default: `Lunch/After NuVu,Low,Normal,Important,Urgent,Absolutely Required`
 ---
@@ -167,7 +167,7 @@ Title text for priority dropdown
 ### `priority_selection` : `boolean`
 #### Default: `false`
 ---
-### `priority_thresh` : `object`
+### `priority_thresh` : `array`
 Thresholds for bumping longer jobs down
 #### Default: `10,20,30,40,50,60`
 ---
@@ -224,4 +224,4 @@ Repository to update from
 Software's current version
 #### Default: `0.0.5`
 ---
-This file automatically generated at Fri Aug 28 2015 10:17:17 GMT-0400 (EDT)
+This file automatically generated at Fri Aug 28 2015 20:49:59 GMT-0400 (EDT)
