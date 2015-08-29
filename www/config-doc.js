@@ -34,9 +34,10 @@ console.log(
 );
 
 for(var i  in config) {
+	var parameterType = (config[i].constructor === Array ? 'array' : typeof config[i]);
     console.log('### `{key}` : `{type}`'.format({
         key: i,
-        type: typeof config[i]
+        type: parameterType
     }));
     if (configDoc[i]) console.log(configDoc[i]);
     console.log('#### Default: `{default}`'.format({
