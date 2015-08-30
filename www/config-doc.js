@@ -5,6 +5,8 @@
 var fs = require('fs');
 var date = new Date();
 
+var out = "";
+
 // fetch ALL OF THE JSON
 var defaultConf = JSON.parse(fs.readFileSync('./defaultconf.json', 'utf8'));
 var configDoc = JSON.parse(fs.readFileSync('./config-doc.json', 'utf8'));
@@ -22,16 +24,14 @@ String.prototype.format = function formatString() {
 };
 
 // print documentation header
-console.log(
-    '# config.json reference\n'
-    + 'This file documents `config.json`, the LaserQueue configuration file.\n'
-    + '## Notes\n'
-    + '- `config.json` is a standard JSON key/value store\n'
-    + '- The config is generated from `defaultconf.json` when the queue first runs. Running the queue again with the `-r` flag will regenerate it.\n'
-    + '- Both the frontend and backend rely on and can access values in `config.json`. The backend can change these values.\n'
-    + '- The file is stored in the `www` directory so that the frontend can access it\n'
-    + '## Keys and values\n'
-);
+out += '# config.json reference\n'
+				+ 'This file documents `config.json`, the LaserQueue configuration file.\n'
+				+ '## Notes\n'
+				+ '- `config.json` is a standard JSON key/value store\n'
+				+ '- The config is generated from `defaultconf.json` when the queue first runs. Running the queue again with the `-r` flag will regenerate it.\n'
+				+ '- Both the frontend and backend rely on and can access values in `config.json`. The backend can change these values.\n'
+				+ '- The file is stored in the `www` directory so that the frontend can access it\n'
+				+ '## Keys and values\n\n';
 
 // for each config value
 keys = Object.keys(defaultConf).sort();
@@ -41,21 +41,27 @@ for(var iindex in keys) {
 	var parameterType = (defaultConf[i].constructor === Array ? 'array' : typeof defaultConf[i]);
 
 	// print key and type as third-level header
-	console.log('### `{key}` : `{type}`'.format({
-        key: i,
-        type: parameterType
-    }));
+	out += '### `{key}` : `{type}`\n'.format({
+				key: i,
+				type: parameterType
+		});
 
 	// if config-doc.json has a note, print it
-	if (configDoc[i]) console.log(configDoc[i]);
+	if (configDoc[i]) out += configDoc[i]+"\n";
 
 	// print default value as 4th-level header
-	console.log('#### Default: `{default}`'.format({
-        default: defaultConf[i]
-    }));
+	out += '#### Default: `{default}`\n'.format({
+				default: defaultConf[i]
+		});
 
 	// print break
-    console.log('---');
+		out += '---\n';
 }
 
-console.log('This file automatically generated at {timestamp}'.format({timestamp: date}));
+out += 'This file automatically generated at {timestamp}'.format({timestamp: date});
+
+console.log(out);
+
+fs.writeFile('config.md', out, function (err) {
+  if (err) throw err;
+});

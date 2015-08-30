@@ -218,4 +218,4 @@ Repository to update from
 Software's current version
 #### Default: `0.0.5`
 ---
-This file automatically generated at Sat Aug 29 2015 20:48:49 GMT-0400 (EDT)
+This file automatically generated at Sat Aug 29 2015 21:01:39 GMT-0400 (EDT)

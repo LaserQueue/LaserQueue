@@ -50,7 +50,7 @@
     "serverRefreshRate": "",
     "time_header": "Header for time column in table",
     "time_hover": "Tooltip for job time textbox",
-    "time_input": "Placeholder for job time textbox ",
+    "time_input": "Placeholder for job time textbox",
     "update_repo": "Repository to update from",
     "update_target": "`defaultconf.json` file to watch for updates",
     "version": "Software's current version"
