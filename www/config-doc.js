@@ -30,7 +30,7 @@ out += '# config.json reference\n'
 				+ '- `config.json` is a standard JSON key/value store\n'
 				+ '- The config is generated from `defaultconf.json` when the queue first runs. Running the queue again with the `-r` flag will regenerate it.\n'
 				+ '- Both the frontend and backend rely on and can access values in `config.json`. The backend can change these values.\n'
-				+ '- The file is stored in the `www` directory so that the frontend can access it\n'
+				+ '- The file is stored in the `www` directory so that the frontend can access it  \n'
 				+ '## Keys and values\n\n';
 
 // for each config value
