@@ -149,7 +149,7 @@ class Queue:
 		for i in self.queue:
 			for job in i:
 				# If enough time has passed to overtake the threshold, bump upwards
-				if time.time()-job["time"] > (config["metabump"] + config["metabumpmult"]*job["priority"]):
+				if time.time()-job["time"] > (config["metabump"] + config["metabumpmult"]*(maximum_priority-job["priority"])):
 					# Increment priority
 					pri = job["priority"]+1
 

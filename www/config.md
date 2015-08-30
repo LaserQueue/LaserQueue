@@ -108,9 +108,11 @@ Number of seconds before a metabump occurs. Set to 0 to disable.
 #### Default: `900`
 ---
 ### `metabumpmax` : `number`
+The top priority (0 is maximum) that can be bumped to. Anything below 0 will allow any priority.
 #### Default: `-1`
 ---
 ### `metabumpmult` : `number`
+The extra amount of time it takes per priority to reach the next level
 #### Default: `30`
 ---
 ### `modified_hover` : `string`
@@ -220,4 +222,4 @@ Repository to update from
 Software's current version
 #### Default: `0.0.5`
 ---
-This file automatically generated at Sat Aug 29 2015 21:12:06 GMT-0400 (EDT)
+This file automatically generated at Sat Aug 29 2015 21:15:55 GMT-0400 (EDT)
