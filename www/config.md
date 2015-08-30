@@ -155,9 +155,6 @@ An array of priority names, from lowest to highest
 Allow anyone to submit at any priority.
 #### Default: `false`
 ---
-### `priority_choose` : `boolean`
-#### Default: `false`
----
 ### `priority_header` : `string`
 Header for priority column of table
 #### Default: `Priority`
@@ -222,4 +219,4 @@ Repository to update from
 Software's current version
 #### Default: `0.0.5`
 ---
-This file automatically generated at Sat Aug 29 2015 21:15:55 GMT-0400 (EDT)
+This file automatically generated at Sat Aug 29 2015 21:17:40 GMT-0400 (EDT)

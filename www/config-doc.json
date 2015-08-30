@@ -35,7 +35,6 @@
     "pass_hover": "The hovertext for the pass button.",
     "port": "Port for WebSockets backend server",
     "priorities": "An array of priority names, from lowest to highest",
-    "priority_choose": "",
     "priority_header": "Header for priority column of table",
     "priority_hover": "Tooltip for priority textbox",
     "priority_input": "Title text for priority dropdown",
