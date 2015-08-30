@@ -76,6 +76,7 @@ Tooltip for increment button
 #### Default: `Increment job's position`
 ---
 ### `length_bounds` : `array`
+Maximum and minimum for the length of a job. Set either to -1 to disable that bound.
 #### Default: `0.0166666667,360`
 ---
 ### `login` : `string`
@@ -133,9 +134,11 @@ Title of page
 #### Default: `LaserQueue`
 ---
 ### `pass_depth` : `number`
+How many jobs from the top are allowed to be passed off.
 #### Default: `1`
 ---
 ### `pass_hover` : `string`
+The hovertext for the pass button.
 #### Default: `Move job down`
 ---
 ### `port` : `string`
@@ -145,6 +148,10 @@ Port for WebSockets backend server
 ### `priorities` : `array`
 An array of priority names, from lowest to highest
 #### Default: `Lunch/After NuVu,Low,Normal,Important,Urgent,Absolutely Required`
+---
+### `priority_allow` : `boolean`
+Allow anyone to submit at any priority.
+#### Default: `false`
 ---
 ### `priority_choose` : `boolean`
 #### Default: `false`
@@ -160,9 +167,6 @@ Tooltip for priority textbox
 ### `priority_input` : `string`
 Title text for priority dropdown
 #### Default: `Choose a priority...`
----
-### `priority_selection` : `boolean`
-#### Default: `false`
 ---
 ### `priority_thresh` : `array`
 Thresholds for bumping longer jobs down
@@ -189,10 +193,8 @@ Tooltip for job removal button
 #### Default: `Cancel this job`
 ---
 ### `send_notifications` : `boolean`
+Send notifications to the client whenever it causes an error on the backend
 #### Default: `true`
----
-### `serverRefreshRate` : `number`
-#### Default: `300000`
 ---
 ### `time_header` : `string`
 Header for time column in table
@@ -218,4 +220,4 @@ Repository to update from
 Software's current version
 #### Default: `0.0.5`
 ---
-This file automatically generated at Sat Aug 29 2015 21:01:39 GMT-0400 (EDT)
+This file automatically generated at Sat Aug 29 2015 21:12:06 GMT-0400 (EDT)

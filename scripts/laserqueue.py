@@ -248,7 +248,7 @@ class Queue:
 			esttime = min(bounds[1], esttime)
 
 		# lock the priority down to the max if the user isn't authed.
-		if not config["priority_selection"] and not authstate:
+		if not config["priority_allow"] and not authstate:
 			priority = min(config["default_priority"], priority)
 
 		# Recalculate priority if applicable.
