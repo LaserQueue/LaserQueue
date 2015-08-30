@@ -6,7 +6,6 @@ var fs = require('fs');
 var date = new Date();
 
 // fetch ALL OF THE JSON
-var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
 var defaultConf = JSON.parse(fs.readFileSync('./defaultconf.json', 'utf8'));
 var configDoc = JSON.parse(fs.readFileSync('./config-doc.json', 'utf8'));
 
@@ -35,9 +34,11 @@ console.log(
 );
 
 // for each config value
-for(var i  in config) {
+keys = Object.keys(defaultConf).sort();
+for(var iindex in keys) {
 	// check if param is an array
-	var parameterType = (config[i].constructor === Array ? 'array' : typeof config[i]);
+	var i = keys[iindex];
+	var parameterType = (defaultConf[i].constructor === Array ? 'array' : typeof defaultConf[i]);
 
 	// print key and type as third-level header
 	console.log('### `{key}` : `{type}`'.format({
@@ -58,5 +59,3 @@ for(var i  in config) {
 }
 
 console.log('This file automatically generated at {timestamp}'.format({timestamp: date}));
-
-return exitCode;
