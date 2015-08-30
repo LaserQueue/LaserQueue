@@ -5,6 +5,7 @@ This file documents `config.json`, the LaserQueue configuration file.
 - The config is generated from `defaultconf.json` when the queue first runs. Running the queue again with the `-r` flag will regenerate it.
 - Both the frontend and backend rely on and can access values in `config.json`. The backend can change these values.
 - The file is stored in the `www` directory so that the frontend can access it  
+
 ## Keys and values
 
 ### `action_header` : `string`
@@ -219,4 +220,4 @@ Repository to update from
 Software's current version
 #### Default: `0.0.5`
 ---
-This file automatically generated at Sat Aug 29 2015 21:18:35 GMT-0400 (EDT)
+This file automatically generated at Sat Aug 29 2015 21:19:25 GMT-0400 (EDT)
