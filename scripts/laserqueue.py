@@ -286,7 +286,7 @@ class Queue:
 			})
 			for key in extra_objects:
 				if key not in newJob:
-					newJob[key] = extra_object[key]
+					newJob[key] = extra_objects[key]
 			self.queue[priority].append(newJob)
 
 			if argvs.loud: # If -v, report success
