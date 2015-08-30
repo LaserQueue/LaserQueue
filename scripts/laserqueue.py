@@ -249,7 +249,7 @@ class Queue:
 
 		# lock the priority down to the max if the user isn't authed.
 		if not config["priority_allow"] and not authstate:
-			priority = min(config["default_priority"], priority)
+			priority = min(config["highest_priority_allowed"], priority)
 
 		# Recalculate priority if applicable.
 		if config["recalc_priority"]:

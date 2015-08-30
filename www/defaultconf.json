@@ -34,6 +34,7 @@
 	},
 	"default_material": "w",
 	"default_priority": 2,
+	"highest_priority_allowed": 2,
 	"name_input": "What is it they call you?",
 	"time_input": "Estimated time (min)",
 	"material_input": "Choose a material...",
