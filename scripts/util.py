@@ -5,10 +5,10 @@ def format(string, **kwargs):
 	Format strings with **kwargs.
 	"""
 	for arg in kwargs:
-		regex = re.compile("\\{" + arg + "\\}", re.IGNORECASE)
+		regex = re.compile(r"\{" + arg + r"\}", re.IGNORECASE)
 		string = regex.sub(str(kwargs[arg]), string)
 	for color in bcolors.COLORS:
-		regex = re.compile("\\{" + color + "\\}", re.IGNORECASE)
+		regex = re.compile(r"\{" + color + r"\}", re.IGNORECASE)
 		string = regex.sub(str(bcolors.COLORS[color]), string)
 	return string
 
