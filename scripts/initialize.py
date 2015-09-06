@@ -1,12 +1,6 @@
-import json
-import os
-import socket
-import pip
-import argparse
-import gzip
-import urllib.request
-import tarfile
-import time
+import os, time, pip
+import gzip, tarfile
+import json, urllib.request
 import getpass, hashlib
 from math import ceil
 
