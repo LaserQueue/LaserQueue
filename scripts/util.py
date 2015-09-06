@@ -1,4 +1,7 @@
-import os, json, time, sys, re
+import os, json, time, sys, re, ssl
+
+if not hasattr(ssl, '_create_default_https_context'): # Some operating systems don't have the default https context.
+	ssl._create_default_https_context = ssl._create_unverified_context
 
 def format(string, **kwargs):
 	"""

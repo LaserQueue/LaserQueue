@@ -13,10 +13,6 @@ from math import ceil
 import plugins
 from parseargv import args
 
-import ssl
-if hasattr(ssl, '_create_unverified_context'): # Some operating systems don't have the default https context.
-		ssl._create_default_https_context = ssl._create_unverified_context
-
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath) # Make sure we're in the correct directory
 
