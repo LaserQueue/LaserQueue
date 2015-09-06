@@ -1,31 +1,17 @@
-import os, json, time, sys, re, ssl, urllib.request, io, socket, http.client
+import os, json, time, sys, re, ssl, urllib.request, io, functools
 
 if not hasattr(ssl, '_create_default_https_context'): # Some operating systems don't have the default https context.
 	if hasattr(ssl, '_create_unverified_context'):
 		ssl._create_default_https_context = ssl._create_unverified_context
 	else:
-		class HTTPSConnection(httplib.HTTPConnection):
-			"This class allows communication via SSL."
-			default_port = http.client.HTTPS_PORT
+		old_init = ssl.SSLSocket.__init__
 
-			def __init__(self, host, port=None, key_file=None, cert_file=None,
-					strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
-					source_address=None):
-				http.client.HTTPConnection.__init__(self, host, port, strict, timeout,
-						source_address)
-				self.key_file = key_file
-				self.cert_file = cert_file
+		@functools.wraps(old_init)
+		def ubuntu_ssl_bug_fix(self, *args, **kwargs):
+		  kwargs['ssl_version'] = ssl.PROTOCOL_TLSv1
+		  old_init(self, *args, **kwargs)
 
-			def connect(self):
-				"Connect to a host on a given (SSL) port."
-				sock = socket.create_connection((self.host, self.port),
-						self.timeout, self.source_address)
-				if self._tunnel_host:
-					self.sock = sock
-					self._tunnel()
-				self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1)
-
-		http.client.HTTPSConnection = HTTPSConnection
+		ssl.SSLSocket.__init__ = ubuntu_openssl_bug_965371
 		# cprint("Cannot access the internet due to a python bug with some operating systems.\nUpdates will not be performed.", color=bcolors.DARKRED)
 		# def fakeopen(*args, **kwargs):
 		# 	return io.StringIO("{}")
