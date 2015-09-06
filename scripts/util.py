@@ -1,13 +1,35 @@
-import os, json, time, sys, re, ssl, urllib.request, io
+import os, json, time, sys, re, ssl, urllib.request, io, socket, http.client
 
 if not hasattr(ssl, '_create_default_https_context'): # Some operating systems don't have the default https context.
 	if hasattr(ssl, '_create_unverified_context'):
 		ssl._create_default_https_context = ssl._create_unverified_context
 	else:
-		cprint("Cannot access the internet due to a python bug with some operating systems.\nUpdates will not be performed.", color=bcolors.DARKRED)
-		def fakeopen(*args, **kwargs):
-			return io.StringIO("{}")
-		urllib.request.urlopen = fakeopen
+		class HTTPSConnection(httplib.HTTPConnection):
+			"This class allows communication via SSL."
+			default_port = http.client.HTTPS_PORT
+
+			def __init__(self, host, port=None, key_file=None, cert_file=None,
+					strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
+					source_address=None):
+				http.client.HTTPConnection.__init__(self, host, port, strict, timeout,
+						source_address)
+				self.key_file = key_file
+				self.cert_file = cert_file
+
+			def connect(self):
+				"Connect to a host on a given (SSL) port."
+				sock = socket.create_connection((self.host, self.port),
+						self.timeout, self.source_address)
+				if self._tunnel_host:
+					self.sock = sock
+					self._tunnel()
+				self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1)
+
+		http.client.HTTPSConnection = HTTPSConnection
+		# cprint("Cannot access the internet due to a python bug with some operating systems.\nUpdates will not be performed.", color=bcolors.DARKRED)
+		# def fakeopen(*args, **kwargs):
+		# 	return io.StringIO("{}")
+		# urllib.request.urlopen = fakeopen
 
 def format(string, **kwargs):
 	"""
@@ -138,18 +160,18 @@ def date_time_string(timestamp=None):
 	return s
 
 def supports_color():
-    """
-    Returns True if the running system's terminal supports color, and False
-    otherwise.
-    """
-    plat = sys.platform
-    supported_platform = plat != 'Pocket PC' and (plat != 'win32' or
-                                                  'ANSICON' in os.environ)
-    # isatty is not always implemented, #6223.
-    is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
-    if not supported_platform or not is_a_tty:
-        return False
-    return True
+	"""
+	Returns True if the running system's terminal supports color, and False
+	otherwise.
+	"""
+	plat = sys.platform
+	supported_platform = plat != 'Pocket PC' and (plat != 'win32' or
+												  'ANSICON' in os.environ)
+	# isatty is not always implemented, #6223.
+	is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
+	if not supported_platform or not is_a_tty:
+		return False
+	return True
 
 
 color_supported = supports_color()
