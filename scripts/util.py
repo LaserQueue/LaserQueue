@@ -1,7 +1,13 @@
-import os, json, time, sys, re, ssl
+import os, json, time, sys, re, ssl, urllib.request, io
 
 if not hasattr(ssl, '_create_default_https_context'): # Some operating systems don't have the default https context.
-	ssl._create_default_https_context = ssl._create_unverified_context
+	if hasattr(ssl, '_create_unverified_context'):
+		ssl._create_default_https_context = ssl._create_unverified_context
+	else:
+		cprint("Cannot access the internet due to a python bug with some operating systems.\nUpdates will not be performed.", color=bcolors.DARKRED)
+		def fakeopen(*args, **kwargs):
+			return io.StringIO("{}")
+		urllib.request.urlopen = fakeopen
 
 def format(string, **kwargs):
 	"""
