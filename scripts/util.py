@@ -11,7 +11,7 @@ if not hasattr(ssl, '_create_default_https_context'): # Some operating systems d
 		  kwargs['ssl_version'] = ssl.PROTOCOL_TLSv1
 		  old_init(self, *args, **kwargs)
 
-		ssl.SSLSocket.__init__ = ubuntu_openssl_bug_965371
+		ssl.SSLSocket.__init__ = ubuntu_ssl_bug_fix
 		# cprint("Cannot access the internet due to a python bug with some operating systems.\nUpdates will not be performed.", color=bcolors.DARKRED)
 		# def fakeopen(*args, **kwargs):
 		# 	return io.StringIO("{}")
