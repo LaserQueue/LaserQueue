@@ -1,21 +1,7 @@
-import os, json, time, sys, re, ssl, urllib.request, io, functools
+import os, json, time, sys, re, ssl, urllib.request, io
 
-if not hasattr(ssl, '_create_default_https_context'): # Some operating systems don't have the default https context.
-	if hasattr(ssl, '_create_unverified_context'):
-		ssl._create_default_https_context = ssl._create_unverified_context
-	else:
-		old_init = ssl.SSLSocket.__init__
-
-		@functools.wraps(old_init)
-		def ubuntu_ssl_bug_fix(self, *args, **kwargs):
-		  kwargs['ssl_version'] = ssl.PROTOCOL_TLSv1
-		  old_init(self, *args, **kwargs)
-
-		ssl.SSLSocket.__init__ = ubuntu_ssl_bug_fix
-		# cprint("Cannot access the internet due to a python bug with some operating systems.\nUpdates will not be performed.", color=bcolors.DARKRED)
-		# def fakeopen(*args, **kwargs):
-		# 	return io.StringIO("{}")
-		# urllib.request.urlopen = fakeopen
+DEFAULTCONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "defaultconf.json"))
+CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "config.json"))
 
 def format(string, **kwargs):
 	"""
@@ -184,6 +170,11 @@ if color_supported:
 		WHITE = '\033[97m'
 		ORANGE = '\033[38;5;202m'
 		DARKPURPLE = '\033[38;5;53m'
+		BROWN = '\033[38;5;94m'
+		PEACH = '\033[38;5;208m'
+		GOLDEN = '\033[38;5;166m'
+		BOLD = '\033[1m'
+		LINE = '\033[4m'
 		REMAKELINE = '\033[F\033[K'
 		ENDC = '\033[0m'
 		COLORS = {
@@ -205,6 +196,11 @@ if color_supported:
 			"white": WHITE,
 			"orange": ORANGE,
 			"darkpurple": DARKPURPLE,
+			"brown": BROWN,
+			"peach": PEACH,
+			"golden": GOLDEN,
+			"bold": BOLD,
+			"line": LINE,
 			"remakeline": REMAKELINE,
 			"endc": ENDC
 		}
@@ -231,6 +227,11 @@ else:
 		WHITE = ''
 		ORANGE = ''
 		DARKPURPLE = ''
+		BROWN = ''
+		PEACH = ''
+		GOLDEN = ''
+		BOLD = ''
+		LINE = ''
 		REMAKELINE = ''
 		ENDC = ''
 		COLORS = {
@@ -252,6 +253,11 @@ else:
 			"white": WHITE,
 			"orange": ORANGE,
 			"darkpurple": DARKPURPLE,
+			"brown": BROWN,
+			"peach": PEACH,
+			"golden": GOLDEN,
+			"bold": BOLD,
+			"line": LINE,
 			"remakeline": REMAKELINE,
 			"endc": ENDC
 		}
@@ -301,6 +307,9 @@ def cprint(text, color="", strip=False, func=print, add_newline=False, colorconf
 	global lastprinted
 	if not colorconfig:
 		colorconfig = cprintconf
+	if "whitespace" not in kwargs:
+		kwargs["whitespace"] = colorconfig.whitespace()
+	kwargs["color"] = color
 	text = format(str(text), **kwargs)
 
 	# Make sure not to print the same thing twice
@@ -379,5 +388,20 @@ def cinput(text, color="", strip=False, func=input, add_newline=False, colorconf
 		  text = prints[0]))
 		if add_newline: func("\n")
 
+if not hasattr(ssl, '_create_default_https_context'): # Some operating systems don't have the default https context.
+	if hasattr(ssl, '_create_unverified_context'):
+		ssl._create_default_https_context = ssl._create_unverified_context
+	else:
+		conf = json.load(open(DEFAULTCONFIGDIR))
+		def fakeopen(*args, **kwargs):
+			cprint("""Cannot access the internet via https.
+			          This is due to a python bug with some operating systems.
+			          Because of this, updates will not be performed.
+			          To see if you need to update, go to 
+			          {blue}{line}{target}{endc}{color}.
+			          (Current version: {endc}{version}{color})""", color=bcolors.RED, strip=True, 
+			          version = conf["version"], target=conf["update_repo"])
+			return io.BytesIO(bytes("{}", 'utf8'))
+		urllib.request.urlopen = fakeopen
 
-CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "config.json"))
+
