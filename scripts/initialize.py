@@ -118,7 +118,7 @@ def getpacks():
 		# Ask if they want to install this dependency
 		confirm = ("y" if args.all else "")
 		while confirm not in ["y", "n"]:
-			confirm = cinput("Install dependency {dep}? (y/n) ", dep=pack).lower().strip().rstrip()
+			confirm = cinput("Install dependency {dep}? (y/n) ", dep=pack).lower().strip()
 
 		if confirm == "n": # If the person chose not to install the dependency
 			cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
@@ -127,7 +127,7 @@ def getpacks():
 			# Ask again, with minor error colors
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = cinput("Install failed, try again with elevated permissions? (y/n) ", color=bcolors.RED).lower().strip().rstrip()
+				confirm = cinput("Install failed, try again with elevated permissions? (y/n) ", color=bcolors.RED).lower().strip()
 
 			if confirm == "n": # If the person chose not to install the dependency
 				cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
@@ -200,7 +200,7 @@ def update():
 			# Check what the user wants to do
 			confirm = ("overwrite" if args.allupdate else "")
 			while confirm not in ["fetch", "overwrite", "cancel"]:
-				confirm = cinput(prompt, strip=True).lower().strip().rstrip()
+				confirm = cinput(prompt, strip=True).lower().strip()
 
 			# If they want to fetch the new repository
 			if confirm == "fetch":
@@ -301,7 +301,7 @@ def confirmhost():
 			confirm = ""
 			while confirm not in ["y", "n"]:
 				confirm = cinput("""Last time you ran this program, it was in local mode.
-				                    Do you want to regenerate the host? (y/n) """, strip=True).lower().strip().rstrip()
+				                    Do you want to regenerate the host? (y/n) """, strip=True).lower().strip()
 			# Reset the host if they say yes
 			if confirm == "y":
 				data["host"] = getIps()[0]

@@ -256,7 +256,7 @@ class Queue:
 			priority = _calcpriority(priority, esttime)
 
 		# Strip whitespace from the name and recapitalize it
-		name = name.strip().rstrip()
+		name = name.strip()
 		if config["recapitalize"]:
 			name = name.title()
 
@@ -525,7 +525,7 @@ class Queue:
 
 		# Strip names before they can be used
 		if attrname == "name": 
-			job["name"] = str(value).strip().rstrip()
+			job["name"] = str(value).strip()
 
 		# Make sure material can be used
 		elif attrname == "material" and value in config["materials"]: 

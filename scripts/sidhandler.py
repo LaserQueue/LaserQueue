@@ -9,7 +9,7 @@ from util import *
 config = Config(CONFIGDIR)
 
 if os.path.exists("hashpassword"):
-	PASSWORD = open("hashpassword").read().strip().rstrip()
+	PASSWORD = open("hashpassword").read().strip()
 
 class SID:
 	"""
@@ -25,8 +25,8 @@ class SID:
 		Attempt to auth using `password`, by checking it against PASSWORD.
 		"""
 		if os.path.exists("hashpassword"):
-			hash_object = hashlib.sha256(password.strip().rstrip().encode()).hexdigest()
-			if hash_object.strip().rstrip() == PASSWORD: 
+			hash_object = hashlib.sha256(password.strip().encode()).hexdigest()
+			if hash_object.strip() == PASSWORD: 
 				self.authstate = True
 				return True
 		return False

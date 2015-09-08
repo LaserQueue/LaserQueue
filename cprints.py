@@ -87,7 +87,7 @@ def cprint(text, color="", strip=False, func=printf, add_newline=False):
 
 	# Split the text by lines
 	if strip:
-		prints = [i.strip().rstrip() for i in text.split("\n")]
+		prints = [i.strip() for i in text.split("\n")]
 	else:
 		prints = text.split("\n")
 

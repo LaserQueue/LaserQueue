@@ -26,7 +26,7 @@ def tryImport(name):
 def tryLoadJS(folder, name):
 	try:
 		with open(os.path.join(folder, name)) as f:
-			return f.read().strip().rstrip().strip("\n").rstrip("\n").strip().rstrip()
+			return f.read().strip()
 	except Exception as e:
 		printer.cprint(tbformat(e, format("Error loading {name}:", name=name)), color=bcolors.DARKRED)
 
