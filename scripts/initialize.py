@@ -1,6 +1,6 @@
 import os, time, pip
 import gzip, tarfile
-import json, urllib.request
+import json, urllib.request, ssl
 import getpass, hashlib
 from math import ceil
 
