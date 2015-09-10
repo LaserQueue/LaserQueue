@@ -175,7 +175,6 @@ def update():
 
 	import git
 	config = json.load(open(defaultconfpath))
-	ssl._create_default_https_context = ssl.create_default_context
 
 	try:
 		configpage = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
