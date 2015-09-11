@@ -42,6 +42,7 @@ hideFromClient = [
 	"sec"
 ]
 
+# Use the modules from plugins to update requiredtags and hideFromClient
 def buildLists(modules):
 	global requiredtags, hideFromClient
 	for module in modules:
