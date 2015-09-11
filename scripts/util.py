@@ -1,4 +1,4 @@
-import os, json, time, sys, re, ssl, urllib.request, io
+import os, json, time, sys, re, ssl, urllib.request, io, uuid
 
 DEFAULTCONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "defaultconf.json"))
 CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "config.json"))

@@ -1,5 +1,3 @@
-import json, os
-
 from parseargv import args as argvs
 from util import *
 config = Config(CONFIGDIR)

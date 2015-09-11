@@ -1,19 +1,17 @@
-import os, time, pip
+import pip
 import gzip, tarfile
-import json, urllib.request
 import getpass, hashlib
-from math import ceil
 
 import plugins
 from parseargv import args
-
-selfpath = os.path.dirname(os.path.realpath(__file__))
-os.chdir(selfpath) # Make sure we're in the correct directory
 
 # Set up pretty printing
 from util import *
 cprintconf.color = bcolors.CYAN
 cprintconf.name = "Setup"
+
+selfpath = os.path.dirname(os.path.realpath(__file__))
+os.chdir(selfpath) # Make sure we're in the correct directory
 
 # All the config paths
 pluginjspath = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")

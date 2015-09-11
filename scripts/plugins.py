@@ -1,4 +1,3 @@
-import sys, os
 from parseargv import args
 from pluginResources.QueueConfig import *
 printer = PluginPrinterInstance()
