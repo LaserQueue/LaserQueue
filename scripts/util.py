@@ -391,7 +391,7 @@ def cinput(text, color="", strip=False, func=input, add_newline=False, colorconf
 if not hasattr(ssl, '_create_default_https_context'): # Some operating systems don't have the default https context.
 	if hasattr(ssl, '_create_unverified_context'):
 		ssl._create_default_https_context = ssl._create_unverified_context
-	elif hasattr(ssl, '_create_default_context'):
+	elif hasattr(ssl, 'create_default_context'):
 		ssl._create_default_https_context = ssl.create_default_context
 	else:
 		conf = json.load(open(DEFAULTCONFIGDIR))
