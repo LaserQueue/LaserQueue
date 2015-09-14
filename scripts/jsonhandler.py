@@ -136,14 +136,14 @@ def auth(**kwargs):
 				cprint("Auth failed.")
 
 # Relative wrappers for queue actions
-def append(**kwargs): kwargs["queue"].append(**kwargs)
-def passoff(**kwargs): kwargs["queue"].passoff(**kwargs)
-def remove(**kwargs): kwargs["queue"].remove(**kwargs)
-def move(**kwargs): kwargs["queue"].move(**kwargs)
-def relmove(**kwargs): kwargs["queue"].relmove(**kwargs)
-def increment(**kwargs): kwargs["queue"].increment(**kwargs)
-def decrement(**kwargs): kwargs["queue"].decrement(**kwargs)
-def attr(**kwargs): kwargs["queue"].attr(**kwargs)
+append = lambda **kwargs: kwargs["queue"].append(**kwargs)
+passoff = lambda **kwargs: kwargs["queue"].passoff(**kwargs)
+remove = lambda **kwargs: kwargs["queue"].remove(**kwargs)
+move = lambda **kwargs: kwargs["queue"].move(**kwargs)
+relmove = lambda **kwargs: kwargs["queue"].relmove(**kwargs)
+increment = lambda **kwargs: kwargs["queue"].increment(**kwargs)
+decrement = lambda **kwargs: kwargs["queue"].decrement(**kwargs)
+attr = lambda **kwargs: kwargs["queue"].attr(**kwargs)
 
 commands = [
 	SocketCommand("deauth", deauth, {}),

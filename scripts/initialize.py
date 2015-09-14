@@ -20,21 +20,12 @@ userconfpath = os.path.join(os.path.pardir, "www", "userconf.json")
 defaultconfpath = os.path.join(os.path.pardir, "www", "defaultconf.json")
 
 # Utility function to test for internet connection.
-def connected_to_internet():
-	return bool(getIps(test=True))
-
-# Config functions
-def openconf():
-	"""
-	Opens the config file and returns its contents.
-	"""
-	return json.load(open(confpath))
-
-def saveconf(data):
-	"""
-	Saves `data` to the config file.
-	"""
-	return json.dump(data, open(confpath, "w"), indent=2, sort_keys=True)
+connected_to_internet = lambda: bool(getIps(test=True))
+# Open/save to the config file
+openconf = lambda: json.load(open(confpath))
+saveconf = lambda data: json.dump(data, open(confpath, "w"), indent=2, sort_keys=True)
+# Merge the dictionary odict over the dictionary adict.
+_fillblanks = lambda odict, adict: dict(adict, **odict)
 
 def copyconf():
 	"""
@@ -142,15 +133,6 @@ def getpacks():
 
 	if installed:
 		cprint("Sucessfully installed all dependencies!")
-
-
-
-
-def _fillblanks(odict, adict):
-	"""
-	Merge the dictionary odict over the dictionary adict.
-	"""
-	return dict(adict, **odict) 
 
 def make_tarfile(output_filename, source_dir):
 	"""

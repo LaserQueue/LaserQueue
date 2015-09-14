@@ -30,12 +30,12 @@ def tryLoadJS(folder, name):
 		printer.cprint(tbformat(e, format("Error loading {name}:", name=name)), color=bcolors.DARKRED)
 
 
-def pluginFilter(module):
-	return (hasattr(module, "upkeep") or
-		hasattr(module, "socketCommands") or
-		hasattr(module, "hideFromClient") or
-		hasattr(module, "requiredTags") or
-		hasattr(module, "requiresAuth"))
+pluginFilter = lambda module: (
+	hasattr(module, "upkeep") or
+	hasattr(module, "socketCommands") or
+	hasattr(module, "hideFromClient") or
+	hasattr(module, "requiredTags") or
+	hasattr(module, "requiresAuth"))
 
 def hasPy(filename):
 	subFiles = os.listdir(os.path.join(PLUGINDIR, filename))

@@ -75,7 +75,7 @@ def getsec(ws):
 	"""
 	return dict(ws.raw_request_headers)['Sec-WebSocket-Key']
 
-def serveGen(jdata, socks):
+def serveToMany(jdata, socks):
 	"""
 	A generator function used to serve to every socket in `socks`.
 	"""
@@ -83,24 +83,16 @@ def serveGen(jdata, socks):
 		if i.open:
 			yield from i.send(json.dumps(jdata, sort_keys=True))
 
-def serveToConnections(jdata, socks):
-	"""
-	A function which extracts every iteration of the generator `serveGen`.
-	"""
-	list(serveGen(jdata, socks))
-
 def serveTo(jdata, ws):
 	"""
 	A generator function used to serve to the `ws` socket.
 	"""
 	if ws.open:
 		yield from ws.send(json.dumps(jdata, sort_keys=True))
-
-def serveToConnection(jdata, ws):
-	"""
-	A function which extracts every iteration of the generator `serveTo`.
-	"""
-	list(serveTo(jdata, ws))
+		
+serveToConnections = lambda jdata, socks: list(serveToMany(jdata, socks))
+serveToConnection = lambda jdata, ws: list(serveTo(jdata, ws))
+	
 
 
 
