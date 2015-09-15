@@ -119,9 +119,9 @@ function populateActions() {
 		if(event.altKey) {
 			removeJob(this);
 		} else {
-			$(event.toElement).tooltip('hide');
+			$(event.target).tooltip('hide');
 			$('.remove-job').popover('hide');
-			$(event.toElement).popover({
+			$(event.target).popover({
 				placement: 'bottom',
 				html: true,
 				content: function confirmModalContents() {
@@ -129,7 +129,7 @@ function populateActions() {
 						'<button class="btn btn-danger btn-lg btn-block confirm-remove">Yes</button>';
 				}
 			});
-			$(event.toElement).popover('show');
+			$(event.target).popover('show');
 			$('.confirm-remove').focus();
 			$('.cancel-remove').click(function cancelRemove(event) {
 				$('.remove-job').popover('hide');
@@ -223,7 +223,7 @@ function modalMessage(modalTitle, modalBody, dialogOptions) {
 
 	// bind clicking background to hiding modal
 	$('.bootbox').click(function bgClickHideModals(event) {
-		if (event.toElement.id === 'notify-modal') {
+		if (event.target.id === 'notify-modal') {
 			bootbox.hideAll();
 		}
 	});
