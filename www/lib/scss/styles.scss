@@ -9,7 +9,7 @@
 	outline: none !important;
 }
 
-#cut-material, #priority-dropdown {
+#job-material, #job-priority {
 	width: 172px;
 }
 
@@ -24,7 +24,9 @@
 	transition: width 0.7s ease-in-out, height 0.7s ease-in-out, padding 0.7s ease-in-out, margin 0.7s ease-in-out, position 0.7s ease-in-out, display 0.7s ease-in-out;
 }
 
-body { animation: fadeIn 1 0.8s linear; }
+html {
+	animation: fadeIn 1 0.8s ease-out;
+}
 
 @import "scrollbar";
 

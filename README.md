@@ -10,22 +10,26 @@ Get the latest version by `git clone`ing the repo or downloading a zip. If there
 
 To start the server, run `start.sh` or `start.py` or `start.bat` if you're on Windows. You'll need Python 3.4.x or greater.
 
-To change the admin login password, create a plaintext file `password` under backend. This will be hashed upon script run.
+To change the admin login password, run the script with `--new-password`.
 
 ### Flags:
 
 - `-h`, `--help`: Display a list of these flags. Does not start the backend.
 - `-p`, `--port`: Set the port for the website to be hosted.
 - `-l`, `--local`: Start the backend in local mode. You'll connect with localhost.
-- `-q`, `--quiet`: Start without output. Only applies to start.sh. Equivalent to >/dev/null.
+- `-v`, `--verbose`: Extra and more informative output from the backend. Doesn't apply if `-q` is used.
+- `-q`, `--quiet`: Start without output. Only applies to start.sh. Equivalent to `>/dev/null`.
 - `-b`, `--queue-backup`: Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.
-- `-r`, `--regen-config`: Regenerate the config. This is the default option if no config.json file is found in WWW
+- `-r`, `--regen-config`: Regenerate the config. Accepts positional arguments in the form `-r key key2 key3 ...`. If it recieves positionals, it will only regenerate those config values.
 - `-n`, `--regen-host`: Regenerate the host in the config. Does not affect any other config values. 
 - `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
 - `-nu`, `--no-update`: Does not install or prompt for updates.
+- `-np`, `--no-plugins`: Does not load plugins.
+- `--new-password`: No short option. Allows you to reset the admin password from within the program.
 - `--backend`: No short option. Only runs the backend.
 - `--frontend`: No short option. Only runs the frontend.
 - `--init-only`: No short option. Runs neither the frontend nor the backend.
+- `--no-init`: No short option. Doesn't run the setup.
 - `--install-all`: No short option. Installs all dependencies without prompting.
 - `--install-update`: No short option. Installs updates without prompting.
 

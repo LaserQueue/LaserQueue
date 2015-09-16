@@ -1,10 +1,10 @@
 {
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"update_target": "https://raw.githubusercontent.com/LaserQueue/LaserQueue/master/www/defaultconf.json",
 	"update_repo": "https://github.com/LaserQueue/LaserQueue.git",
+	"page_title": "LaserQueue",
 	"host": "",
 	"port": "8763",
-	"serverRefreshRate": 300000,
 	"refreshRate": 1000,
 	"reconnectRate": 5000,
 	"priority_thresh": [
@@ -16,12 +16,12 @@
 		60
 	],
 	"priorities": [
-		"Absolutely Required",
-		"Urgent",
-		"Important",
+		"Lunch/After NuVu",
+		"Low",
 		"Normal",
-		"Low", 
-		"Lunch/After NuVu"
+		"Important",
+		"Urgent",
+		"Absolutely Required"
 	],
 	"materials": {
 		"w": "Thin Wood",
@@ -33,7 +33,8 @@
 		"o": "Other"
 	},
 	"default_material": "w",
-	"default_priority": 3,
+	"default_priority": 2,
+	"highest_priority_allowed": 2,
 	"name_input": "What is it they call you?",
 	"time_input": "Estimated time (min)",
 	"material_input": "Choose a material...",
@@ -64,18 +65,16 @@
 		"esttime"
 	],
 	"auth_timeout": 600,
-	"lastuse_timeout": 1800,
-	"sid_total_timeout": 3600,
 	"length_bounds": [
-		0.0166666667, 
+		0.0166666667,
 		360
 	],
-	"metabump": 0,
-	"metabumpmult": 30,	
+	"metabump": 900,
+	"metabumpmult": 30,
+	"metabumpmax": -1,
 	"google_analytics_key": "",
-	"priority_selection": false,
+	"priority_allow": false,
 	"allow_force_refresh": false,
-	"priority_choose": false,
 	"pass_depth": 1,
 	"remove_hover": "Cancel this job",
 	"pass_hover": "Move job down",
@@ -88,5 +87,6 @@
 	"name_header": "Name",
 	"material_header": "Material",
 	"time_header": "Est. Time",
-	"priority_header": "Priority"
+	"priority_header": "Priority",
+	"send_notifications": true
 }

@@ -1,149 +1,121 @@
-# sid handler. it will hold sids (and cache them with -b), and return their validity.
-
-
-# SID logic:
-# 	if sid doesn't exist:
-# 		return False on auth, add sid to list with timestamp of connection; lasttimestamp is now
-# 	if sid exists and is not authorized:
-# 		return False on auth, set lasttimestamp to now
-# 	if sid exists and is over 60 minutes old:
-# 		destroy, return False
-# 	if sid exists and has gone 20 minutes since lasttimestamp:
-# 		destroy, return False
+# sid handler. it will hold sids and return their validity.
 
 import time
 import json
 import os
 import hashlib
 
-from config import *
-config = Config(os.path.join("..","www","config.json"))
+from util import *
+config = Config(CONFIGDIR)
 
-if os.path.exists("password"):
-	opass = open("password").read().strip().rstrip()
-	hash_object = hashlib.sha1(opass.encode()).hexdigest()
-	hashed_final = hashlib.sha1(hash_object.encode()).hexdigest()
-	hashed = open("hashpassword", "w")
-	hashed.write(hashed_final)
-	hashed.close()
-	os.remove("password")
 if os.path.exists("hashpassword"):
-	PASSWORD = open("hashpassword").read().strip().rstrip()
+	PASSWORD = open("hashpassword").read().strip()
 
 class SID:
-	def __init__(self, uuid=None):
-		self.lasttimestamp = time.time()
-		self.timestamp = time.time()
-		self.authstamp = time.time()
+	"""
+	A single session instance.
+	"""
+	def __init__(self, seckey=None):
+		self.stamp = time.time()
 		self.authstate = False
-		self.lastnull = time.time()
-		self.uuid = str(uuid)
-	@classmethod
-	def load(cls, jdata):
-		self = cls()
-		self.lasttimestamp = jdata["laststamp"]
-		self.timestamp = jdata["stamp"]
-		self.authstamp = jdata["authstamp"]
-		self.authstate = jdata["auth"]
-		self.lastnull = time.time()
-		self.uuid = str(jdata["uuid"])
-		return self
-	def serialize(self):
-		return {
-			"stamp": self.timestamp,
-			"laststamp": self.lasttimestamp,
-			"authstamp": self.authstamp,
-			"auth": self.authstate,
-			"uuid": self.uuid
-		}
+		self.seckey = str(seckey)
+
 	def auth(self, password):
+		"""
+		Attempt to auth using `password`, by checking it against PASSWORD.
+		"""
 		if os.path.exists("hashpassword"):
-			hash_object = hashlib.sha1(password.strip().rstrip().encode()).hexdigest()
-			if hash_object.strip().rstrip() == PASSWORD: 
+			hash_object = hashlib.sha256(password.strip().encode()).hexdigest()
+			if hash_object.strip() == PASSWORD: 
 				self.authstate = True
 				return True
 		return False
+
 	def deauth(self):
+		"""
+		Remove this session's authstate.
+		"""
 		self.authstate = False
+
 	def checkstate(self):
+		"""
+		Check this session's state, making sure that nothing has timed out yet.
+		"""
 		timestamp = time.time()
-		if timestamp-self.authstamp > config["auth_timeout"] and config["auth_timeout"]:
-			self.authstate = False
-		if timestamp-self.lastnull > config["refreshRate"]*0.015:
-			return False
-		elif timestamp-self.lasttimestamp > config["lastuse_timeout"] and config["lastuse_timeout"]:
-			return False
-		elif timestamp-self.timestamp > config["sid_total_timeout"] and config["sid_total_timeout"]:
-			return False
-		return True
+		if timestamp-self.stamp > config["auth_timeout"] and config["auth_timeout"]:
+			self.deauth()
+
 	def onupdate(self):
-		self.lasttimestamp = time.time()
-		self.authstamp = time.time()
-	def newnull(self):
-		self.lastnull = time.time()
-	def regen(self):
-		self.lasttimestamp = time.time()
-		self.timestamp = time.time()
-		self.authstamp = time.time()
-		self.authstate = False
+		"""
+		Update the session's timestamps.
+		"""
+		self.stamp = time.time()
+
 
 
 class SIDCache:
+	"""
+	A collection of session instances.
+	"""
 	def __init__(self):
 		self.sids = []
-	@classmethod
-	def load(cls, jdata):
-		self = cls()
-		for sid in jdata:
-			self.sids.append(SID.load(sid))
-		return self
-	def check(self, uuid):
-		csid = self._get(uuid)
-		if not csid:               return False
-		elif not csid.checkstate(): 
-			self.sids.remove(csid);  return False
+
+	def check(self, sec):
+		"""
+		Get the authstate of the specified key, and regen if needed.
+		"""
+		csid = self._get(sec)
+		if not csid:               return False # If the key doesn't exist, return False
+
+		# update the SID
+		csid.checkstate() 
 		csid.onupdate()
-		if not csid.authstate:     return False
-		return True
-	def auth(self, uuid, password):
-		if self.check(uuid) or self._get(uuid).auth(password): 
-			return True
+
+		if not csid.authstate:     return False # If the key isn't authed, return False
+		return True # Otherwise, return True
+	def auth(self, sec, password):
+		"""
+		Attempt to auth `sec` using `password`.
+		"""
+		if self.check(sec) or self._get(sec).auth(password): 
+			return True # If the key's already authed or the auth succeeded, return True
 		return False
-	def deauth(self, uuid):
-		self._get(uuid).deauth()
-	def serialize(self):
-		return [sid.serialize() for sid in self.sids]
+
+	def deauth(self, sec):
+		"""
+		Deauth `sec`.
+		"""
+		self._get(sec).deauth()
+
 	def allauth(self):
-		return [sid.uuid for sid in self.sids if sid.authstate]
-	def cutauths(self):
-		return [sid.uuid[:int(len(sid.uuid)/2)] for sid in self.sids if sid.authstate]
-	def allnonauth(self):
-		return [sid.uuid for sid in self.sids if not sid.authstate]
-	def _isin(self, uuid):
+		"""
+		Return a list of every authed key.
+		"""
+		return [sid.seckey for sid in self.sids if sid.authstate]
+
+	def _isin(self, sec):
+		"""
+		Check if the key is in the cache.
+		"""
 		for i in self.sids:
-			if i.uuid == uuid:
+			if i.seckey == sec:
 				return True
 		return False
-	def _get(self, uuid):
-		if not self._isin(uuid):
-			self.sids.append(SID(uuid))
+
+	def _get(self, sec):
+		"""
+		Get the session for the key given.
+		"""
+		if not self._isin(sec): # If it doesn't exist, make it
+			self.sids.append(SID(sec))
+
 		for sid in self.sids:
-			if sid.uuid == uuid:
+			if sid.seckey == sec:
 				return sid
 	def update(self):
+		"""
+		Iterate through every session and update it.
+		"""
 		for sid in self.sids:
-			self.check(sid.uuid)
-	def newnull(self, uuid):
-		self._get(uuid).newnull()
-
-def cache(sids):
-	json.dump(sids.serialize(), open("scache.json", "w"), indent=2)
-
-def loadcache():
-	try:
-		if os.path.exists("scache.json"):
-			return SIDCache.load(json.load(open("scache.json")))
-	except: pass
-	json.dump({}, open("scache.json", "w"))
-	return SIDCache()
+			self.check(sid.seckey)
 

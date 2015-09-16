@@ -1,54 +1,61 @@
-import json, os
+from parseargv import args as argvs
+from util import *
+config = Config(CONFIGDIR)
 
-from config import *
-config = Config(os.path.join("..","www","config.json"))
+def _comparetypes(obj, expected):
+	"""
+	Compare types, allowing exceptions.
+	"""
+	if expected is any_type:
+		return True
+	elif expected is any_number:
+		if type(obj) is int or type(obj) is float:
+			return True
+	return type(obj) is expected
 
-def _typelist(l):
-	return [type(i) for i in l]
-
-def _comparetypes(args, expected):
-	args = _typelist(args)
-	exp = expected[:]
-	for ii in range(len(exp)):
-		i = exp[ii]
-		if i is any_type:
-			exp[ii] = args[ii]
-		elif i is any_number:
-			if args[ii] in [int, float]:
-				exp[ii] = args[ii]
-	return args == exp
-
-# typelist exceptions
+# Type exceptions
 class any_type: pass 
 class any_number: pass 
 
-def runSocketCommand(commandlist, jdata, sessions):
+authactions = config["authactions"]
+
+def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
+	"""
+	Run a command based on `jdata`, from `commandlist`.
+	"""
+	global authactions
 	if "action" not in jdata: 
 		return "Action missing!"
-	if "sid" not in jdata:
-		return "Session ID missing!"
 
+	# Get the objects needed to run commands
 	action = jdata["action"]
-	sid = jdata["sid"]
-	if "args" in jdata:
-		args = jdata["args"]
-	else:
-		args = None
-	authstate = sessions.check(sid)
+	sec = getsec(ws)
+	args = dict(jdata)
+	del args["action"]
+	authstate = sessions.check(sec)
 
-	if action in config["authactions"] and not authstate: 
+	# Stop actions that need auth if the client isn't auth
+	if action in authactions and not authstate: 
+		serveToConnection({"action":"deauthed"}, ws)
 		return "This action requires auth."
 
+	# Get a command dictionary for fast lookup
 	cmds = {str(i): i for i in commandlist}
 
+	# If the command can be run, run it
 	if action in cmds and (not cmds[action].args or args):
-		return cmds[action].run(args=args, authstate=authstate, sid=sid, sessions=sessions)
-	elif not args: 
-		return "Args missing!"
-	else:
+		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks, queue=queue)
+	# If the action being bad is the problem, return that
+	elif action not in cmds: 
 		return "Bad command name."
+	# If the args missing is the problem, return that
+	elif not args:
+		return "Args missing!"
 
 class SocketCommand:
+	"""
+	A class used to define a socket command usable by `runSocketCommand`.
+	"""
 	def __init__(self, actionname, method, arglist):
 		self.name = actionname
 		self.method = method
@@ -56,68 +63,128 @@ class SocketCommand:
 	def __str__(self):
 		return self.name
 	def run(self, **kwargs):
-		if self.args:
-			args = kwargs["args"]
-			if not args:
-				return "Expected {} argument{}, received {}".format(len(self.args), 
-					"s" if len(self.args) != 1 else "", 0)
-			elif len(args) != len(self.args):
-				return "Expected {} argument{}, received {}".format(len(self.args), 
-					"s" if len(self.args) != 1 else "", len(args))
-			elif not _comparetypes(args, self.args):
-				return "Expected "+str(self.args)+", received "+str(_typelist(args))
+		args = kwargs["args"]
+		# Check that each argument is correct
+		for i in self.args:
+			if i not in args:
+				return format("Expected '{nameofarg}' argument, but didn't find it.", nameofarg=i)
+			if not _comparetypes(args[i], self.args[i]):
+				return format("Expected '{nameofarg}' argument to be an instance of '{typeexpected}', but found an instance of '{typeofarg}'.",
+					nameofarg = i, 
+					typeexpected = self.args[i].__name__, 
+					typeofarg = type(args[i]).__name__)
+		# Run the command if all is in order
 		return self.method(**kwargs)
 
-
 # Non-queue functions
-def null(**kwargs): 
-	sid, sessions = kwargs["sid"], kwargs["sessions"]
-	sessions.newnull(sid)
-	sessions.update()
 def deauth(**kwargs): 
-	sid, sessions = kwargs["sid"], kwargs["sessions"]
-	sessions.deauth(kwargs["sid"])
-def shame(**kwargs): return "sorry"
-def refresh(**kwargs): return "refresh"
-def uuddlrlrba(**kwargs): return "uuddlrlrba"
+	"""
+	Deauth the client.
+	"""
+	sec, sessions, ws = kwargs["sec"], kwargs["sessions"], kwargs["ws"]
+	sessions.deauth(sec)
+	serveToConnection({"action":"deauthed"}, ws)
+
+	# If the verbose flag is used, print report
+	if argvs.loud:
+		cprint("Client successfully deauthed.")
+
+def refresh(**kwargs): 
+	"""
+	Refresh all clients. (if the config allows it)
+	"""
+	socks, authstate = kwargs["sockets"], kwargs["authstate"]
+	if config["allow_force_refresh"]:
+		serveToConnections({"action":"refresh"}, socks)
+
+		if argvs.loud: # If the verbose flag is used, print report
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Refreshed all clients.", color=color)
+	else:
+		cprint("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=bcolors.YELLOW)
+
+def uuddlrlrba(**kwargs):
+	"""
+	Huehuehue all clients. (if the config allows it)
+	"""
+	socks, authstate = kwargs["sockets"], kwargs["authstate"]
+	if config["easter_eggs"]:
+		serveToConnections({"action":"rickroll"}, socks)
+
+		if argvs.loud: # If the verbose flag is used, print report
+			color = bcolors.MAGENTA if authstate else bcolors.ENDC
+			cprint("{Trolled}{c} all clients.",
+				Trolled = rainbonify("Trolled"),
+				c = color) # RAINBOW \o/
+	else:
+		cprint("This is a serious establishment, son. I'm dissapointed in you.", color=bcolors.YELLOW)
+
 def auth(**kwargs):
-	args, sid, sessions = kwargs["args"], kwargs["sid"], kwargs["sessions"]
+	"""
+	Attempt to auth the client using the `pass` argument.
+	"""
+	args, sec, sessions, ws = kwargs["args"], kwargs["sec"], kwargs["sessions"], kwargs["ws"]
+
 	if config["admin_mode_enabled"]:
-		return sessions.auth(sid, args[0])
+		if sessions.auth(sec, args["pass"]):
+			serveToConnection({"action":"authed"}, ws)
+			if argvs.loud: # If the verbose flag is used, print report
+				cprint("Auth succeeded.", color=bcolors.MAGENTA)
+		else:
+			serveToConnection({"action":"authfailed"}, ws)
+			if argvs.loud: # If the verbose flag is used, print report
+				cprint("Auth failed.")
 
-def parseData(queue, sessions, jdata):
-	commands = [
-		SocketCommand("null", null, None),
-		SocketCommand("deauth", deauth, None),
-		SocketCommand("shame", shame, None),
-		SocketCommand("refresh", refresh, None),
-		SocketCommand("uuddlrlrba", uuddlrlrba, None),
-		SocketCommand("auth", auth, [str]),
-		SocketCommand("add", queue.append, [str, int, any_number, str]),
-		SocketCommand("pass", queue.passoff, [str]),
-		SocketCommand("remove", queue.remove, [str]),
-		SocketCommand("move", queue.move, [str, int, int]),
-		SocketCommand("relmove", queue.relmove, [str, int]),
-		SocketCommand("increment", queue.increment, [str]),
-		SocketCommand("decrement", queue.decrement, [str]),
-		SocketCommand("attr", queue.attr, [str, str, any_type])
-	]
-	return runSocketCommand(commands, jdata, sessions)
+# Relative wrappers for queue actions
+append = lambda **kwargs: kwargs["queue"].append(**kwargs)
+passoff = lambda **kwargs: kwargs["queue"].passoff(**kwargs)
+remove = lambda **kwargs: kwargs["queue"].remove(**kwargs)
+move = lambda **kwargs: kwargs["queue"].move(**kwargs)
+relmove = lambda **kwargs: kwargs["queue"].relmove(**kwargs)
+increment = lambda **kwargs: kwargs["queue"].increment(**kwargs)
+decrement = lambda **kwargs: kwargs["queue"].decrement(**kwargs)
+attr = lambda **kwargs: kwargs["queue"].attr(**kwargs)
 
-def generateData(queue, sessions, shamed):
-	jdata = {}
-	jdata["queue"] = queue.queue
-	jdata["action"] = "display"
-	jdata["auths"] = sessions.cutauths()
-	jdata["deauths"] = shamed
+commands = [
+	SocketCommand("deauth", deauth, {}),
+	SocketCommand("refresh", refresh, {}),
+	SocketCommand("uuddlrlrba", uuddlrlrba, {}),
+	SocketCommand("auth", auth, {"pass": str}),
+	SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str}),
+	SocketCommand("pass", passoff, {"uuid": str}),
+	SocketCommand("remove", remove, {"uuid": str}),
+	SocketCommand("move", move, {"uuid": str, "target_priority": int, "target_index": int}),
+	SocketCommand("relmove", relmove, {"uuid": str, "target_index": int}),
+	SocketCommand("increment", increment, {"uuid": str}),
+	SocketCommand("decrement", decrement, {"uuid": str}),
+	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type})
+]
+
+def buildCommands(plugins):
+	"""
+	Build the list of commands.
+	"""
+	global commands, authactions
+	for module in plugins:
+		if hasattr(module, "socketCommands"):
+			for cmd in module.socketCommands:
+				if cmd in commands:
+					commands = filter(lambda command: str(command) != str(cmd), commands)
+				commands.append(cmd)
+		if hasattr(module, "requiresAuth"):
+			authactions += module.requiresAuth
+
+def parseData(queue, ws, socks, sessions, jdata):
+	"""
+	Run the socket commands using the data given.
+	"""
+	global commands
+	return runSocketCommand(commands, ws, socks, sessions, jdata, queue)
+
+def generateData(queue):
+	"""
+	Generate data for sending to clients.
+	"""
+	jdata = {"action": "display"}
+	jdata["queue"] = queue
 	return jdata
-
-
-
-
-
-
-
-
-
-

@@ -5,9 +5,10 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content='black'>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="apple-touch-icon" href="/dist/img/laserQueue.png">
-		<title>Laser Cutter</title>
+		<title>Queue</title>
+		<link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 		<link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="dist/css/styles.min.css">
 		<link rel="shortcut icon" href="/dist/img/laserQueue.png" type="image/x-icon">
@@ -22,46 +23,21 @@
 		<noscript>
 			<h1>ERROR 1 JAVASCRIPT NOT SUPPORTED. Go get a better broswer like <a href="https://chrome.com">Chrome</a>, or enable Javascript.</h1><div style="display:none">
 		</noscript>
-		<!-- modal for displaying errors -->
-		<div class="modal fade" id="notify-modal" tabindex="-1" role="dialog" aria-labelledby="notify-modal-label" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title notify-modal-title" id="notify-modal-label">Error 0</h4>
-					</div>
-					<div class="notify-modal-body modal-body">
-						It appears that there's been some error in either the error handler or the notifier. It also appears that the error handler has an error. That's right, the error's error handler has an error. Something is very wrong. Go get a nerd. Error 0.
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
 		<header class="top-header clearfix">
 			<img src="/dist/img/logo.svg" alt="NuVu Logo" class="nuvu-logo authorize" data-toggle="tooltip" data-placement="bottom">
 			<div class="control-panel clearfix">
-				<form class="new-cut-form form-inline">
-					<div class="form-group cut-form-group">
-						<input type="text" class="form-control cut-human-name" style="font-size:0.95em" data-toggle="tooltip" data-placement="bottom">
-						<input type="text" class="form-control cut-time-estimate" style="font-size:0.95em" data-toggle="tooltip" data-placement="bottom">
-						<select name="material" id="cut-material" class="cut-material form-control" data-toggle="tooltip" data-placement="bottom">
+				<form class="new-job-form form-inline">
+					<div class="form-group job-form-group">
 
-						</select>
-						<select name="priority" id="priority-dropdown" class="priority-dropdown form-control" data-toggle="tooltip" data-placement="bottom">
-
-						</select>
 						<button type="submit" class="btn btn-default btn-pink btn-submit">Submit</button>
 					</div>
 				</form>
 			</div>
 		</header>
 
-		<div class="table-responsive cutting-table">
-			<table class="table table-striped table-bordered cutting-table">
-				<tbody class="cutting-table-header">
+		<div class="table-responsive jobs-table">
+			<table class="table table-striped table-bordered jobs-table">
+				<thead class="jobs-table-header">
 					<tr class="table-first-row">
 						<td class="col-md-1 action-header"></td>
 						<td class="col-md-2 name-header"></td>
@@ -69,8 +45,8 @@
 						<td class="col-md-1 time-header"></td>
 						<td class="col-md-1 priority-header"></td>
 					</tr>
-				</tbody>
-				<tbody class="cutting-table-template">
+				</thead>
+				<tbody class="jobs-table-template">
 					<tr>
 						<td data-bind="actions" class="col-md-1 action-box">
 
@@ -88,12 +64,15 @@
 				This <a href="//cambridge.nuvustudio.com">NuVu</a> site by <a href="//sdaitzman.github.io">Sam</a>, Myles, <a href="https://github.com/jdtzmn">Jacob</a> and <a href="http://twitter.com/wiresegal">Yoni</a> is © under a Creative Commons BY-NC-SA/4.0 license with exceptions
 			</footer>
 			<br><br><br>
-			<label class="glyphicon glyphicon-console" for="log-checkbox" data-toggle="tooltip" data-placement="top" title="Show log (nerds only)"></label>
+			<label class="glyphicon glyphicon-console log-toggler" for="log-checkbox" data-toggle="tooltip" data-placement="top" title="Show log (nerds only)"></label>
 			<input id="log-checkbox" type="checkbox">
 		<pre class="log-pre"><code class="language-bash log"></code></pre><br>
 
 	</div>
 	<script type="text/javascript" src="dist/js/scripts.min.js"></script>
+	<script type="text/javascript" src="dist/js/plugins.js"></script>
+
+	</script>
 	<script>document.addEventListener("touchstart", function(){}, true);</script>
 </body>
 </html>

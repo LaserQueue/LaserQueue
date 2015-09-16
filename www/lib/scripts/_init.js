@@ -22,30 +22,28 @@ $.ajax({
 	console.log('Failed to get infotext.md');
 });
 
-// focus the first form element on not-mobile
-if(!isTouchDevice()) {
-	$('.cut-human-name').focus();
-}
-
-// when submit button clicked
-$('.btn-submit').click(function submitForm(clickAction) {
-	clickAction.preventDefault();
-	logText("submit button clicked");
-	var estimate = $('.cut-time-estimate').val().match(/\d*(\.\d+)?/);
-	socketSend({
-			'action': 'add',
-			'args': [
-				$('.cut-human-name').val(), 
-				+$('.priority-dropdown').val(), 
-				+estimate[0], 
-				$('.cut-material').val()
-			]
-		});
-	resetForm($('.new-cut-form'));
-	$('.cut-human-name').focus();
-	
+// bind ESC key to hide all dialogs
+$(document).keyup(function hideAllDialogs(e) {
+	if (e.keyCode == 27) {
+		bootbox.hideAll();
+		$('.remove-job').popover('hide');
+	}
 });
 
+// allow click-hold on log button to download logs so far
+var logClickTimeout = 0;
+
+$('.log-toggler').mousedown(function maybeDownloadLog(evt) {
+	if(evt.altKey) {
+		logClickTimeout = setTimeout(function downloadLog() {
+			window.open('data:application/octet-stream;,' + encodeURI($('.log-pre').text()));
+		}, 1000);
+	}
+}).bind('mouseup mouseleave', function doNotDownloadLog() {
+	clearTimeout(logClickTimeout);
+});
+
+// ready the konami
 $(document).ready(function loadKonami() {
 	var easterEgg = new Konami();
 	easterEgg.code = function rickRollUser() {

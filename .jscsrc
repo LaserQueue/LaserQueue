@@ -1,6 +1,10 @@
 {
-	// add rules from http://jscs.info/rules.html
 	"disallowCapitalizedComments": true,
 	"disallowAnonymousFunctions": true,
-	"validateIndentation": "\t"
+	"validateIndentation": "\t",
+	"excludeFiles": [
+		"www/bower_components/**/*.js",
+		"www/lib/scripts/libraries/*.js",
+		"www/lib/scripts/scripts.js"
+	]
 }
