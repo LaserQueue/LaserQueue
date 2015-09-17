@@ -99,7 +99,7 @@ def getpacks():
 	for pack in PACKAGES:
 		if pack in pl:
 			continue # Don't do anything if the package is installed
-		if not connected_to_internet():
+		if "netifaces" in pl and not connected_to_internet():
 			cprint("No internet connection. Skipping package install.", color=bcolors.YELLOW)
 			return
 		installed = True
