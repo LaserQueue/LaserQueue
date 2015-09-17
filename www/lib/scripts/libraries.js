@@ -1,5 +1,6 @@
 // libraries
 @@include('../../bower_components/jquery/dist/jquery.min.js')
+@@include('../../bower_components/tether/dist/js/tether.min.js')
 @@include('../../bower_components/bootstrap/dist/js/bootstrap.min.js')
 @@include('../../bower_components/transparency/dist/transparency.min.js')
 @@include('../../bower_components/js-sha256/build/sha256.min.js')
