@@ -74,7 +74,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		'increment': '\n<a role="button" tabindex="0" class="fa fa-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.incr_hover}),
 		'decrement': '\n<a role="button" tabindex="0" class="fa fa-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.decr_hover}),
 		'pass': '\n<a role="button" tabindex="0" class="fa fa-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.pass_hover}),
-		'relmove': '\n<a role="button" tabindex="0" class="fa fa-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.drag_hover})
+		'relmove': '\n<a role="button" tabindex="0" class="fa fa-bars move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.drag_hover})
 	};
 
 	// set up admin mode if enabled
