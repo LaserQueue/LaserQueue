@@ -26,6 +26,8 @@ sys.path.append(
 	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
 from parseargv import args
 from util import *
+cprintconf.color = bcolors.GREEN
+cprintconf.name = "LaserQueue"
 
 def initFile(path, data=""):
 	"""
@@ -83,6 +85,8 @@ class dummyProcess:
 atexit.register(cleanup) # Make sure cleanup gets called on exit
 
 if __name__ == "__main__":
+	version = Config(os.path.join("..","www","defaultconf.json"))["version"]
+	cprint("Running version {version}.", version=version)
 	cprintconf.color = bcolors.CYAN
 	cprintconf.name = "Setup"
 	# Initialize all needed files
