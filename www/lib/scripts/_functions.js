@@ -108,12 +108,13 @@ function populateActions() {
 	// handler to remove a job
 	$('.remove-job').click(function handleRemove(event) {
 		// remove job based on action button
+		var uuidToRemove = $(this).parents('[data-uuid]').data('uuid');
 		var removeJob = function removeJob(actionButton) {
 			googleAnalytics('send', 'event', 'action', 'click', 'remove job');
 			logText('removing item {uuid}'.format({uuid: $($(this).parents()[1]).attr('data-uuid')}));
 			socketSend({
 				'action': 'remove',
-				'uuid': $(actionButton).parents('tr').attr('data-uuid')
+				'uuid': uuidToRemove
 			});
 		};
 		if(event.altKey) {
@@ -136,6 +137,7 @@ function populateActions() {
 			});
 			$('.confirm-remove').click(function confirmRemove(event) {
 				removeJob(this);
+				$('.remove-job').popover('hide');
 			});
 		}
 	});
