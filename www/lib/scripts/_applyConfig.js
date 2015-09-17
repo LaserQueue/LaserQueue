@@ -92,7 +92,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 							'<label for="password">Password</label>' +
 							'<input type="password" class="form-control coach-password" id="password" placeholder="Password">' +
 						'</div>' +
-						'<button type="submit" class="btn btn-default auth-button">Sign in</button>' +
+						'<button type="submit" class="btn btn-pink auth-button">Sign in</button>' +
 					'</form>'
 				);
 				$('.authorize').tooltip('hide');
