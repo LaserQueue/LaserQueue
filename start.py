@@ -85,8 +85,8 @@ class dummyProcess:
 atexit.register(cleanup) # Make sure cleanup gets called on exit
 
 if __name__ == "__main__":
-	version = Config(os.path.join("..","www","defaultconf.json"))["version"]
-	cprint("Running version {version}.", version=version)
+	version = Config(os.path.join("www","defaultconf.json"))["version"]
+	cprint("Running version {bold}{version}{endc}.", version=version)
 	cprintconf.color = bcolors.CYAN
 	cprintconf.name = "Setup"
 	# Initialize all needed files
