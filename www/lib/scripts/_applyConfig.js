@@ -73,7 +73,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		'remove': '\n<a role="button" tabindex="0" class="fa fa-remove remove-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.remove_hover}),
 		'increment': '\n<a role="button" tabindex="0" class="fa fa-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.incr_hover}),
 		'decrement': '\n<a role="button" tabindex="0" class="fa fa-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.decr_hover}),
-		'pass': '\n<a role="button" tabindex="0" class="fa fa-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.pass_hover}),
+		'pass': '\n<a role="button" tabindex="0" class="fa fa-chevron-down lower-priority" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.pass_hover}),
 		'relmove': '\n<a role="button" tabindex="0" class="fa fa-bars move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.drag_hover})
 	};
 
