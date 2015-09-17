@@ -46,7 +46,7 @@ def initFile(path, data=""):
 			except: 
 				cprint(format("WARNING: {file} created as root.", file=os.path.basename(path)), color=bcolors.YELLOW)
 
-def gPopen(cmd, stdin=None, stdout=None, stderr=None):
+def globalAsyncCommand(cmd, stdin=None, stdout=None, stderr=None):
 	"""
 	Run a non-blocking command with python, independent of windows vs *nix.
 	"""
@@ -55,7 +55,7 @@ def gPopen(cmd, stdin=None, stdout=None, stderr=None):
 	else:
 		return subprocess.Popen(["python3"] + cmd, stdin, stdout, stderr)
 
-def gSystem(cmd):
+def globalSyncCommand(cmd):
 	"""
 	Run a blocking command with python, independent of windows vs *nix.
 	"""
@@ -98,12 +98,12 @@ if __name__ == "__main__":
 	# Do setup
 	os.chdir("scripts") # Move to the right directory
 	if not args.no_init:
-		initcode = gSystem("initialize.py "+" ".join(sys.argv[1:])) # Run initialize with all arguments
+		initcode = globalSyncCommand("initialize.py "+" ".join(sys.argv[1:])) # Run initialize with all arguments
 		if initcode:
 			if initcode == 2560: # If the update exit code was called
 				os.chdir("..")
 				cprint("Update successful! Restarting server...\n\n\n")
-				quit(gSystem("start.py "+" ".join(sys.argv[1:]))/256) # Restart this script
+				quit(globalSyncCommand("start.py "+" ".join(sys.argv[1:]))/256) # Restart this script
 			else:
 				quit(initcode/256) # Quit if something went wrong
 	else:
@@ -132,7 +132,7 @@ if __name__ == "__main__":
 			# Run the backend with sudo
 			backend = subprocess.Popen(["sudo", "-p", passprompt, "python3", "main.py"]+argvs, stdout=output, stderr=output)
 		else: # Run the backend normally
-			backend = gPopen(["main.py"]+argvs, stdout=output, stderr=output)
+			backend = globalAsyncCommand(["main.py"]+argvs, stdout=output, stderr=output)
 	else: # If we aren't loading the backend, use a dummyProcess so the program doesn't get confused
 		backend = dummyProcess()
 
@@ -154,7 +154,7 @@ if __name__ == "__main__":
 			# Run the frontend with sudo
 			frontend = subprocess.Popen(["sudo", "-p", passprompt, "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 		else: # Run the frontend normally
-			frontend = gPopen(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
+			frontend = globalAsyncCommand(["../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
 	else: # If we aren't loading the frontend, use a dummyProcess so the program doesn't get confused
 		frontend = dummyProcess()
 
