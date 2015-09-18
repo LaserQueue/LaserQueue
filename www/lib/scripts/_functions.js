@@ -90,6 +90,11 @@ function logText(text) {
 	}
 }
 
+// initialize tooltips
+function tooltips() {
+	$('[data-toggle="tooltip"]').tooltip();
+}
+
 // repopulate action button UUIDs
 function populateActions() {
 	logText('Populating actions');
@@ -102,7 +107,7 @@ function populateActions() {
 
 	// reinitialize bootstrap tooltips
 	if(isTouchDevice() === false) {
-		$('[data-toggle="tooltip"]').tooltip();
+		tooltips();
 	}
 
 	// handler to remove a job
@@ -370,7 +375,7 @@ function renderForm() {
 		if(!isTouchDevice()) $('.{formObject}:first'.format({formObject: formOptions.name.classes[0]})).focus();
 
 		// reconfigure tooltips
-		$('.form-group').children('[data-toggle="tooltip"]').tooltip();
+		tooltips();
 
 		// set up form submission
 		$('.btn-submit').click(function submitForm(clickAction) {
