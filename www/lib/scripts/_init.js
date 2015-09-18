@@ -27,6 +27,7 @@ $(document).keyup(function hideAllDialogs(e) {
 	if (e.keyCode == 27) {
 		bootbox.hideAll();
 		$('.remove-job').popover('hide');
+		$('[data-toggle=tooltip]').tooltip('hide');
 	}
 });
 

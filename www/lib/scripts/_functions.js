@@ -181,17 +181,15 @@ function populateActions() {
 				// grid: [ 37, 37 ]
 			});
 			$(this).on('dragStart', function handleDragStart() {
-				$('[data-toggle="tooltip"]').tooltip('destroy');
+				$('[data-toggle="tooltip"]').tooltip('hide');
 				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.fa').addClass('animate-hide');
 			});
 			$(this).on('dragEnd', function handleDragEnd(event, pointer) {
 				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.fa').removeClass('animate-hide');
-				$('[data-toggle="tooltip"]').tooltip();
 				socketSend({
 					'action': 'relmove',
 					'uuid': $(this).attr('data-uuid'),
-					'target_index': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / 37))
-
+					'target_index': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / $(this).height()))
 				});
 			});
 		});
