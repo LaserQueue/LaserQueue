@@ -1,6 +1,8 @@
 # LaserQueue
 A queue system for NuVu’s laser cutter and other CNC hardware. [NuVu Studio](https://cambridge.nuvustudio.com/discover) has a lasercutter, and *only* one of them. A lot of people want to use it, and managing it is a giant pain. This software aims to simplify that with a simple web-based software accessible locally. It is developed primarily by [@sdaitzman](https://github.com/sdaitzman) and [@yrsegal](https://github.com/yrsegal). You can use it to control access to a 3D printer, lasercutter, printer... whatever you want!
 
+This file is an overview. Full API docs are in [api.md](./API.md) and config docs are in [config.md](./www/config.md). Info about plugins is in [plugins.md](./plugins/plugins.md).
+
 ## Getting the software
 Download the latest stable version from [github.com/yrsegal/LaserQueue/releases](https://github.com/yrsegal/LaserQueue/releases) and decompress it.
 
@@ -21,7 +23,7 @@ To change the admin login password, run the script with `--new-password`.
 - `-q`, `--quiet`: Start without output. Only applies to start.sh. Equivalent to `>/dev/null`.
 - `-b`, `--queue-backup`: Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.
 - `-r`, `--regen-config`: Regenerate the config. Accepts positional arguments in the form `-r key key2 key3 ...`. If it recieves positionals, it will only regenerate those config values.
-- `-n`, `--regen-host`: Regenerate the host in the config. Does not affect any other config values. 
+- `-n`, `--regen-host`: Regenerate the host in the config. Does not affect any other config values.
 - `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
 - `-nu`, `--no-update`: Does not install or prompt for updates.
 - `-np`, `--no-plugins`: Does not load plugins.
@@ -50,4 +52,3 @@ All dependencies should be met the first time you run the program. The program w
 - GitPython (`#~ pip3 install GitPython`)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yrsegal/laserqueue/trend.png)](https://bitdeli.com/free “Bitdeli Badge”)
-
