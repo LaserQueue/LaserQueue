@@ -224,4 +224,4 @@ Repository to update from
 Software's current version
 #### Default: `0.0.6`
 ---
-This file automatically generated at Sun Sep 20 2015 09:58:32 GMT-0400 (EDT)
+This file automatically generated at Sun Sep 20 2015 10:27:37 GMT-0400 (EDT)
