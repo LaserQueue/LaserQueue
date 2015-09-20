@@ -38,6 +38,9 @@ var config, jsonData, socket, buttons,
 		}],
 		"notification": [function displayNotification(data) {
 			modalMessage(data.title, data.text);
+		}],
+		"starttour": [function tourQueue(data) {
+			if(config.allow_tour) queueTour();
 		}]
 	},
 	renderDirectives = {

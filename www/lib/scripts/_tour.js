@@ -97,6 +97,10 @@ tour.on('cancel', function bringBackTooltips() {
 });
 
 function queueTour() {
-	$('body').addClass('hide-tooltips');
-	tour.start();
+	if (config.allow_tour) {
+		$('body').addClass('hide-tooltips');
+		tour.start();
+	} else {
+		logText("The tour isn't enabled.");
+	}
 }

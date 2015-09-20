@@ -103,6 +103,20 @@ def refresh(**kwargs):
 	else:
 		cprint("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=bcolors.YELLOW)
 
+def starttour(**kwargs): 
+	"""
+	Start the tour. (if the config allows it)
+	"""
+	socks, authstate = kwargs["sockets"], kwargs["authstate"]
+	if config["allow_tour"]:
+		serveToConnections({"action":"starttour"}, socks)
+
+		if argvs.loud: # If the verbose flag is used, print report
+			color = bcolors.MAGENTA if authstate else ""
+			cprint("Started the tour.", color=color)
+	else:
+		cprint("The tour isn't enabled. (config.json, allow_tour)", color=bcolors.YELLOW)
+
 def uuddlrlrba(**kwargs):
 	"""
 	Huehuehue all clients. (if the config allows it)
@@ -113,9 +127,9 @@ def uuddlrlrba(**kwargs):
 
 		if argvs.loud: # If the verbose flag is used, print report
 			color = bcolors.MAGENTA if authstate else bcolors.ENDC
-			cprint("{Trolled}{c} all clients.",
+			cprint("{Trolled}{color} all clients.",
 				Trolled = rainbonify("Trolled"),
-				c = color) # RAINBOW \o/
+				color = color) # RAINBOW \o/
 	else:
 		cprint("This is a serious establishment, son. I'm dissapointed in you.", color=bcolors.YELLOW)
 
@@ -135,6 +149,7 @@ def auth(**kwargs):
 			if argvs.loud: # If the verbose flag is used, print report
 				cprint("Auth failed.")
 
+
 # Relative wrappers for queue actions
 append = lambda **kwargs: kwargs["queue"].append(**kwargs)
 passoff = lambda **kwargs: kwargs["queue"].passoff(**kwargs)
@@ -149,6 +164,7 @@ commands = [
 	SocketCommand("deauth", deauth, {}),
 	SocketCommand("refresh", refresh, {}),
 	SocketCommand("uuddlrlrba", uuddlrlrba, {}),
+	SocketCommand("starttour", starttour, {}),
 	SocketCommand("auth", auth, {"pass": str}),
 	SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str}),
 	SocketCommand("pass", passoff, {"uuid": str}),
