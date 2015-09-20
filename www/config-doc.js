@@ -60,7 +60,7 @@ function configDoc(defaultConfFile, configDocFile, outFile) {
 			out += '---\n';
 	}
 
-	out += 'This file automatically generated at {timestamp}\n'.format({timestamp: date});
+	out += '\n';
 
 	fs.writeFile(outFile, out, function (err) {
 		if (err) throw err;
