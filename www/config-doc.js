@@ -58,10 +58,10 @@ for(var iindex in keys) {
 		out += '---\n';
 }
 
-out += 'This file automatically generated at {timestamp}'.format({timestamp: date});
+out += 'This file automatically generated at {timestamp}\n'.format({timestamp: date});
 
 console.log(out);
 
 fs.writeFile('config.md', out, function (err) {
-  if (err) throw err;
+	if (err) throw err;
 });
