@@ -33,6 +33,10 @@ html {
 	animation: fadeIn 1 0.8s ease-out;
 }
 
+.hide-tooltips .tooltip {
+	display: none;
+}
+
 @import "scrollbar";
 
 @import "prism";
