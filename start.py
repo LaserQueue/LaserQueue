@@ -27,8 +27,8 @@ sys.path.append(
 	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
 from parseargv import args
 from util import *
-cprintconf.color = ansi_colors.GREEN
-cprintconf.name = "LaserQueue"
+color_printing_config.color = ansi_colors.GREEN
+color_printing_config.name = "LaserQueue"
 
 def initFile(path, data=""):
 	"""
@@ -45,7 +45,7 @@ def initFile(path, data=""):
 				if uid:
 					os.chown(path, int(uid), int(gid))
 			except: 
-				cprint(format("WARNING: {file} created as root.", file=os.path.basename(path)), color=ansi_colors.YELLOW)
+				color_print(format("WARNING: {file} created as root.", file=os.path.basename(path)), color=ansi_colors.YELLOW)
 
 def globalAsyncCommand(cmd, stdin=None, stdout=None, stderr=None):
 	"""
@@ -87,9 +87,9 @@ atexit.register(cleanup) # Make sure cleanup gets called on exit
 
 if __name__ == "__main__":
 	version = Config(os.path.join("www","defaultconf.json"))["version"]
-	cprint("Running version {bold}{version}{endc}.", version=version)
-	cprintconf.color = ansi_colors.CYAN
-	cprintconf.name = "Setup"
+	color_print("Running version {bold}{version}{endc}.", version=version)
+	color_printing_config.color = ansi_colors.CYAN
+	color_printing_config.name = "Setup"
 	# Initialize all needed files
 	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
 	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
@@ -103,12 +103,12 @@ if __name__ == "__main__":
 		if initcode:
 			if initcode == 2560: # If the update exit code was called
 				os.chdir(os.path.pardir)
-				cprint("Update successful! Restarting...\n\n\n")
+				color_print("Update successful! Restarting...\n\n\n")
 				quit(globalSyncCommand("start.py "+" ".join(sys.argv[1:]))/256) # Restart this script
 			else:
 				quit(initcode/256) # Quit if something went wrong
 	else:
-		cprint("Skipping initialization.", color=ansi_colors.YELLOW)
+		color_print("Skipping initialization.", color=ansi_colors.YELLOW)
 
 	argvs = [i for i in sys.argv[1:] if i != "-q"]
 	FNULL = open(os.devnull, 'w') # If the silent arg is called, this is where data will go.
@@ -122,13 +122,13 @@ if __name__ == "__main__":
 	load_backend = (args.load_backend or (not args.load_frontend and not args.load_backend)) and not args.load_none
 
 
-	passprompt = format("{whitespace}Password: ", whitespace=cprintconf.whitespace()[1:])
+	passprompt = format("{whitespace}Password: ", whitespace=color_printing_config.whitespace()[1:])
 
 	if load_backend: # Make sure that we're at the correct permission level
 		if os.name != "nt" and os.geteuid() and backend_port < 1024:
-			cprintconf.color = ansi_colors.BLUE
-			cprintconf.name = "Backend"
-			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
+			color_printing_config.color = ansi_colors.BLUE
+			color_printing_config.name = "Backend"
+			color_print("""Root required on ports up to 1023, attempting to elevate permissions.
 			          (Edit config.json to change ports.)""", strip=True)
 			# Run the backend with sudo
 			backend = subprocess.Popen(["sudo", "-p", passprompt, "python3", "main.py"]+argvs, stdout=output, stderr=output)
@@ -140,17 +140,17 @@ if __name__ == "__main__":
 	try: time.sleep(0.5)
 	except KeyboardInterrupt:
 		print()
-		cprintconf.color = ansi_colors.RED
-		cprintconf.name = "Cleanup"
-		cprint("Keyboard interrupt received, exiting.")
+		color_printing_config.color = ansi_colors.RED
+		color_printing_config.name = "Cleanup"
+		color_print("Keyboard interrupt received, exiting.")
 		quit(0)
 
 	os.chdir(os.path.join(os.path.pardir, "www"))
 	if load_frontend: # Make sure we're at the correct permission level
 		if os.name != "nt" and os.geteuid() and args.port < 1024:
-			cprintconf.color = ansi_colors.PURPLE
-			cprintconf.name = "HTTP"
-			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
+			color_printing_config.color = ansi_colors.PURPLE
+			color_printing_config.name = "HTTP"
+			color_print("""Root required on ports up to 1023, attempting to elevate permissions.
 			          (Use --port PORT to change ports.)""", strip=True)
 			# Run the frontend with sudo
 			frontend = subprocess.Popen(["sudo", "-p", passprompt, "python3", "../scripts/http/server.py", str(args.port)], stdout=output, stderr=output)
@@ -165,8 +165,8 @@ if __name__ == "__main__":
 	except KeyboardInterrupt:
 		# Print a cleanup message if exited manually
 		print()
-		cprintconf.color = ansi_colors.RED
-		cprintconf.name = "Cleanup"
-		cprint("Keyboard interrupt received, exiting.")
+		color_printing_config.color = ansi_colors.RED
+		color_printing_config.name = "Cleanup"
+		color_print("Keyboard interrupt received, exiting.")
 	finally: # And then, quit
 		quit(0)
