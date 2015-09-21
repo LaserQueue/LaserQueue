@@ -25,6 +25,39 @@ connected_to_internet = lambda: bool(getIPs(test=True))
 open_config = lambda: json.load(open(config_path))
 save_config = lambda data: json.dump(data, open(config_path, "w"), indent=2, sort_keys=True)
 
+
+version_regex = re.compile(r"^(dev-)?\d+\.\d+\.\d+$")
+dev_tag_regex = re.compile(r"^dev-")
+def check_version_numbers(current, master):
+	if version_regex.match(current):
+		version_number = convert_version_number(current)
+		if version_number < 0: return False
+	else:
+		cprint("The current version lacks a valid version tag.")
+		return False
+
+	if version_regex.match(master):
+		master_version_number = convert_version_number(master)
+	else:
+		cprint("The master version lacks a valid version tag.")
+		return False
+
+	return version_number > master_number
+
+def convert_version_number(version):
+	version_number = 0.0
+	is_dev = dev_tag_regex.match(version)
+	if is_dev: 
+		version_number = -1.0
+	else:
+		float_index = 0
+		for i in version:
+			if i.isdigit():
+				float_index += 1
+				version_number += int(i) * 10 ** -float_index
+	return version_number
+
+
 def update_config():
 	"""
 	Make sure the config has the required data in it.
@@ -158,7 +191,7 @@ def update():
 		config_page = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
 		master_config = json.loads(config_page) # Get the current up-to-date config
 
-		if "version" in master_config and master_config["version"] > config["version"]: # If the remote version is greater than the one here
+		if "version" in master_config and check_version_numbers(config["version"], master_config["version"]): # If the remote version is greater than the one here
 
 			color_print("New update found: Version {ver}.", ver=master_config["version"])
 

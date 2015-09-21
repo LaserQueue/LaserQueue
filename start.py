@@ -83,11 +83,31 @@ class dummyProcess:
 	def kill(self):
 		pass
 
+version_regex = re.compile(r"^(dev-)?\d+\.\d+\.\d+$")
+dev_tag_regex = re.compile(r"^dev-")
+def parse_version(version):
+	return_words = []
+	if version_regex.match(version):
+		is_dev = dev_tag_regex.match(version)
+		if is_dev: 
+			version = dev_tag_regex.sub("", version)
+			return_words.append("development")
+		return_words.append("version{bold}")
+		return_words.append(str(version))
+	else:
+		return_words.append("{bold}{red}an unknown version")
+
+	return format("{words}{endc}", words=" ".join(return_words))
+
+
+
 atexit.register(cleanup) # Make sure cleanup gets called on exit
 
 if __name__ == "__main__":
 	version = Config(os.path.join("www","defaultconf.json"))["version"]
-	color_print("Running version {bold}{version}{endc}.", version=version)
+	color_print("Running {version}.", version=parse_version(version))
+
+
 	color_printing_config.color = ansi_colors.CYAN
 	color_printing_config.name = "Setup"
 	# Initialize all needed files
