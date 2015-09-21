@@ -101,7 +101,7 @@ if __name__ == "__main__":
 		initcode = globalSyncCommand("initialize.py "+" ".join(sys.argv[1:])) # Run initialize with all arguments
 		if initcode:
 			if initcode == 2560: # If the update exit code was called
-				os.chdir("..")
+				os.chdir(os.path.pardir)
 				cprint("Update successful! Restarting server...\n\n\n")
 				quit(globalSyncCommand("start.py "+" ".join(sys.argv[1:]))/256) # Restart this script
 			else:
@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
 	output = FNULL if args.shh else None
 
-	backend_port = int(Config(os.path.join("..","www","config.json"))["port"]) # Get the port to host the backend from
+	backend_port = int(Config(os.path.join(os.path.pardir,"www","config.json"))["port"]) # Get the port to host the backend from
 
 	# Based on the args, load frontend, backend, or neither.
 	load_frontend = (args.load_frontend or (not args.load_frontend and not args.load_backend)) and not args.load_none
@@ -144,7 +144,7 @@ if __name__ == "__main__":
 		cprint("Keyboard interrupt received, exiting.")
 		quit(0)
 
-	os.chdir(os.path.join("..", "www"))
+	os.chdir(os.path.join(os.path.pardir, "www"))
 	if load_frontend: # Make sure we're at the correct permission level
 		if os.name != "nt" and os.geteuid() and args.port < 1024:
 			cprintconf.color = bcolors.PURPLE
