@@ -1,7 +1,7 @@
 import laserqueue
 from util import *
-cprintconf.color = bcolors.BLUE
-cprintconf.name = "Backend"
+color_printing_config.color = ansi_colors.BLUE
+color_printing_config.name = "Backend"
 config = Config(CONFIGDIR)
 import jsonhandler as comm
 import sidhandler as sids
@@ -27,12 +27,12 @@ class Sockets:
 	def append(self, obj):
 		self.sockets.append(obj)
 	def remove(self, obj): 
-		key = getsec(obj)
+		key = get_sec_key(obj)
 		get = self.get(key)
 		if get: self.sockets.remove(get)
 	def get(self, key):
 		for i in self.sockets:
-			if getsec(i) == key:
+			if get_sec_key(i) == key:
 				return i
 	def __getitem__(self, key):
 		return self.get(key)
@@ -53,7 +53,7 @@ def server(websocket, path):
 	# Allow all processes to serve to this
 	socks.append(websocket)
 	# Serve the latest queue to this socket
-	serveToConnection(comm.generateData(queue.serialize()), websocket)
+	serve_connection(comm.generateData(queue.serialize()), websocket)
 	while True:
 		# Get the latest message
 		message = yield from websocket.recv()
@@ -71,15 +71,15 @@ def server(websocket, path):
 					# Replace the password with asterisks
 					displaymessage["pass"] = "*"*len(displaymessage["pass"])
 					displaymessage = json.dumps(displaymessage, sort_keys=True)
-				authstate = sessions.check(getsec(websocket))
-				color = bcolors.MAGENTA if authstate and args.loud else ""
-				cprint(displaymessage, color=color)
+				authstate = sessions.check(get_sec_key(websocket))
+				color = ansi_colors.MAGENTA if authstate and args.loud else ""
+				color_print(displaymessage, color=color)
 				# Run the processing subroutine
 				process(messagedata, websocket)
 		except Exception as e: # Error reporting
-			cprint(tbformat(e, "Error while serving WebSockets:"), color=bcolors.YELLOW)
+			color_print(format_traceback(e, "Error while serving WebSockets:"), color=ansi_colors.YELLOW)
 			if config["send_notifications"]:
-				serveToConnection({ # Tell the socket about it
+				serve_connection({ # Tell the socket about it
 						"action": "notification",
 						"title": type(e).__name__,
 						"text": str(e)
@@ -100,16 +100,16 @@ def process(data, ws):
 			json.dump(queue.queue, open("cache.json", "w"), indent=2, sort_keys=True)
 		# If the socket handler had an error, report it to the socket
 		if x and type(x) is str:
-			serveToConnection({
+			serve_connection({
 					"action": "notification",
 					"title": "Failed to process data",
 					"text": x
 				}, ws)
-			cprint(x, color=bcolors.YELLOW)
+			color_print(x, color=ansi_colors.YELLOW)
 		# If the queue changed, serve it
 		if queuehash != hash(str(queue.queue)):
 			queuehash = hash(str(queue.queue))
-			serveToConnections(comm.generateData(queue.serialize()), socks)
+			serve_connections(comm.generateData(queue.serialize()), socks)
 
 def upkeep():
 	"""
@@ -128,28 +128,28 @@ def upkeep():
 				for i in deauthed:
 					ws = socks[i]
 					if ws:
-						serveToConnection({"action":"deauthed"}, ws)
+						serve_connection({"action":"deauthed"}, ws)
 			# Remove closed socks
 			for i in socks:
 				if not i.open:
-					sessions.sids.remove(sessions._get(getsec(i)))
+					sessions.sids.remove(sessions._get(get_sec_key(i)))
 
 			for module in pluginUpkeeps:
 				try:
 					module.upkeep(queue=queue, sessions=sessions, sockets=socks)
 				except:
-					cprint(tbformat(e, format("Error while processing {plugin}.upkeep:", plugin=module.__name__)), color=bcolors.YELLOW)
+					color_print(format_traceback(e, format("Error while processing {plugin}.upkeep:", plugin=module.__name__)), color=ansi_colors.YELLOW)
 					pluginUpkeeps.remove(module)
 
 			# If the queue changed, serve it
 			queue.metapriority()
 			if queuehash != hash(str(queue.queue)):
 				queuehash = hash(str(queue.queue))
-				serveToConnections(comm.generateData(queue.serialize()), socks)
+				serve_connections(comm.generateData(queue.serialize()), socks)
 
 			time.sleep(config["refreshRate"]/1000)
 		except Exception as e: # Error reporting
-			cprint(tbformat(e, "Error in upkeep thread:"), color=bcolors.YELLOW)
+			color_print(format_traceback(e, "Error in upkeep thread:"), color=ansi_colors.YELLOW)
 
 def main():
 	"""
@@ -169,7 +169,7 @@ def main():
 		else:
 			json.dump({}, open("cache.json", "w"))
 
-	cprint("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"])
+	color_print("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"])
 
 	# Create the upkeep thread
 	upkeepThread = threading.Thread(target=upkeep)

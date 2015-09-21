@@ -7,8 +7,8 @@ from parseargv import args
 
 # Set up pretty printing
 from util import *
-cprintconf.color = bcolors.CYAN
-cprintconf.name = "Setup"
+color_printing_config.color = ansi_colors.CYAN
+color_printing_config.name = "Setup"
 
 file_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(file_path) # Make sure we're in the correct directory
@@ -65,7 +65,7 @@ def getIPs(test=False):
 			ips += addresses
 	if not ips and not test: 
 		ips.append("localhost")
-		cprint("WARNING: No internet connection. Using -l behavior.", color=bcolors.YELLOW)
+		color_print("WARNING: No internet connection. Using -l behavior.", color=ansi_colors.YELLOW)
 	return ips
 
 def concat_js_plugins():
@@ -85,7 +85,7 @@ def fetch_dependencies():
 	Go through PACKAGES and install everything missing.
 	"""
 	if args.skip: 
-		cprint("Skipping package install.", color=bcolors.YELLOW)
+		color_print("Skipping package install.", color=ansi_colors.YELLOW)
 		return
 
 	# Gets a list of installed packages
@@ -98,26 +98,26 @@ def fetch_dependencies():
 		if package in installed_packages:
 			continue # Don't do anything if the package is installed
 		if "netifaces" in installed_packages and not connected_to_internet():
-			cprint("No internet connection. Skipping package install.", color=bcolors.YELLOW)
+			color_print("No internet connection. Skipping package install.", color=ansi_colors.YELLOW)
 			return
 		installed = True
 
 		# Ask if they want to install this dependency
 		confirm = ("y" if args.all else "")
 		while confirm not in ["y", "n"]:
-			confirm = cinput("Install dependency {dep}? (y/n) ", dep=package).lower().strip()
+			confirm = color_input("Install dependency {dep}? (y/n) ", dep=package).lower().strip()
 
 		if confirm == "n": # If the person chose not to install the dependency
-			cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
+			color_print("WARNING: Program may not run without this library.", color=ansi_colors.YELLOW)
 			continue # Don't do anything
 		if pip.main(["install", package]) and os.name != "nt": # If the install fails and this is a *nix system:
 			# Ask again, with minor error colors
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = cinput("Install failed, try again with elevated permissions? (y/n) ", color=bcolors.RED).lower().strip()
+				confirm = color_input("Install failed, try again with elevated permissions? (y/n) ", color=ansi_colors.RED).lower().strip()
 
 			if confirm == "n": # If the person chose not to install the dependency
-				cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
+				color_print("WARNING: Program may not run without this library.", color=ansi_colors.YELLOW)
 				continue # Don't do anything
 			if not os.system("sudo pip3 install "+package): # Try again with root permissions
 				installed_packages.append(package) # If it succeeds, add it to the installed packages
@@ -126,11 +126,11 @@ def fetch_dependencies():
 	if installed:
 		for package in PACKAGES:
 			if package not in installed_packages:
-				cprint("Failed to install dependency {dep}.", color=bcolors.DARKRED, dep=package)
+				color_print("Failed to install dependency {dep}.", color=ansi_colors.DARKRED, dep=package)
 				installed = False # If not everything's been installed, don't say it was successful
 
 	if installed:
-		cprint("Sucessfully installed all dependencies!")
+		color_print("Sucessfully installed all dependencies!")
 
 def make_tarfile(output_filename, source_dir):
 	"""
@@ -144,11 +144,11 @@ def update():
 	Try to update LaserQueue to the latest version.
 	"""
 	if args.skipupdate: 
-		cprint("Skipping updating.", color=bcolors.YELLOW)
+		color_print("Skipping updating.", color=ansi_colors.YELLOW)
 		return
 
 	if not connected_to_internet():
-		cprint("No internet connection. Skipping update.", color=bcolors.YELLOW)
+		color_print("No internet connection. Skipping update.", color=ansi_colors.YELLOW)
 		return
 
 	import git
@@ -160,7 +160,7 @@ def update():
 
 		if "version" in master_config and master_config["version"] > config["version"]: # If the remote version is greater than the one here
 
-			cprint("New update found: Version {ver}.", ver=master_config["version"])
+			color_print("New update found: Version {ver}.", ver=master_config["version"])
 
 			prefix = format("{path}-", path=os.path.basename(os.path.abspath(os.path.pardir))) # Prefix for new or old versions
 			update_directory = os.path.join(os.path.pardir,os.path.pardir,prefix+master_config["version"]) # Directory if fetch updating
@@ -178,14 +178,14 @@ def update():
 			# Check what the user wants to do
 			confirm = ("overwrite" if args.allupdate else "")
 			while confirm not in ["fetch", "overwrite", "cancel"]:
-				confirm = cinput(prompt, strip=True).lower().strip()
+				confirm = color_input(prompt, strip=True).lower().strip()
 
 			# If they want to fetch the new repository
 			if confirm == "fetch":
 				git.Repo.clone_from(config["update_repo"], update_directory) # Get the new repository
 
 				# Inform them about it
-				cprint("""\nNew version located in: 
+				color_print("""\nNew version located in: 
 				            {update_directory}
 				            Run the following: 
 				            {start_script} 
@@ -221,7 +221,7 @@ def update():
 				json.dump(config, open(config_path, "w"), sort_keys=True)
 				quit(10) # Tells the start script to restart
 	except Exception as e: # Error reporting
-		cprint(tbformat(e, "Error updating:"), color=bcolors.DARKRED)
+		color_print(format_traceback(e, "Error updating:"), color=ansi_colors.DARKRED)
 
 
 
@@ -232,9 +232,9 @@ def update_password():
 	if args.newpass or not os.path.exists("hashpassword"):
 		# Get password
 		if args.newpass:
-			new_password = cinput("New password: ", func=getpass.getpass)
+			new_password = color_input("New password: ", func=getpass.getpass)
 		else:
-			new_password = cinput("Please set the admin login password: ", func=getpass.getpass)
+			new_password = color_input("Please set the admin login password: ", func=getpass.getpass)
 
 		# Hash the new password
 		hash_object = hashlib.sha256(new_password.encode()).hexdigest()
@@ -248,7 +248,7 @@ def update_password():
 
 			# Make sure we don't overwrite the old password with itself
 			if old_data == hashed_final:
-				cprint("Passwords identical. No action taken.")
+				color_print("Passwords identical. No action taken.")
 				return
 
 		try:
@@ -256,9 +256,9 @@ def update_password():
 			hashed_file = open("hashpassword", "w")
 			hashed_file.write(hashed_final)
 			hashed_file.close()
-			cprint("Password changed to {starredpass}.", starredpass="*"*len(newpass))
+			color_print("Password changed to {starredpass}.", starredpass="*"*len(newpass))
 		except Exception as e: # Error reporting
-			cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
+			color_print(format_traceback(e, "Error changing password:"), color=ansi_colors.DARKRED)
 
 
 def update_host():
@@ -278,7 +278,7 @@ def update_host():
 			# Confirm they want to reset the host
 			confirm = ""
 			while confirm not in ["y", "n"]:
-				confirm = cinput("""Last time you ran this program, it was in local mode.
+				confirm = color_input("""Last time you ran this program, it was in local mode.
 				                    Do you want to regenerate the host? (y/n) """, strip=True).lower().strip()
 			# Reset the host if they say yes
 			if confirm == "y":
@@ -291,7 +291,7 @@ def main():
 	"""
 	Run all subroutines for initialization.
 	"""
-	cprint("Beginning initialization.")
+	color_print("Beginning initialization.")
 
 	try: fetch_dependencies()
 	except KeyboardInterrupt: print()
@@ -306,7 +306,7 @@ def main():
 	try: concat_js_plugins()
 	except KeyboardInterrupt: print()
 				
-	cprint("Initialization complete.")
+	color_print("Initialization complete.")
 
 if __name__ == "__main__":
 	main()

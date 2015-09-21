@@ -8,17 +8,18 @@ selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath) # Make sure we're in the right directory
 
 if sys.version_info.major < 3 or (sys.version_info.major >= 3 and sys.version_info.minor < 4):
-	from cprints import cprint, cprintconf, bcolors
+	from cprints import *
 
-	cprintconf.color = bcolors.DARKRED
-	cprintconf.name = "Error"
+	color_printing_config.color = ansi_colors.DARKRED
+	color_printing_config.name = "Error"
 	version = sys.version.split(" ")[0]
 
-	cprint("""The version of Python is outdated.
-		Found: {}
+	color_print("""The version of Python is outdated.
+		Found: {version}
 		Required: 3.4+
-		Please update to the correct version.""".format(version), 
-		color=bcolors.DARKRED, strip=True)
+		Please update to the correct version.""",
+		version=version, 
+		color=ansi_colors.DARKRED, strip=True)
 	quit()
 
 # Allow importing from scripts
@@ -26,7 +27,7 @@ sys.path.append(
 	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
 from parseargv import args
 from util import *
-cprintconf.color = bcolors.GREEN
+cprintconf.color = ansi_colors.GREEN
 cprintconf.name = "LaserQueue"
 
 def initFile(path, data=""):
@@ -44,7 +45,7 @@ def initFile(path, data=""):
 				if uid:
 					os.chown(path, int(uid), int(gid))
 			except: 
-				cprint(format("WARNING: {file} created as root.", file=os.path.basename(path)), color=bcolors.YELLOW)
+				cprint(format("WARNING: {file} created as root.", file=os.path.basename(path)), color=ansi_colors.YELLOW)
 
 def globalAsyncCommand(cmd, stdin=None, stdout=None, stderr=None):
 	"""
@@ -87,7 +88,7 @@ atexit.register(cleanup) # Make sure cleanup gets called on exit
 if __name__ == "__main__":
 	version = Config(os.path.join("www","defaultconf.json"))["version"]
 	cprint("Running version {bold}{version}{endc}.", version=version)
-	cprintconf.color = bcolors.CYAN
+	cprintconf.color = ansi_colors.CYAN
 	cprintconf.name = "Setup"
 	# Initialize all needed files
 	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
@@ -102,12 +103,12 @@ if __name__ == "__main__":
 		if initcode:
 			if initcode == 2560: # If the update exit code was called
 				os.chdir(os.path.pardir)
-				cprint("Update successful! Restarting server...\n\n\n")
+				cprint("Update successful! Restarting...\n\n\n")
 				quit(globalSyncCommand("start.py "+" ".join(sys.argv[1:]))/256) # Restart this script
 			else:
 				quit(initcode/256) # Quit if something went wrong
 	else:
-		cprint("Skipping initialization.", color=bcolors.YELLOW)
+		cprint("Skipping initialization.", color=ansi_colors.YELLOW)
 
 	argvs = [i for i in sys.argv[1:] if i != "-q"]
 	FNULL = open(os.devnull, 'w') # If the silent arg is called, this is where data will go.
@@ -125,7 +126,7 @@ if __name__ == "__main__":
 
 	if load_backend: # Make sure that we're at the correct permission level
 		if os.name != "nt" and os.geteuid() and backend_port < 1024:
-			cprintconf.color = bcolors.BLUE
+			cprintconf.color = ansi_colors.BLUE
 			cprintconf.name = "Backend"
 			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
 			          (Edit config.json to change ports.)""", strip=True)
@@ -139,7 +140,7 @@ if __name__ == "__main__":
 	try: time.sleep(0.5)
 	except KeyboardInterrupt:
 		print()
-		cprintconf.color = bcolors.RED
+		cprintconf.color = ansi_colors.RED
 		cprintconf.name = "Cleanup"
 		cprint("Keyboard interrupt received, exiting.")
 		quit(0)
@@ -147,7 +148,7 @@ if __name__ == "__main__":
 	os.chdir(os.path.join(os.path.pardir, "www"))
 	if load_frontend: # Make sure we're at the correct permission level
 		if os.name != "nt" and os.geteuid() and args.port < 1024:
-			cprintconf.color = bcolors.PURPLE
+			cprintconf.color = ansi_colors.PURPLE
 			cprintconf.name = "HTTP"
 			cprint("""Root required on ports up to 1023, attempting to elevate permissions.
 			          (Use --port PORT to change ports.)""", strip=True)
@@ -164,7 +165,7 @@ if __name__ == "__main__":
 	except KeyboardInterrupt:
 		# Print a cleanup message if exited manually
 		print()
-		cprintconf.color = bcolors.RED
+		cprintconf.color = ansi_colors.RED
 		cprintconf.name = "Cleanup"
 		cprint("Keyboard interrupt received, exiting.")
 	finally: # And then, quit

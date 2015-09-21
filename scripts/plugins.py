@@ -1,7 +1,7 @@
 from parseargv import args
 from pluginResources.QueueConfig import *
 printer = PluginPrinterInstance()
-printer.setcolor(bcolors.DARKGRAY)
+printer.setcolor(ansi_colors.DARKGRAY)
 printer.setname("Plugins")
 
 PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "plugins"))
@@ -11,23 +11,23 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 def tryImport(name):
 	try:
 		if args.loud:
-			printer.cprint("Loading {name}...", name=name)
+			printer.color_print("Loading {name}...", name=name)
 		imported =  __import__(name)
 		if args.loud:
 			if pluginFilter(imported):
-				printer.cprint("{name} successfully loaded.", name=name)
+				printer.color_print("{name} successfully loaded.", name=name)
 			else:
-				printer.cprint("{name} not a plugin.", name=name)
+				printer.color_print("{name} not a plugin.", name=name)
 		return imported
 	except Exception as e:
-		printer.cprint(tbformat(e, format("Error importing {name}:", name=name)), color=bcolors.DARKRED)
+		printer.color_print(format_traceback(e, format("Error importing {name}:", name=name)), color=ansi_colors.DARKRED)
 
 def tryLoadJS(folder, name):
 	try:
 		with open(os.path.join(folder, name)) as f:
 			return f.read().strip()
 	except Exception as e:
-		printer.cprint(tbformat(e, format("Error loading {name}:", name=name)), color=bcolors.DARKRED)
+		printer.color_print(format_traceback(e, format("Error loading {name}:", name=name)), color=ansi_colors.DARKRED)
 
 
 pluginFilter = lambda module: (
@@ -50,7 +50,7 @@ def hasJs(filename):
 def getPlugins():
 	if args.noPlugins:
 		return []
-	printer.cprint("Loading Python plugins...")
+	printer.color_print("Loading Python plugins...")
 	plugins = os.listdir(PLUGINDIR)
 	pluginFolders = filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), plugins)
 	pluginsPy = filter(hasPy, pluginFolders)
@@ -67,9 +67,9 @@ def getPlugins():
 
 	pluginModules = list(filter(pluginFilter, pluginModules))
 	if pluginModules:
-		printer.cprint("Finished loading Python plugins.")
+		printer.color_print("Finished loading Python plugins.")
 	else:
-		printer.cprint("No Python plugins found.")
+		printer.color_print("No Python plugins found.")
 	return pluginModules
 
 
@@ -77,7 +77,7 @@ def getPlugins():
 def getPluginJs():
 	if args.noPlugins:
 		return []
-	printer.cprint("Loading JS plugins...")
+	printer.color_print("Loading JS plugins...")
 	plugins = os.listdir(PLUGINDIR)
 	pluginFolders = filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), plugins)
 	pluginsJs = filter(hasJs, pluginFolders)
@@ -91,7 +91,7 @@ def getPluginJs():
 			pluginModules.append(tryLoadJs(i, j))
 
 	if pluginJs:
-		printer.cprint("Finished loading JS plugins.")
+		printer.color_print("Finished loading JS plugins.")
 	else:
-		printer.cprint("No JS plugins found.")
+		printer.color_print("No JS plugins found.")
 	return pluginJs

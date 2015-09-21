@@ -103,8 +103,8 @@ import argparse
 sys.path.append(
 	os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from util import *
-cprintconf.color = bcolors.PURPLE
-cprintconf.name = "HTTP"
+color_printing_config.color = ansi_colors.PURPLE
+color_printing_config.name = "HTTP"
 
 # Default error message template
 DEFAULT_ERROR_MESSAGE = """\
@@ -536,7 +536,7 @@ class BaseHTTPRequestHandler(socketserver.StreamRequestHandler):
 
 		"""
 
-		cprint("{} - {}".format(
+		color_print("{} - {}".format(
 			self.address_string(),
 			format%args), 
 			func=sys.stderr.write, 
@@ -1225,7 +1225,7 @@ def test(HandlerClass=BaseHTTPRequestHandler,
 	httpd = ServerClass(server_address, HandlerClass)
 
 	sa = httpd.socket.getsockname()
-	cprint("Serving HTTP on " + str(sa[0]) + " port " + str(sa[1]) + " ...")
+	color_print("Serving HTTP on " + str(sa[0]) + " port " + str(sa[1]) + " ...")
 	try:
 		httpd.serve_forever()
 	except KeyboardInterrupt:

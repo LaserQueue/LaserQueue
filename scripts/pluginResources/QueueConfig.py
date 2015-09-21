@@ -7,18 +7,18 @@ from util import *
 class PluginPrinterInstance:
 	def __init__(self, colorobj=None):
 		if not colorobj:
-			colorobj = colorconf()
+			colorobj = color_config()
 		self.colorconfig = colorobj
 	def setname(self, string):
 		self.colorconfig.name = string
 	def setcolor(self, string):
 		self.colorconfig.color = string
-	def cprint(self, *args, **kwargs):
+	def color_print(self, *args, **kwargs):
 		kwargs["colorconfig"] = self.colorconfig
-		cprint(*args, **kwargs)
-	def cinput(self, *args, **kwargs):
+		color_print(*args, **kwargs)
+	def color_input(self, *args, **kwargs):
 		kwargs["colorconfig"] = self.colorconfig
-		cinput(*args, **kwargs)
+		color_input(*args, **kwargs)
 
 CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 
 	os.path.pardir, os.path.pardir, "www", "config.json"))

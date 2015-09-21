@@ -227,13 +227,13 @@ class Queue:
 		# If the priority or the material aren't set up, or the name isn't defined
 		if not name or material == "N/A" or priority == -1:
 			# Tell the client then don't add the object
-			serveToConnection({
+			serve_connection({
 				"action": "notification",
 				"title": "Incomplete data",
 				"text": "Please fill out the submission form fully."
 				}, ws)
 			if argvs.loud:
-				cprint("Insufficient data to add job to queue.", color=bcolors.YELLOW)
+				color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
 			return
 
 		# Contain the length of time within the configurable bounds.
@@ -286,24 +286,24 @@ class Queue:
 			self.queue[priority].append(newJob)
 
 			if argvs.loud: # If -v, report success
-				color = bcolors.MAGENTA if authstate else ""
-				cprint("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
+				color = ansi_colors.MAGENTA if authstate else ""
+				color_print("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
 		else:
 			if config["allow_multiple_materials"]:
-				serveToConnection({
+				serve_connection({
 					"action": "notification",
 					"title": "Duplicate job",
 					"text": "You may not create two jobs with the same name and material."
 					}, ws)
 			else:
-				serveToConnection({
+				serve_connection({
 					"action": "notification",
 					"title": "Duplicate job",
 					"text": "You may not create two jobs with the same name."
 					}, ws)
 
 			if argvs.loud: # If -v, report failures
-				cprint("Cannot add {name} to the queue.", name=name, color=bcolors.YELLOW)
+				color_print("Cannot add {name} to the queue.", name=name, color=ansi_colors.YELLOW)
 
 	def remove(self, **kwargs):
 		"""
@@ -316,8 +316,8 @@ class Queue:
 		self.queue[priority].remove(job)
 
 		if argvs.loud: # if -v, report success
-			color = bcolors.MAGENTA if authstate else ""
-			cprint("Removed {name} from the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Removed {name} from the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
 
 	def passoff(self, **kwargs):
 		"""
@@ -335,7 +335,7 @@ class Queue:
 		# If the pass can't happen, return
 		if masterindex >= len(masterqueue)-1: return
 		if masterindex >= config["pass_depth"] and not authstate: 
-			cprint("Passing at depth {masterindex} requires auth.", masterindex=masterindex, color=bcolors.YELLOW)
+			color_print("Passing at depth {masterindex} requires auth.", masterindex=masterindex, color=ansi_colors.YELLOW)
 			return
 
 		# Remove the job
@@ -350,8 +350,8 @@ class Queue:
 		self.queue[new_priority].insert(new_index+1, job)
 
 		if argvs.loud: # if -v, report success
-			color = bcolors.MAGENTA if authstate else ""
-			cprint("Passed {name} down the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Passed {name} down the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
 
 
 	def relmove(self, **kwargs):
@@ -387,8 +387,8 @@ class Queue:
 		self.queue[bpri].insert(bind, job)
 
 		if argvs.loud: # if -v, report success
-			color = bcolors.MAGENTA if authstate else ""
-			cprint("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"], 
 				prevind = masterindex, 
 				newind = nindex, 
@@ -410,8 +410,8 @@ class Queue:
 		self.queue[np].insert(ni, job)
 
 		if argvs.loud: # if -v, report success
-			color = bcolors.MAGENTA if authstate else ""
-			cprint("Moved {name} to index {newind} within priority {newpri}.\n({uuid})",
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Moved {name} to index {newind} within priority {newpri}.\n({uuid})",
 				name = job["name"], 
 				newind = ni, 
 				newpri = np, 
@@ -451,8 +451,8 @@ class Queue:
 		self.queue[priority].insert(index, job)
 
 		if argvs.loud: # if -v, report success
-			color = bcolors.MAGENTA if authstate else ""
-			cprint("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"], 
 				prevind = masterindex, 
 				newind = masterindex-1, 
@@ -492,8 +492,8 @@ class Queue:
 		self.queue[priority].insert(index ,job)
 
 		if argvs.loud: # if -v, report success
-			color = bcolors.MAGENTA if authstate else ""
-			cprint("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"], 
 				prevind = masterindex, 
 				newind = masterindex+1, 
@@ -566,8 +566,8 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			newval = job[attrname]
-			color = bcolors.MAGENTA if authstate else ""
-			cprint("Changed {name}'s `{attributename}` value from {oldvalue} to {newvalue}.\n({uuid})",
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Changed {name}'s `{attributename}` value from {oldvalue} to {newvalue}.\n({uuid})",
 				name = job["name"], 
 				attributename = attrname, 
 				oldvalue = oldval, 
