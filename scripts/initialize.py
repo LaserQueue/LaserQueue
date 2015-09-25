@@ -33,13 +33,13 @@ def check_version_numbers(current, master):
 		version_number = convert_version_number(current)
 		if version_number < 0: return False
 	else:
-		color_print("The current version lacks a valid version tag.")
+		color_print("The current version lacks a valid version tag.", color=ansi_colors.RED)
 		return False
 
 	if version_regex.match(master):
 		master_version_number = convert_version_number(master)
 	else:
-		color_print("The master version lacks a valid version tag.")
+		color_print("The master version lacks a valid version tag.", color=ansi_colors.RED)
 		return False
 
 	return version_number > master_number
