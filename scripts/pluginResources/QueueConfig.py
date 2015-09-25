@@ -5,10 +5,24 @@ sys.path.append(
 from util import *
 
 class PluginPrinterInstance:
-	def __init__(self, colorobj=None):
-		if not colorobj:
+	def __init__(self, *args):
+		if not args:
 			colorobj = color_config()
+		elif len(args) == 1:
+			if isinstance(colorobj, color_config):
+				colorobj = args[0]
+			else:
+				raise TypeError(format("Expected type `color_config`, got type `{type}`", type=type(args[0]).__name__))
+		elif len(args) == 2:
+			colorobj = color_config()
+			colorobj.color = args[0]
+			colorobj.name = args[1]
+		else:
+			raise TypeError(format("PluginPrinterInstance() takes at most 2 positional arguments, but {num} were given", type=len(args)))
 		self.colorconfig = colorobj
+	def set(self, color, name):
+		self.colorconfig.color = color
+		self.colorconfig.name = name
 	def setname(self, string):
 		self.colorconfig.name = string
 	def setcolor(self, string):

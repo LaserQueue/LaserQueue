@@ -1,8 +1,6 @@
 from parseargv import args
 from pluginResources.QueueConfig import *
-printer = PluginPrinterInstance()
-printer.setcolor(ansi_colors.DARKGRAY)
-printer.setname("Plugins")
+printer = PluginPrinterInstance(ansi_colors.DARKGRAY, "Plugins")
 
 PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "plugins"))
 sys.path.append(PLUGINDIR)
