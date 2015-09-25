@@ -35,7 +35,7 @@ Alternatively, `formOptions.example.options` can be an object with keys and valu
 Two modules that have been made available you might find helpful:  
 `ActionFramework` and `QueueConfig`.
 
-`QueueConfig` is a clone of the normal `config` file, and `ActionFramework` supplies `SocketCommand`, `any_number`, and `any_type`.  
+`QueueConfig` is a clone of the normal `util` file, and `ActionFramework` supplies `SocketCommand`, `any_number`, and `any_type`.  
 
 ## Backend Plugin functions
 Each plugin must have at least one of these:
