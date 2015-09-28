@@ -113,7 +113,8 @@ function populateActions() {
 	// handler to remove a job
 	$('.remove-job').click(function handleRemove(event) {
 		// remove job based on action button
-		var uuidToRemove = $(this).parents('[data-uuid]').data('uuid');
+		var uuidToRemove = $(this).parents('[data-uuid]')[0].dataset.uuid;
+		console.log(uuidToRemove);
 		var removeJob = function removeJob(actionButton) {
 			googleAnalytics('send', 'event', 'action', 'click', 'remove job');
 			logText('removing item {uuid}'.format({uuid: $($(this).parents()[1]).attr('data-uuid')}));
