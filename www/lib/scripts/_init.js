@@ -8,6 +8,9 @@ var jsonData;
 // initialize the modal by changing the title
 $('.notify-modal-title').html('Notification');
 
+// hide nprogress spinner
+NProgress.settings.showSpinner = false;
+
 // footer
 $.ajax({
 	url: '/infotext.md',
