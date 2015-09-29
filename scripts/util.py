@@ -10,13 +10,13 @@ def format(string, **kwargs):
 	for arg in kwargs:
 		regex = re.compile(r"\{" + arg + r"\}", re.IGNORECASE)
 		string = regex.sub(str(kwargs[arg]), string)
-	for color in bcolors.COLORS:
+	for color in ansi_colors.COLORS:
 		regex = re.compile(r"\{" + color + r"\}", re.IGNORECASE)
-		string = regex.sub(str(bcolors.COLORS[color]), string)
+		string = regex.sub(str(ansi_colors.COLORS[color]), string)
 	return string
 
 import traceback
-def tbformat(e, text="Traceback (most recent call last):"):
+def format_traceback(e, text="Traceback (most recent call last):"):
 	"""
 	Format a traceback into a printable string.
 	"""
@@ -69,13 +69,13 @@ class Config:
 # Functions for serving to sockets
 import asyncio
 
-def getsec(ws):
+def get_sec_key(ws):
 	"""
 	Get the Sec key of the websocket `ws`, used to identify it.
 	"""
 	return dict(ws.raw_request_headers)['Sec-WebSocket-Key']
 
-def serveToMany(jdata, socks):
+def serve_connections_generator(jdata, socks):
 	"""
 	A generator function used to serve to every socket in `socks`.
 	"""
@@ -83,15 +83,15 @@ def serveToMany(jdata, socks):
 		if i.open:
 			yield from i.send(json.dumps(jdata, sort_keys=True))
 
-def serveTo(jdata, ws):
+def serve_connection_generator(jdata, ws):
 	"""
 	A generator function used to serve to the `ws` socket.
 	"""
 	if ws.open:
 		yield from ws.send(json.dumps(jdata, sort_keys=True))
 		
-serveToConnections = lambda jdata, socks: list(serveToMany(jdata, socks))
-serveToConnection = lambda jdata, ws: list(serveTo(jdata, ws))
+serve_connections = lambda jdata, socks: list(serve_connections_generator(jdata, socks))
+serve_connection = lambda jdata, ws: list(serve_connection_generator(jdata, ws))
 	
 
 
@@ -140,7 +140,7 @@ def supports_color():
 
 color_supported = supports_color()
 if color_supported:
-	class bcolors: # All color codes
+	class ansi_colors: # All color codes
 		"""
 		A helper class containing colors (for pretty printing.)
 		"""
@@ -197,7 +197,7 @@ if color_supported:
 			"endc": ENDC
 		}
 else:
-	class bcolors: # No color codes
+	class ansi_colors: # No color codes
 		"""
 		A helper class containing no colors, allowing systems that don't support ANSI to continue running without strange logs.
 		"""
@@ -255,24 +255,24 @@ else:
 		}
 
 def rainbonify(string):
-	if not supports_color(): return string
+	if not color_supported: return string
 	else:
-		colors = [bcolors.RED, bcolors.ORANGE, bcolors.YELLOW, bcolors.GREEN, 
-				bcolors.BLUE, bcolors.PURPLE, bcolors.DARKPURPLE]
+		colors = [ansi_colors.RED, ansi_colors.ORANGE, ansi_colors.YELLOW, ansi_colors.GREEN, 
+				ansi_colors.BLUE, ansi_colors.PURPLE, ansi_colors.DARKPURPLE]
 		nstring = ""
 		cind = 0
 		for i in string:
 			nstring += colors[cind] + i
 			cind += 1
 			cind %= len(colors)
-		return nstring + bcolors.ENDC
+		return nstring + ansi_colors.ENDC
 
-class colorconf:
+class color_config:
 	"""
-	An object used to configure cprint and cinput.
+	An object used to configure color_print and color_input.
 	"""
 	def __init__(self):
-		self.color = bcolors.WHITE
+		self.color = ansi_colors.WHITE
 		self.name = "Generic"
 	def tag(self):
 		"""
@@ -287,18 +287,18 @@ class colorconf:
 		"""
 		return " "*(26+len(self.name))
 
-cprintconf = colorconf() # create the instance of colorconf used to configure cprint and cinput
+color_printing_config = color_config() # create the instance of color_config used to configure color_print and color_input
 
 lastprinted = None
 
-def cprint(text, color="", strip=False, func=print, add_newline=False, colorconfig = None, **kwargs):
+def color_print(text, color="", strip=False, func=print, add_newline=False, colorconfig = None, **kwargs):
 	"""
 	Pretty print `text`, with `color` as its color, using `func`.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
 	global lastprinted
 	if not colorconfig:
-		colorconfig = cprintconf
+		colorconfig = color_printing_config
 	if "whitespace" not in kwargs:
 		kwargs["whitespace"] = colorconfig.whitespace()
 	kwargs["color"] = color
@@ -307,7 +307,7 @@ def cprint(text, color="", strip=False, func=print, add_newline=False, colorconf
 	# Make sure not to print the same thing twice
 	if text == lastprinted: 
 		if not color_supported: return
-		print(bcolors.REMAKELINE, end="")
+		print(ansi_colors.REMAKELINE, end="")
 	lastprinted = text
 
 	# Split the text by lines
@@ -332,13 +332,13 @@ def cprint(text, color="", strip=False, func=print, add_newline=False, colorconf
 			  text = i)) # Print all consecutive lines
 			if add_newline: func("\n")
 
-def cinput(text, color="", strip=False, func=input, add_newline=False, colorconfig = None, **kwargs):
+def color_input(text, color="", strip=False, func=input, add_newline=False, colorconfig = None, **kwargs):
 	"""
 	Pretty print `text`, with `color` as its color. Take input using `func` on the last line.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
 	if not colorconfig:
-		colorconfig = cprintconf
+		colorconfig = color_printing_config
 	if "whitespace" not in kwargs:
 		kwargs["whitespace"] = colorconfig.whitespace()
 	kwargs["color"] = color
@@ -388,12 +388,12 @@ if not hasattr(ssl, '_create_default_https_context'): # Some operating systems d
 	else:
 		conf = json.load(open(DEFAULTCONFIGDIR))
 		def fakeopen(*args, **kwargs):
-			cprint("""Cannot access the internet via https.
+			color_print("""Cannot access the internet via https.
 			          This is due to a python bug with some operating systems.
 			          Because of this, updates will not be performed.
 			          To see if you need to update, go to 
 			          {blue}{line}{target}{endc}{color}.
-			          (Current version: {endc}{version}{color})""", color=bcolors.RED, strip=True, 
+			          (Current version: {endc}{version}{color})""", color=ansi_colors.RED, strip=True, 
 			          version = conf["version"], target=conf["update_repo"])
 			return io.BytesIO(bytes("{}", 'utf8'))
 		urllib.request.urlopen = fakeopen

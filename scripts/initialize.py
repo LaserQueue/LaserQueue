@@ -7,74 +7,106 @@ from parseargv import args
 
 # Set up pretty printing
 from util import *
-cprintconf.color = bcolors.CYAN
-cprintconf.name = "Setup"
+color_printing_config.color = ansi_colors.CYAN
+color_printing_config.name = "Setup"
 
-selfpath = os.path.dirname(os.path.realpath(__file__))
-os.chdir(selfpath) # Make sure we're in the correct directory
+file_path = os.path.dirname(os.path.realpath(__file__))
+os.chdir(file_path) # Make sure we're in the correct directory
 
 # All the config paths
-pluginjspath = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
-confpath = os.path.join(os.path.pardir, "www", "config.json")
-userconfpath = os.path.join(os.path.pardir, "www", "userconf.json")
-defaultconfpath = os.path.join(os.path.pardir, "www", "defaultconf.json")
+plugin_js_path = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
+config_path = os.path.join(os.path.pardir, "www", "config.json")
+user_config_path = os.path.join(os.path.pardir, "www", "userconf.json")
+default_config_path = os.path.join(os.path.pardir, "www", "defaultconf.json")
 
 # Utility function to test for internet connection.
-connected_to_internet = lambda: bool(getIps(test=True))
+connected_to_internet = lambda: bool(getIPs(test=True))
 # Open/save to the config file
-openconf = lambda: json.load(open(confpath))
-saveconf = lambda data: json.dump(data, open(confpath, "w"), indent=2, sort_keys=True)
-# Merge the dictionary odict over the dictionary adict.
-_fillblanks = lambda odict, adict: dict(adict, **odict)
+open_config = lambda: json.load(open(config_path))
+save_config = lambda data: json.dump(data, open(config_path, "w"), indent=2, sort_keys=True)
 
-def copyconf():
+
+version_regex = re.compile(r"^(dev-)?\d+\.\d+\.\d+$")
+dev_tag_regex = re.compile(r"^dev-")
+def check_version_numbers(current, master):
+	if version_regex.match(current):
+		version_number = convert_version_number(current)
+		if version_number < 0: return False
+	else:
+		color_print("The current version lacks a valid version tag.", color=ansi_colors.RED)
+		return False
+
+	if version_regex.match(master):
+		master_version_number = convert_version_number(master)
+		if version_number < 0: return False
+	else:
+		color_print("The master version lacks a valid version tag.", color=ansi_colors.RED)
+		return False
+
+	return version_number > master_version_number
+
+def convert_version_number(version):
+	version_number = 0.0
+	is_dev = dev_tag_regex.match(version)
+	if is_dev: 
+		version_number = -1.0
+	else:
+		float_index = 0
+		for i in version:
+			if i.isdigit():
+				float_index += 1
+				version_number += int(i) * 10 ** -float_index
+	return version_number
+
+
+def update_config():
 	"""
 	Make sure the config has the required data in it.
 	If args.regen, it will pretend as though the original config was empty.
 	"""
-	if os.path.exists(confpath) and args.regen != []:
-		currdata = openconf()
+	if os.path.exists(config_path) and args.regen != []:
+		current_data = open_config()
 
 		if args.regen: # Regenerate everything after -r
-			for i in args.regen:
-				if i in currdata:
-					del currdata[i]
+			for key in args.regen:
+				if key in current_data:
+					del current_data[key]
 
-		if "host" not in currdata or not currdata["host"]:
-			currdata["host"] = getIps()[0]
-		if "version" in currdata: # Version should always be latest
-			del currdata["version"]
+		if "host" not in current_data or not current_data["host"]:
+			current_data["host"] = getIPs()[0]
+		if "version" in current_data: # Version should always be latest
+			del current_data["version"]
 	else:
-		currdata = {"host": getIps()[0]}
-	data = json.load(open(defaultconfpath))
-	if os.path.exists(userconfpath):
-		userdata = json.load(open(userconfpath))
+		current_data = {"host": getIPs()[0]}
+	data = json.load(open(default_config_path))
+	if os.path.exists(user_config_path):
+		user_data = json.load(open(user_config_path))
 	else:
-		userdata = {}
-	data = dict(dict(data, **userdata), **currdata)
-	saveconf(data)
+		user_data = {}
+	data = dict(dict(data, **user_data), **current_data)
+	save_config(data)
 
 
-def getIps(test=False):
+def getIPs(test=False):
 	"""
 	Get the IPs this device controls.
 	"""
 	from netifaces import interfaces, ifaddresses, AF_INET
 	ips = []
-	for ifaceName in interfaces():
-		addresses = [i['addr'] for i in ifaddresses(ifaceName).get(AF_INET, [{"addr":"not found"}])]
+	for interface in interfaces():
+		addresses = [address['addr'] for address in ifaddresses(interface).get(AF_INET, [{"addr":"not found"}])]
 		if "not found" not in addresses and "127.0.0.1" not in addresses:
 			ips += addresses
 	if not ips and not test: 
 		ips.append("localhost")
-		cprint("WARNING: No internet connection. Using -l behavior.", color=bcolors.YELLOW)
+		color_print("WARNING: No internet connection. Using -l behavior.", color=ansi_colors.YELLOW)
 	return ips
 
-def concatJsPlugins():
+def concat_js_plugins():
 	js = plugins.getPluginJs()
-	concatjs = "\n".join(js)
-	with open(pluginjspath, "w") as f:
-		f.write(concatjs)
+	plugin_js = "\n".join(js)
+	with open(plugin_js_path, "w") as f:
+		f.write(plugin_js)
 
 
 PACKAGES = [
@@ -82,57 +114,57 @@ PACKAGES = [
 	"netifaces",
 	"GitPython"
 ]
-def getpacks():
+def fetch_dependencies():
 	"""
 	Go through PACKAGES and install everything missing.
 	"""
 	if args.skip: 
-		cprint("Skipping package install.", color=bcolors.YELLOW)
+		color_print("Skipping package install.", color=ansi_colors.YELLOW)
 		return
 
 	# Gets a list of installed packages
-	pl = [str(i).split(" ")[0] for i in pip.get_installed_distributions()]
+	installed_packages = [str(i).split(" ")[0] for i in pip.get_installed_distributions()]
 
 	# Check if anything's been installed
 	installed = False
 
-	for pack in PACKAGES:
-		if pack in pl:
+	for package in PACKAGES:
+		if package in installed_packages:
 			continue # Don't do anything if the package is installed
-		if not connected_to_internet():
-			cprint("No internet connection. Skipping package install.", color=bcolors.YELLOW)
+		if "netifaces" in installed_packages and not connected_to_internet():
+			color_print("No internet connection. Skipping package install.", color=ansi_colors.YELLOW)
 			return
 		installed = True
 
 		# Ask if they want to install this dependency
 		confirm = ("y" if args.all else "")
 		while confirm not in ["y", "n"]:
-			confirm = cinput("Install dependency {dep}? (y/n) ", dep=pack).lower().strip()
+			confirm = color_input("Install dependency {dep}? (y/n) ", dep=package).lower().strip()
 
 		if confirm == "n": # If the person chose not to install the dependency
-			cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
+			color_print("WARNING: Program may not run without this library.", color=ansi_colors.YELLOW)
 			continue # Don't do anything
-		if pip.main(["install", pack]) and os.name != "nt": # If the install fails and this is a *nix system:
+		if pip.main(["install", package]) and os.name != "nt": # If the install fails and this is a *nix system:
 			# Ask again, with minor error colors
 			confirm = ("y" if args.all else "")
 			while confirm not in ["y", "n"]:
-				confirm = cinput("Install failed, try again with elevated permissions? (y/n) ", color=bcolors.RED).lower().strip()
+				confirm = color_input("Install failed, try again with elevated permissions? (y/n) ", color=ansi_colors.RED).lower().strip()
 
 			if confirm == "n": # If the person chose not to install the dependency
-				cprint("WARNING: Program may not run without this library.", color=bcolors.YELLOW)
+				color_print("WARNING: Program may not run without this library.", color=ansi_colors.YELLOW)
 				continue # Don't do anything
-			if not os.system("sudo pip3 install "+pack): # Try again with root permissions
-				pl.append(pack) # If it succeeds, add it to the installed packages
+			if not os.system("sudo pip3 install "+package): # Try again with root permissions
+				installed_packages.append(package) # If it succeeds, add it to the installed packages
 		else:
-			pl.append(pack) # If it succeeds at first, add it to the installed packages
+			installed_packages.append(package) # If it succeeds at first, add it to the installed packages
 	if installed:
-		for pack in PACKAGES:
-			if pack not in pl:
-				cprint("Failed to install dependency {dep}.", color=bcolors.DARKRED, dep=pack)
+		for package in PACKAGES:
+			if package not in installed_packages:
+				color_print("Failed to install dependency {dep}.", color=ansi_colors.DARKRED, dep=package)
 				installed = False # If not everything's been installed, don't say it was successful
 
 	if installed:
-		cprint("Sucessfully installed all dependencies!")
+		color_print("Sucessfully installed all dependencies!")
 
 def make_tarfile(output_filename, source_dir):
 	"""
@@ -146,54 +178,54 @@ def update():
 	Try to update LaserQueue to the latest version.
 	"""
 	if args.skipupdate: 
-		cprint("Skipping updating.", color=bcolors.YELLOW)
+		color_print("Skipping updating.", color=ansi_colors.YELLOW)
 		return
 
 	if not connected_to_internet():
-		cprint("No internet connection. Skipping update.", color=bcolors.YELLOW)
+		color_print("No internet connection. Skipping update.", color=ansi_colors.YELLOW)
 		return
 
 	import git
-	config = json.load(open(defaultconfpath))
+	config = json.load(open(default_config_path))
 
 	try:
-		configpage = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
-		masterconfig = json.loads(configpage) # Get the current up-to-date config
+		config_page = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
+		master_config = json.loads(config_page) # Get the current up-to-date config
 
-		if "version" in masterconfig and masterconfig["version"] > config["version"]: # If the remote version is greater than the one here
+		if "version" in master_config and check_version_numbers(config["version"], master_config["version"]): # If the remote version is greater than the one here
 
-			cprint("New update found: Version {ver}.", ver=masterconfig["version"])
+			color_print("New update found: Version {ver}.", ver=master_config["version"])
 
 			prefix = format("{path}-", path=os.path.basename(os.path.abspath(os.path.pardir))) # Prefix for new or old versions
-			updatedir = os.path.join(os.path.pardir,os.path.pardir,prefix+masterconfig["version"]) # Directory if fetch updating
-			backupfile = os.path.join(os.path.pardir, os.path.pardir, prefix+config["version"]+".tar.gz") # Backup file if overwrite updating
+			update_directory = os.path.join(os.path.pardir,os.path.pardir,prefix+master_config["version"]) # Directory if fetch updating
+			backup_file = os.path.join(os.path.pardir, os.path.pardir, prefix+config["version"]+".tar.gz") # Backup file if overwrite updating
 
 			prompt = format("""Do you want to get version {current} to {latest}? 
-				                 The fetch option will update into {updatedir}.
-				                 The overwrite option will backup to {backupfile}, and fetch master.
+				                 The fetch option will update into {update_directory}.
+				                 The overwrite option will backup to {backup_file}, and fetch master.
 				                 (fetch / overwrite / cancel) """, 
 				                 current=config["version"], 
-				                 lastest=masterconfig["version"], 
-				                 updatedir=os.path.abspath(updatedir), 
-				                 backupfile=os.path.abspath(backupfile))
+				                 lastest=master_config["version"], 
+				                 update_directory=os.path.abspath(update_directory), 
+				                 backup_file=os.path.abspath(backup_file))
 
 			# Check what the user wants to do
 			confirm = ("overwrite" if args.allupdate else "")
 			while confirm not in ["fetch", "overwrite", "cancel"]:
-				confirm = cinput(prompt, strip=True).lower().strip()
+				confirm = color_input(prompt, strip=True).lower().strip()
 
 			# If they want to fetch the new repository
 			if confirm == "fetch":
-				git.Repo.clone_from(config["update_repo"], updatedir) # Get the new repository
+				git.Repo.clone_from(config["update_repo"], update_directory) # Get the new repository
 
 				# Inform them about it
-				cprint("""\nNew version located in: 
-				            {updatedir}
+				color_print("""\nNew version located in: 
+				            {update_directory}
 				            Run the following: 
-				            {startscript} 
+				            {start_script} 
 				            to use the new version.""",
-				            	updatedir=os.path.abspath(updatedir),
-				            	startscript=os.path.abspath(os.path.join(updatedir, "start.py")),
+				            	update_directory=os.path.abspath(update_directory),
+				            	start_script=os.path.abspath(os.path.join(update_directory, "start.py")),
 				            	strip=True)
 
 			# If they want to overwrite their repository
@@ -211,66 +243,66 @@ def update():
 
 				# Make a backup file
 				try:
-					tarchive = open(backupfile, 'wb')
-					repo.archive(tarchive)
-					gzip.GzipFile(fileobj=tarchive, mode='wb')
+					tar_archive_file = open(backup_file, 'wb')
+					repo.archive(tar_archive_file)
+					gzip.GzipFile(fileobj=tar_archive_file, mode='wb')
 				except:
-					make_tarfile(backupfile, os.path.pardir)
+					make_tarfile(backup_file, os.path.pardir)
 
 				# Reset the repository
 				repo.git.fetch("--all")
 				repo.git.reset("--hard", "origin/master")
-				json.dump(config, open(confpath, "w"), sort_keys=True)
+				json.dump(config, open(config_path, "w"), sort_keys=True)
 				quit(10) # Tells the start script to restart
 	except Exception as e: # Error reporting
-		cprint(tbformat(e, "Error updating:"), color=bcolors.DARKRED)
+		color_print(format_traceback(e, "Error updating:"), color=ansi_colors.DARKRED)
 
 
 
-def changepass():
+def update_password():
 	"""
 	Change the password if --new-password used.
 	"""
 	if args.newpass or not os.path.exists("hashpassword"):
 		# Get password
 		if args.newpass:
-			newpass = cinput("New password: ", func=getpass.getpass)
+			new_password = color_input("New password: ", func=getpass.getpass)
 		else:
-			newpass = cinput("Please set the admin login password: ", func=getpass.getpass)
+			new_password = color_input("Please set the admin login password: ", func=getpass.getpass)
 
 		# Hash the new password
-		hash_object = hashlib.sha256(newpass.encode()).hexdigest()
+		hash_object = hashlib.sha256(new_password.encode()).hexdigest()
 		hashed_final = hashlib.sha256(hash_object.encode()).hexdigest()
 
 		if os.path.exists("hashpassword"):
 			# Read the old password
-			oldfile = open("hashpassword")
-			old = oldfile.read()
-			oldfile.close()
+			old_file = open("hashpassword")
+			old_data = old_file.read()
+			old_file.close()
 
 			# Make sure we don't overwrite the old password with itself
-			if old == hashed_final:
-				cprint("Passwords identical. No action taken.")
+			if old_data == hashed_final:
+				color_print("Passwords identical. No action taken.")
 				return
 
 		try:
 			# Write the password to the file
-			hashed = open("hashpassword", "w")
-			hashed.write(hashed_final)
-			hashed.close()
-			cprint("Password changed to {starredpass}.", starredpass="*"*len(newpass))
+			hashed_file = open("hashpassword", "w")
+			hashed_file.write(hashed_final)
+			hashed_file.close()
+			color_print("Password changed to {starredpass}.", starredpass="*"*len(newpass))
 		except Exception as e: # Error reporting
-			cprint(tbformat(e, "Error changing password:"), color=bcolors.DARKRED)
+			color_print(format_traceback(e, "Error changing password:"), color=ansi_colors.DARKRED)
 
 
-def confirmhost():
+def update_host():
 	"""
 	Make sure the config's "host" flag is correct
 	"""
-	data = openconf()
+	data = open_config()
 	# Regenerate the host if -n was used, or if it doesn't exist
 	if args.host or "host" not in data and args.regen != []:
-		data["host"] = getIps()[0]
+		data["host"] = getIPs()[0]
 	# Change the host to localhost if -l was used (overriding -n)
 	if args.local:
 		data["host"] = "localhost"
@@ -280,12 +312,12 @@ def confirmhost():
 			# Confirm they want to reset the host
 			confirm = ""
 			while confirm not in ["y", "n"]:
-				confirm = cinput("""Last time you ran this program, it was in local mode.
+				confirm = color_input("""Last time you ran this program, it was in local mode.
 				                    Do you want to regenerate the host? (y/n) """, strip=True).lower().strip()
 			# Reset the host if they say yes
 			if confirm == "y":
-				data["host"] = getIps()[0]
-	saveconf(data)
+				data["host"] = getIPs()[0]
+	save_config(data)
 
 
 
@@ -293,21 +325,22 @@ def main():
 	"""
 	Run all subroutines for initialization.
 	"""
-	cprint("Beginning initialization.")
-	try: getpacks()
+	color_print("Beginning initialization.")
+
+	try: fetch_dependencies()
 	except KeyboardInterrupt: print()
-	try: copyconf()
+	try: update_config()
 	except KeyboardInterrupt: print()
-	try: changepass()	
+	try: update_password()	
 	except KeyboardInterrupt: print()
-	try: confirmhost()
+	try: update_host()
 	except KeyboardInterrupt: print()
 	try: update()
 	except KeyboardInterrupt: print()
-	try: concatJsPlugins()
+	try: concat_js_plugins()
 	except KeyboardInterrupt: print()
 				
-	cprint("Initialization complete.")
+	color_print("Initialization complete.")
 
 if __name__ == "__main__":
 	main()

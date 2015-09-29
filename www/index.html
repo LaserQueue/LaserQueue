@@ -8,8 +8,8 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="apple-touch-icon" href="/dist/img/laserQueue.png">
 		<title>Queue</title>
-		<link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 		<link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="dist/css/styles.min.css">
 		<link rel="shortcut icon" href="/dist/img/laserQueue.png" type="image/x-icon">
 		<!-- If you're using IE8 I hate you but here have this -->
@@ -39,22 +39,22 @@
 			<table class="table table-striped table-bordered jobs-table">
 				<thead class="jobs-table-header">
 					<tr class="table-first-row">
-						<td class="col-md-1 action-header"></td>
-						<td class="col-md-2 name-header"></td>
-						<td class="col-md-1 material-header"></td>
-						<td class="col-md-1 time-header"></td>
-						<td class="col-md-1 priority-header"></td>
+						<td class="action-header"></td>
+						<td class="name-header"></td>
+						<td class="material-header"></td>
+						<td class="time-header"></td>
+						<td class="priority-header"></td>
 					</tr>
 				</thead>
 				<tbody class="jobs-table-template">
 					<tr>
-						<td data-bind="actions" class="col-md-1 action-box">
+						<td data-bind="actions" class="action-box">
 
 						</td>
-						<td data-bind="name" class="col-md-2 name-box"></td>
-						<td data-bind="material" class="col-md-1 material-box"></td>
-						<td data-bind="esttime" class="col-md-1 esttime-box"></td>
-						<td data-bind="priority" class="col-md-1 priority-box"></td>
+						<td data-bind="name" class="name-box"></td>
+						<td data-bind="material" class="material-box"></td>
+						<td data-bind="esttime" class="esttime-box"></td>
+						<td data-bind="priority" class="priority-box"></td>
 					</tr>
 				</tbody>
 			</table>
@@ -64,11 +64,10 @@
 				This <a href="//cambridge.nuvustudio.com">NuVu</a> site by <a href="//sdaitzman.github.io">Sam</a>, Myles, <a href="https://github.com/jdtzmn">Jacob</a> and <a href="http://twitter.com/wiresegal">Yoni</a> is © under a Creative Commons BY-NC-SA/4.0 license with exceptions
 			</footer>
 			<br><br><br>
-			<label class="glyphicon glyphicon-console log-toggler" for="log-checkbox" data-toggle="tooltip" data-placement="top" title="Show log (nerds only)"></label>
+			<label class="fa fa-2x fa-terminal log-toggler" for="log-checkbox" data-toggle="tooltip" data-placement="top" title="Show log (nerds only)"></label>
 			<input id="log-checkbox" type="checkbox">
-		<pre class="log-pre"><code class="language-bash log"></code></pre><br>
-
-	</div>
+			<pre class="log-pre"><code class="language-bash log"></code></pre><br>
+		</div>
 	<script type="text/javascript" src="dist/js/scripts.min.js"></script>
 	<script type="text/javascript" src="dist/js/plugins.js"></script>
 

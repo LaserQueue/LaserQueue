@@ -1,5 +1,5 @@
 {
-	"version": "0.0.5",
+	"version": "dev-0.0.6",
 	"update_target": "https://raw.githubusercontent.com/LaserQueue/LaserQueue/master/www/defaultconf.json",
 	"update_repo": "https://github.com/LaserQueue/LaserQueue.git",
 	"page_title": "LaserQueue",
@@ -57,6 +57,7 @@
 		"increment",
 		"decrement",
 		"refresh",
+		"starttour",
 		"uuddlrlrba"
 	],
 	"attr_edit_perms": [
@@ -88,5 +89,6 @@
 	"material_header": "Material",
 	"time_header": "Est. Time",
 	"priority_header": "Priority",
-	"send_notifications": true
+	"send_notifications": true,
+	"allow_tour": true
 }

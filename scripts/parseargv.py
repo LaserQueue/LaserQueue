@@ -1,6 +1,6 @@
 import argparse
 
-parser = argparse.ArgumentParser(add_help=False)
+parser = argparse.ArgumentParser(add_help=False, usage="%(prog)s [options]",)
 parser.add_argument("-p", "--port", help="Port to host from", dest="port",
 	default=80, type=int)
 parser.add_argument("-n", "--regen-host", help="Regenerate host in config", dest="host",
@@ -14,7 +14,7 @@ parser.add_argument("-q", "--quiet", help="Makes the script not give output", de
 parser.add_argument("-b", "--queue-backup", help="Backup queue and load from backup on start", dest="backup",
 	action="store_true")
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
-	action="store", required=False, default=False, nargs="*")
+	action="store", required=False, default=False, nargs="*", metavar="KEY")
 parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
 	action="store_true")
 parser.add_argument("-nu", "--no-update", help="Skip update", dest="skipupdate",

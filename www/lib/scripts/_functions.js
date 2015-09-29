@@ -90,6 +90,11 @@ function logText(text) {
 	}
 }
 
+// initialize tooltips
+function tooltips() {
+	$('[data-toggle="tooltip"]').tooltip();
+}
+
 // repopulate action button UUIDs
 function populateActions() {
 	logText('Populating actions');
@@ -102,18 +107,20 @@ function populateActions() {
 
 	// reinitialize bootstrap tooltips
 	if(isTouchDevice() === false) {
-		$('[data-toggle="tooltip"]').tooltip();
+		tooltips();
 	}
 
 	// handler to remove a job
 	$('.remove-job').click(function handleRemove(event) {
 		// remove job based on action button
+		var uuidToRemove = $(this).parents('[data-uuid]')[0].dataset.uuid;
+		console.log(uuidToRemove);
 		var removeJob = function removeJob(actionButton) {
 			googleAnalytics('send', 'event', 'action', 'click', 'remove job');
 			logText('removing item {uuid}'.format({uuid: $($(this).parents()[1]).attr('data-uuid')}));
 			socketSend({
 				'action': 'remove',
-				'uuid': $(actionButton).parents('tr').attr('data-uuid')
+				'uuid': uuidToRemove
 			});
 		};
 		if(event.altKey) {
@@ -125,7 +132,7 @@ function populateActions() {
 				placement: 'bottom',
 				html: true,
 				content: function confirmModalContents() {
-					return '<button class="btn btn-default btn-lg btn-block cancel-remove">No</button>' +
+					return '<button class="btn btn-default btn-secondary btn-lg btn-block cancel-remove">No</button>' +
 						'<button class="btn btn-danger btn-lg btn-block confirm-remove">Yes</button>';
 				}
 			});
@@ -136,6 +143,7 @@ function populateActions() {
 			});
 			$('.confirm-remove').click(function confirmRemove(event) {
 				removeJob(this);
+				$('.remove-job').popover('hide');
 			});
 		}
 	});
@@ -179,17 +187,15 @@ function populateActions() {
 				// grid: [ 37, 37 ]
 			});
 			$(this).on('dragStart', function handleDragStart() {
-				$('[data-toggle="tooltip"]').tooltip('destroy');
-				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').addClass('animate-hide');
+				$('[data-toggle="tooltip"]').tooltip('hide');
+				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.fa').addClass('animate-hide');
 			});
 			$(this).on('dragEnd', function handleDragEnd(event, pointer) {
-				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.glyphicon').removeClass('animate-hide');
-				$('[data-toggle="tooltip"]').tooltip();
+				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.fa').removeClass('animate-hide');
 				socketSend({
 					'action': 'relmove',
 					'uuid': $(this).attr('data-uuid'),
-					'target_index': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / 37))
-
+					'target_index': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / $(this).height()))
 				});
 			});
 		});
@@ -370,7 +376,7 @@ function renderForm() {
 		if(!isTouchDevice()) $('.{formObject}:first'.format({formObject: formOptions.name.classes[0]})).focus();
 
 		// reconfigure tooltips
-		$('.form-group').children('[data-toggle="tooltip"]').tooltip();
+		tooltips();
 
 		// set up form submission
 		$('.btn-submit').click(function submitForm(clickAction) {

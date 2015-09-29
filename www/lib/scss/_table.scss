@@ -1,6 +1,6 @@
 .jobs-table-header td {
 	border: none;
-	font: 1.4em 'Raleway', sans-serif;
+	font-size: 1.4em;
 	background: $nuvu-pink;
 	color: white;
 }
@@ -26,14 +26,14 @@ td {
 }
 
 
-.glyphicon-remove, .glyphicon-triangle-bottom, .glyphicon-chevron-up, .glyphicon-chevron-down {
+.fa-remove, .fa-triangle-bottom, .fa-chevron-up, .fa-chevron-down {
 	cursor: pointer;
 	transition: transform 0.1s linear;
 	&:hover { transform: scale(1.2); }
 	&:active { transform: scale(0.9); }
 }
 
-.glyphicon-remove, .glyphicon-remove:hover, .glyphicon-remove:focus {
+.fa-remove, .fa-remove:hover, .fa-remove:focus {
 	color: firebrick;
 	&:hover { color: darken(firebrick, 10%); }
 	&:active { color: darken(firebrick, 25%); }

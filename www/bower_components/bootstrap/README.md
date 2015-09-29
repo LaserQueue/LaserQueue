@@ -1,7 +1,9 @@
 # [Bootstrap](http://getbootstrap.com)
+
 [![Slack](https://bootstrap-slack.herokuapp.com/badge.svg)](https://bootstrap-slack.herokuapp.com)
 ![Bower version](https://img.shields.io/bower/v/bootstrap.svg)
 [![npm version](https://img.shields.io/npm/v/bootstrap.svg)](https://www.npmjs.com/package/bootstrap)
+[![Gem version](https://img.shields.io/gem/v/bootstrap.svg)](https://rubygems.org/gems/bootstrap)
 [![Build Status](https://img.shields.io/travis/twbs/bootstrap/master.svg)](https://travis-ci.org/twbs/bootstrap)
 [![devDependency Status](https://img.shields.io/david/dev/twbs/bootstrap.svg)](https://david-dm.org/twbs/bootstrap#info=devDependencies)
 [![Selenium Test Status](https://saucelabs.com/browser-matrix/bootstrap.svg)](https://saucelabs.com/u/bootstrap)
@@ -44,22 +46,13 @@ bootstrap/
 │   ├── bootstrap.css
 │   ├── bootstrap.css.map
 │   ├── bootstrap.min.css
-│   ├── bootstrap-theme.css
-│   ├── bootstrap-theme.css.map
-│   └── bootstrap-theme.min.css
-├── js/
-│   ├── bootstrap.js
-│   └── bootstrap.min.js
-└── fonts/
-    ├── glyphicons-halflings-regular.eot
-    ├── glyphicons-halflings-regular.svg
-    ├── glyphicons-halflings-regular.ttf
-    ├── glyphicons-halflings-regular.woff
-    └── glyphicons-halflings-regular.woff2
+│   └── bootstrap.min.css.map
+└── js/
+    ├── bootstrap.js
+    └── bootstrap.min.js
 ```
 
-We provide compiled CSS and JS (`bootstrap.*`), as well as compiled and minified CSS and JS (`bootstrap.min.*`). CSS [source maps](https://developer.chrome.com/devtools/docs/css-preprocessors) (`bootstrap.*.map`) are available for use with certain browsers' developer tools. Fonts from Glyphicons are included, as is the optional Bootstrap theme.
-
+We provide compiled CSS and JS (`bootstrap.*`), as well as compiled and minified CSS and JS (`bootstrap.min.*`). CSS [source maps](https://developer.chrome.com/devtools/docs/css-preprocessors) (`bootstrap.*.map`) are available for use with certain browsers' developer tools.
 
 
 ## Bugs and feature requests

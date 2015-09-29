@@ -41,7 +41,8 @@
 	margin-right: 15px;
 }
 
-.form-control {
+.new-job-form .form-control {
+	height: 38px;
 	box-shadow: none !important;
 	&:focus {
 		border-color: $nuvu-pink;

@@ -29,14 +29,14 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
 
 	# Get the objects needed to run commands
 	action = jdata["action"]
-	sec = getsec(ws)
+	sec = get_sec_key(ws)
 	args = dict(jdata)
 	del args["action"]
 	authstate = sessions.check(sec)
 
 	# Stop actions that need auth if the client isn't auth
 	if action in authactions and not authstate: 
-		serveToConnection({"action":"deauthed"}, ws)
+		serve_connection({"action":"deauthed"}, ws)
 		return "This action requires auth."
 
 	# Get a command dictionary for fast lookup
@@ -83,11 +83,11 @@ def deauth(**kwargs):
 	"""
 	sec, sessions, ws = kwargs["sec"], kwargs["sessions"], kwargs["ws"]
 	sessions.deauth(sec)
-	serveToConnection({"action":"deauthed"}, ws)
+	serve_connection({"action":"deauthed"}, ws)
 
 	# If the verbose flag is used, print report
 	if argvs.loud:
-		cprint("Client successfully deauthed.")
+		color_print("Client successfully deauthed.")
 
 def refresh(**kwargs): 
 	"""
@@ -95,13 +95,27 @@ def refresh(**kwargs):
 	"""
 	socks, authstate = kwargs["sockets"], kwargs["authstate"]
 	if config["allow_force_refresh"]:
-		serveToConnections({"action":"refresh"}, socks)
+		serve_connections({"action":"refresh"}, socks)
 
 		if argvs.loud: # If the verbose flag is used, print report
-			color = bcolors.MAGENTA if authstate else ""
-			cprint("Refreshed all clients.", color=color)
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Refreshed all clients.", color=color)
 	else:
-		cprint("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=bcolors.YELLOW)
+		color_print("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=ansi_colors.YELLOW)
+
+def starttour(**kwargs): 
+	"""
+	Start the tour. (if the config allows it)
+	"""
+	socks, authstate = kwargs["sockets"], kwargs["authstate"]
+	if config["allow_tour"]:
+		serve_connections({"action":"starttour"}, socks)
+
+		if argvs.loud: # If the verbose flag is used, print report
+			color = ansi_colors.MAGENTA if authstate else ""
+			color_print("Started the tour.", color=color)
+	else:
+		color_print("The tour isn't enabled. (config.json, allow_tour)", color=ansi_colors.YELLOW)
 
 def uuddlrlrba(**kwargs):
 	"""
@@ -109,15 +123,15 @@ def uuddlrlrba(**kwargs):
 	"""
 	socks, authstate = kwargs["sockets"], kwargs["authstate"]
 	if config["easter_eggs"]:
-		serveToConnections({"action":"rickroll"}, socks)
+		serve_connections({"action":"rickroll"}, socks)
 
 		if argvs.loud: # If the verbose flag is used, print report
-			color = bcolors.MAGENTA if authstate else bcolors.ENDC
-			cprint("{Trolled}{c} all clients.",
+			color = ansi_colors.MAGENTA if authstate else ansi_colors.ENDC
+			color_print("{Trolled}{color} all clients.",
 				Trolled = rainbonify("Trolled"),
-				c = color) # RAINBOW \o/
+				color = color) # RAINBOW \o/
 	else:
-		cprint("This is a serious establishment, son. I'm dissapointed in you.", color=bcolors.YELLOW)
+		color_print("This is a serious establishment, son. I'm dissapointed in you.", color=ansi_colors.YELLOW)
 
 def auth(**kwargs):
 	"""
@@ -127,13 +141,14 @@ def auth(**kwargs):
 
 	if config["admin_mode_enabled"]:
 		if sessions.auth(sec, args["pass"]):
-			serveToConnection({"action":"authed"}, ws)
+			serve_connection({"action":"authed"}, ws)
 			if argvs.loud: # If the verbose flag is used, print report
-				cprint("Auth succeeded.", color=bcolors.MAGENTA)
+				color_print("Auth succeeded.", color=ansi_colors.MAGENTA)
 		else:
-			serveToConnection({"action":"authfailed"}, ws)
+			serve_connection({"action":"authfailed"}, ws)
 			if argvs.loud: # If the verbose flag is used, print report
-				cprint("Auth failed.")
+				color_print("Auth failed.")
+
 
 # Relative wrappers for queue actions
 append = lambda **kwargs: kwargs["queue"].append(**kwargs)
@@ -149,6 +164,7 @@ commands = [
 	SocketCommand("deauth", deauth, {}),
 	SocketCommand("refresh", refresh, {}),
 	SocketCommand("uuddlrlrba", uuddlrlrba, {}),
+	SocketCommand("starttour", starttour, {}),
 	SocketCommand("auth", auth, {"pass": str}),
 	SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str}),
 	SocketCommand("pass", passoff, {"uuid": str}),

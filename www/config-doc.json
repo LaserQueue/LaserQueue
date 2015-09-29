@@ -4,6 +4,7 @@
     "allow_force_refresh": "Enables server-to-client force reload",
     "allow_multiple_materials": "Allows people to submit cuts with different materials but same name",
     "allow_multiples": "Allows people to submit different cuts with the same name",
+    "allow_tour": "Allows the LaserQueue visual tour to occur.",
     "attr_edit_perms": "The tags non-authenticated users are allowed to edit with the `attr` action.",
     "auth_timeout": "Timeout before authed user is deauthed",
     "authactions": "Actions that require authentication",

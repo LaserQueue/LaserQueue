@@ -70,11 +70,11 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	// set up action buttons from config
 	buttons = {
-		'remove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-remove remove-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.remove_hover}),
-		'increment': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.incr_hover}),
-		'decrement': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.decr_hover}),
-		'pass': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-triangle-bottom lower-priority" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.pass_hover}),
-		'relmove': '\n<a role="button" tabindex="0" class="glyphicon glyphicon-menu-hamburger move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.drag_hover})
+		'remove': '\n<a role="button" tabindex="0" class="fa fa-remove remove-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.remove_hover}),
+		'increment': '\n<a role="button" tabindex="0" class="fa fa-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.incr_hover}),
+		'decrement': '\n<a role="button" tabindex="0" class="fa fa-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.decr_hover}),
+		'pass': '\n<a role="button" tabindex="0" class="fa fa-chevron-down lower-priority" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.pass_hover}),
+		'relmove': '\n<a role="button" tabindex="0" class="fa fa-bars move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.drag_hover})
 	};
 
 	// set up admin mode if enabled
@@ -92,7 +92,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 							'<label for="password">Password</label>' +
 							'<input type="password" class="form-control coach-password" id="password" placeholder="Password">' +
 						'</div>' +
-						'<button type="submit" class="btn btn-default auth-button">Sign in</button>' +
+						'<button type="submit" class="btn btn-pink auth-button">Sign in</button>' +
 					'</form>'
 				);
 				$('.authorize').tooltip('hide');
@@ -138,7 +138,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	}
 
 	// log status
-	logText('LaserQueue is up and config is loaded and parsed. Attempting connection to WebSockets host at {host}.'.format({host: host}));
+	logText('LaserQueue {version} is up and config is loaded and parsed. Attempting connection to WebSockets host at {host}.'.format({version: config.version,host: host}));
 
 	// attempt WebSockets connection
 	socketSetup();

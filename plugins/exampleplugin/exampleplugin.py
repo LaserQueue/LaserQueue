@@ -9,4 +9,4 @@ Here as a very basic idea of how to construct a plugin.
 
 
 # def upkeep(**kwargs):
-# 	printer.cprint("hi")
+# 	printer.color_print("hi")

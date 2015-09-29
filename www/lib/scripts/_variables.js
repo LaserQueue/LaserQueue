@@ -38,6 +38,9 @@ var config, jsonData, socket, buttons,
 		}],
 		"notification": [function displayNotification(data) {
 			modalMessage(data.title, data.text);
+		}],
+		"starttour": [function tourQueue(data) {
+			if(config.allow_tour) queueTour();
 		}]
 	},
 	renderDirectives = {
@@ -45,7 +48,7 @@ var config, jsonData, socket, buttons,
 			html: function drawCoachMode(params) {
 				return this.priority + (
 					this.coachmodified ?
-						' <span class="glyphicon glyphicon-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="{title}"></span>'.format({title: config.modified_hover})
+						' <span class="fa fa-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="{title}"></span>'.format({title: config.modified_hover})
 						: ''
 				);
 			},

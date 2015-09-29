@@ -28,6 +28,10 @@ Allows people to submit cuts with different materials but same name
 Allows people to submit different cuts with the same name
 #### Default: `false`
 ---
+### `allow_tour` : `boolean`
+Allows the LaserQueue visual tour to occur.
+#### Default: `true`
+---
 ### `attr_edit_perms` : `array`
 The tags non-authenticated users are allowed to edit with the `attr` action.
 #### Default: `name,material,esttime`
@@ -38,7 +42,7 @@ Timeout before authed user is deauthed
 ---
 ### `authactions` : `array`
 Actions that require authentication
-#### Default: `move,relmove,increment,decrement,refresh,uuddlrlrba`
+#### Default: `move,relmove,increment,decrement,refresh,starttour,uuddlrlrba`
 ---
 ### `decr_hover` : `string`
 Tooltip for decrement button
@@ -222,6 +226,6 @@ Repository to update from
 ---
 ### `version` : `string`
 Software's current version
-#### Default: `0.0.5`
+#### Default: `dev-0.0.6`
 ---
-This file automatically generated at Sat Aug 29 2015 21:24:27 GMT-0400 (EDT)
+

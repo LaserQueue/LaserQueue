@@ -19,6 +19,7 @@ var watch        = require('gulp-watch');
 var sourcemaps   = require('gulp-sourcemaps');
 var sizereport   = require('gulp-sizereport');
 var noop         = function() {};
+var configDoc    = require('./www/config-doc.js').configDoc;
 
 // compile sass
 gulp.task('sass', function() {
@@ -62,7 +63,7 @@ gulp.task('js-prod', function() {
 			.pipe(uglify())
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/js/'))
-	.pipe(notify({message: 'JS has been compiled for production'}))
+	.pipe(notify({message: 'JS has been compiled for production'}));
 });
 
 // watch sass and compile
@@ -86,16 +87,25 @@ gulp.task('js-size-report', function() {
 // style size report
 gulp.task('style-size-report', function() {
 	gulp.src('./www/dist/css/styles.min.css').pipe(sizereport({gzip: true}));
-})
+});
 
 // overall size report
 gulp.task('size', function() {
 	gulp.start(['js-size-report', 'style-size-report']);
 	gulp.src('./www/index.html').pipe(sizereport({gzip: true}));
+});
+
+// generates config.md
+gulp.task('config-doc', configDoc('./www/defaultconf.json', './www/config-doc.json', './www/config.md'));
+
+// watches and generates config.md
+gulp.task('config-doc-watch', function() {
+	gulp.start('config-doc');
+	gulp.watch(['./www/config-doc.json', './www/defaultconf.json'], ['config-doc']);
 })
 
 // Default task, just runs dev
 gulp.task('default', function() {
 	livereload.listen();
-	gulp.start(['sass-watch', 'js-watch']).on('error', function() {});
+	gulp.start(['sass-watch', 'js-watch', 'config-doc-watch']).on('error', function() {});
 });
