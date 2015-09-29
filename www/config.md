@@ -226,6 +226,6 @@ Repository to update from
 ---
 ### `version` : `string`
 Software's current version
-#### Default: `0.0.6`
+#### Default: `dev-0.0.7`
 ---
 
