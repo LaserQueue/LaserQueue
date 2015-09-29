@@ -85,6 +85,9 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 				socketSend({'action': 'deauth'});
 				$('.authorize').tooltip('hide');
 			} else {
+
+				NProgress.start();
+
 				// if not authorized, present auth UI
 				modalMessage('Authenticate',
 					'<form class="login-form">' +

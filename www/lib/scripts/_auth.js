@@ -16,11 +16,13 @@ function onAuth() {
 	}
 	populateActions();
 	renderForm();
+	NProgress.done();
 }
 
 function onFailedauth() {
 	modalMessage('Failure', '<p class="lead">Unfortunately, it looks like your password was wrong.</p>');
 	logText('Password was wrong. You\'re bad and you should feel bad.');
+	NProgress.done();
 }
 
 function onDeauth() {
