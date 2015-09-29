@@ -1,5 +1,5 @@
 {
-	"version": "0.0.6",
+	"version": "dev-0.0.7",
 	"update_target": "https://raw.githubusercontent.com/LaserQueue/LaserQueue/master/www/defaultconf.json",
 	"update_repo": "https://github.com/LaserQueue/LaserQueue.git",
 	"page_title": "LaserQueue",
