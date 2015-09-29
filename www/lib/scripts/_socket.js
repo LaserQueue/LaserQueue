@@ -1,5 +1,7 @@
 // basically this handles everything WebSockets
 
+NProgress.start();
+
 function parseCut(arrayIndex, arrayEl) {
 	// parse cut
 	displayEl = $.extend({}, arrayEl); // deepcopy
@@ -35,6 +37,8 @@ function socketSetup() {
 		logText('WebSockets connection opened successfully');
 
 		$('#notify-modal').modal('hide');
+
+		NProgress.done();
 	};
 
 	// when websockets message
@@ -74,4 +78,3 @@ function socketSetup() {
 		});
 	};
 }
-
