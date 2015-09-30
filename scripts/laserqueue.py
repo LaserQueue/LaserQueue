@@ -285,14 +285,15 @@ class Queue:
 					newJob[key] = extra_objects[key]
 			self.queue[priority].append(newJob)
 
-			if argvs.loud: # If -v, report success
-				color = ansi_colors.MAGENTA if authstate else ""
-				color_print("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
-
-			# let that client know
+			# Tell the client the job was added
 			serve_connection({
 				"action": "job_added"
 			}, ws)
+
+			if argvs.loud: # If -v, report success
+				color = ansi_colors.MAGENTA if authstate else ""
+				color_print("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
+			
 		else:
 			if config["allow_multiple_materials"]:
 				serve_connection({
