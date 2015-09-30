@@ -19,7 +19,7 @@ def _concatlist(lists):
 	Return the sum of each iterable in `lists`.
 	"""
 	masterlist = []
-	for i in lists: 
+	for i in lists:
 		for j in i:
 			masterlist.append(j)
 	return masterlist
@@ -28,11 +28,11 @@ def _concatlist(lists):
 requiredtags = {
 	"priority":0,
 	"name":"DEFAULT",
-	"material":"o", 
-	"esttime": 0, 
-	"coachmodified": False, 
-	"uuid": "this object is so old that it should be deleted", 
-	"sec": "this object is so old that it should be deleted", 
+	"material":"o",
+	"esttime": 0,
+	"coachmodified": False,
+	"uuid": "this object is so old that it should be deleted",
+	"sec": "this object is so old that it should be deleted",
 	"time": 2**30,
 	"totaldiff": 0
 }
@@ -113,11 +113,11 @@ class Queue:
 		jdata = QueueObject.convert(jdata) # Read the jdata
 
 		# If there are too many priorities, cut off the end ones
-		if len(jdata) > len(config["priorities"]): 
+		if len(jdata) > len(config["priorities"]):
 			self.queue = jdata[:len(config["priorities"])]
 		# If there are too few priorities, add on more to the end
-		elif len(jdata) < len(config["priorities"]): 
-			discrepancy = len(config["priorities"]) - len(jdata) 
+		elif len(jdata) < len(config["priorities"]):
+			discrepancy = len(config["priorities"]) - len(jdata)
 			self.queue = jdata + [[] for i in range(discrepancy)]
 		else:
 			self.queue = jdata
@@ -125,7 +125,7 @@ class Queue:
 		# Ensure correct priorities
 		for ii in range(len(self.queue)):
 			i = self.queue[ii]
-			for job in i: 
+			for job in i:
 				job["priority"] = ii
 		return self
 
@@ -207,7 +207,7 @@ class Queue:
 	# All functions beyond this point are socket-type functions.
 	# See API.md for info on what to pass as `args`.
 
-	# Other requirements: 
+	# Other requirements:
 	# `authstate`: a boolean that contains whether the session is authenticated.
 	# `sec`: the identifier for the session, used to change/get its authstate.
 	# `sessions`: the global instance of sidhandler.SIDCache.
@@ -259,7 +259,7 @@ class Queue:
 		# Make sure the user isn't in the queue. The config can allow multiple materials per person, or not.
 		inqueue = False
 		for i in self.queue:
-			for j in i: 
+			for j in i:
 				if name.lower() == j["name"].lower() and (
 						material == j["material"] or (not config["allow_multiple_materials"])):
 					inqueue = True
@@ -288,6 +288,11 @@ class Queue:
 			if argvs.loud: # If -v, report success
 				color = ansi_colors.MAGENTA if authstate else ""
 				color_print("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
+
+			# let that client know
+			serve_connection({
+				"action": "job_added"
+			}, ws)
 		else:
 			if config["allow_multiple_materials"]:
 				serve_connection({
@@ -334,7 +339,7 @@ class Queue:
 
 		# If the pass can't happen, return
 		if masterindex >= len(masterqueue)-1: return
-		if masterindex >= config["pass_depth"] and not authstate: 
+		if masterindex >= config["pass_depth"] and not authstate:
 			color_print("Passing at depth {masterindex} requires auth.", masterindex=masterindex, color=ansi_colors.YELLOW)
 			return
 
@@ -356,7 +361,7 @@ class Queue:
 
 	def relmove(self, **kwargs):
 		"""
-		Move an object with pass logic, using masterqueue indexes. 
+		Move an object with pass logic, using masterqueue indexes.
 		"""
 		args, authstate = kwargs["args"], kwargs["authstate"]
 		job_uuid, nindex = args["uuid"], args["target_index"]
@@ -389,9 +394,9 @@ class Queue:
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
 			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
-				name = job["name"], 
-				prevind = masterindex, 
-				newind = nindex, 
+				name = job["name"],
+				prevind = masterindex,
+				newind = nindex,
 				uuid = job["uuid"],
 				color=color)
 
@@ -412,15 +417,15 @@ class Queue:
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
 			color_print("Moved {name} to index {newind} within priority {newpri}.\n({uuid})",
-				name = job["name"], 
-				newind = ni, 
-				newpri = np, 
-				uuid = job["uuid"], 
+				name = job["name"],
+				newind = ni,
+				newpri = np,
+				uuid = job["uuid"],
 				color=color)
 
 	def increment(self, **kwargs):
 		"""
-		Raise an object one index. 
+		Raise an object one index.
 		If it's at the top of a priority level it will jump to the bottom of the next.
 		"""
 		args, authstate = kwargs["args"], kwargs["authstate"]
@@ -453,15 +458,15 @@ class Queue:
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
 			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
-				name = job["name"], 
-				prevind = masterindex, 
-				newind = masterindex-1, 
-				uuid = job["uuid"], 
+				name = job["name"],
+				prevind = masterindex,
+				newind = masterindex-1,
+				uuid = job["uuid"],
 				color=color)
 
 	def decrement(self, **kwargs):
 		"""
-		Drop an object one index. 
+		Drop an object one index.
 		If it's at the bottom of a priority level it will jump to the top of the next.
 		"""
 		args, authstate = kwargs["args"], kwargs["authstate"]
@@ -494,10 +499,10 @@ class Queue:
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
 			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
-				name = job["name"], 
-				prevind = masterindex, 
-				newind = masterindex+1, 
-				uuid = job["uuid"], 
+				name = job["name"],
+				prevind = masterindex,
+				newind = masterindex+1,
+				uuid = job["uuid"],
 				color=color)
 
 	def attr(self, **kwargs):
@@ -520,11 +525,11 @@ class Queue:
 			job["coachmodified"] = True
 
 		# Strip names before they can be used
-		if attrname == "name": 
+		if attrname == "name":
 			job["name"] = str(value).strip()
 
 		# Make sure material can be used
-		elif attrname == "material" and value in config["materials"]: 
+		elif attrname == "material" and value in config["materials"]:
 			job["material"] = value
 
 		#
@@ -554,7 +559,7 @@ class Queue:
 
 				# If the new priority changed, remove and reinsert the job.
 				if priority != newpriority:
-					job["priority"] = newpriority 
+					job["priority"] = newpriority
 					self.queue[priority].pop(index)
 					self.queue[newpriority].append(job)
 
@@ -568,10 +573,9 @@ class Queue:
 			newval = job[attrname]
 			color = ansi_colors.MAGENTA if authstate else ""
 			color_print("Changed {name}'s `{attributename}` value from {oldvalue} to {newvalue}.\n({uuid})",
-				name = job["name"], 
-				attributename = attrname, 
-				oldvalue = oldval, 
-				newvalue = newval, 
-				uuid = job["uuid"], 
+				name = job["name"],
+				attributename = attrname,
+				oldvalue = oldval,
+				newvalue = newval,
+				uuid = job["uuid"],
 				color=color)
-

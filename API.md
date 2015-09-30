@@ -256,6 +256,15 @@ The frontend should render the queue based on data in here.
 }
 ```
 
+### Confirm job was added to queue
+This can be used to end a loader or just to confirm the job was added.
+
+```
+{
+	"action": "job_added"
+}
+```
+
 ### Display modal
 Displays a modal based on the packet.
 

@@ -382,6 +382,7 @@ function renderForm() {
 		$('.btn-submit').click(function submitForm(clickAction) {
 			clickAction.preventDefault();
 			logText("submit button clicked");
+			NProgress.start(); // end when the sending callback is received
 			var job = {
 				"action": "add",
 				"extras": {}

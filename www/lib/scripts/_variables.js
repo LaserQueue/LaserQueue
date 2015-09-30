@@ -21,6 +21,10 @@ var config, jsonData, socket, buttons,
 			$('.jobs-table-template').render(allCuts, renderDirectives);
 			populateActions();
 		}],
+		"job_added": [function endLoader() {
+			logText("job_added received, so ending job addition loader");
+			NProgress.done();
+		}],
 		"authed": [function authUser(data) {
 			if (config.admin_mode_enabled && !authed) onAuth();
 		}],
