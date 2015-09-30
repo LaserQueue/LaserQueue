@@ -86,8 +86,6 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 				$('.authorize').tooltip('hide');
 			} else {
 
-				NProgress.start();
-
 				// if not authorized, present auth UI
 				modalMessage('Authenticate',
 					'<form class="login-form">' +
@@ -108,6 +106,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 				// authenticate password when asked
 				$('.auth-button').click(function authenticatePassword(event) {
 					event.preventDefault();
+					NProgress.start();
 					if($('#password').val()) {
 						logText('Password entered. Attempting auth.');
 						socketSend({
