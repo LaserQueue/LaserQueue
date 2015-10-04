@@ -6,6 +6,9 @@ import atexit
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath) # Make sure we're in the right directory
+# Allow importing from scripts
+sys.path.append(
+	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
 
 if sys.version_info.major < 3 or (sys.version_info.major >= 3 and sys.version_info.minor < 4):
 	from cprints import *
@@ -22,9 +25,6 @@ if sys.version_info.major < 3 or (sys.version_info.major >= 3 and sys.version_in
 		color=ansi_colors.DARKRED, strip=True)
 	quit()
 
-# Allow importing from scripts
-sys.path.append(
-	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
 from parseargv import args
 from util import *
 color_printing_config.color = ansi_colors.GREEN
