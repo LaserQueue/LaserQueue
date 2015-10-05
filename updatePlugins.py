@@ -2,6 +2,9 @@ import os, sys
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath) # Make sure we're in the right directory
+# Allow importing from scripts
+sys.path.append(
+	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
 
 if sys.version_info.major < 3 or (sys.version_info.major >= 3 and sys.version_info.minor < 4):
 	from cprints import *
@@ -19,8 +22,14 @@ if sys.version_info.major < 3 or (sys.version_info.major >= 3 and sys.version_in
 	quit()
 
 import pip, argparse, git
+import urllib.parse, urllib.request
 
 PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "plugins"))
+
+from util import *
+color_printing_config.color = ansi_colors.DARKGRAY
+color_printing_config.name = "Plugins"
+
 
 def fetch_dependencies(packs):
 	"""
@@ -73,14 +82,6 @@ def fetch_dependencies(packs):
 	if installed:
 		color_print("Sucessfully installed all dependencies!")
 
-# Allow importing from scripts
-sys.path.append(
-	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
-from util import *
-color_printing_config.color = ansi_colors.DARKGRAY
-color_printing_config.name = "Plugins"
-
-
 def tryLoadManifest(folder, name):
 	try:
 		with open(os.path.join(folder, name)) as f:
@@ -90,7 +91,7 @@ def tryLoadManifest(folder, name):
 
 def hasManifest(filename):
 	subFiles = os.listdir(os.path.join(PLUGINDIR, filename))
-	acceptableFiles = filter(lambda x: x.lower() == "manifest.json", subFiles)
+	acceptableFiles = filter(lambda x: x == "manifest.json", subFiles)
 	return bool(list(acceptableFiles))
 
 def getManifests():
@@ -98,14 +99,14 @@ def getManifests():
 	pluginFolders = filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), plugins)
 	pluginManifested = filter(hasManifest, pluginFolders)
 
-	pluginManifests = []
+	pluginManifests = {}
 
 	for i in pluginManifested:
 		pluginFiles = os.listdir(os.path.join(PLUGINDIR, i))
-		pluginFiles = filter(lambda filename: x.lower() == "manifest.json", pluginFiles)
+		pluginFiles = filter(lambda filename: x == "manifest.json", pluginFiles)
 		for j in pluginFiles:
 			imported = tryLoadManifest(i, j)
-			pluginManifests.append(imported)
+			pluginManifests[j] = imported
 			break
 
 	if not pluginManifests:
@@ -117,18 +118,53 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(add_help=False, usage="%(prog)s [options]",)
 	parser.add_argument("-f", "--fetch", help="Pull from plugins.json and install", dest="fetch",
 		action="store_true")
+	parser.add_argument("-s", "--skip-deps", help="Don't install dependencies", dest="skip",
+		action="store_true")
 	parser.add_argument("-h", "--help", help="Show this help message and exit", action="help")
 	args = parser.parse_args()
 
 	pluginFolders = list(filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), os.listdir(PLUGINDIR)))
 	if args.fetch:
-		plugins = Config("plugins.json")
-		for pl in plugins:
-			if pl['name'] not in pluginFolders:
-				git.Repo.clone_from(pl['target'], os.path.join(PLUGINDIR, pl['name']))
+		deps = []
+		try:
+			plugins = Config("plugins.json")
+			for pl in plugins:
+				if 'name' in pl and 'target' in pl and pl['name'] not in pluginFolders:
+					try:
+						git.Repo.clone_from(pl['target'], os.path.join(PLUGINDIR, pl['name']))
+						if os.path.exists(os.path.join(PLUGINDIR, pl['name'], "manifest.json")):
+							manifest = Config(os.path.join(PLUGINDIR, pl['name'], "manifest.json"))
+							deps += manifest.get('deps', [])
+					except Exception as e:
+						color_print(format_traceback(e, "Error installing {name}:"), name=pl['name'], color=ansi_colors.DARKRED)
+			fetch_dependencies(deps)
+		except Exception as e:
+			color_print(format_traceback(e, "Error loading plugins.json:"), color=ansi_colors.DARKRED)
 	else:
 		manifests = getManifests()
-		pass
+		for folder_name in manifests:
+			try:
+				manifest = manifests[folder_name]
+				if 'name' in manifest and 'target' in manifest and 'version' in manifest:
+					newurl = urllib.parse.urljoin(re.sub(r"\.git$", "", manifest['target']), "manifest.json")
+					data = json.load(urllib.request.urlopen(newurl))
+					if 'version' in data and data['version'] > manifest['version']:
+						# Get a git repo object for the folder
+						if not os.path.exists(os.path.join(PLUGINDIR, folder_name, ".git")):
+							repo = git.Repo.init(os.path.join(PLUGINDIR, folder_name))
+						else:
+							repo = git.Repo(os.path.join(PLUGINDIR, folder_name))
+						if "origin" not in [i.name for i in repo.remotes]:
+							origin = repo.create_remote("origin", manifest['target'])
+							origin.fetch()
+
+						# Reset the repository
+						repo.git.fetch("--all")
+						repo.git.reset("--hard", "origin/master")
+				else:
+					color_print("Invalid manifest for {name}.", name=folder_name, color=ansi_colors.RED)
+			except Exception as e:
+				color_print(format_traceback(e, "Error installing {name}:"), name=pl['name'], color=ansi_colors.DARKRED)
 		
 
 
