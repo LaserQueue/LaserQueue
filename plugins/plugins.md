@@ -40,9 +40,9 @@ Two modules that have been made available you might find helpful:
 ## Backend Plugin functions
 Each plugin must have at least one of these:
 ### Upkeep
-`upkeep`, which is a function recieving **kwargs. It will be run every `config.refreshRate` These arguments, for now, include `queue`, `sessions`, and `sockets`. These allow you to manipulate the queue quite readily.
+`upkeep`, which is a function receiving **kwargs. It will be run every `config.refreshRate` These arguments, for now, include `queue`, `sessions`, and `sockets`. These allow you to manipulate the queue quite readily.
 ### Socket commands
-`socketCommands`, a list of SocketCommand objects usable for recieving and processing data.
+`socketCommands`, a list of SocketCommand objects usable for receiving and processing data.
 ### Hidden from the client
 `hideFromClient` is a list of tags to be added to the blacklist in `QueueObject.serialize`.
 ### Required tags
