@@ -16,7 +16,7 @@ formOptions.example = {
 
 ### Select form options
 ```
-formOptions.example = "priority": {
+formOptions.example = {
     "type": "select",
     "tooltip": "This shows on hover",
     "header": "An optional value. If set, this is added to the top of the dropdown, disabled but selected.",
@@ -30,6 +30,18 @@ formOptions.example = "priority": {
 ```
 
 Alternatively, `formOptions.example.options` can be an object with keys and values. In this case, the value returned to the backend will be the key.
+
+### Generic form options
+This enables custom form elements.
+```
+formOptions.test = {
+	"type": "generic",
+	"template": "<button class='btn btn-default testButton'>testButton</button>",
+	"getVal": function getVal() {
+		return $('.testButton').html()
+	}
+};
+```
 
 ## Backend Plugin resources
 Two modules that have been made available you might find helpful:  
