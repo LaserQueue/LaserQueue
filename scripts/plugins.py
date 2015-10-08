@@ -88,6 +88,8 @@ def getPluginJs():
 		for j in pluginJsFiles:
 			pluginJs.append(tryLoadJS(i, j))
 
+	pluginJs = list(filter(lambda x: x, pluginJs))
+
 	if pluginJs:
 		printer.color_print("Finished loading JS plugins.")
 	else:
