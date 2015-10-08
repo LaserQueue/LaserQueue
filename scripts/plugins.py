@@ -86,7 +86,7 @@ def getPluginJs():
 		pluginJsFiles = os.listdir(os.path.join(PLUGINDIR, i))
 		pluginJsFiles = filter(lambda filename: filename.endswith(".min.js"), pluginJsFiles)
 		for j in pluginJsFiles:
-			pluginModules.append(tryLoadJs(i, j))
+			pluginJs.append(tryLoadJs(i, j))
 
 	if pluginJs:
 		printer.color_print("Finished loading JS plugins.")
