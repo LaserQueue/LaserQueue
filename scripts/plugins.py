@@ -22,7 +22,7 @@ def tryImport(name):
 
 def tryLoadJS(folder, name):
 	try:
-		with open(os.path.join('..', 'plugins', folder, name)) as f:
+		with open(os.path.join(os.path.pardir, 'plugins', folder, name)) as f:
 			return f.read().strip()
 	except Exception as e:
 		printer.color_print(format_traceback(e, format("Error loading {name}:", name=name)), color=ansi_colors.DARKRED)
