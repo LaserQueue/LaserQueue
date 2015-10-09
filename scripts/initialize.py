@@ -290,7 +290,7 @@ def update_password():
 			hashed_file = open("hashpassword", "w")
 			hashed_file.write(hashed_final)
 			hashed_file.close()
-			color_print("Password changed to {starredpass}.", starredpass="*"*len(newpass))
+			color_print("Password changed to {starredpass}.", starredpass="*"*len(hashed_final))
 		except Exception as e: # Error reporting
 			color_print(format_traceback(e, "Error changing password:"), color=ansi_colors.DARKRED)
 
