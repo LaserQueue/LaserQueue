@@ -123,8 +123,7 @@ class Queue:
 			self.queue = jdata
 
 		# Ensure correct priorities
-		for ii in range(len(self.queue)):
-			i = self.queue[ii]
+		for ii, i in enumerate(range(len(self.queue))):
 			for job in i:
 				job["priority"] = ii
 		return self
