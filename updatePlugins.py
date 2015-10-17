@@ -124,6 +124,8 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	pluginFolders = list(filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), os.listdir(PLUGINDIR)))
+	installed_packages = [str(i).split(" ")[0] for i in pip.get_installed_distributions()]
+
 	if args.fetch:
 		deps = []
 		try:
@@ -134,14 +136,16 @@ if __name__ == "__main__":
 						git.Repo.clone_from(pl['target'], os.path.join(PLUGINDIR, pl['name']))
 						if os.path.exists(os.path.join(PLUGINDIR, pl['name'], "manifest.json")):
 							manifest = Config(os.path.join(PLUGINDIR, pl['name'], "manifest.json"))
-							deps += manifest.get('deps', [])
+							deps += list(filter(lambda x: x not in installed_packages, manifest.get('deps', [])))
 					except Exception as e:
 						color_print(format_traceback(e, "Error installing {name}:"), name=pl['name'], color=ansi_colors.DARKRED)
-			fetch_dependencies(deps)
+			if deps:
+				fetch_dependencies(deps)
 		except Exception as e:
 			color_print(format_traceback(e, "Error loading plugins.json:"), color=ansi_colors.DARKRED)
 	else:
 		manifests = getManifests()
+		deps = []
 		for folder_name in manifests:
 			try:
 				manifest = manifests[folder_name]
@@ -157,6 +161,7 @@ if __name__ == "__main__":
 						if "origin" not in [i.name for i in repo.remotes]:
 							origin = repo.create_remote("origin", manifest['target'])
 							origin.fetch()
+						deps += list(filter(lambda x: x not in installed_packages, manifest.get('deps', [])))
 
 						# Reset the repository
 						repo.git.fetch("--all")
@@ -165,6 +170,11 @@ if __name__ == "__main__":
 					color_print("Invalid manifest for {name}.", name=folder_name, color=ansi_colors.RED)
 			except Exception as e:
 				color_print(format_traceback(e, "Error installing {name}:"), name=pl['name'], color=ansi_colors.DARKRED)
+		try:
+			if deps:
+				fetch_dependencies(deps)
+		except KeyboardInterrupt: print()
+
 		
 
 
