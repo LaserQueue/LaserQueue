@@ -400,21 +400,24 @@ function renderForm() {
 			$('.form-group > *:not(.btn-submit)').each(function parseFormElements() {
 				var formEl = $(this).data('formEl');
 
-				if (formEl === 'name' || formEl === 'material') {
-					// if name or material, just send value
-					job[formEl] = $(this).val();
-				} else if (formEl === 'priority') {
-					// if priority, send value as number
-					job[formEl] = +$(this).val();
-				} else  if (formEl === 'time'){
-					// if time estimate, send value parsed as time and as number
-					job[formEl] = +$('.job-time-estimate').val().match(/\d*(\.\d+)?/)[0];
-				} else if (formEl) {
-					// otherwise, toss into extras
-					if($(this).data('formElType') === 'generic') {
-						job.extras[formEl] = formOptions[formEl].getVal();
-					} else {
-						job.extras[formEl] = $(this).val();
+				if(!formOptions[formEl].noParse) {
+
+					if (formEl === 'name' || formEl === 'material') {
+						// if name or material, just send value
+						job[formEl] = $(this).val();
+					} else if (formEl === 'priority') {
+						// if priority, send value as number
+						job[formEl] = +$(this).val();
+					} else  if (formEl === 'time'){
+						// if time estimate, send value parsed as time and as number
+						job[formEl] = +$('.job-time-estimate').val().match(/\d*(\.\d+)?/)[0];
+					} else if (formEl) {
+						// otherwise, toss into extras
+						if($(this).data('formElType') === 'generic') {
+							job.extras[formEl] = formOptions[formEl].getVal();
+						} else {
+							job.extras[formEl] = $(this).val();
+						}
 					}
 				}
 			});
