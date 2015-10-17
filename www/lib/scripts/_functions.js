@@ -333,17 +333,11 @@ function renderForm() {
 						}));
 					}
 				}
-			} else if (el.type === 'file') {
-				$('<input data-form-el-type="file" data-form-el="{formEl}" type="file" placeholder="{placeholder}" class="form-control form-file-picker {classes}" data-toggle="tooltip" data-placement="bottom" title="{tooltip}">'.format({
-					formEl: i,
-					placeholder: el.placeholder,
-					classes: classes,
-					tooltip: el.tooltip
-				})).insertBefore('.btn-submit');
 			} else if (el.type === 'generic') {
 				$(el.template).insertBefore('.btn-submit')
 					.attr('data-form-el-type', 'generic')
 					.attr('data-form-el', i);
+				if(el.onRender) el.onRender();
 			} else {
 				// if this form option wants something we don't recognize (yet)
 				logText('Unhandled input type: {type}.'.format({type: el.type}));

@@ -19,6 +19,10 @@
 	display: inline-block;
 }
 
+.job-form-group * {
+	margin-right: 15px;
+}
+
 .btn-pink, .btn-pink:hover, .btn-pink:focus {
 	color: white;
 }
@@ -37,8 +41,25 @@
 	}
 }
 
-.job-form-group * {
-	margin-right: 15px;
+.btn-pink-outline {
+	@extend .btn-pink;
+	background: white;
+	color: $nuvu-pink;
+	&:hover, &:focus {
+		color: white;
+	}
+}
+
+.form-file-picker {
+	@extend .btn-pink-outline;
+	margin-right: 0;
+	text-align: center;
+	border-color: $subtle-gray;
+	color: $text-black;
+	cursor: pointer;
+	input {
+		display: none;
+	}
 }
 
 .new-job-form .form-control {
@@ -47,10 +68,6 @@
 	&:focus {
 		border-color: $nuvu-pink;
 	}
-}
-
-.form-file-picker {
-	width: 110px !important;
 }
 
 @media (max-width: 768px) {
