@@ -65,15 +65,17 @@ def server(websocket, path):
 			# Only use messages if they have an action
 			if "action" in messagedata:
 				# Make a form of the message used only for display
-				displaymessage = message[:]
+				displaymessage = json.loads(message)
 				if "pass" in messagedata:
-					displaymessage = json.loads(displaymessage)
 					# Replace the password with asterisks
 					displaymessage["pass"] = "*"*len(displaymessage["pass"])
-					displaymessage = json.dumps(displaymessage, sort_keys=True)
+				for key in messagedata:
+					if isinstance(messagedata[key], str) and len(messagedata[key]) > 64:
+						displaymessage[key] = displaymessage[key][:61] + "..."
+
 				authstate = sessions.check(get_sec_key(websocket))
 				color = ansi_colors.MAGENTA if authstate and args.loud else ""
-				color_print(displaymessage, color=color)
+				color_print(json.dumps(displaymessage, sort_keys=True), color=color)
 				# Run the processing subroutine
 				process(messagedata, websocket)
 		except Exception as e: # Error reporting
