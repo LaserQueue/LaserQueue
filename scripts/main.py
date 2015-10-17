@@ -70,8 +70,11 @@ def server(websocket, path):
 					# Replace the password with asterisks
 					displaymessage["pass"] = "*"*len(displaymessage["pass"])
 				for key in messagedata:
-					if isinstance(messagedata[key], str) and len(messagedata[key]) > 64:
-						displaymessage[key] = displaymessage[key][:61] + "..."
+					if isinstance(messagedata[key], str):
+						displaymessage[key] = displaymessage[key].replace("\n", "\\n")
+						displaymessage[key] = displaymessage[key].replace("\t", "\\t")
+						if len(messagedata[key]) > 64:
+							displaymessage[key] = displaymessage[key][:61] + "..."
 
 				authstate = sessions.check(get_sec_key(websocket))
 				color = ansi_colors.MAGENTA if authstate and args.loud else ""
