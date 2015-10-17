@@ -20,7 +20,7 @@ def tryImport(name):
 	except Exception as e:
 		printer.color_print(format_traceback(e, format("Error importing {name}:", name=name)), color=ansi_colors.DARKRED)
 
-def tryLoadJS(folder, name):
+def tryLoadFile(folder, name):
 	try:
 		with open(os.path.join(os.path.pardir, 'plugins', folder, name)) as f:
 			return f.read().strip()
@@ -39,16 +39,19 @@ def hasPy(filename):
 	subFiles = os.listdir(os.path.join(PLUGINDIR, filename))
 	acceptableFiles = filter(lambda x: x.endswith(".py"), subFiles)
 	return bool(list(acceptableFiles))
-def hasJs(filename):
-	subFiles = os.listdir(os.path.join(PLUGINDIR, filename))
-	acceptableFiles = filter(lambda x: x.endswith(".js"), subFiles)
-	return bool(list(acceptableFiles))
+def hasftypeFactory(ftype):
+	def hasftype(filename):
+		subFiles = os.listdir(os.path.join(PLUGINDIR, filename))
+		acceptableFiles = filter(lambda x: x.endswith(ftype), subFiles)
+		return bool(list(acceptableFiles))
+	return hasftype
 
 
 def getPlugins():
 	if args.noPlugins:
 		return []
-	printer.color_print("Loading Python plugins...")
+	if args.loud:
+		printer.color_print("Loading Python plugins...")
 	plugins = os.listdir(PLUGINDIR)
 	pluginFolders = filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), plugins)
 	pluginsPy = filter(hasPy, pluginFolders)
@@ -64,34 +67,37 @@ def getPlugins():
 			pluginModules.append(imported)
 
 	pluginModules = list(filter(pluginFilter, pluginModules))
-	if pluginModules:
-		printer.color_print("Finished loading Python plugins.")
-	else:
-		printer.color_print("No Python plugins found.")
+	if args.loud:
+		if pluginModules:
+			printer.color_print("Finished loading Python plugins.")
+		else:
+			printer.color_print("No Python plugins found.")
 	return pluginModules
 
 
 
-def getPluginJs():
+def getPluginFiletype(ftype):
 	if args.noPlugins:
 		return []
-	printer.color_print("Loading JS plugins...")
+	if args.loud:
+		printer.color_print("Loading {type} plugins...", type=ftype)
 	plugins = os.listdir(PLUGINDIR)
 	pluginFolders = filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), plugins)
-	pluginsJs = filter(hasJs, pluginFolders)
+	plugins = filter(hasftypeFactory(ftype), pluginFolders)
 
-	pluginJs = []
+	plugin = []
 
-	for i in pluginsJs:
-		pluginJsFiles = os.listdir(os.path.join(PLUGINDIR, i))
-		pluginJsFiles = filter(lambda filename: filename.endswith(".min.js"), pluginJsFiles)
-		for j in pluginJsFiles:
-			pluginJs.append(tryLoadJS(i, j))
+	for i in plugins:
+		pluginFiles = os.listdir(os.path.join(PLUGINDIR, i))
+		pluginFiles = filter(lambda filename: filename.endswith(ftype), pluginFiles)
+		for j in pluginFiles:
+			plugin.append(tryLoadFile(i, j))
 
-	pluginJs = list(filter(lambda x: x, pluginJs))
+	plugin = list(filter(lambda x: x, plugin))
 
-	if pluginJs:
-		printer.color_print("Finished loading JS plugins.")
-	else:
-		printer.color_print("No JS plugins found.")
-	return pluginJs
+	if args.loud:
+		if plugin:
+			printer.color_print("Finished loading {type} plugins.", type=ftype)
+		else:
+			printer.color_print("No {type} plugins found.", type=ftype)
+	return plugin

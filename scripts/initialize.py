@@ -15,6 +15,7 @@ os.chdir(file_path) # Make sure we're in the correct directory
 
 # All the config paths
 plugin_js_path = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
+plugin_css_path = os.path.join(os.path.pardir, "www", "dist", "css", "plugins.css")
 config_path = os.path.join(os.path.pardir, "www", "config.json")
 user_config_path = os.path.join(os.path.pardir, "www", "userconf.json")
 default_config_path = os.path.join(os.path.pardir, "www", "defaultconf.json")
@@ -102,11 +103,15 @@ def getIPs(test=False):
 		color_print("WARNING: No internet connection. Using -l behavior.", color=ansi_colors.YELLOW)
 	return ips
 
-def concat_js_plugins():
-	js = plugins.getPluginJs()
+def concat_plugins():
+	js = plugins.getPluginFiletype(".min.js")
 	plugin_js = "\n".join(js)
 	with open(plugin_js_path, "w") as f:
 		f.write(plugin_js)
+	css = plugins.getPluginFiletype(".min.css")
+	plugin_css = "\n".join(css)
+	with open(plugin_css_path, "w") as f:
+		f.write(plugin_css)
 
 
 PACKAGES = [
@@ -337,7 +342,7 @@ def main():
 	except KeyboardInterrupt: print()
 	try: update()
 	except KeyboardInterrupt: print()
-	try: concat_js_plugins()
+	try: concat_plugins()
 	except KeyboardInterrupt: print()
 				
 	color_print("Initialization complete.")

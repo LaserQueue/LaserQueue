@@ -96,3 +96,4 @@ plugins/
 !plugins/exampleplugin
 
 www/dist/js/plugins.js
+www/dist/css/plugins.css
