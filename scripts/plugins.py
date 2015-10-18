@@ -6,6 +6,25 @@ PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pard
 sys.path.append(PLUGINDIR)
 sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 
+class Registry:
+	def __init__(self):
+		self.events = {}
+	def on(self, tag, func):
+		if not self.events[tag]:
+			self.events[tag] = {}
+		funcid = -1
+		for i in self.events[tag]:
+			funcid = max(funcid, i)
+		funcid += 1
+		self.events[tag][funcid] = func
+		return funcid
+	def deregister(self, tag, funcid):
+		if tag in self.events:
+			if funcid in self.events[tag]:
+				del self.events[tag]
+				return True
+		return False
+
 def tryImport(name):
 	try:
 		if args.loud:
