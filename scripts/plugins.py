@@ -80,7 +80,7 @@ def getPlugins():
 			printer.color_print("Finished loading Python plugins.")
 		else:
 			printer.color_print("No Python plugins found.")
-	return pluginModules
+	return pluginModules, reg
 
 
 

@@ -162,7 +162,7 @@ def main():
 	"""
 	global socks, queue, authed, sessions, queuehash, upkeepThread, pluginUpkeeps
 
-	pluginList = plugins.getPlugins()
+	pluginList, reg = plugins.getPlugins()
 	pluginUpkeeps = list(filter(lambda module: hasattr(module, "upkeep"), pluginList))
 	comm.buildCommands(pluginList)
 	laserqueue.buildLists(pluginList)
