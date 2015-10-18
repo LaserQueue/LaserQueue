@@ -30,9 +30,13 @@
 .btn-pink {
 	background: $nuvu-pink;
 	border: 1px solid darken($nuvu-pink, 15%);
-	&:hover, &:focus {
+	&:hover {
 		background: darken($nuvu-pink, 5%);
 		border: 1px solid darken($nuvu-pink, 15%);
+	}
+	&:focus {
+		border: 1px solid darken($nuvu-pink, 15%);
+		color: $text-black;
 	}
 	&:active {
 		background: darken($nuvu-pink, 20%) !important;
@@ -45,7 +49,7 @@
 	@extend .btn-pink;
 	background: white;
 	color: $nuvu-pink;
-	&:hover, &:focus {
+	&:hover {
 		color: white;
 	}
 }
