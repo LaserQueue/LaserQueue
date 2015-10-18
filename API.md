@@ -265,6 +265,15 @@ This can be used to end a loader or just to confirm the job was added.
 }
 ```
 
+### Let client know job was NOT added to the queue
+This can be used to end a loader or inform the user. The backend also sends a user-visible notification when this happens.
+
+```
+{
+	"action": "add_failed"
+}
+```
+
 ### Display modal
 Displays a modal based on the packet.
 

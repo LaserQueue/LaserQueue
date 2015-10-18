@@ -225,12 +225,14 @@ class Queue:
 
 		# If the priority or the material aren't set up, or the name isn't defined
 		if not name or material == "N/A" or priority == -1:
-			# Tell the client then don't add the object
+			# Tell the user
 			serve_connection({
 				"action": "notification",
 				"title": "Incomplete data",
 				"text": "Please fill out the submission form fully."
 				}, ws)
+			# Tell the client then don't add the object
+			serve_connection({"action": "add_failed"}, ws)
 			if argvs.loud:
 				color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
 			return
@@ -292,7 +294,7 @@ class Queue:
 			if argvs.loud: # If -v, report success
 				color = ansi_colors.MAGENTA if authstate else ""
 				color_print("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
-			
+
 		else:
 			if config["allow_multiple_materials"]:
 				serve_connection({
