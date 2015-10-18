@@ -302,6 +302,7 @@ class Queue:
 					"title": "Duplicate job",
 					"text": "You may not create two jobs with the same name and material."
 					}, ws)
+				serve_connection({"action": "add_failed"}, ws)
 			else:
 				serve_connection({
 					"action": "notification",
