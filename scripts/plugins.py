@@ -6,25 +6,6 @@ PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pard
 sys.path.append(PLUGINDIR)
 sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
 
-class Registry:
-	def __init__(self):
-		self.events = {}
-	def on(self, tag, func):
-		if not self.events[tag]:
-			self.events[tag] = {}
-		funcid = -1
-		for i in self.events[tag]:
-			funcid = max(funcid, i)
-		funcid += 1
-		self.events[tag][funcid] = func
-		return funcid
-	def deregister(self, tag, funcid):
-		if tag in self.events:
-			if funcid in self.events[tag]:
-				del self.events[tag]
-				return True
-		return False
-
 def tryImport(name):
 	try:
 		if args.loud:
@@ -52,7 +33,8 @@ pluginFilter = lambda module: (
 	hasattr(module, "socketCommands") or
 	hasattr(module, "hideFromClient") or
 	hasattr(module, "requiredTags") or
-	hasattr(module, "requiresAuth"))
+	hasattr(module, "requiresAuth") or
+	hasattr(module, "eventRegistry"))
 
 def hasPy(filename):
 	subFiles = os.listdir(os.path.join(PLUGINDIR, filename))
@@ -71,6 +53,7 @@ def getPlugins():
 		return []
 	if args.loud:
 		printer.color_print("Loading Python plugins...")
+	reg = Registry()
 	plugins = os.listdir(PLUGINDIR)
 	pluginFolders = filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), plugins)
 	pluginsPy = filter(hasPy, pluginFolders)
@@ -83,7 +66,13 @@ def getPlugins():
 		sys.path.append(os.path.join(PLUGINDIR, i))
 		for j in pluginPyFiles:
 			imported = tryImport(j[:-3])
-			pluginModules.append(imported)
+			if imported:
+				if hasattr(imported, "eventRegistry"):
+					if isinstance(imported.eventRegistry, Registry):
+						reg.graft(imported.eventRegistry)
+					else:
+						printer.color_print("{name}.eventRegistry isn't a Registry!", name=j[:-3], color=ansi_colors.DARKRED)
+				pluginModules.append(imported)
 
 	pluginModules = list(filter(pluginFilter, pluginModules))
 	if args.loud:

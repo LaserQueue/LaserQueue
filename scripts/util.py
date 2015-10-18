@@ -42,6 +42,37 @@ def format_traceback(e, text="Traceback (most recent call last):"):
 
 	return error 
 
+class Registry:
+	def __init__(self):
+		self.events = {}
+	def on(self, tag, func):
+		if tag not in self.events:
+			self.events[tag] = {}
+		funcid = -1
+		for i in self.events[tag]:
+			funcid = max(funcid, i)
+		funcid += 1
+		self.events[tag][funcid] = func
+		return funcid
+	def deregister(self, tag, funcid):
+		if tag in self.events:
+			if funcid in self.events[tag]:
+				del self.events[tag]
+				return True
+		return False
+	def hash(self):
+		return hash(str(self.events))
+	def graft(self, reg):
+		for key in reg.events:
+			if key not in self.events:
+				self.events[key] = {}
+			for oldjob in reg.events[key]:
+				newjob = -1
+				for i in self.events[key]:
+					newjob = max(newjob, i)
+				newjob += 1
+				self.events[key][newjob] = reg.events[key][oldjob]
+
 class Config:
 	"""
 	A JSON read-only loader that will update automatically from `path`.
