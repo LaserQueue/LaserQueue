@@ -1,5 +1,5 @@
 # Plugins
-Plugins can add features to the queue or tweak it to fit your needs.
+Plugins can add features to the queue or tweak it to fit your needs. For general API info that may be relevant, see [API.md](../API.md).
 
 ## Frontend Plugin resources
 Your JS will be concatenated with the other plugins. It has access to `formOptions`, a global object, to modify the form. The plugin should modify it as desired, then call `renderForm()` to make its changes reflected. There are two builtin types of form elements: strings for text and selects for dropdowns. Custom values are passed to the backend in the extras object.
