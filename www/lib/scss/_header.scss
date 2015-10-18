@@ -66,6 +66,10 @@
 	}
 }
 
+.form-pink-input:focus {
+	border-color: $nuvu-pink;
+}
+
 .new-job-form .form-control {
 	height: 38px;
 	box-shadow: none !important;
