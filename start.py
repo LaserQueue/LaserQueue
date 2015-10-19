@@ -11,7 +11,7 @@ sys.path.append(
 	os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts")))
 
 if sys.version_info.major < 3 or (sys.version_info.major >= 3 and sys.version_info.minor < 4):
-	from cprints import *
+	from wireutils import *
 
 	color_printing_config.color = ansi_colors.DARKRED
 	color_printing_config.name = "Error"

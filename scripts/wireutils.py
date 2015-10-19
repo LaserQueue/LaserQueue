@@ -1,6 +1,12 @@
-# Only imported if Python is outdated, so no errors are raised when python runs into the asyncio code.
+"""
+Wire Segal's utility library. 
+
+Do whatever with it, I seriously couldn't care less.
+
+Runs 2.6+ onwards.
+"""
 from __future__ import print_function
-import os, time, sys, re
+import os, json, time, sys, re, traceback
 
 def format(string, **kwargs):
 	"""
@@ -13,6 +19,87 @@ def format(string, **kwargs):
 		regex = re.compile(r"\{" + color + r"\}", re.IGNORECASE)
 		string = regex.sub(str(ansi_colors.COLORS[color]), string)
 	return string
+
+def format_traceback(e, text="Traceback (most recent call last):"):
+	"""
+	Format a traceback into a printable string.
+	"""
+	if not hasattr(e, "__traceback__"):
+		if str(e):
+			return str(type(e).__name__) + ": " + str(e)
+		return str(type(e).__name__)
+	trace = traceback.extract_tb(e.__traceback__) # Get the traceback object
+	error = format("{text}\n", text=text) # Start out with `text`
+
+	# Iterate through the traceback and add each iteration to the string
+	for filename,lineno,function,message in trace:
+		error += format("  File \"{name}\", line {num}, in {funcname}\n",
+			name=filename, 
+			num=lineno, 
+			funcname=function)
+		if message: 
+			error += format("    {data}\n", data=message)
+
+	# Add the type and message of the error
+	error += str(type(e).__name__)
+	if str(e): error += format(": {description}", description=e)
+
+	return error 
+
+class Registry:
+	def __init__(self):
+		self.events = {}
+	def on(self, tag, func):
+		if tag not in self.events:
+			self.events[tag] = {}
+		funcid = -1
+		for i in self.events[tag]:
+			funcid = max(funcid, i)
+		funcid += 1
+		self.events[tag][funcid] = func
+		return funcid
+	def deregister(self, tag, funcid):
+		if tag in self.events:
+			if funcid in self.events[tag]:
+				del self.events[tag]
+				return True
+		return False
+	def hash(self):
+		return hash(str(self.events))
+	def graft(self, reg):
+		for key in reg.events:
+			if key not in self.events:
+				self.events[key] = {}
+			for oldjob in reg.events[key]:
+				newjob = -1
+				for i in self.events[key]:
+					newjob = max(newjob, i)
+				newjob += 1
+				self.events[key][newjob] = reg.events[key][oldjob]
+
+class Config:
+	"""
+	A JSON read-only loader that will update automatically from `path`.
+	"""
+	def __init__(self, path):
+		self.path = path
+		self.lastmodtime = os.path.getctime(path) # get the last modified time of the target file
+		self.data = json.load(open(path))
+	def reload(self):
+		if os.path.getctime(self.path) > self.lastmodtime: # check the last modified time of the target file
+			self.data = json.load(open(self.path))
+			self.lastmodtime = os.path.getctime(self.path)
+
+	# These are extensions of self.data's methods, except they run self.reload.
+	def __getitem__(self, y):
+		self.reload()
+		return self.data[y]
+	def __contains__(self, key):
+		self.reload()
+		return key in self.data
+	def get(self, k, d=None):
+		self.reload()
+		return self.data.get(k, d)
 
 def date_time_string(timestamp=None):
 	"""
@@ -172,7 +259,7 @@ else:
 		}
 
 def rainbonify(string):
-	if not supports_color(): return string
+	if not color_supported: return string
 	else:
 		colors = [ansi_colors.RED, ansi_colors.ORANGE, ansi_colors.YELLOW, ansi_colors.GREEN, 
 				ansi_colors.BLUE, ansi_colors.PURPLE, ansi_colors.DARKPURPLE]
@@ -249,7 +336,12 @@ def color_print(text, color="", strip=False, func=print, add_newline=False, colo
 			  text = i)) # Print all consecutive lines
 			if add_newline: func("\n")
 
-def color_input(text, color="", strip=False, func=input, add_newline=False, colorconfig = None, **kwargs):
+try:
+	agnostic_input = raw_input
+except:
+	agnostic_input = input
+
+def color_input(text, color="", strip=False, func=agnostic_input, add_newline=False, colorconfig = None, **kwargs):
 	"""
 	Pretty print `text`, with `color` as its color. Take input using `func` on the last line.
 	If `strip`, then remove whitespace from both sides of each line.
@@ -296,3 +388,5 @@ def color_input(text, color="", strip=False, func=input, add_newline=False, colo
 			color = color,
 		  text = prints[0]))
 		if add_newline: func("\n")
+
+
