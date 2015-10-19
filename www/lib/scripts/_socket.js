@@ -7,18 +7,7 @@ function parseCut(arrayIndex, arrayEl) {
 	displayEl = $.extend({}, arrayEl); // deepcopy
 	displayEl.material = config.materials[arrayEl.material];
 	displayEl.priority = config.priorities[arrayEl.priority];
-	var timetotal = arrayEl.esttime;
-	var hours = Math.floor(timetotal / 60);
-	timetotal -= hours * 60;
-	var minutes = Math.floor(timetotal);
-	timetotal -= minutes;
-	var seconds = +(timetotal * 60).toFixed(2);
-
-	var timeEstimate = String(hours ? hours + 'h' : '') + (minutes && hours ? ' ' : '');
-	timeEstimate += String(minutes ? minutes + 'm' : '') + (seconds && minutes ? ' ' : '');
-	timeEstimate += String(seconds ? seconds + 's' : '');
-
-	displayEl.esttime = timeEstimate;
+	displayEl.esttime = prettifyTime(arrayEl.esttime);
 
 	// add to full list of cuts
 	allCuts = allCuts.concat(displayEl);

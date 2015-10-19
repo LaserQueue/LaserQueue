@@ -480,3 +480,19 @@ function googleAnalytics(i, s, o, g, r, a, m){
 		ga(i, s, o, g, r, a, m);
 	}
 }
+
+// convert time in minutes to pretty time
+function prettifyTime(minutes) {
+	var timetotal = minutes;
+	var hours = Math.floor(timetotal / 60);
+	timetotal -= hours * 60;
+	var minutes = Math.floor(timetotal);
+	timetotal -= minutes;
+	var seconds = +(timetotal * 60).toFixed(2);
+
+	var prettyTime = String(hours ? hours + 'h' : '') + (minutes && hours ? ' ' : '');
+	prettyTime += String(minutes ? minutes + 'm' : '') + (seconds && minutes ? ' ' : '');
+	prettyTime += String(seconds ? seconds + 's' : '');
+
+	return prettyTime;
+}
