@@ -329,3 +329,11 @@ The title says it all. Dependent upon `config.easter_eggs`.
 	"action":"rickroll"
 }
 ```
+
+### And his name is
+John Cena! Dependent upon `config.easter_eggs`.
+```
+{
+	"action":"dodoododoooooo"
+}
+```
