@@ -469,6 +469,16 @@ function rickRoll() {
 	}
 }
 
+// and his name is
+function johnCena() {
+	if (config.easter_eggs) {
+		modalMessage('And his name is', '<iframe width="420" height="315" src="https://www.youtube.com/embed/weBnn5fzcHg?autoplay=1&disablekb=1&controls=0&loop=1&showinfo=0&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>');
+	}
+	else {
+		logText('Too little cena, not enough easter egg.');
+	}
+}
+
 // checks if the device is a touch device
 function isTouchDevice(){
 	return true === ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
@@ -482,8 +492,8 @@ function googleAnalytics(i, s, o, g, r, a, m){
 }
 
 // convert time in minutes to pretty time
-function prettifyTime(minutes) {
-	var timetotal = minutes;
+function prettifyTime(mins) {
+	var timetotal = mins;
 	var hours = Math.floor(timetotal / 60);
 	timetotal -= hours * 60;
 	var minutes = Math.floor(timetotal);

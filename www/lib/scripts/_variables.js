@@ -41,6 +41,9 @@ var config, jsonData, socket, buttons,
 		"rickroll": [function rickRollUser(data) {
 			if(config.easter_eggs) rickRoll();
 		}],
+		"dodoododoooooo": [function dodoododoooooo(data) {
+			if(config.easter_eggs) johnCena();
+		}],
 		"refresh": [function refreshPage(data) {
 			if(config.allow_force_refresh) window.location.reload();
 		}],

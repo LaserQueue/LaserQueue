@@ -217,7 +217,7 @@ class Queue:
 		"""
 		Adds an object to the queue.
 		"""
-		args, authstate, sec, ws = kwargs["args"], kwargs["authstate"], kwargs["sec"], kwargs["ws"]
+		args, authstate, sec, ws, socks = kwargs["args"], kwargs["authstate"], kwargs["sec"], kwargs["ws"], kwargs["sockets"]
 		name, priority, esttime, material = args["name"], args["priority"], args["time"], args["material"]
 
 		extra_objects = args.get("extras", {}) # Get the extras and make sure it's the right format
@@ -236,6 +236,17 @@ class Queue:
 			if argvs.loud:
 				color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
 			return
+
+		dodoododoooooo = re.sub(r"[^\w ]", "", name.lower().strip())
+		if (dodoododoooooo == "and his name is" or dodoododoooooo == "his name is") and config["easter_eggs"]:
+			if authstate:
+				serve_connections({"action":"dodoododoooooo"}, socks)
+			else:
+				serve_connection({"action": "dodoododoooooo"}, ws)
+			if argvs.loud:
+				color_print(rainbonify("And his name is John Cena!"))
+			return
+
 
 		# Contain the length of time within the configurable bounds.
 		bounds = config["length_bounds"]
