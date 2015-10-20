@@ -4,9 +4,19 @@ import ssl, urllib.request, io, uuid
 DEFAULTCONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "defaultconf.json"))
 CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "config.json"))
 
-# Functions for serving to sockets
-import asyncio
+class MergerConfig(Config):
+	def __init__(self, path, defpath=""):
+		if not defpath:
+			self = Config(path)
+		else:
+			self.path = path
+			self.defpath = path
+			defdata = json.load(open(defpath))
+			self.data = dict(defdata, **json.load(open(path)))
+			json.save(open(path, "w"), self.data)
+			self.lastmodtime = os.path.getctime(path) # get the last modified time of the target file
 
+# Functions for serving to sockets
 def get_sec_key(ws):
 	"""
 	Get the Sec key of the websocket `ws`, used to identify it.
