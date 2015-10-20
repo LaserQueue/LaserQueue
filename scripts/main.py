@@ -7,6 +7,7 @@ import jsonhandler as comm
 import sidhandler as sids
 import plugins
 
+import asyncio
 import websockets
 import threading
 
