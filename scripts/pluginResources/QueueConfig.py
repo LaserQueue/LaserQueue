@@ -9,8 +9,11 @@ class PluginPrinterInstance:
 		if not args:
 			colorobj = color_config()
 		elif len(args) == 1:
-			if isinstance(colorobj, color_config):
+			if isinstance(args[0], color_config):
 				colorobj = args[0]
+			elif isinstance(args[0], str):
+				colorobj = color_config()
+				colorobj.name = args[0]
 			else:
 				raise TypeError(format("Expected type `color_config`, got type `{type}`", type=type(args[0]).__name__))
 		elif len(args) == 2:
