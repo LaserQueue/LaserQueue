@@ -237,14 +237,22 @@ class Queue:
 				color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
 			return
 
-		dodoododoooooo = re.sub(r"[^\w ]", "", name.lower().strip())
-		if (dodoododoooooo == "and his name is" or dodoododoooooo == "his name is") and config["easter_eggs"]:
+		strippedname = re.sub(r"[^\w ]", "", name.lower().strip())
+		if (strippedname == "and his name is" or strippedname == "his name is") and config["easter_eggs"]:
 			if authstate:
 				serve_connections({"action":"dodoododoooooo"}, socks)
 			else:
 				serve_connection({"action": "dodoododoooooo"}, ws)
 			if argvs.loud:
 				color_print(rainbonify("And his name is John Cena!"))
+			return
+		elif (strippedname == "uuddlrlrba") and config["easter_eggs"]:
+			if authstate:
+				serve_connections({"action":"rickroll"}, socks)
+			else:
+				serve_connection({"action": "rickroll"}, ws)
+			if argvs.loud:
+				color_print(rainbonify("Trolled all clients."))
 			return
 
 

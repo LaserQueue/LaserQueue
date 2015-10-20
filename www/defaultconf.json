@@ -57,8 +57,7 @@
 		"increment",
 		"decrement",
 		"refresh",
-		"starttour",
-		"uuddlrlrba"
+		"starttour"
 	],
 	"attr_edit_perms": [
 		"name",

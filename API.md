@@ -225,19 +225,6 @@ Dependent upon config.allow_force_refresh.
 }
 ```
 
-
-### uuddlrlrba *
-huehuehue  
-Dependent upon config.easter_eggs.
-
-#### Sample
-
-```
-{
-	"action": "uuddlrlrba"
-}
-```
-
 *: requires auth by default
 
 

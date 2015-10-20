@@ -42,7 +42,7 @@ Timeout before authed user is deauthed
 ---
 ### `authactions` : `array`
 Actions that require authentication
-#### Default: `move,relmove,increment,decrement,refresh,starttour,uuddlrlrba`
+#### Default: `move,relmove,increment,decrement,refresh,starttour`
 ---
 ### `decr_hover` : `string`
 Tooltip for decrement button

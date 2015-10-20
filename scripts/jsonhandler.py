@@ -117,22 +117,6 @@ def starttour(**kwargs):
 	else:
 		color_print("The tour isn't enabled. (config.json, allow_tour)", color=ansi_colors.YELLOW)
 
-def uuddlrlrba(**kwargs):
-	"""
-	Huehuehue all clients. (if the config allows it)
-	"""
-	socks, authstate = kwargs["sockets"], kwargs["authstate"]
-	if config["easter_eggs"]:
-		serve_connections({"action":"rickroll"}, socks)
-
-		if argvs.loud: # If the verbose flag is used, print report
-			color = ansi_colors.MAGENTA if authstate else ansi_colors.ENDC
-			color_print("{Trolled}{color} all clients.",
-				Trolled = rainbonify("Trolled"),
-				color = color) # RAINBOW \o/
-	else:
-		color_print("This is a serious establishment, son. I'm dissapointed in you.", color=ansi_colors.YELLOW)
-
 def auth(**kwargs):
 	"""
 	Attempt to auth the client using the `pass` argument.
@@ -163,7 +147,6 @@ attr = lambda **kwargs: kwargs["queue"].attr(**kwargs)
 commands = [
 	SocketCommand("deauth", deauth, {}),
 	SocketCommand("refresh", refresh, {}),
-	SocketCommand("uuddlrlrba", uuddlrlrba, {}),
 	SocketCommand("starttour", starttour, {}),
 	SocketCommand("auth", auth, {"pass": str}),
 	SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str}),
