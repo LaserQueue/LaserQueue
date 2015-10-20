@@ -165,8 +165,8 @@ def main():
 
 	pluginList, reg = plugins.getPlugins()
 	pluginUpkeeps = list(filter(lambda module: hasattr(module, "upkeep"), pluginList))
-	comm.buildCommands(pluginList)
-	laserqueue.buildLists(pluginList)
+	comm.buildCommands(pluginList, reg)
+	laserqueue.buildLists(pluginList, reg)
 
 	# Load the queue if -b is used
 	if args.backup:

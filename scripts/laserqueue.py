@@ -42,14 +42,42 @@ hideFromClient = [
 	"sec"
 ]
 
+easterEggs = [
+	{
+		"match": ["and his name is", "his name is"],
+		"serve": {"action":"dodoododoooooo"},
+		"loud": rainbonify("And his name is John Cena!"),
+		"broadcast": True
+	},
+	{
+		"match": ["uuddlrlrba"],
+		"serve": {"action":"rickroll"},
+		"loud": rainbonify("Never gonna give you up,\nnever gonna let you down.\nNever gonna run around and desert you."),
+		"broadcast": True
+	}
+]
+
 # Use the modules from plugins to update requiredtags and hideFromClient
-def buildLists(modules):
-	global requiredtags, hideFromClient
+def buildLists(modules, reg):
+	global requiredtags, hideFromClient, easterEggs
 	for module in modules:
 		if hasattr(module, "requiredTags"):
 			requiredtags = dict(d, **module.requiredTags)
 		if hasattr(module, "hideFromClient"):
 			hideFromClient += module.hideFromClient
+	eggs = reg.events.get('egg', [])
+	for egg in eggs:
+		if not isinstance(egg, dict): 
+			continue
+		if "match" not in egg or not isinstance(egg["match"], list) or not egg["match"]:
+			continue
+		if "serve" not in egg or not isinstance(egg["serve"], dict) or not egg["serve"] or "action" not in egg["serve"]:
+			continue
+		if "loud" not in egg or not isinstance(egg["loud"], str):
+			continue
+		if "broadcast" not in egg or not isinstance(egg["broadcast"], bool):
+			egg["broadcast"] = True
+		easterEggs.append(egg)
 
 class QueueObject(dict):
 	"""
@@ -237,24 +265,22 @@ class Queue:
 				color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
 			return
 
-		strippedname = re.sub(r"[^\w ]", "", name.lower().strip())
-		if (strippedname == "and his name is" or strippedname == "his name is") and config["easter_eggs"]:
-			if authstate:
-				serve_connections({"action":"dodoododoooooo"}, socks)
-			else:
-				serve_connection({"action": "dodoododoooooo"}, ws)
-			if argvs.loud:
-				color_print(rainbonify("And his name is John Cena!"))
-			return
-		elif (strippedname == "uuddlrlrba") and config["easter_eggs"]:
-			if authstate:
-				serve_connections({"action":"rickroll"}, socks)
-			else:
-				serve_connection({"action": "rickroll"}, ws)
-			if argvs.loud:
-				color_print(rainbonify("Trolled all clients."))
-			return
-
+		if config["easter_eggs"]:
+			strippedname = re.sub(r"[^\w ]", "", name.lower().strip())
+			for egg in easterEggs:
+				matches = False
+				for match in egg["match"]:
+					if match == strippedname:
+						matches = True
+						break
+				if matches:
+					if authstate and egg["broadcast"]:
+						serve_connections(egg["serve"], socks)
+					else:
+						serve_connection(egg["serve"], ws)
+					if argvs.loud:
+						color_print(egg["loud"])
+					return
 
 		# Contain the length of time within the configurable bounds.
 		bounds = config["length_bounds"]

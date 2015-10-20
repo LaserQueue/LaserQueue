@@ -159,7 +159,7 @@ commands = [
 	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type})
 ]
 
-def buildCommands(plugins):
+def buildCommands(plugins, reg):
 	"""
 	Build the list of commands.
 	"""
