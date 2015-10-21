@@ -167,7 +167,7 @@ def buildCommands(plugins, reg):
 	commandlist = reg.events.get('socket', {})
 	cmds = [(i,commandlist[i]) for i in commandlist]
 	for cmdid, cmd in cmds:
-		if not (isinstance(cmd, list) or isinstance(cmd, tuple)) or not (2 <= len(cmd) <= 3): 
+		if not (2 <= len(cmd) <= 3): 
 			continue
 		if not isinstance(cmd[0], str) or not cmd[0]:
 			continue

@@ -170,8 +170,8 @@ def main():
 	upkeeplist = reg.events.get('upkeep', {})
 	upkeeps = [(i,upkeeplist[i]) for i in upkeeplist]
 	for jobid, job in upkeeps:
-		if hasattr(job, "__call__"):
-			pluginUpkeeps.append(job)
+		if if job and hasattr(job[0], "__call__"):
+			pluginUpkeeps.append(job[0])
 	comm.buildCommands(pluginList, reg)
 	laserqueue.buildLists(pluginList, reg)
 

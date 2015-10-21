@@ -49,14 +49,14 @@ def format_traceback(e, text="Traceback (most recent call last):"):
 class Registry:
 	def __init__(self):
 		self.events = {}
-	def on(self, tag, func):
+	def on(self, tag, *args):
 		if tag not in self.events:
 			self.events[tag] = {}
 		funcid = -1
 		for i in self.events[tag]:
 			funcid = max(funcid, i)
 		funcid += 1
-		self.events[tag][funcid] = func
+		self.events[tag][funcid] = args
 		return funcid
 	def deregister(self, tag, funcid):
 		if tag in self.events:

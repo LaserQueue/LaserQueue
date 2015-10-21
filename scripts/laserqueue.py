@@ -68,17 +68,19 @@ def buildLists(modules, reg):
 	egglist = reg.events.get('egg', {})
 	eggs = [(i,egglist[i]) for i in egglist]
 	for eggid, egg in eggs:
-		if not isinstance(egg, dict): 
+		if not egg:
 			continue
-		if "match" not in egg or not isinstance(egg["match"], list) or not egg["match"]:
+		if not isinstance(egg[0], dict): 
 			continue
-		if "serve" not in egg or not isinstance(egg["serve"], dict) or not egg["serve"] or "action" not in egg["serve"]:
+		if "match" not in egg[0] or not isinstance(egg[0]["match"], list) or not egg[0]["match"]:
 			continue
-		if "loud" not in egg or not isinstance(egg["loud"], str):
+		if "serve" not in egg[0] or not isinstance(egg[0]["serve"], dict) or not egg[0]["serve"] or "action" not in egg[0]["serve"]:
 			continue
-		if "broadcast" not in egg or not isinstance(egg["broadcast"], bool):
+		if "loud" not in egg[0] or not isinstance(egg[0]["loud"], str):
+			continue
+		if "broadcast" not in egg[0] or not isinstance(egg[0]["broadcast"], bool):
 			egg["broadcast"] = True
-		easterEggs.append(egg)
+		easterEggs.append(egg[0])
 
 class QueueObject(dict):
 	"""
