@@ -75,7 +75,7 @@ Every `config.refreshRate` ms, this will be run. The object to register is a fun
 * `queue` - The current `laserqueue.Queue` object
 * `sessions` - The currect `sidhandler.SIDCache` object
 * `sockets` - The current `main.Sockets` object
-* `reg` - The current `wireutils.Registry` object. Changes you make to this object will not be reflected elsewhere.
+* `registry` - The current `wireutils.Registry` object. Changes you make to this object will not be reflected elsewhere.
 
 #### `"socket"`
 This allows you to register commands for incoming socket data.
@@ -88,10 +88,13 @@ Format:
 )
 ```
 These are identical to the arguments for a `ActionFramework.SocketCommand` object.
+
 ### Hidden from the client
 `hideFromClient` is a list of tags to be added to the blacklist in `QueueObject.serialize`.
+
 ### Required tags
 `requiredTags` is a dict of tags required for QueueObjects. Merged under the existing.
+
 ### Auth-requiring actions
 `requiresAuth` is a list of names of commands that require auth.
 
