@@ -384,18 +384,19 @@ def color_input(text, color="", strip=False, func=agnostic_input, add_newline=Fa
 				text = i))
 			if add_newline: func("\n")
 
+		print_lock.release()
 		return func(format("{whitespace}{color}{text}{endc}",
 			whitespace = colorconfig.whitespace(), 
 			color = color,
 		  text = prints[-1]))
 		if add_newline: func("\n")
 	else:
+		print_lock.release()
 		return func(format("{timestamp}{processtag}{color}{text}{endc}",
 			timestamp = date_time_string(), 
 			processtag = originstr, 
 			color = color,
 		  text = prints[0]))
 		if add_newline: func("\n")
-	print_lock.release()
 
 
