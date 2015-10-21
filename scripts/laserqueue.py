@@ -65,7 +65,7 @@ def buildLists(modules, reg):
 			requiredtags = dict(d, **module.requiredTags)
 		if hasattr(module, "hideFromClient"):
 			hideFromClient += module.hideFromClient
-	egglist = reg.events.get('egg', [])
+	egglist = reg.events.get('egg', {})
 	eggs = [(i,egglist[i]) for i in egglist]
 	for eggid, egg in eggs:
 		if not isinstance(egg, dict): 

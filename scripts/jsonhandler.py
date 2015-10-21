@@ -164,12 +164,24 @@ def buildCommands(plugins, reg):
 	Build the list of commands.
 	"""
 	global commands, authactions
+	commandlist = reg.events.get('socket', {})
+	cmds = [(i,commandlist[i]) for i in commandlist]
+	for cmdid, cmd in cmds:
+		if not (isinstance(cmd, list) or isinstance(cmd, tuple)) or not (2 <= len(cmd) <= 3): 
+			continue
+		if not isinstance(cmd[0], str) or not cmd[0]:
+			continue
+		if not hasattr(cmd[1], "__call__"):
+			continue
+		if len(cmd) > 2 and not isinstance(cmd, dict):
+			continue
+
+		if len(cmd) <= 2:
+			cmdargs = {}
+		else:
+			cmdargs = cmd[2]
+			commands.append(SocketCommand(cmd[0], cmd[1], cmdargs))
 	for module in plugins:
-		if hasattr(module, "socketCommands"):
-			for cmd in module.socketCommands:
-				if cmd in commands:
-					commands = filter(lambda command: str(command) != str(cmd), commands)
-				commands.append(cmd)
 		if hasattr(module, "requiresAuth"):
 			authactions += module.requiresAuth
 

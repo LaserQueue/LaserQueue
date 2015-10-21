@@ -30,7 +30,6 @@ def tryLoadFile(folder, name):
 
 pluginFilter = lambda module: (
 	hasattr(module, "upkeep") or
-	hasattr(module, "socketCommands") or
 	hasattr(module, "hideFromClient") or
 	hasattr(module, "requiredTags") or
 	hasattr(module, "requiresAuth") or
