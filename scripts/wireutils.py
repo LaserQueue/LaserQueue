@@ -61,7 +61,7 @@ class Registry:
 	def deregister(self, tag, funcid):
 		if tag in self.events:
 			if funcid in self.events[tag]:
-				del self.events[tag]
+				del self.events[tag][funcid]
 				return True
 		return False
 	def hash(self):
