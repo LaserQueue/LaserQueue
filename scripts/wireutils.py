@@ -303,6 +303,7 @@ def color_print(text, color="", strip=False, func=print, add_newline=False, colo
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
 	global lastprinted, print_lock
+	timestamp = date_time_string()
 	print_lock.acquire()
 	if not colorconfig:
 		colorconfig = color_printing_config
@@ -328,7 +329,7 @@ def color_print(text, color="", strip=False, func=print, add_newline=False, colo
 
 	originstr = colorconfig.tag()
 	func(format("{timestamp}{processtag}{color}{text}{endc}",
-		timestamp = date_time_string(), 
+		timestamp = timestamp, 
 		processtag = originstr, 
 	  color = color, 
 	  text = prints[0])) # Print the first line with a timestamp
@@ -347,12 +348,13 @@ try:
 except:
 	agnostic_input = input
 
-def color_input(text, color="", strip=False, func=agnostic_input, add_newline=False, colorconfig = None, **kwargs):
+def color_input(text, color="", strip=False, func=agnostic_input, colorconfig = None, **kwargs):
 	"""
 	Pretty print `text`, with `color` as its color. Take input using `func` on the last line.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
 	global print_lock
+	timestamp = date_time_string()
 	print_lock.acquire()
 	if not colorconfig:
 		colorconfig = color_printing_config
@@ -371,32 +373,30 @@ def color_input(text, color="", strip=False, func=agnostic_input, add_newline=Fa
 	# Print in order if there's more than one line
 	if len(prints) > 1: 
 		print(format("{timestamp}{processtag}{color}{text}",
-			timestamp = date_time_string(), 
+			timestamp = timestamp, 
 			processtag = originstr, 
 		  color = color, 
 		  text = prints[0]))
-		if add_newline: func("\n")
 
 		for i in prints[1:-1]:
 			print(format("{whitespace}{color}{text}",
 				whitespace = colorconfig.whitespace(), 
 				color = color, 
 				text = i))
-			if add_newline: func("\n")
 
-		print_lock.release()
-		return func(format("{whitespace}{color}{text}{endc}",
+		inp = func(format("{whitespace}{color}{text}{endc}",
 			whitespace = colorconfig.whitespace(), 
 			color = color,
 		  text = prints[-1]))
-		if add_newline: func("\n")
-	else:
 		print_lock.release()
-		return func(format("{timestamp}{processtag}{color}{text}{endc}",
-			timestamp = date_time_string(), 
+		return inp
+	else:
+		inp = func(format("{timestamp}{processtag}{color}{text}{endc}",
+			timestamp = timestamp, 
 			processtag = originstr, 
 			color = color,
 		  text = prints[0]))
-		if add_newline: func("\n")
+		print_lock.release()
+		return inp
 
 
