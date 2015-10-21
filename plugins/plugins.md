@@ -77,7 +77,7 @@ Every `config.refreshRate` ms, this will be run. The object to register is a fun
 #### `"socket"`
 This allows you to register commands for incoming socket data.
 Format:
-```
+```python
 (
   "...",
   function,
