@@ -140,12 +140,14 @@ def upkeep():
 				if not i.open:
 					sessions.sids.remove(sessions._get(get_sec_key(i)))
 
-			for module in pluginUpkeeps:
+			for upkeep in pluginUpkeeps:
 				try:
-					module.upkeep(queue=queue, sessions=sessions, sockets=socks)
+					regdupe = Registry()
+					regdupe.events = dict(reg.events)
+					upkeep(queue=queue, sessions=sessions, sockets=socks, registry=regdupe)
 				except:
-					color_print(format_traceback(e, format("Error while processing {plugin}.upkeep:", plugin=module.__name__)), color=ansi_colors.YELLOW)
-					pluginUpkeeps.remove(module)
+					color_print(format_traceback(e, "Error while processing upkeep:"), color=ansi_colors.YELLOW)
+					pluginUpkeeps.remove(upkeep)
 
 			# If the queue changed, serve it
 			queue.metapriority()
@@ -161,10 +163,15 @@ def main():
 	"""
 	Setup and run all subroutines.
 	"""
-	global socks, queue, authed, sessions, queuehash, upkeepThread, pluginUpkeeps
+	global socks, reg, queue, authed, sessions, queuehash, upkeepThread, pluginUpkeeps
 
 	pluginList, reg = plugins.getPlugins()
-	pluginUpkeeps = list(filter(lambda module: hasattr(module, "upkeep"), pluginList))
+	pluginUpkeeps = []
+	upkeeplist = reg.events.get('upkeep', {})
+	upkeeps = [(i,upkeeplist[i]) for i in upkeeplist]
+	for jobid, job in upkeeps:
+		if hasattr(job, "__call__"):
+			pluginUpkeeps.append(job)
 	comm.buildCommands(pluginList, reg)
 	laserqueue.buildLists(pluginList, reg)
 

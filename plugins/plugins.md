@@ -5,7 +5,7 @@ Plugins can add features to the queue or tweak it to fit your needs. For general
 Your JS will be concatenated with the other plugins. It has access to `formOptions`, a global object, to modify the form. The plugin should modify it as desired, then call `renderForm()` to make its changes reflected. There are two builtin types of form elements: strings for text and selects for dropdowns. Custom values are passed to the backend in the extras object.
 
 ### String form options
-```
+```js
 formOptions.example = {
     "type": "string",
     "placeholder": "This is placeholder text",
@@ -15,7 +15,7 @@ formOptions.example = {
 ```
 
 ### Select form options
-```
+```js
 formOptions.example = {
     "type": "select",
     "tooltip": "This shows on hover",
@@ -33,7 +33,7 @@ Alternatively, `formOptions.example.options` can be an object with keys and valu
 
 ### Generic form options
 This enables custom form elements.
-```
+```js
 formOptions.test = {
 	"type": "generic",
 	"template": "<button class='btn btn-default testButton'>testButton</button>",
@@ -51,10 +51,40 @@ Two modules that have been made available you might find helpful:
 
 ## Backend Plugin functions
 Each plugin must have at least one of these:
-### Upkeep
-`upkeep`, which is a function receiving **kwargs. It will be run every `config.refreshRate` These arguments, for now, include `queue`, `sessions`, and `sockets`. These allow you to manipulate the queue quite readily.
-### Socket commands
-`socketCommands`, a list of SocketCommand objects usable for receiving and processing data.
+### Event Registry
+`eventRegistry` is a `QueueObject.Registry` instance. To register an event, you call `QueueObject.on`. It currently has the following events handled:
+#### `"egg"`
+Whenever a job is added, this will check if an easter egg is applicable.  
+Format:
+```python
+{
+  "match": [...],
+  "serve": {...},
+  "loud": "...",
+  "broadcast": True|False
+}
+```
+* `match` is a list of possible matches for the easter egg.  
+* `serve` is the packet to serve to the client when they submit the job.  
+* `loud` is the text to output if `-v` was used to call the Queue.  
+* If `broadcast` is true, being in admin mode will broadcast this packet to everyone when you call it.
+#### `"upkeep"`
+Every `config.refreshRate` ms, this will be run. The object to register is a function accepting `**kwargs`. These args are, at the moment:
+* `queue` - The current `laserqueue.Queue` object
+* `sessions` - The currect `sidhandler.SIDCache` object
+* `sockets` - The current `main.Sockets` object
+* `reg` - The current `wireutils.Registry` object. Changes you make to this object will not be reflected elsewhere.
+#### `"socket"`
+This allows you to register commands for incoming socket data.
+Format:
+```
+(
+  "...",
+  function,
+  {...}
+)
+```
+These are identical to the arguments for a `ActionFramework.SocketCommand` object.
 ### Hidden from the client
 `hideFromClient` is a list of tags to be added to the blacklist in `QueueObject.serialize`.
 ### Required tags
