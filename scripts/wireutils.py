@@ -6,7 +6,7 @@ Do whatever with it, I seriously couldn't care less.
 Runs 2.6+ onwards.
 """
 from __future__ import print_function
-import os, json, time, sys, re, traceback
+import os, json, time, sys, re, traceback, threading
 
 def format(string, **kwargs):
 	"""
@@ -295,12 +295,15 @@ color_printing_config = color_config() # create the instance of color_config use
 
 lastprinted = None
 
+print_lock = threading.Lock()
+
 def color_print(text, color="", strip=False, func=print, add_newline=False, colorconfig = None, **kwargs):
 	"""
 	Pretty print `text`, with `color` as its color, using `func`.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
-	global lastprinted
+	global lastprinted, print_lock
+	print_lock.acquire()
 	if not colorconfig:
 		colorconfig = color_printing_config
 	if "whitespace" not in kwargs:
@@ -310,7 +313,9 @@ def color_print(text, color="", strip=False, func=print, add_newline=False, colo
 
 	# Make sure not to print the same thing twice
 	if text == lastprinted: 
-		if not color_supported: return
+		if not color_supported: 
+			print_lock.release()
+			return
 		print(ansi_colors.REMAKELINE, end="")
 	lastprinted = text
 
@@ -335,6 +340,7 @@ def color_print(text, color="", strip=False, func=print, add_newline=False, colo
 			  color = color, 
 			  text = i)) # Print all consecutive lines
 			if add_newline: func("\n")
+	print_lock.release()
 
 try:
 	agnostic_input = raw_input
@@ -346,6 +352,8 @@ def color_input(text, color="", strip=False, func=agnostic_input, add_newline=Fa
 	Pretty print `text`, with `color` as its color. Take input using `func` on the last line.
 	If `strip`, then remove whitespace from both sides of each line.
 	"""
+	global print_lock
+	print_lock.acquire()
 	if not colorconfig:
 		colorconfig = color_printing_config
 	if "whitespace" not in kwargs:
@@ -388,5 +396,6 @@ def color_input(text, color="", strip=False, func=agnostic_input, add_newline=Fa
 			color = color,
 		  text = prints[0]))
 		if add_newline: func("\n")
+	print_lock.release()
 
 
