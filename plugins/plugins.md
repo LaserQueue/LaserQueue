@@ -92,7 +92,7 @@ These are identical to the arguments for a `ActionFramework.SocketCommand` objec
 ### Auth-requiring actions
 `requiresAuth` is a list of names of commands that require auth.
 
-## SocketCommand
+## `ActionFramework.SocketCommand`
 SocketCommand accepts these arguments:  
 actionname, method, arglist
 * `actionname` is a string which defines the object's name (and therefore action).
