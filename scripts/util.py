@@ -14,8 +14,10 @@ class MergerConfig(Config):
 			defdata = json.load(open(defpath))
 			try:
 				data = json.load(open(path))
+				self.new = False
 			except:
 				data = {}
+				self.new = True
 			self.data = dict(defdata, **data)
 			json.dump(self.data, open(path, "w"), sort_keys=True, indent=2)
 			self.lastmodtime = os.path.getctime(path) # get the last modified time of the target file
