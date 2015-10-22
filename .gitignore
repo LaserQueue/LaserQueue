@@ -90,7 +90,6 @@ password
 infotext.md
 hashpassword
 www/infotext.md
-www/dist/js/plugins.js
 plugins/
 !plugins/plugins.md
 !plugins/exampleplugin
