@@ -12,8 +12,12 @@ class MergerConfig(Config):
 			self.path = path
 			self.defpath = path
 			defdata = json.load(open(defpath))
-			self.data = dict(defdata, **json.load(open(path)))
-			json.save(open(path, "w"), self.data)
+			try:
+				data = json.load(open(path))
+			except:
+				data = {}
+			self.data = dict(defdata, **data)
+			json.dump(self.data, open(path, "w"), sort_keys=True, indent=2)
 			self.lastmodtime = os.path.getctime(path) # get the last modified time of the target file
 
 # Functions for serving to sockets
