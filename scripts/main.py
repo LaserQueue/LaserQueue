@@ -27,7 +27,7 @@ class Sockets:
 		return iter(self.sockets)
 	def append(self, obj):
 		self.sockets.append(obj)
-	def remove(self, obj): 
+	def remove(self, obj):
 		key = get_sec_key(obj)
 		get = self.get(key)
 		if get: self.sockets.remove(get)
@@ -170,7 +170,7 @@ def main():
 	upkeeplist = reg.events.get('upkeep', {})
 	upkeeps = [(i,upkeeplist[i]) for i in upkeeplist]
 	for jobid, job in upkeeps:
-		if if job and hasattr(job[0], "__call__"):
+		if job and hasattr(job[0], "__call__"):
 			pluginUpkeeps.append(job[0])
 	comm.buildCommands(pluginList, reg)
 	laserqueue.buildLists(pluginList, reg)
