@@ -173,14 +173,14 @@ def buildCommands(plugins, reg):
 			continue
 		if not hasattr(cmd[1], "__call__"):
 			continue
-		if len(cmd) > 2 and not isinstance(cmd, dict):
+		if len(cmd) > 2 and not isinstance(cmd[2], dict):
 			continue
 
 		if len(cmd) <= 2:
 			cmdargs = {}
 		else:
 			cmdargs = cmd[2]
-			commands.append(SocketCommand(cmd[0], cmd[1], cmdargs))
+		commands.append(SocketCommand(cmd[0], cmd[1], cmdargs))
 	for module in plugins:
 		if hasattr(module, "requiresAuth"):
 			authactions += module.requiresAuth
