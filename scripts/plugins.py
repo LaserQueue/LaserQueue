@@ -48,7 +48,7 @@ def hasftypeFactory(ftype):
 
 def getPlugins():
 	if args.noPlugins:
-		return []
+		return [], Registry()
 	if args.loud:
 		printer.color_print("Loading Python plugins...")
 	reg = Registry()

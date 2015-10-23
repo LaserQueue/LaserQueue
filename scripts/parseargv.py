@@ -17,7 +17,7 @@ parser.add_argument("-S", "--no-install", help="Skip package installation", dest
 	action="store_true")
 parser.add_argument("-U", "--no-update", help="Skip update", dest="skipupdate",
 	action="store_true")
-parser.add_argument("-P", "--no-plugin", help="Don't load plugins", dest="noPlugins",
+parser.add_argument("-P", "--no-plugins", help="Don't load plugins", dest="noPlugins",
 	action="store_true")
 parser.add_argument("-H", "--no-regen-host", help="Do not regenerate host in config", dest="host",
 	action="store_false")
