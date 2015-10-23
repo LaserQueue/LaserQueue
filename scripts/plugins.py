@@ -107,3 +107,19 @@ def getPluginFiletype(ftype):
 		else:
 			printer.color_print("No {type} plugins found.", type=ftype)
 	return plugin
+
+def getPluginNames(ftype):
+	if args.noPlugins:
+		return []
+	plugins = os.listdir(PLUGINDIR)
+	pluginFolders = filter(lambda filename: os.path.isdir(os.path.join(PLUGINDIR, filename)), plugins)
+	plugins = filter(hasftypeFactory(ftype), pluginFolders)
+
+	plugin = []
+
+	for i in plugins:
+		pluginFiles = os.listdir(os.path.join(PLUGINDIR, i))
+		pluginFiles = filter(lambda filename: filename.endswith(ftype), pluginFiles)
+		for j in pluginFiles:
+			plugin.append(os.path.abspath(os.path.join(os.path.pardir, 'plugins', i, j)))
+	return plugin

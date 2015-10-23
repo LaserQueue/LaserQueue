@@ -139,14 +139,15 @@ def upkeep():
 				if not i.open:
 					sessions.sids.remove(sessions._get(get_sec_key(i)))
 
-			for upkeep in pluginUpkeeps:
+			pluginUpkeepsDupe = pluginUpkeeps[:]
+			for plupkeep in pluginUpkeepsDupe:
 				try:
 					regdupe = Registry()
 					regdupe.events = dict(reg.events)
-					upkeep(queue=queue, sessions=sessions, sockets=socks, registry=regdupe)
-				except:
+					plupkeep(queue=queue, sessions=sessions, sockets=socks, registry=regdupe)
+				except Exception as e:
 					color_print(format_traceback(e, "Error while processing upkeep:"), color=ansi_colors.YELLOW)
-					pluginUpkeeps.remove(upkeep)
+					pluginUpkeeps.remove(plupkeep)
 
 			# If the queue changed, serve it
 			queue.metapriority()
@@ -158,19 +159,57 @@ def upkeep():
 		except Exception as e: # Error reporting
 			color_print(format_traceback(e, "Error in upkeep thread:"), color=ansi_colors.YELLOW)
 
+plugin_js_path = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
+plugin_css_path = os.path.join(os.path.pardir, "www", "dist", "css", "plugins.css")
+def watchPlugins(**kwargs):
+	jsstep, cssstep = False, False
+	pluginJSFilesDupe, pluginCSSFilesDupe = dict(pluginJSFiles), dict(pluginCSSFiles)
+	for i in pluginJSFilesDupe:
+		try:
+			if os.path.getctime(i) > pluginJSFiles[i]:
+				pluginJSFiles[i] = os.path.getctime(i)
+				if not jsstep:
+					toprint = "Reloading JS plugins."
+					if args.loud: toprint += "\n({file} updated.)"
+					plugins.printer.color_print(toprint, file=i)
+					js = plugins.getPluginFiletype(".min.js")
+					plugin_js = "\n".join(js)
+					with open(plugin_js_path, "w") as f:
+						f.write(plugin_js)
+					jsstep = True
+		except:
+			del pluginJSFiles[i]
+	for i in pluginCSSFilesDupe:
+		try:
+			if os.path.getctime(i) > pluginCSSFiles[i]:
+				pluginCSSFiles[i] = os.path.getctime(i)
+				if not cssstep:
+					toprint = "Reloading CSS plugins."
+					if args.loud: toprint += "\n({file} updated.)"
+					plugins.printer.color_print(toprint, file=i)
+					css = plugins.getPluginFiletype(".min.css")
+					plugin_css = "\n".join(css)
+					with open(plugin_css_path, "w") as f:
+						f.write(plugin_css)
+					cssstep = True
+		except:
+			del pluginJSFiles[i]
+
 def main():
 	"""
 	Setup and run all subroutines.
 	"""
-	global socks, reg, queue, authed, sessions, queuehash, upkeepThread, pluginUpkeeps
+	global socks, reg, queue, authed, sessions, queuehash, upkeepThread, pluginUpkeeps, pluginJSFiles, pluginCSSFiles
 
 	pluginList, reg = plugins.getPlugins()
-	pluginUpkeeps = []
+	pluginUpkeeps = [watchPlugins]
 	upkeeplist = reg.events.get('upkeep', {})
 	upkeeps = [(i,upkeeplist[i]) for i in upkeeplist]
 	for jobid, job in upkeeps:
 		if job and hasattr(job[0], "__call__"):
 			pluginUpkeeps.append(job[0])
+	pluginJSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.js")}
+	pluginCSSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.css")}
 	comm.buildCommands(pluginList, reg)
 	laserqueue.buildLists(pluginList, reg)
 
