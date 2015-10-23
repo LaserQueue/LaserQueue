@@ -164,7 +164,7 @@ def watchQueue(**kwargs):
 		serve_connections(comm.generateData(kwargs["queue"].serialize()), kwargs["sockets"])
 
 def reloadplugins(filetype, plugin_path):
-	pl = plugins.getPluginFiletype(".min.js")
+	pl = plugins.getPluginFiletype(filetype)
 	plugins = "\n".join(pl)
 	with open(plugin_path, "w") as f:
 		f.write(plugins)
