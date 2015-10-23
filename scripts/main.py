@@ -163,6 +163,12 @@ def watchQueue(**kwargs):
 		queuehash = hash(str(kwargs["queue"].queue))
 		serve_connections(comm.generateData(kwargs["queue"].serialize()), kwargs["sockets"])
 
+def reloadplugins(filetype, plugin_path):
+	pl = plugins.getPluginFiletype(".min.js")
+	plugins = "\n".join(pl)
+	with open(plugin_path, "w") as f:
+		f.write(plugins)
+
 plugin_js_path = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
 plugin_css_path = os.path.join(os.path.pardir, "www", "dist", "css", "plugins.css")
 def watchPlugins(**kwargs):
@@ -175,14 +181,18 @@ def watchPlugins(**kwargs):
 				if not jsstep:
 					toprint = "Reloading JS plugins."
 					if args.loud: toprint += "\n({file} updated.)"
-					plugins.printer.color_print(toprint, file=i)
-					js = plugins.getPluginFiletype(".min.js")
-					plugin_js = "\n".join(js)
-					with open(plugin_js_path, "w") as f:
-						f.write(plugin_js)
+					plugins.printer.color_print(toprint, file=os.path.basename(i))
+					reloadplugins(".min.js", plugin_js_path)
 					jsstep = True
 		except:
 			del pluginJSFiles[i]
+			if not jsstep:
+				toprint = "Reloading JS plugins."
+				if args.loud: toprint += "\n({file} removed.)"
+				plugins.printer.color_print(toprint, file=os.path.basename(i))
+				reloadplugins(".min.js", plugin_js_path)
+				jsstep = True
+				
 	for i in pluginCSSFilesDupe:
 		try:
 			if os.path.getctime(i) > pluginCSSFiles[i]:
@@ -190,14 +200,17 @@ def watchPlugins(**kwargs):
 				if not cssstep:
 					toprint = "Reloading CSS plugins."
 					if args.loud: toprint += "\n({file} updated.)"
-					plugins.printer.color_print(toprint, file=i)
-					css = plugins.getPluginFiletype(".min.css")
-					plugin_css = "\n".join(css)
-					with open(plugin_css_path, "w") as f:
-						f.write(plugin_css)
+					plugins.printer.color_print(toprint, file=os.path.basename(i))
+					reloadplugins(".min.css", plugin_css_path)
 					cssstep = True
 		except:
 			del pluginJSFiles[i]
+			if not cssstep:
+				toprint = "Reloading CSS plugins."
+				if args.loud: toprint += "\n({file} removed.)"
+				plugins.printer.color_print(toprint, file=os.path.basename(i))
+				reloadplugins(".min.css", plugin_css_path)
+				cssstep = True
 
 def main():
 	"""
@@ -206,14 +219,16 @@ def main():
 	global socks, reg, queue, authed, sessions, queuehash, upkeepThread, upkeeps, pluginJSFiles, pluginCSSFiles
 
 	pluginList, reg = plugins.getPlugins()
-	upkeeps = [watchSessions, watchQueue, watchPlugins]
+	pluginJSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.js")}
+	pluginCSSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.css")}
+	upkeeps = [watchSessions, watchQueue]
+	if pluginJSFiles or pluginCSSFiles:
+		upkeeps.append(watchPlugins)
 	upkeeplist = reg.events.get('upkeep', {})
 	upkeeps = [(i,upkeeplist[i]) for i in upkeeplist]
 	for jobid, job in upkeeps:
 		if job and hasattr(job[0], "__call__"):
 			upkeeps.append(job[0])
-	pluginJSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.js")}
-	pluginCSSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.css")}
 	comm.buildCommands(pluginList, reg)
 	laserqueue.buildLists(pluginList, reg)
 
