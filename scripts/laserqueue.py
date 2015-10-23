@@ -255,7 +255,7 @@ class Queue:
 		if not isinstance(extra_objects, dict): extra_objects = {}
 
 		# If the priority or the material aren't set up, or the name isn't defined
-		if not name or material == "N/A" or priority == -1 or esttime == -1:
+		if not name or material == "N/A" or priority == -1 or esttime <= 0:
 			# Tell the user
 			serve_connection({
 				"action": "notification",
