@@ -120,44 +120,48 @@ def upkeep():
 	"""
 	Thread to perform tasks asynchronously.
 	"""
-	global socks, queue, authed, sessions, queuehash, pluginUpkeeps
+	global socks, queue, sessions, upkeeps
 	while True:
 		try:
-			# Keep everything in line
-			sessions.update()
-			# Deauth everyone who dropped from auth
-			newauths = sessions.allauth()
-			if authed != newauths:
-				deauthed = [i for i in authed if i not in newauths]
-				authed = sessions.allauth()
-				for i in deauthed:
-					ws = socks[i]
-					if ws:
-						serve_connection({"action":"deauthed"}, ws)
-			# Remove closed socks
-			for i in socks:
-				if not i.open:
-					sessions.sids.remove(sessions._get(get_sec_key(i)))
-
-			pluginUpkeepsDupe = pluginUpkeeps[:]
-			for plupkeep in pluginUpkeepsDupe:
+			upkeepsDupe = upkeeps[:]
+			for upkeepf in upkeepsDupe:
 				try:
 					regdupe = Registry()
 					regdupe.events = dict(reg.events)
-					plupkeep(queue=queue, sessions=sessions, sockets=socks, registry=regdupe)
+					upkeepf(queue=queue, sessions=sessions, sockets=socks, registry=regdupe)
 				except Exception as e:
 					color_print(format_traceback(e, "Error while processing upkeep:"), color=ansi_colors.YELLOW)
-					pluginUpkeeps.remove(plupkeep)
-
-			# If the queue changed, serve it
-			queue.metapriority()
-			if queuehash != hash(str(queue.queue)):
-				queuehash = hash(str(queue.queue))
-				serve_connections(comm.generateData(queue.serialize()), socks)
+					upkeeps.remove(upkeepf)
 
 			time.sleep(config["refreshRate"]/1000)
 		except Exception as e: # Error reporting
 			color_print(format_traceback(e, "Error in upkeep thread:"), color=ansi_colors.YELLOW)
+
+def watchSessions(**kwargs):
+	global authed
+	# Keep everything in line
+	kwargs["sessions"].update()
+	# Deauth everyone who dropped from auth
+	newauths = kwargs["sessions"].allauth()
+	if authed != newauths:
+		deauthed = [i for i in authed if i not in newauths]
+		authed = kwargs["sessions"].allauth()
+		for i in deauthed:
+			ws = kwargs["sockets"][i]
+			if ws:
+				serve_connection({"action":"deauthed"}, ws)
+	# Remove closed socks
+	for i in kwargs["sockets"]:
+		if not i.open:
+			kwargs["sessions"].sids.remove(sessions._get(get_sec_key(i)))
+
+def watchQueue(**kwargs):
+	global queuehash
+	# If the queue changed, serve it
+	kwargs["queue"].metapriority()
+	if queuehash != hash(str(kwargs["queue"].queue)):
+		queuehash = hash(str(kwargs["queue"].queue))
+		serve_connections(comm.generateData(kwargs["queue"].serialize()), kwargs["sockets"])
 
 plugin_js_path = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
 plugin_css_path = os.path.join(os.path.pardir, "www", "dist", "css", "plugins.css")
@@ -199,15 +203,15 @@ def main():
 	"""
 	Setup and run all subroutines.
 	"""
-	global socks, reg, queue, authed, sessions, queuehash, upkeepThread, pluginUpkeeps, pluginJSFiles, pluginCSSFiles
+	global socks, reg, queue, authed, sessions, queuehash, upkeepThread, upkeeps, pluginJSFiles, pluginCSSFiles
 
 	pluginList, reg = plugins.getPlugins()
-	pluginUpkeeps = [watchPlugins]
+	upkeeps = [watchSessions, watchQueue, watchPlugins]
 	upkeeplist = reg.events.get('upkeep', {})
 	upkeeps = [(i,upkeeplist[i]) for i in upkeeplist]
 	for jobid, job in upkeeps:
 		if job and hasattr(job[0], "__call__"):
-			pluginUpkeeps.append(job[0])
+			upkeeps.append(job[0])
 	pluginJSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.js")}
 	pluginCSSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.css")}
 	comm.buildCommands(pluginList, reg)
