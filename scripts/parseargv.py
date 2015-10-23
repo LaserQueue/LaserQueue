@@ -3,8 +3,6 @@ import argparse
 parser = argparse.ArgumentParser(add_help=False, usage="%(prog)s [options]",)
 parser.add_argument("-p", "--port", help="Port to host from", dest="port",
 	default=80, type=int)
-parser.add_argument("-n", "--regen-host", help="Regenerate host in config", dest="host",
-	action="store_true")
 parser.add_argument("-l", "--local", help="Run from localhost", dest="local",
 	action="store_true")
 parser.add_argument("-v", "--verbose", help="Makes the script give extra output", dest="loud",
@@ -15,12 +13,14 @@ parser.add_argument("-b", "--queue-backup", help="Backup queue and load from bac
 	action="store_true")
 parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest="regen",
 	action="store", required=False, default=False, nargs="*", metavar="KEY")
-parser.add_argument("-s", "--skip-install", help="Skip package installation", dest="skip",
+parser.add_argument("-S", "--no-install", help="Skip package installation", dest="skip",
 	action="store_true")
-parser.add_argument("-nu", "--no-update", help="Skip update", dest="skipupdate",
+parser.add_argument("-U", "--no-update", help="Skip update", dest="skipupdate",
 	action="store_true")
-parser.add_argument("-np", "--no-plugin", help="Don't load plugins", dest="noPlugins",
+parser.add_argument("-P", "--no-plugin", help="Don't load plugins", dest="noPlugins",
 	action="store_true")
+parser.add_argument("-H", "--no-regen-host", help="Do not regenerate host in config", dest="host",
+	action="store_false")
 parser.add_argument("--new-password", help="Set a new password", dest="newpass",
 	action="store_true")
 parser.add_argument("--backend", help="Loads backend but not frontend", dest="load_backend",

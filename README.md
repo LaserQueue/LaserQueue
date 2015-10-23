@@ -23,10 +23,10 @@ To change the admin login password, run the script with `--new-password`.
 - `-q`, `--quiet`: Start without output. Only applies to start.sh. Equivalent to `>/dev/null`.
 - `-b`, `--queue-backup`: Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.
 - `-r`, `--regen-config`: Regenerate the config. Accepts positional arguments in the form `-r key key2 key3 ...`. If it recieves positionals, it will only regenerate those config values.
-- `-n`, `--regen-host`: Regenerate the host in the config. Does not affect any other config values.
-- `-s`, `--skip-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
-- `-nu`, `--no-update`: Does not install or prompt for updates.
-- `-np`, `--no-plugins`: Does not load plugins.
+- `-S`, `--no-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
+- `-U`, `--no-update`: Does not install or prompt for updates.
+- `-P`, `--no-plugins`: Does not load plugins.
+- `-H`, `--no-regen-host`: Do not regenerate the host in the config. Does not affect any other config values.
 - `--new-password`: No short option. Allows you to reset the admin password from within the program.
 - `--backend`: No short option. Only runs the backend.
 - `--frontend`: No short option. Only runs the frontend.
