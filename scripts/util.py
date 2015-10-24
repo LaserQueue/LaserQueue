@@ -1,4 +1,5 @@
 from wireutils import *
+from parseargv import args as argvs
 import ssl, urllib.request, io, uuid
 
 DEFAULTCONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "defaultconf.json"))
@@ -51,10 +52,10 @@ class Printer:
 		self.colorconfig.color = string
 	def color_print(self, *args, **kwargs):
 		kwargs["colorconfig"] = self.colorconfig
-		color_print(*args, **kwargs)
+		if not argvs.shh: color_print(*args, **kwargs)
 	def color_input(self, *args, **kwargs):
 		kwargs["colorconfig"] = self.colorconfig
-		color_input(*args, **kwargs)
+		if not argvs.shh: color_input(*args, **kwargs)
 
 # Functions for serving to sockets
 def get_sec_key(ws):
