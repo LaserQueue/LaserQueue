@@ -19,7 +19,7 @@ class any_number: pass
 
 authactions = config["authactions"]
 
-def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
+def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue, printer):
 	"""
 	Run a command based on `jdata`, from `commandlist`.
 	"""
@@ -44,7 +44,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue):
 
 	# If the command can be run, run it
 	if action in cmds and (not cmds[action].args or args):
-		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks, queue=queue)
+		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks, queue=queue, printer=printer)
 	# If the action being bad is the problem, return that
 	elif action not in cmds: 
 		return "Bad command name."
@@ -81,57 +81,57 @@ def deauth(**kwargs):
 	"""
 	Deauth the client.
 	"""
-	sec, sessions, ws = kwargs["sec"], kwargs["sessions"], kwargs["ws"]
+	sec, sessions, ws, printer = kwargs["sec"], kwargs["sessions"], kwargs["ws"], kwargs["printer"]
 	sessions.deauth(sec)
 	serve_connection({"action":"deauthed"}, ws)
 
 	# If the verbose flag is used, print report
 	if argvs.loud:
-		color_print("Client successfully deauthed.")
+		printer.color_print("Client successfully deauthed.")
 
 def refresh(**kwargs): 
 	"""
 	Refresh all clients. (if the config allows it)
 	"""
-	socks, authstate = kwargs["sockets"], kwargs["authstate"]
+	socks, authstate, printer = kwargs["sockets"], kwargs["authstate"], kwargs["printer"]
 	if config["allow_force_refresh"]:
 		serve_connections({"action":"refresh"}, socks)
 
 		if argvs.loud: # If the verbose flag is used, print report
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Refreshed all clients.", color=color)
+			printer.color_print("Refreshed all clients.", color=color)
 	else:
-		color_print("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=ansi_colors.YELLOW)
+		printer.color_print("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=ansi_colors.YELLOW)
 
 def starttour(**kwargs): 
 	"""
 	Start the tour. (if the config allows it)
 	"""
-	socks, authstate = kwargs["sockets"], kwargs["authstate"]
+	socks, authstate, printer = kwargs["sockets"], kwargs["authstate"], kwargs["printer"]
 	if config["allow_tour"]:
 		serve_connections({"action":"starttour"}, socks)
 
 		if argvs.loud: # If the verbose flag is used, print report
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Started the tour.", color=color)
+			printer.color_print("Started the tour.", color=color)
 	else:
-		color_print("The tour isn't enabled. (config.json, allow_tour)", color=ansi_colors.YELLOW)
+		printer.color_print("The tour isn't enabled. (config.json, allow_tour)", color=ansi_colors.YELLOW)
 
 def auth(**kwargs):
 	"""
 	Attempt to auth the client using the `pass` argument.
 	"""
-	args, sec, sessions, ws = kwargs["args"], kwargs["sec"], kwargs["sessions"], kwargs["ws"]
+	args, sec, sessions, ws, printer = kwargs["args"], kwargs["sec"], kwargs["sessions"], kwargs["ws"], kwargs["printer"]
 
 	if config["admin_mode_enabled"]:
 		if sessions.auth(sec, args["pass"]):
 			serve_connection({"action":"authed"}, ws)
 			if argvs.loud: # If the verbose flag is used, print report
-				color_print("Auth succeeded.", color=ansi_colors.MAGENTA)
+				printer.color_print("Auth succeeded.", color=ansi_colors.MAGENTA)
 		else:
 			serve_connection({"action":"authfailed"}, ws)
 			if argvs.loud: # If the verbose flag is used, print report
-				color_print("Auth failed.")
+				printer.color_print("Auth failed.")
 
 
 # Relative wrappers for queue actions
@@ -185,12 +185,12 @@ def buildCommands(plugins, reg):
 		if hasattr(module, "requiresAuth"):
 			authactions += module.requiresAuth
 
-def parseData(queue, ws, socks, sessions, jdata):
+def parseData(queue, ws, socks, sessions, jdata, printer):
 	"""
 	Run the socket commands using the data given.
 	"""
 	global commands
-	return runSocketCommand(commands, ws, socks, sessions, jdata, queue)
+	return runSocketCommand(commands, ws, socks, sessions, jdata, queue, printer)
 
 def generateData(queue):
 	"""

@@ -1,7 +1,6 @@
 import laserqueue
 from util import *
-color_printing_config.color = ansi_colors.BLUE
-color_printing_config.name = "Backend"
+printer = Printer(ansi_colors.BLUE, "Backend")
 config = Config(CONFIGDIR)
 import jsonhandler as comm
 import sidhandler as sids
@@ -78,11 +77,11 @@ def server(websocket, path):
 
 				authstate = sessions.check(get_sec_key(websocket))
 				color = ansi_colors.MAGENTA if authstate and args.loud else ""
-				color_print(json.dumps(displaymessage, sort_keys=True), color=color)
+				printer.color_print(json.dumps(displaymessage, sort_keys=True), color=color)
 				# Run the processing subroutine
 				process(messagedata, websocket)
 		except Exception as e: # Error reporting
-			color_print(format_traceback(e, "Error while serving WebSockets:"), color=ansi_colors.YELLOW)
+			printer.color_print(format_traceback(e, "Error while serving WebSockets:"), color=ansi_colors.YELLOW)
 			if config["send_notifications"]:
 				serve_connection({ # Tell the socket about it
 						"action": "notification",
@@ -99,11 +98,11 @@ def process(data, ws):
 	global queue, sessions, socks, queuehash
 	if data:
 		# Parse the data through the socket command handler
-		x = comm.parseData(queue, ws, socks, sessions, data)
+		x = comm.parseData(queue, ws, socks, sessions, data, printer)
 		# Back up the queue
 		if args.backup:
 			out = json.dumps(queue.queue, indent=2, sort_keys=True)
-			writeFile("cache.json", out)
+			writeFile("cache.json", out, printer)
 		# If the socket handler had an error, report it to the socket
 		if x and type(x) is str:
 			serve_connection({
@@ -111,7 +110,7 @@ def process(data, ws):
 					"title": "Failed to process data",
 					"text": x
 				}, ws)
-			color_print(x, color=ansi_colors.YELLOW)
+			printer.color_print(x, color=ansi_colors.YELLOW)
 		# If the queue changed, serve it
 		if queuehash != hash(str(queue.queue)):
 			queuehash = hash(str(queue.queue))
@@ -131,12 +130,12 @@ def upkeep():
 					regdupe.events = dict(reg.events)
 					upkeepf(queue=queue, sessions=sessions, sockets=socks, registry=regdupe)
 				except Exception as e:
-					color_print(format_traceback(e, "Error while processing upkeep:"), color=ansi_colors.YELLOW)
+					printer.color_print(format_traceback(e, "Error while processing upkeep:"), color=ansi_colors.YELLOW)
 					upkeeps.remove(upkeepf)
 
 			time.sleep(config["refreshRate"]/1000)
 		except Exception as e: # Error reporting
-			color_print(format_traceback(e, "Error in upkeep thread:"), color=ansi_colors.YELLOW)
+			printer.color_print(format_traceback(e, "Error in upkeep thread:"), color=ansi_colors.YELLOW)
 
 def watchSessions(**kwargs):
 	global authed
@@ -167,7 +166,7 @@ def watchQueue(**kwargs):
 def reloadplugins(filetype, plugin_path):
 	pl = plugins.getPluginFiletype(filetype)
 	plugins = "\n".join(pl)
-	writeFile(plugin_path, plugins)
+	writeFile(plugin_path, plugins, printer)
 
 plugin_js_path = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
 plugin_css_path = os.path.join(os.path.pardir, "www", "dist", "css", "plugins.css")
@@ -181,7 +180,7 @@ def watchPlugins(**kwargs):
 				if not jsstep:
 					toprint = "Reloading JS plugins."
 					if args.loud: toprint += "\n({file} updated.)"
-					plugins.printer.color_print(toprint, file=os.path.basename(i))
+					plugins.printer.printer.color_print(toprint, file=os.path.basename(i))
 					reloadplugins(".min.js", plugin_js_path)
 					jsstep = True
 		except:
@@ -189,7 +188,7 @@ def watchPlugins(**kwargs):
 			if not jsstep:
 				toprint = "Reloading JS plugins."
 				if args.loud: toprint += "\n({file} removed.)"
-				plugins.printer.color_print(toprint, file=os.path.basename(i))
+				plugins.printer.printer.color_print(toprint, file=os.path.basename(i))
 				reloadplugins(".min.js", plugin_js_path)
 				jsstep = True
 				
@@ -200,7 +199,7 @@ def watchPlugins(**kwargs):
 				if not cssstep:
 					toprint = "Reloading CSS plugins."
 					if args.loud: toprint += "\n({file} updated.)"
-					plugins.printer.color_print(toprint, file=os.path.basename(i))
+					plugins.printer.printer.color_print(toprint, file=os.path.basename(i))
 					reloadplugins(".min.css", plugin_css_path)
 					cssstep = True
 		except:
@@ -208,7 +207,7 @@ def watchPlugins(**kwargs):
 			if not cssstep:
 				toprint = "Reloading CSS plugins."
 				if args.loud: toprint += "\n({file} removed.)"
-				plugins.printer.color_print(toprint, file=os.path.basename(i))
+				plugins.printer.printer.color_print(toprint, file=os.path.basename(i))
 				reloadplugins(".min.css", plugin_css_path)
 				cssstep = True
 
@@ -237,9 +236,9 @@ def main():
 		if os.path.exists("cache.json"):
 			queue = laserqueue.Queue.load(open("cache.json"))
 		else:
-			writeFile("cache.json", "{}")
+			writeFile("cache.json", "{}", printer)
 
-	color_print("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"])
+	printer.color_print("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"])
 
 	# Create the upkeep thread
 	upkeepThread = threading.Thread(target=upkeep)

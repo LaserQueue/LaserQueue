@@ -119,8 +119,8 @@ Every method used for a SocketCommand should accept only **kwargs. These are the
 * `queue`: the laserqueue.Queue object holding the jobs.
 
 ## Printing
-Unlike in a normal program, you shouldn't just edit `color_printing_config`. This will edit the process's `color_printing_config`, meaning that the `[Backend]` in the log will become your plugin's name. Instead, you use `PluginPrinterInstance`, included in `QueueConfig`.  
+Unlike in a normal program, you shouldn't just edit `color_printing_config`. This will edit the process's `color_printing_config`, meaning that the `[Backend]` in the log will become your plugin's name. Instead, you use `Printer`, included in `QueueConfig`.  
 
-`PluginPrinterInstance` can emulate any function of color_print. You may pass it an existing `color_config` when you make it. If you don't, it will be a blank one.  
-You can use `PluginPrinterInstance.colorconfig` to change the name and color, or you can call `PluginPrinterInstance.setname(string)` or `PluginPrinterInstance.setcolor(string)` to do it for you.  
-To print/get input, use `PluginPrinterInstance.color_print` and `PluginPrinterInstance.color_input`. They function exactly like the other ones, but they aren't affected by the "colorconfig" argument.
+`Printer` can emulate any function of color_print. You may pass it an existing `color_config` when you make it. If you don't, it will be a blank one.  
+You can use `Printer.colorconfig` to change the name and color, or you can call `Printer.setname(string)` or `Printer.setcolor(string)` to do it for you.  
+To print/get input, use `Printer.color_print` and `Printer.color_input`. They function exactly like the other ones, but they aren't affected by the "colorconfig" argument.

@@ -243,12 +243,13 @@ class Queue:
 	# `sessions`: the global instance of sidhandler.SIDCache.
 	# `ws`: the websocket for this session.
 	# `sockets`: a main.Sockets object that contains all the current sessions.
+	# `printer`: the current util.Printer.
 
 	def append(self, **kwargs):
 		"""
 		Adds an object to the queue.
 		"""
-		args, authstate, sec, ws, socks = kwargs["args"], kwargs["authstate"], kwargs["sec"], kwargs["ws"], kwargs["sockets"]
+		args, authstate, sec, ws, socks, printer = kwargs["args"], kwargs["authstate"], kwargs["sec"], kwargs["ws"], kwargs["sockets"], kwargs["printer"]
 		name, priority, esttime, material = args["name"], args["priority"], args["time"], args["material"]
 
 		extra_objects = args.get("extras", {}) # Get the extras and make sure it's the right format
@@ -265,7 +266,7 @@ class Queue:
 			# Tell the client then don't add the object
 			serve_connection({"action": "add_failed"}, ws)
 			if argvs.loud:
-				color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
+				printer.color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
 			return
 
 		if config["easter_eggs"]:
@@ -282,7 +283,7 @@ class Queue:
 					else:
 						serve_connection(egg["serve"], ws)
 					if argvs.loud:
-						color_print(egg["loud"])
+						printer.color_print(egg["loud"])
 					return
 
 		# Contain the length of time within the configurable bounds.
@@ -341,7 +342,7 @@ class Queue:
 
 			if argvs.loud: # If -v, report success
 				color = ansi_colors.MAGENTA if authstate else ""
-				color_print("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
+				printer.color_print("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
 
 		else:
 			if config["allow_multiple_materials"]:
@@ -359,13 +360,13 @@ class Queue:
 					}, ws)
 
 			if argvs.loud: # If -v, report failures
-				color_print("Cannot add {name} to the queue.", name=name, color=ansi_colors.YELLOW)
+				printer.color_print("Cannot add {name} to the queue.", name=name, color=ansi_colors.YELLOW)
 
 	def remove(self, **kwargs):
 		"""
 		Removes an object from the queue.
 		"""
-		args, authstate = kwargs["args"], kwargs["authstate"]
+		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid = args["uuid"]
 		# Fetch the job from the queue and remove it
 		job, masterindex, priority, index = self.getQueueObject(job_uuid)
@@ -373,13 +374,13 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Removed {name} from the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
+			printer.color_print("Removed {name} from the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
 
 	def passoff(self, **kwargs):
 		"""
 		Move the job down one. Equivalent to relmove with an index shift of 1.
 		"""
-		args, authstate = kwargs["args"], kwargs["authstate"]
+		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid = args["uuid"]
 		# Fetch the job from the queue
 		job, masterindex, priority, index = self.getQueueObject(job_uuid)
@@ -391,7 +392,7 @@ class Queue:
 		# If the pass can't happen, return
 		if masterindex >= len(masterqueue)-1: return
 		if masterindex >= config["pass_depth"] and not authstate:
-			color_print("Passing at depth {masterindex} requires auth.", masterindex=masterindex, color=ansi_colors.YELLOW)
+			printer.color_print("Passing at depth {masterindex} requires auth.", masterindex=masterindex, color=ansi_colors.YELLOW)
 			return
 
 		# Remove the job
@@ -407,14 +408,14 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Passed {name} down the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
+			printer.color_print("Passed {name} down the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
 
 
 	def relmove(self, **kwargs):
 		"""
 		Move an object with pass logic, using masterqueue indexes.
 		"""
-		args, authstate = kwargs["args"], kwargs["authstate"]
+		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid, nindex = args["uuid"], args["target_index"]
 		masterqueue = self.masterqueue()
 
@@ -444,7 +445,7 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			printer.color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"],
 				prevind = masterindex,
 				newind = nindex,
@@ -456,7 +457,7 @@ class Queue:
 		"""
 		Move an object to a target index and priority.
 		"""
-		args, authstate = kwargs["args"], kwargs["authstate"]
+		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid, ni, np = args["uuid"], args["target_index"], args["target_priority"]
 		# Fetch object and remove
 		job, masterindex, priority, index = self.getQueueObject(job_uuid)
@@ -467,7 +468,7 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Moved {name} to index {newind} within priority {newpri}.\n({uuid})",
+			printer.color_print("Moved {name} to index {newind} within priority {newpri}.\n({uuid})",
 				name = job["name"],
 				newind = ni,
 				newpri = np,
@@ -479,7 +480,7 @@ class Queue:
 		Raise an object one index.
 		If it's at the top of a priority level it will jump to the bottom of the next.
 		"""
-		args, authstate = kwargs["args"], kwargs["authstate"]
+		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid = args["uuid"]
 
 		# Fetch the object, and make sure it's viable for incrementing.
@@ -508,7 +509,7 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			printer.color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"],
 				prevind = masterindex,
 				newind = masterindex-1,
@@ -520,7 +521,7 @@ class Queue:
 		Drop an object one index.
 		If it's at the bottom of a priority level it will jump to the top of the next.
 		"""
-		args, authstate = kwargs["args"], kwargs["authstate"]
+		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid = args["uuid"]
 
 		# Fetch the object, and make sure it's viable for decrementing.
@@ -549,7 +550,7 @@ class Queue:
 
 		if argvs.loud: # if -v, report success
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
+			printer.color_print("Moved {name} from position {prevind} to {newind}.\n({uuid})",
 				name = job["name"],
 				prevind = masterindex,
 				newind = masterindex+1,
@@ -557,7 +558,7 @@ class Queue:
 				color=color)
 
 	def attr(self, **kwargs):
-		args, authstate = kwargs["args"], kwargs["authstate"]
+		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid, attrname, value = args["uuid"], args["key"], args["new"]
 
 		# Make sure `attrname` is allowed to be changed (no changing timestamps, etc)
@@ -623,7 +624,7 @@ class Queue:
 		if argvs.loud: # if -v, report success
 			newval = job[attrname]
 			color = ansi_colors.MAGENTA if authstate else ""
-			color_print("Changed {name}'s `{attributename}` value from {oldvalue} to {newvalue}.\n({uuid})",
+			printer.color_print("Changed {name}'s `{attributename}` value from {oldvalue} to {newvalue}.\n({uuid})",
 				name = job["name"],
 				attributename = attrname,
 				oldvalue = oldval,
