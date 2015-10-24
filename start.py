@@ -85,7 +85,7 @@ if __name__ == "__main__":
 		if initcode == 1: # If the update exit code was called
 			os.chdir(selfpath)
 			printer.color_print("Update successful! Restarting...\n\n\n")
-			quit(globalSyncCommand("start.py "+" ".join(sys.argv[1:]))/256) # Restart this script # Quit if something went wrong
+			quit(int(globalSyncCommand("start.py "+" ".join(sys.argv[1:]))/256)) # Restart this script # Quit if something went wrong
 	else:
 		printer.color_print("Skipping initialization.", color=ansi_colors.YELLOW)
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
 			                     (Edit config.json to change backend ports, 
 			                     	use --port PORT to change frontend ports.)""", strip=True)
 		os.chdir(selfpath)
-		quit(os.system("sudo -p \""+passprompt+"\" python3 start.py "+" ".join(sys.argv[1:]))/256)
+		quit(int(os.system("sudo -p \""+passprompt+"\" python3 start.py "+" ".join(sys.argv[1:]))/256))
 
 
 	try:
