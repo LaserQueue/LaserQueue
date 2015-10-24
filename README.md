@@ -24,6 +24,7 @@ To change the admin login password, run the script with `--new-password`.
 - `-b`, `--queue-backup`: Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.
 - `-r`, `--regen-config`: Regenerate the config. Accepts positional arguments in the form `-r key key2 key3 ...`. If it recieves positionals, it will only regenerate those config values.
 - `-S`, `--no-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
+- `-V`, `--no-version-print`: Does not print the version. Mainly used for the sudo functionality.
 - `-U`, `--no-update`: Does not install or prompt for updates.
 - `-P`, `--no-plugins`: Does not load plugins.
 - `-H`, `--no-regen-host`: Do not regenerate the host in the config. Does not affect any other config values.
