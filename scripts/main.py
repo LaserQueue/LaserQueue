@@ -102,7 +102,8 @@ def process(data, ws):
 		x = comm.parseData(queue, ws, socks, sessions, data)
 		# Back up the queue
 		if args.backup:
-			json.dump(queue.queue, open("cache.json", "w"), indent=2, sort_keys=True)
+			out = json.dumps(queue.queue, indent=2, sort_keys=True)
+			writeFile("cache.json", out)
 		# If the socket handler had an error, report it to the socket
 		if x and type(x) is str:
 			serve_connection({
@@ -166,8 +167,7 @@ def watchQueue(**kwargs):
 def reloadplugins(filetype, plugin_path):
 	pl = plugins.getPluginFiletype(filetype)
 	plugins = "\n".join(pl)
-	with open(plugin_path, "w") as f:
-		f.write(plugins)
+	writeFile(plugin_path, plugins)
 
 plugin_js_path = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
 plugin_css_path = os.path.join(os.path.pardir, "www", "dist", "css", "plugins.css")
@@ -237,7 +237,7 @@ def main():
 		if os.path.exists("cache.json"):
 			queue = laserqueue.Queue.load(open("cache.json"))
 		else:
-			json.dump({}, open("cache.json", "w"))
+			writeFile("cache.json", "{}")
 
 	color_print("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"])
 

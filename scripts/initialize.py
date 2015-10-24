@@ -24,7 +24,7 @@ default_config_path = os.path.join(os.path.pardir, "www", "defaultconf.json")
 connected_to_internet = lambda: bool(getIPs(test=True))
 # Open/save to the config file
 open_config = lambda: json.load(open(config_path))
-save_config = lambda data: json.dump(data, open(config_path, "w"), indent=2, sort_keys=True)
+save_config = lambda data: writeFile(config_path, json.dumps(data, indent=2, sort_keys=True))
 
 
 version_regex = re.compile(r"^(dev-)?\d+\.\d+\.\d+$")
@@ -106,12 +106,11 @@ def getIPs(test=False):
 def concat_plugins():
 	js = plugins.getPluginFiletype(".min.js")
 	plugin_js = "\n".join(js)
-	with open(plugin_js_path, "w") as f:
-		f.write(plugin_js)
+	writeFile(plugin_js_path, plugin_js)
+
 	css = plugins.getPluginFiletype(".min.css")
 	plugin_css = "\n".join(css)
-	with open(plugin_css_path, "w") as f:
-		f.write(plugin_css)
+	writeFile(plugin_css_path, plugin_css)
 
 
 PACKAGES = [
@@ -257,7 +256,7 @@ def update():
 				# Reset the repository
 				repo.git.fetch("--all")
 				repo.git.reset("--hard", "origin/master")
-				json.dump(config, open(config_path, "w"), sort_keys=True)
+				save_config(config)
 				quit(10) # Tells the start script to restart
 	except Exception as e: # Error reporting
 		color_print(format_traceback(e, "Error updating:"), color=ansi_colors.DARKRED)
@@ -292,9 +291,7 @@ def update_password():
 
 		try:
 			# Write the password to the file
-			hashed_file = open("hashpassword", "w")
-			hashed_file.write(hashed_final)
-			hashed_file.close()
+			writeFile("hashpassword", hashed_final)
 			color_print("Password changed to {starredpass}.", starredpass="*"*len(hashed_final))
 		except Exception as e: # Error reporting
 			color_print(format_traceback(e, "Error changing password:"), color=ansi_colors.DARKRED)

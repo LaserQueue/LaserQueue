@@ -19,7 +19,8 @@ class MergerConfig(Config):
 				data = {}
 				self.new = True
 			self.data = dict(defdata, **data)
-			json.dump(self.data, open(path, "w"), sort_keys=True, indent=2)
+			out = json.dumps(self.data, sort_keys=True, indent=2)
+			writeFile(path, out)
 			self.lastmodtime = os.path.getctime(path) # get the last modified time of the target file
 
 # Functions for serving to sockets
@@ -46,6 +47,24 @@ def serve_connection_generator(jdata, ws):
 		
 serve_connections = lambda jdata, socks: list(serve_connections_generator(jdata, socks))
 serve_connection = lambda jdata, ws: list(serve_connection_generator(jdata, ws))
+
+def writeFile(path, data):
+	"""
+	Write to a file, being careful to respect sudo.
+	"""
+	exists = os.path.exists(path)
+		
+	with open(path, "w") as fs:
+		fs.write(data)
+
+	if not exists and os.name != "nt" and not os.geteuid():
+		try:
+			uid = os.environ.get('SUDO_UID')
+			gid = os.environ.get('SUDO_GID')
+			if uid:
+				os.chown(path, int(uid), int(gid))
+		except: 
+			color_print(format("WARNING: {file} created as root.", file=os.path.basename(path)), color=ansi_colors.YELLOW)
 
 if not hasattr(ssl, '_create_default_https_context'): # Some operating systems don't have the default https context.
 	if hasattr(ssl, '_create_unverified_context'):
