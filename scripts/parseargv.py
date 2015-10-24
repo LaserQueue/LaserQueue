@@ -15,6 +15,8 @@ parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest=
 	action="store", required=False, default=False, nargs="*", metavar="KEY")
 parser.add_argument("-S", "--no-install", help="Skip package installation", dest="skip",
 	action="store_true")
+parser.add_argument("-V", "--no-version-print", help="Don't print version", dest="noversionprint",
+	action="store_true")
 parser.add_argument("-U", "--no-update", help="Skip update", dest="skipupdate",
 	action="store_true")
 parser.add_argument("-P", "--no-plugins", help="Don't load plugins", dest="noPlugins",

@@ -76,8 +76,27 @@ def cleanup():
 if __name__ == "__main__":
 	atexit.register(cleanup)
 	version = Config(os.path.join("www","defaultconf.json"))["version"]
-	printer.color_print("Running {version}.", version=parse_version(version))
+	if not args.noversionprint: 
+		printer.color_print("Running {version}.", version=parse_version(version))
 
+	backend_port = int(Config(os.path.join(selfpath,"www","config.json"))["port"]) # Get the port to host the backend from
+
+	# Based on the args, load frontend, backend, or neither.
+	load_frontend = (args.load_frontend or (not args.load_frontend and not args.load_backend)) and not args.load_none
+	load_backend = (args.load_backend or (not args.load_frontend and not args.load_backend)) and not args.load_none
+
+	canServeToRestricted = os.name == "nt" or not os.geteuid()
+
+	useSudo = ((load_backend and not canServeToRestricted and backend_port < 1024) or
+						(load_frontend and not canServeToRestricted and args.port < 1024))
+
+	if useSudo:
+		passprompt = format("{whitespace}Password: ", whitespace=printer.colorconfig.whitespace())
+		printer.color_print("""Root required on ports up to 1023, attempting to elevate permissions.
+			                     (Edit config.json to change backend ports, 
+			                     	use --port PORT to change frontend ports.)""", strip=True)
+		os.chdir(selfpath)
+		quit(int(os.system("sudo -p \""+passprompt+"\" python3 start.py -V "+" ".join(sys.argv[1:]))/256))
 
 	printer = Printer(ansi_colors.CYAN, "Setup")
 	# Initialize all needed files
@@ -97,26 +116,6 @@ if __name__ == "__main__":
 			quit(int(globalSyncCommand("start.py "+" ".join(sys.argv[1:]))/256)) # Restart this script # Quit if something went wrong
 	else:
 		printer.color_print("Skipping initialization.", color=ansi_colors.YELLOW)
-
-	backend_port = int(Config(os.path.join(os.path.pardir,"www","config.json"))["port"]) # Get the port to host the backend from
-
-	# Based on the args, load frontend, backend, or neither.
-	load_frontend = (args.load_frontend or (not args.load_frontend and not args.load_backend)) and not args.load_none
-	load_backend = (args.load_backend or (not args.load_frontend and not args.load_backend)) and not args.load_none
-
-	canServeToRestricted = os.name == "nt" or not os.geteuid()
-
-	useSudo = ((load_backend and not canServeToRestricted and backend_port < 1024) or
-						(load_frontend and not canServeToRestricted and args.port < 1024))
-
-	if useSudo:
-		passprompt = format("{whitespace}Password: ", whitespace=printer.colorconfig.whitespace())
-		printer.color_print("""Root required on ports up to 1023, attempting to elevate permissions.
-			                     (Edit config.json to change backend ports, 
-			                     	use --port PORT to change frontend ports.)""", strip=True)
-		os.chdir(selfpath)
-		quit(int(os.system("sudo -p \""+passprompt+"\" python3 start.py "+" ".join(sys.argv[1:]))/256))
-
 
 	try:
 		os.chdir(os.path.join(selfpath, "www"))
