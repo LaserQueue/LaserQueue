@@ -13,7 +13,6 @@ import threading
 from parseargv import args
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
-os.chdir(selfpath)
 
 
 class Sockets:
@@ -168,8 +167,8 @@ def reloadplugins(filetype, plugin_path):
 	plugins = "\n".join(pl)
 	writeFile(plugin_path, plugins, printer)
 
-plugin_js_path = os.path.join(os.path.pardir, "www", "dist", "js", "plugins.js")
-plugin_css_path = os.path.join(os.path.pardir, "www", "dist", "css", "plugins.css")
+plugin_js_path = os.path.join(selfpath, os.path.pardir, "www", "dist", "js", "plugins.js")
+plugin_css_path = os.path.join(selfpath, os.path.pardir, "www", "dist", "css", "plugins.css")
 def watchPlugins(**kwargs):
 	jsstep, cssstep = False, False
 	pluginJSFilesDupe, pluginCSSFilesDupe = dict(pluginJSFiles), dict(pluginCSSFiles)

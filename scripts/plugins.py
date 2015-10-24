@@ -2,9 +2,11 @@ from parseargv import args
 from pluginResources.QueueConfig import *
 printer = Printer(ansi_colors.DARKGRAY, "Plugins")
 
-PLUGINDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "plugins"))
+selfpath = os.path.dirname(__file__)
+
+PLUGINDIR = os.path.abspath(os.path.join(selfpath, os.path.pardir, "plugins"))
 sys.path.append(PLUGINDIR)
-sys.path.append(os.path.join(os.path.dirname(__file__), "pluginResources"))
+sys.path.append(os.path.join(selfpath, "pluginResources"))
 
 def tryImport(name):
 	try:
@@ -22,7 +24,7 @@ def tryImport(name):
 
 def tryLoadFile(folder, name):
 	try:
-		with open(os.path.join(os.path.pardir, 'plugins', folder, name)) as f:
+		with open(os.path.join(selfpath, os.path.pardir, 'plugins', folder, name)) as f:
 			return f.read().strip()
 	except Exception as e:
 		printer.color_print(format_traceback(e, format("Error loading {name}:", name=name)), color=ansi_colors.DARKRED)
@@ -121,5 +123,5 @@ def getPluginNames(ftype):
 		pluginFiles = os.listdir(os.path.join(PLUGINDIR, i))
 		pluginFiles = filter(lambda filename: filename.endswith(ftype), pluginFiles)
 		for j in pluginFiles:
-			plugin.append(os.path.abspath(os.path.join(os.path.pardir, 'plugins', i, j)))
+			plugin.append(os.path.abspath(os.path.join(selfpath, os.path.pardir, 'plugins', i, j)))
 	return plugin

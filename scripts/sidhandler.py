@@ -8,8 +8,10 @@ import hashlib
 from util import *
 config = Config(CONFIGDIR)
 
-if os.path.exists("hashpassword"):
-	PASSWORD = open("hashpassword").read().strip()
+selfpath = os.path.dirname(__file__)
+
+if os.path.exists(os.path.join(selfpath, "hashpassword")):
+	PASSWORD = open(os.path.join(selfpath, "hashpassword")).read().strip()
 
 class SID:
 	"""
@@ -24,7 +26,7 @@ class SID:
 		"""
 		Attempt to auth using `password`, by checking it against PASSWORD.
 		"""
-		if os.path.exists("hashpassword"):
+		if os.path.exists(os.path.join(selfpath, "hashpassword")):
 			hash_object = hashlib.sha256(password.strip().encode()).hexdigest()
 			if hash_object.strip() == PASSWORD: 
 				self.authstate = True

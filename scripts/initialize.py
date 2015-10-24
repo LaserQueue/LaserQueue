@@ -256,7 +256,7 @@ def update():
 				repo.git.fetch("--all")
 				repo.git.reset("--hard", "origin/master")
 				save_config(config)
-				quit(10) # Tells the start script to restart
+				return "restart" # Tells the start script to restart
 	except Exception as e: # Error reporting
 		printer.color_print(format_traceback(e, "Error updating:"), color=ansi_colors.DARKRED)
 
@@ -327,7 +327,7 @@ def main():
 	Run all subroutines for initialization.
 	"""
 	printer.color_print("Beginning initialization.")
-
+	retcode = 0
 	try: fetch_dependencies()
 	except KeyboardInterrupt: print()
 	try: update_config()
@@ -336,12 +336,15 @@ def main():
 	except KeyboardInterrupt: print()
 	try: update_host()
 	except KeyboardInterrupt: print()
-	try: update()
+	try: 
+		if update() == "restart":
+			retcode = 1
 	except KeyboardInterrupt: print()
 	try: concat_plugins()
 	except KeyboardInterrupt: print()
 				
 	printer.color_print("Initialization complete.")
+	return retcode
 
 if __name__ == "__main__":
 	main()
