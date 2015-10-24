@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os, sys
-import subprocess, time
-import json, multiprocessing
+import time, json
+import multiprocessing, atexit
 
 selfpath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(selfpath) # Make sure we're in the right directory
@@ -47,6 +47,7 @@ def globalSyncCommand(cmd):
 class DummyProcess:
 	def start(*args, **kwargs): pass
 	def join(*args, **kwargs): pass
+	def terminate(*args, **kwargs): pass
 
 version_regex = re.compile(r"^(dev-)?\d+\.\d+\.\d+$")
 dev_tag_regex = re.compile(r"^dev-")
@@ -65,7 +66,15 @@ def parse_version(version):
 	return format("{words}{endc}", words=" ".join(return_words))
 
 
+global backThread, frontThread
+backThread, frontThread = DummyProcess(), DummyProcess()
+def cleanup():
+	global backThread, frontThread
+	backThread.terminate()
+	frontThread.terminate()
+
 if __name__ == "__main__":
+	atexit.register(cleanup)
 	version = Config(os.path.join("www","defaultconf.json"))["version"]
 	printer.color_print("Running {version}.", version=parse_version(version))
 
@@ -79,9 +88,9 @@ if __name__ == "__main__":
 	initFile(os.path.join(selfpath, "www", "dist", "css", "plugins.css"))
 
 	# Do setup
-	import scripts.initialize
+	import initialize
 	if not args.no_init:
-		initcode = scripts.initialize.main()
+		initcode = initialize.main()
 		if initcode == 1: # If the update exit code was called
 			os.chdir(selfpath)
 			printer.color_print("Update successful! Restarting...\n\n\n")
@@ -111,15 +120,9 @@ if __name__ == "__main__":
 
 	try:
 		os.chdir(os.path.join(selfpath, "www"))
-		import scripts.main, scripts.http.server
-		if load_backend:
-			backThread = multiprocessing.Process(target=scripts.main.main)
-		else:
-			backThread = DummyProcess()
-		if load_frontend:
-			frontThread = multiprocessing.Process(target=scripts.http.server.main, args=(args.port,))	
-		else:
-			backThread = DummyProcess()
+		import scripts.backend, scripts.http.server
+		if load_backend: backThread =   multiprocessing.Process(target=scripts.backend.main)
+		if load_frontend: frontThread = multiprocessing.Process(target=scripts.http.server.main, args=(args.port,))
 		backThread.start()
 		frontThread.start()
 		backThread.join()

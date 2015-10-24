@@ -74,7 +74,7 @@ Format:
 Every `config.refreshRate` ms, this will be run. The object to register is a function accepting `**kwargs`. These args are, at the moment:
 * `queue` - The current `laserqueue.Queue` object
 * `sessions` - The currect `sidhandler.SIDCache` object
-* `sockets` - The current `main.Sockets` object
+* `sockets` - The current `backend.Sockets` object
 * `registry` - The current `wireutils.Registry` object. Changes you make to this object will not be reflected elsewhere.
 
 #### `"socket"`
@@ -115,8 +115,9 @@ Every method used for a SocketCommand should accept only **kwargs. These are the
 * `sec`: the identifier for the session, used to change/get its authstate.
 * `sessions`: the global instance of sidhandler.SIDCache.
 * `ws`: the websocket for this session.
-* `sockets`: a main.Sockets object that contains all the current sessions.
+* `sockets`: a backend.Sockets object that contains all the current sessions.
 * `queue`: the laserqueue.Queue object holding the jobs.
+* `printer`: the util.Printer instance for the main laserqueue.
 
 ## Printing
 Unlike in a normal program, you shouldn't just edit `color_printing_config`. This will edit the process's `color_printing_config`, meaning that the `[Backend]` in the log will become your plugin's name. Instead, you use `Printer`, included in `QueueConfig`.  
