@@ -54,6 +54,10 @@ if (!String.prototype.repeat) {
 	};
 }
 
+function splatArgs(func, args) {
+	return Array.prototype.slice.call(args, func.length);
+}
+
 
 function ensureNumberStringLength(number, len) {
 	return '0'.repeat(len - String(number).length) + String(number);
