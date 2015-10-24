@@ -4,8 +4,7 @@ Here as a very basic idea of how to construct a plugin.
 """
 
 # from QueueConfig import *
-# printer = Printer()
-# printer.setname("Test Plugin")
+# printer = Printer("Test Plugin")
 
 
 # def routine(**kwargs):
