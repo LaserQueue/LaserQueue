@@ -2,6 +2,7 @@
 
 var config, jsonData, socket, buttons,
 	authed = false,
+	queueEvents = {},
 	allCuts = [],
 	draggable = [],
 	displayEl = {},
