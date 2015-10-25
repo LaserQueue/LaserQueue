@@ -159,7 +159,7 @@ commands = [
 	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type})
 ]
 
-def buildCommands(plugins, reg):
+def buildCommands(reg):
 	"""
 	Build the list of commands.
 	"""
@@ -181,9 +181,15 @@ def buildCommands(plugins, reg):
 		else:
 			cmdargs = cmd[2]
 		commands.append(SocketCommand(cmd[0], cmd[1], cmdargs))
-	for module in plugins:
-		if hasattr(module, "requiresAuth"):
-			authactions += module.requiresAuth
+
+	requireslist = reg.events.get('requiresAuth', {})
+	requires = [(i,requireslist[i]) for i in requireslist]
+	for _, required in requires:
+		if not required:
+			continue
+		if not isinstance(required[0], str):
+			continue
+		authactions.append(required[0])
 
 def parseData(queue, ws, socks, sessions, jdata, printer):
 	"""

@@ -2,6 +2,8 @@ from wireutils import *
 from parseargv import args as argvs
 import ssl, urllib.request, io, uuid
 
+Registry.register = Registry.on
+
 DEFAULTCONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "defaultconf.json"))
 CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "config.json"))
 

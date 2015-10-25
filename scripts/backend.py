@@ -216,7 +216,7 @@ def main():
 	"""
 	global socks, reg, queue, authed, sessions, queuehash, upkeepThread, upkeeps, pluginJSFiles, pluginCSSFiles
 
-	pluginList, reg = plugins.getPlugins()
+	reg = plugins.getPlugins()
 	pluginJSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.js")}
 	pluginCSSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.css")}
 	upkeeps = [watchSessions, watchQueue]
@@ -227,8 +227,8 @@ def main():
 	for jobid, job in upkeeps:
 		if job and hasattr(job[0], "__call__"):
 			upkeeps.append(job[0])
-	comm.buildCommands(pluginList, reg)
-	laserqueue.buildLists(pluginList, reg)
+	comm.buildCommands(reg)
+	laserqueue.buildLists(reg)
 
 	# Load the queue if -b is used
 	if args.backup:

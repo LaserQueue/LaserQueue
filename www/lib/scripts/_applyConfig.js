@@ -154,6 +154,6 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		}
 	}, config.reconnectRate);
 
-	eventRegistry = new Registry();
+	registry = new Registry();
 
 });

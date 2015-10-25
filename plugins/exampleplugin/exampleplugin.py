@@ -10,5 +10,5 @@ Here as a very basic idea of how to construct a plugin.
 # def routine(**kwargs):
 # 	printer.color_print("hi")
 
-# eventRegistry = Registry()
-# eventRegistry.on('upkeep', routine)
+# registry = Registry()
+# registry.on('upkeep', routine)

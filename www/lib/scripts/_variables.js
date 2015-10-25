@@ -1,6 +1,6 @@
 // declare all globals here
 
-var config, jsonData, socket, buttons, eventRegistry,
+var config, jsonData, socket, buttons, registry,
 	authed = false,
 	allCuts = [],
 	draggable = [],

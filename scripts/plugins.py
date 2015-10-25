@@ -30,11 +30,7 @@ def tryLoadFile(folder, name):
 		printer.color_print(format_traceback(e, format("Error loading {name}:", name=name)), color=ansi_colors.DARKRED)
 
 
-pluginFilter = lambda module: (
-	hasattr(module, "hideFromClient") or
-	hasattr(module, "requiredTags") or
-	hasattr(module, "requiresAuth") or
-	hasattr(module, "eventRegistry"))
+pluginFilter = lambda module: (hasattr(module, "registry"))
 
 def hasPy(filename):
 	subFiles = os.listdir(os.path.join(PLUGINDIR, filename))
@@ -67,11 +63,11 @@ def getPlugins():
 		for j in pluginPyFiles:
 			imported = tryImport(j[:-3])
 			if imported:
-				if hasattr(imported, "eventRegistry"):
-					if isinstance(imported.eventRegistry, Registry):
-						reg.graft(imported.eventRegistry)
+				if hasattr(imported, "registry"):
+					if isinstance(imported.registry, Registry):
+						reg.graft(imported.registry)
 					else:
-						printer.color_print("{name}.eventRegistry isn't a Registry!", name=j[:-3], color=ansi_colors.DARKRED)
+						printer.color_print("{name}.registry isn't a Registry!", name=j[:-3], color=ansi_colors.DARKRED)
 				pluginModules.append(imported)
 
 	pluginModules = list(filter(pluginFilter, pluginModules))
@@ -80,7 +76,7 @@ def getPlugins():
 			printer.color_print("Finished loading Python plugins.")
 		else:
 			printer.color_print("No Python plugins found.")
-	return pluginModules, reg
+	return reg
 
 
 

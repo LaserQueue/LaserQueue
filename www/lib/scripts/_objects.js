@@ -16,6 +16,8 @@ Registry.prototype.on = function registerEvent(tag) {
 	return newjobid;
 };
 
+Registry.prototype.register = Registry.prototype.on;
+
 Registry.prototype.deregister = function deregisterEvent(tag, jobid) {
 	if (this.events.hasOwnProperty(tag)) {
 		if (this.events[tag].hasOwnProperty(jobid)) {

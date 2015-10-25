@@ -52,7 +52,7 @@ Two modules that have been made available you might find helpful:
 ## Backend Plugin functions
 Each plugin must have at least one of these:
 ### Event Registry
-`eventRegistry` is a `QueueObject.Registry` instance. To register an event, you call `QueueObject.on`. It currently has the following events handled:
+`registry` is a `QueueObject.Registry` instance. To register an event, you call `QueueObject.on`. It currently has the following events handled:
 
 #### `"egg"`
 Whenever a job is added, this will check if an easter egg is applicable.  

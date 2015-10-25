@@ -58,16 +58,30 @@ easterEggs = [
 ]
 
 # Use the modules from plugins to update requiredtags and hideFromClient
-def buildLists(modules, reg):
+def buildLists(reg):
 	global requiredtags, hideFromClient, easterEggs
-	for module in modules:
-		if hasattr(module, "requiredTags"):
-			requiredtags = dict(d, **module.requiredTags)
-		if hasattr(module, "hideFromClient"):
-			hideFromClient += module.hideFromClient
+
+	requiredlist = reg.events.get('requiredTag', {})
+	requires = [(i,requiredlist[i]) for i in requiredlist]
+	for _, required in requires:
+		if len(required) != 2:
+			continue
+		if not isinstance(required[0], str):
+			continue
+		requiredtags[required[0]] = required[1]
+
+	hiddenlist = reg.events.get('hideFromClient', {})
+	hiddens = [(i,hiddenlist[i]) for i in hiddenlist]
+	for _, hidden in hiddens:
+		if not hidden:
+			continue
+		if not isinstance(hidden[0], str):
+			continue
+		hideFromClient.append(hidden[0])
+
 	egglist = reg.events.get('egg', {})
 	eggs = [(i,egglist[i]) for i in egglist]
-	for eggid, egg in eggs:
+	for _, egg in eggs:
 		if not egg:
 			continue
 		if not isinstance(egg[0], dict): 
