@@ -1,6 +1,7 @@
 // functions for auth
 
 function onAuth() {
+	$(queueEvents).trigger('auth.success');
 	authed = true;
 	logText('Displaying authed modal.');
 	modalMessage('Success!', '<p class="lead">You\'ve been authorized!</p>');
@@ -20,12 +21,14 @@ function onAuth() {
 }
 
 function onFailedauth() {
+	$(queueEvents).trigger('auth.failure');
 	modalMessage('Failure', '<p class="lead">Unfortunately, it looks like your password was wrong.</p>');
 	logText('Password was wrong. You\'re bad and you should feel bad.');
 	NProgress.done();
 }
 
 function onDeauth() {
+	$(queueEvents).trigger('auth.deauth');
 	authed = false;
 	logText('User has been deauthed.');
 	$('.jobs-table-template').render(allCuts, renderDirectives);

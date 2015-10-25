@@ -4,6 +4,26 @@ Plugins can add features to the queue or tweak it to fit your needs. For general
 ## Frontend Plugin resources
 Your JS will be concatenated with the other plugins. It has access to `formOptions`, a global object, to modify the form. The plugin should modify it as desired, then call `renderForm()` to make its changes reflected. There are two builtin types of form elements: strings for text and selects for dropdowns. Custom values are passed to the backend in the extras object.
 
+### Events
+Events get triggered on the `queueEvents` object when LaserQueue-related things happen. You can detect them with code like the example below, which displays an alert when the `auth` event gets triggered.
+
+#### Example
+```js
+$(queueEvents).on('auth.success', function alertAuth() {
+	alert('Auth event was triggered.');
+});
+```
+
+#### Events list
+| Event | Meaning |
+|-------|---------|
+|`auth.success`|User has successfully completed auth|
+|`auth.failure`|User failed auth|
+|`auth.deauth`|User logged out|
+|`config.parsed`|Config file has been applied|
+|`actions.populated`|Action buttons have been populated|
+|`form.reset`|Built-in form elements have been cleared|
+
 ### String form options
 ```js
 formOptions.example = {

@@ -207,6 +207,7 @@ function populateActions() {
 			});
 		});
 	}
+	$(queueEvents).trigger('actions.populated');
 }
 
 // displays message in a bootstrap modal
@@ -249,6 +250,7 @@ function resetForm(form) {
 	if($(form).selector == '.new-job-form') {
 		form.find('.selected').prop('selected', true);
 	}
+	$(queueEvents).trigger('form.reset');
 }
 
 // sends over websockets if the connection is stable

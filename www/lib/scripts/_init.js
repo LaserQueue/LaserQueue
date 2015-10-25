@@ -15,13 +15,11 @@ NProgress.settings.showSpinner = false;
 $.ajax({
 	url: '/infotext.md',
 	type: 'GET'
-})
-.done(function writeInfoText(request) {
+}).done(function writeInfoText(request) {
 	$('.credits-footer').before(
 		marked(request)
 	);
-})
-.fail(function handleInfoTextFail() {
+}).fail(function handleInfoTextFail() {
 	console.log('Failed to get infotext.md');
 });
 
