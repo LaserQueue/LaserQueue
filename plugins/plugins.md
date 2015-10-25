@@ -49,12 +49,10 @@ Two modules that have been made available you might find helpful:
 
 `QueueConfig` is a clone of the normal `util` file, and `ActionFramework` supplies `SocketCommand`, `any_number`, and `any_type`.  
 
-## Backend Plugin functions
-Each plugin must have at least one of these:
-### Event Registry
-`registry` is a `QueueObject.Registry` instance. To register an event, you call `QueueObject.on`. It currently has the following events handled:
+## Event Registry
+`registry` is a `QueueObject.Registry` instance. If it exists in the module, it is considered to be a plugin. To register an event, you call `QueueObject.Registry.register`. It currently has the following events handled:
 
-#### `"egg"`
+### `"egg"`
 Whenever a job is added, this will check if an easter egg is applicable.  
 Format:
 ```python
@@ -70,33 +68,44 @@ Format:
 * `loud` is the text to output if `-v` was used to call the Queue.  
 * If `broadcast` is true, being in admin mode will broadcast this packet to everyone when you call it.
 
-#### `"upkeep"`
+### `"upkeep"`
 Every `config.refreshRate` ms, this will be run. The object to register is a function accepting `**kwargs`. These args are, at the moment:
 * `queue` - The current `laserqueue.Queue` object
 * `sessions` - The currect `sidhandler.SIDCache` object
 * `sockets` - The current `backend.Sockets` object
 * `registry` - The current `wireutils.Registry` object. Changes you make to this object will not be reflected elsewhere.
 
-#### `"socket"`
+### `"socket"`
 This allows you to register commands for incoming socket data.
 Format:
 ```python
-(
-  "...",
-  function,
-  {...}
-)
+"...",
+function,
+{...}
 ```
 These are identical to the arguments for a `ActionFramework.SocketCommand` object.
 
-### Hidden from the client
-`hideFromClient` is a list of tags to be added to the blacklist in `QueueObject.serialize`.
+### `"hideFromClient"`
+This allows you to blacklist objects in a job from being sent to the frontend.
+Format:
+```python
+"..."
+```
 
-### Required tags
-`requiredTags` is a dict of tags required for QueueObjects. Merged under the existing.
+### `"requiredTag"`
+This allows you to add a key-data pair that all Queue jobs are initialized with.
+Format:
+```python
+"...",
+object
+```
 
-### Auth-requiring actions
-`requiresAuth` is a list of names of commands that require auth.
+### `"requiresAuth"`
+This allows you to blacklist a socket command name from being used by non-authenticated users.
+Format:
+```python
+"..."
+```
 
 ## `ActionFramework.SocketCommand`
 SocketCommand accepts these arguments:  
