@@ -84,7 +84,7 @@ def buildLists(reg):
 	for _, egg in eggs:
 		if not egg:
 			continue
-		if not isinstance(egg[0], dict): 
+		if not isinstance(egg[0], dict):
 			continue
 		if "match" not in egg[0] or not isinstance(egg[0]["match"], list) or not egg[0]["match"]:
 			continue
@@ -351,7 +351,8 @@ class Queue:
 
 			# Tell the client the job was added
 			serve_connection({
-				"action": "job_added"
+				"action": "job_added",
+				"uuid": newJob["uuid"]
 			}, ws)
 
 			if argvs.loud: # If -v, report success
