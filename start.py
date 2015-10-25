@@ -91,7 +91,9 @@ if __name__ == "__main__":
 						(load_frontend and not canServeToRestricted and args.port < 1024))
 
 	if useSudo:
-		passprompt = format("{whitespace}Password: ", whitespace=printer.colorconfig.whitespace())
+		passprompt = "Password: "
+		if not args.shh:
+			passprompt = printer.colorconfig.whitespace()+passprompt
 		printer.color_print("""Root required on ports up to 1023, attempting to elevate permissions.
 			                     (Edit config.json to change backend ports, 
 			                     	use --port PORT to change frontend ports.)""", strip=True)
