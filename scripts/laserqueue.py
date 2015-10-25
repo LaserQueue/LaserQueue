@@ -269,20 +269,6 @@ class Queue:
 		extra_objects = args.get("extras", {}) # Get the extras and make sure it's the right format
 		if not isinstance(extra_objects, dict): extra_objects = {}
 
-		# If the priority or the material aren't set up, or the name isn't defined
-		if not name or material == "N/A" or priority == -1 or esttime <= 0:
-			# Tell the user
-			serve_connection({
-				"action": "notification",
-				"title": "Incomplete data",
-				"text": "Please fill out the submission form fully."
-				}, ws)
-			# Tell the client then don't add the object
-			serve_connection({"action": "add_failed"}, ws)
-			if argvs.loud:
-				printer.color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
-			return
-
 		if config["easter_eggs"]:
 			strippedname = re.sub(r"[^\w ]", "", name.lower().strip())
 			for egg in easterEggs:
@@ -299,6 +285,20 @@ class Queue:
 					if argvs.loud:
 						printer.color_print(egg["loud"])
 					return
+
+		# If the priority or the material aren't set up, or the name isn't defined
+		if not name or material == "N/A" or priority == -1 or esttime <= 0:
+			# Tell the user
+			serve_connection({
+				"action": "notification",
+				"title": "Incomplete data",
+				"text": "Please fill out the submission form fully."
+				}, ws)
+			# Tell the client then don't add the object
+			serve_connection({"action": "add_failed"}, ws)
+			if argvs.loud:
+				printer.color_print("Insufficient data to add job to queue.", color=ansi_colors.YELLOW)
+			return
 
 		# Contain the length of time within the configurable bounds.
 		bounds = config["length_bounds"]
