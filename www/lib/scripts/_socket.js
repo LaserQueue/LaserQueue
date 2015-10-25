@@ -48,7 +48,11 @@ function socketSetup() {
 			// if being told to render table
 			if (jsonData.action in acceptedAPIs) {
 				for (var func in acceptedAPIs[jsonData.action]) {
-					acceptedAPIs[jsonData.action][func](jsonData);
+					try {
+						acceptedAPIs[jsonData.action][func](jsonData);
+					} catch (e) {
+						console.log(e);
+					}
 				}
 			}
 		}
