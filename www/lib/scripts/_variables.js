@@ -25,10 +25,12 @@ var config, jsonData, socket, buttons,
 		"job_added": [function endLoader() {
 			logText("job_added received, so ending job addition loader");
 			NProgress.done();
+			$(queueEvents).trigger('add.succeed');
 		}],
 		"add_failed": [function endLoader() {
 			logText("job_failed received, so ending job addition loader");
 			NProgress.done();
+			$(queueEvents).trigger('add.fail');
 		}],
 		"authed": [function authUser(data) {
 			if (config.admin_mode_enabled && !authed) onAuth();
