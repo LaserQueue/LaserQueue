@@ -183,7 +183,7 @@ Example:
 `SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str})`  
 where append is a function.  
 
-Every method used for a SocketCommand should accept only **kwargs. These are the things passed currently:
+Every method used for a SocketCommand should accept only `**kwargs`.
 
 |Key|Type|Description|
 |---|----|-----------|
