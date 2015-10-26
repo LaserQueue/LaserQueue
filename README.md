@@ -17,19 +17,19 @@ To change the admin login password, run the script with `--new-password`.
 ### Flags:
 | Flag | Long flag | Description |
 |------|-----------|-------------|
-|`-h`|`--help`|Display a list of these flags. Does not start the backend.|
-|`-p PORT`|`--port`|Set the port for the website to be hosted.|
-|`-l`|`--local`|Start the backend in local mode. You'll connect with localhost.|
-|`-v`|`--verbose`|Extra and more informative output from the backend. Doesn't apply if `-q` is used.|
-|`-q`|`--quiet`|Start without output. Only applies to start.sh. Equivalent to `>/dev/null`.|
+|`-h`|`--help`|Display a list of these flags and quit.|
+|`-p PORT`|`--port PORT`|Set the port for the website to be hosted.|
+|`-l`|`--local`|Start the backend from localhost.|
+|`-v`|`--verbose`|Extra and more informative output from the backend.|
+|`-q`|`--quiet`|Silence all printing.|
 |`-b`|`--queue-backup`|Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.|
 |`-r`|`--regen-config`|Regenerate the config.|
-|`-r [REGEN,]`|`--regen-config`|Regenerate the positional arguments in the config.|
-|`-S`|`--no-install`|Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.|
-|`-V`|`--no-version-print`|Does not print the version. Mainly used for the sudo functionality.|
+|`-r [REGEN,]`|`--regen-config [REGEN,]`|Regenerate the positional arguments in the config.|
+|`-S`|`--no-install`|Does not install dependencies.|
+|`-V`|`--no-version-print`|Does not print the version.|
 |`-U`|`--no-update`|Does not install or prompt for updates.|
 |`-P`|`--no-plugins`|Does not load plugins.|
-|`-H`|`--no-regen-host`|Do not regenerate the host in the config. Does not affect any other config values.|
+|`-H`|`--no-regen-host`|Do not automatically regenerate `config.host`.|
 |None|`--new-password`|Allows you to reset the admin password from within the program.|
 |None|`--backend`|Only runs the backend.|
 |None|`--frontend`|Only runs the frontend.|
