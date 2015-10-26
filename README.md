@@ -15,26 +15,27 @@ To start the server, run `start.sh` or `start.py` or `start.bat` if you're on Wi
 To change the admin login password, run the script with `--new-password`.
 
 ### Flags:
-
-- `-h`, `--help`: Display a list of these flags. Does not start the backend.
-- `-p`, `--port`: Set the port for the website to be hosted.
-- `-l`, `--local`: Start the backend in local mode. You'll connect with localhost.
-- `-v`, `--verbose`: Extra and more informative output from the backend. Doesn't apply if `-q` is used.
-- `-q`, `--quiet`: Start without output. Only applies to start.sh. Equivalent to `>/dev/null`.
-- `-b`, `--queue-backup`: Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.
-- `-r`, `--regen-config`: Regenerate the config. Accepts positional arguments in the form `-r key key2 key3 ...`. If it recieves positionals, it will only regenerate those config values.
-- `-S`, `--no-install`: Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.
-- `-V`, `--no-version-print`: Does not print the version. Mainly used for the sudo functionality.
-- `-U`, `--no-update`: Does not install or prompt for updates.
-- `-P`, `--no-plugins`: Does not load plugins.
-- `-H`, `--no-regen-host`: Do not regenerate the host in the config. Does not affect any other config values.
-- `--new-password`: No short option. Allows you to reset the admin password from within the program.
-- `--backend`: No short option. Only runs the backend.
-- `--frontend`: No short option. Only runs the frontend.
-- `--init-only`: No short option. Runs neither the frontend nor the backend.
-- `--no-init`: No short option. Doesn't run the setup.
-- `--install-all`: No short option. Installs all dependencies without prompting.
-- `--install-update`: No short option. Installs updates without prompting.
+| Short flag | Long flag | Description |
+|------------|-----------|-------------|
+|`-h`|`--help`|Display a list of these flags. Does not start the backend.|
+|`-p`|`--port`|Set the port for the website to be hosted.|
+|`-l`|`--local`|Start the backend in local mode. You'll connect with localhost.|
+|`-v`|`--verbose`|Extra and more informative output from the backend. Doesn't apply if `-q` is used.|
+|`-q`|`--quiet`|Start without output. Only applies to start.sh. Equivalent to `>/dev/null`.|
+|`-b`|`--queue-backup`|Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.|
+|`-r`|`--regen-config`|Regenerate the config. Accepts positional arguments in the form `-r key key2 key3 ...`. If it recieves positionals, it will only regenerate those config values.|
+|`-S`|`--no-install`|Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.|
+|`-V`|`--no-version-print`|Does not print the version. Mainly used for the sudo functionality.|
+|`-U`|`--no-update`|Does not install or prompt for updates.|
+|`-P`|`--no-plugins`|Does not load plugins.|
+|`-H`|`--no-regen-host`|Do not regenerate the host in the config. Does not affect any other config values.|
+|None|`--new-password`|Allows you to reset the admin password from within the program.|
+|None|`--backend`|Only runs the backend.|
+|None|`--frontend`|Only runs the frontend.|
+|None|`--init-only`|Runs neither the frontend nor the backend.|
+|None|`--no-init`|Doesn't run the setup.|
+|None|`--install-all`|Installs all dependencies without prompting.|
+|None|`--install-update`|Installs updates without prompting.|
 
 ### Backend API
 Want to access the backend? Send it signals? Control your list with a custom frontend? Make changes to the backend or frontend? See [API.md](API.md)!

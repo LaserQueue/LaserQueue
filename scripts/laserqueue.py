@@ -286,7 +286,7 @@ class Queue:
 	# `sec`: the identifier for the session, used to change/get its authstate.
 	# `sessions`: the global instance of sidhandler.SIDCache.
 	# `ws`: the websocket for this session.
-	# `sockets`: a main.Sockets object that contains all the current sessions.
+	# `sockets`: a backend.Sockets object that contains all the current sessions.
 	# `printer`: the current util.Printer.
 
 	def append(self, **kwargs):

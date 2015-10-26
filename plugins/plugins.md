@@ -85,17 +85,21 @@ Format:
   "broadcast": True|False
 }
 ```
-* `match` is a list of possible matches for the easter egg.  
-* `serve` is the packet to serve to the client when they submit the job.  
-* `loud` is the text to output if `-v` was used to call the Queue.  
-* If `broadcast` is true, being in admin mode will broadcast this packet to everyone when you call it.
+|Key|Type|Description|
+|---|----|-----------|
+|`match`|`list<str>`|A list of possible matches for the easter egg.|
+|`serve`|`dict`|The packet to serve to the client when they submit the job.|
+|`loud`|`str`|The text to output if `-v` was used to call the Queue.|
+|`broadcast`|`bool`|Whether being in admin mode will broadcast this packet to everyone when you call it.|
 
 ### `"upkeep"`
 Every `config.refreshRate` ms, this will be run. The object to register is a function accepting `**kwargs`. These args are, at the moment:
-* `queue` - The current `laserqueue.Queue` object
-* `sessions` - The currect `sidhandler.SIDCache` object
-* `sockets` - The current `backend.Sockets` object
-* `registry` - The current `wireutils.Registry` object. Changes you make to this object will not be reflected elsewhere.
+|Key|Description|
+|---|-----------|
+|`queue`|The current `laserqueue.Queue` object.|
+|`sessions`|The currect `sidhandler.SIDCache` object.|
+|`sockets`|The current `backend.Sockets` object.|
+|`registry`|The current `wireutils.Registry` object. Changes you make to this object will not be reflected elsewhere.|
 
 ### `"socket"`
 This allows you to register commands for incoming socket data.
@@ -150,36 +154,42 @@ Format:
 "...",
 function
 ```
-The function accepts `**kwargs`, which will contain:
-* `value` - The target value for the tag.
-* `attrname` - The tag name.
-* `queue` - The queue.
-* `authstate` - If the sender is authed.
-* `job` - The QueueObject that is being edited.
-* `masterindex` - The master index of the job.
-* `priority` - The priority of the job.
-* `index` - The index of the job.
+The function accepts `**kwargs`.
+|Keyword|Type|Value|
+|-------|----|-----|
+|`value`|`object`|The target value for the tag.|
+|`attrname`|`str`|The tag name.|
+|`queue`|`laserqueue.Queue`|The queue.|
+|`authstate`|`bool`|If the sender is authed.|
+|`job`|`laserqueue.QueueObject`|The job that is being edited.|
+|`masterindex`|`int`|The master index of the job.|
+|`priority`|`int`|The priority of the job.|
+|`index`|`int`|The index of the job.|
 
 ## `ActionFramework.SocketCommand`
 SocketCommand accepts these arguments:  
 actionname, method, arglist
-* `actionname` is a string which defines the object's name (and therefore action).
-* `method` is what function should be run when SocketCommand is intercepted.
-* `arglist` is a dictionary of arguments required and their types.
+|Key|Description|
+|---|-----------|
+|`actionname`|A string which defines the object's name (and therefore action).|
+|`method`|What function should be run when SocketCommand is intercepted.|
+|`arglist`|A dictionary of arguments required and their types.|
 
 Example:  
 `SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str})`  
 where append is a function.  
 
 Every method used for a SocketCommand should accept only **kwargs. These are the things passed currently:
-* `args`: a dictionary of all arguments in the json sent over the socket, minus `action`.
-* `authstate`: a boolean that contains whether the session is authenticated.
-* `sec`: the identifier for the session, used to change/get its authstate.
-* `sessions`: the global instance of sidhandler.SIDCache.
-* `ws`: the websocket for this session.
-* `sockets`: a backend.Sockets object that contains all the current sessions.
-* `queue`: the laserqueue.Queue object holding the jobs.
-* `printer`: the util.Printer instance for the main laserqueue.
+|Key|Type|Description|
+|---|----|-----------|
+|`args`|`dict`|All arguments in the json sent over the socket, minus `action`.|
+|`authstate`|`bool`|Whether the session is authenticated.|
+|`sec`|`str`|The identifier for the session, used to change/get its authstate.|
+|`sessions`|`sidhandler.SIDCache`|The global session cache.|
+|`ws`|`websockets.server.WebSocketServerProtocol`|The current session's socket.|
+|`sockets`|`backend.Sockets`|All open sessions.|
+|`queue`|`laserqueue.Queue`|The current queue.|
+|`printer`|`util.Printer`|The printer instance for the main laserqueue.|
 
 ## Printing
 Unlike in a normal program, you shouldn't just edit `color_printing_config`. This will edit the process's `color_printing_config`, meaning that the `[Backend]` in the log will become your plugin's name. Instead, you use `Printer`, included in `QueueConfig`.  
