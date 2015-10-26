@@ -180,6 +180,14 @@ def buildCommands(reg):
 			cmdargs = {}
 		else:
 			cmdargs = cmd[2]
+
+		toremove = []
+		for oldcmd in commands:
+			if str(oldcmd) == cmd[0]:
+				toremove.append(oldcmd)
+		for oldcmd in toremove:
+			commands.remove(oldcmd)
+
 		commands.append(SocketCommand(cmd[0], cmd[1], cmdargs))
 
 	requireslist = reg.events.get('requiresAuth', {})

@@ -123,6 +123,7 @@ def buildLists(reg):
 			continue
 		if "broadcast" not in egg[0] or not isinstance(egg[0]["broadcast"], bool):
 			egg["broadcast"] = True
+
 		easterEggs.append(egg[0])
 
 class QueueObject(dict):
