@@ -22,7 +22,7 @@ To change the admin login password, run the script with `--new-password`.
 |`-l`|`--local`|Start the backend from localhost.|
 |`-v`|`--verbose`|Extra and more informative output from the backend.|
 |`-q`|`--quiet`|Silence all printing.|
-|`-b`|`--queue-backup`|Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.|
+|`-b`|`--queue-backup`|Enable queue backups.|
 |`-r`|`--regen-config`|Regenerate the config.|
 |`-r [REGEN,]`|`--regen-config [REGEN,]`|Regenerate the positional arguments in the config.|
 |`-S`|`--no-install`|Does not install dependencies.|
