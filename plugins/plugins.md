@@ -85,6 +85,7 @@ Format:
   "broadcast": True|False
 }
 ```
+
 |Key|Type|Description|
 |---|----|-----------|
 |`match`|`list<str>`|A list of possible matches for the easter egg.|
@@ -94,6 +95,7 @@ Format:
 
 ### `"upkeep"`
 Every `config.refreshRate` ms, this will be run. The object to register is a function accepting `**kwargs`. These args are, at the moment:
+
 |Key|Description|
 |---|-----------|
 |`queue`|The current `laserqueue.Queue` object.|
@@ -155,6 +157,7 @@ Format:
 function
 ```
 The function accepts `**kwargs`.
+
 |Keyword|Type|Value|
 |-------|----|-----|
 |`value`|`object`|The target value for the tag.|
@@ -169,6 +172,7 @@ The function accepts `**kwargs`.
 ## `ActionFramework.SocketCommand`
 SocketCommand accepts these arguments:  
 actionname, method, arglist
+
 |Key|Description|
 |---|-----------|
 |`actionname`|A string which defines the object's name (and therefore action).|
@@ -180,6 +184,7 @@ Example:
 where append is a function.  
 
 Every method used for a SocketCommand should accept only **kwargs. These are the things passed currently:
+
 |Key|Type|Description|
 |---|----|-----------|
 |`args`|`dict`|All arguments in the json sent over the socket, minus `action`.|
