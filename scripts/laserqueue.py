@@ -59,7 +59,7 @@ easterEggs = [
 
 # Use the modules from plugins to update requiredtags and hideFromClient
 def buildLists(reg):
-	global requiredtags, hideFromClient, easterEggs
+	global requiredtags, hideFromClient, easterEggs, attrEditable, attrFunctions, attrBlacklist
 
 	requiredlist = reg.events.get('requiredTag', {})
 	requires = [(i,requiredlist[i]) for i in requiredlist]
@@ -78,6 +78,35 @@ def buildLists(reg):
 		if not isinstance(hidden[0], str):
 			continue
 		hideFromClient.append(hidden[0])
+
+	blacklistlist = reg.events.get('attrDisable', {})
+	blacklist = [(i,blacklistlist[i]) for i in blacklistlist]
+	for _, blacklisted in blacklist:
+		if not blacklisted:
+			continue
+		if not isinstance(blacklisted[0], str):
+			continue
+		attrBlacklist.append(blacklisted[0])
+
+	whitelistlist = reg.events.get('attrEnable', {})
+	whitelist = [(i,whitelistlist[i]) for i in whitelistlist]
+	for _, whitelisted in whitelist:
+		if not whitelisted:
+			continue
+		if not isinstance(whitelisted[0], str):
+			continue
+		attrEditable.append(whitelisted[0])
+
+	attrlist = reg.events.get('attr', {})
+	attrs = [(i,attrlist[i]) for i in attrlist]
+	for _, attr in attrs:
+		if len(attr) < 2:
+			continue
+		if not isinstance(attr[0], str):
+			continue
+		if not hasattr(attr[1], "__call__"):
+			continue
+		attrFunctions[attr[0]] = attr[1]
 
 	egglist = reg.events.get('egg', {})
 	eggs = [(i,egglist[i]) for i in egglist]
@@ -573,14 +602,15 @@ class Queue:
 				color=color)
 
 	def attr(self, **kwargs):
+		global attrEditable, attrFunctions, attrBlacklist
 		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid, attrname, value = args["uuid"], args["key"], args["new"]
 
 		# Make sure `attrname` is allowed to be changed (no changing timestamps, etc)
-		if attrname not in requiredtags or attrname in ["uuid", "sec", "time", "totaldiff", "priority"]:
+		if attrname not in requiredtags or attrname in attrBlacklist:
 			return format("Cannot change the `{attribute}` value of a job.", attribute=attrname)
 		# Make sure the user is allowed to edit `attrname`.
-		if attrname not in config["attr_edit_perms"] and not authstate:
+		if attrname not in attrEditable and not authstate:
 			return format("Changing a job's `{attribute}` value requires auth.", attribute=attrname)
 
 		# Fetch the job and cache the old value of `attrname`
@@ -588,53 +618,22 @@ class Queue:
 		oldval = job[attrname]
 
 		# Add coachmodified tag if you're not setting it with `attrname`
-		if attrname not in config["attr_edit_perms"] and attrname != "coachmodified":
+		if attrname not in attrEditable and attrname != "coachmodified":
 			job["coachmodified"] = True
 
-		# Strip names before they can be used
-		if attrname == "name":
-			job["name"] = str(value).strip()
-
-		# Make sure material can be used
-		elif attrname == "material" and value in config["materials"]:
-			job["material"] = value
-
-		#
-		elif attrname == "esttime":
-			# Cap the length using the configurable bounds
-			bounds = config["length_bounds"]
-			if bounds[0] >= 0:
-				value = max(bounds[0], value)
-			if bounds[1] >= 0:
-				value = min(bounds[1], value)
-			# Get the previous time, then set the new estimated time
-			prevtime = job["esttime"]
-			job["esttime"] = value
-			# If priority is recalculated with time and you're not auth, recalc priority
-			if config["recalc_priority"] and not authstate:
-				newpriority = priority*1 # Make sure editing priority doesn't change newpriority
-				job["totaldiff"] += value-prevtime # Add the difference between the times to the job's total difference.
-				job["totaldiff"] = max(job["totaldiff"], 0) # Make sure total difference doesn't drop below 0.
-
-				highestremoved = 0
-				for i in config["priority_thresh"]: # A modified version of _calcpriority, to take out from the totaldiff.
-					if job["totaldiff"] >= i and i < value:
-						newpriority -= 1 # Lower priority for each thresh it passes.
-						highestremoved = max(highestremoved, i)
-				job["totaldiff"] -= highestremoved # Remove the thresh from the total difference.
-				newpriority = max(newpriority, 0) # Keep the priority above 0.
-
-				# If the new priority changed, remove and reinsert the job.
-				if priority != newpriority:
-					job["priority"] = newpriority
-					self.queue[priority].pop(index)
-					self.queue[newpriority].append(job)
-
-			elif authstate and config["recalc_priority"]: # If auth was needed to bypass the recalc, then add the gear.
-				job["coachmodified"] = True
-
-		elif attrname == "coachmodified": # Change the gear.
-			job["coachmodified"] = bool(value)
+		if attrname in attrFunctions:
+			attrFunctions[attrname](
+				value=value,
+				attrname=attrname,
+				queue=self,
+				authstate=authstate,
+				job=job,
+				masterindex=masterindex,
+				priority=priority,
+				index=index
+			)
+		else:
+			job[attrname] = value
 
 		if argvs.loud: # if -v, report success
 			newval = job[attrname]
@@ -646,3 +645,58 @@ class Queue:
 				newvalue = newval,
 				uuid = job["uuid"],
 				color=color)
+
+
+
+
+def attrName(**kwargs):
+	kwargs["job"]["name"] = str(kwargs["value"]).strip()
+def attrMaterial(**kwargs):
+	if kwargs["value"] in config["materials"]:
+		kwargs["job"]["material"] = kwargs["value"]
+def attrCoachmod(**kwargs):
+	job["coachmodified"] = bool(value)
+def attrEsttime(**kwargs):
+	value, job, authstate, queue, priority, index = (
+		kwargs["value"], kwargs["job"], kwargs["authstate"], kwargs["queue"], kwargs["priority"], kwargs["index"]
+	)
+	# Cap the length using the configurable bounds
+	bounds = config["length_bounds"]
+	if bounds[0] >= 0:
+		value = max(bounds[0], value)
+	if bounds[1] >= 0:
+		value = min(bounds[1], value)
+	# Get the previous time, then set the new estimated time
+	prevtime = job["esttime"]
+	job["esttime"] = value
+	# If priority is recalculated with time and you're not auth, recalc priority
+	if config["recalc_priority"] and not authstate:
+		newpriority = priority*1 # Make sure editing priority doesn't change newpriority
+		job["totaldiff"] += value-prevtime # Add the difference between the times to the job's total difference.
+		job["totaldiff"] = max(job["totaldiff"], 0) # Make sure total difference doesn't drop below 0.
+
+		highestremoved = 0
+		for i in config["priority_thresh"]: # A modified version of _calcpriority, to take out from the totaldiff.
+			if job["totaldiff"] >= i and i < value:
+				newpriority -= 1 # Lower priority for each thresh it passes.
+				highestremoved = max(highestremoved, i)
+		job["totaldiff"] -= highestremoved # Remove the thresh from the total difference.
+		newpriority = max(newpriority, 0) # Keep the priority above 0.
+
+		# If the new priority changed, remove and reinsert the job.
+		if priority != newpriority:
+			job["priority"] = newpriority
+			queue[priority].pop(index)
+			queue[newpriority].append(job)
+
+	elif authstate and config["recalc_priority"]: # If auth was needed to bypass the recalc, then add the gear.
+		job["coachmodified"] = True
+
+attrEditable = config["attr_edit_perms"]
+attrBlacklist = ["uuid", "sec", "time", "totaldiff", "priority"]
+attrFunctions = {
+	"name": attrName,
+	"material": attrMaterial,
+	"coachmodified": attrCoachmod,
+	"esttime": attrEsttime
+}

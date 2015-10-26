@@ -129,6 +129,37 @@ Format:
 "..."
 ```
 
+### `"attrDisable"`
+This allows you to blacklist a tag from being edited with `attr`, even by authed users. Overrides the tag being present as an `attrEnable`.
+Format:
+```python
+"..."
+```
+
+### `"attrEnable"`
+This allows you to whitelist a tag in `attr` so that anyone can edit it.
+Format:
+```python
+"..."
+```
+
+### `"attr"`
+This allows you to register special behavior for a tag when it gets edited with `attr`.
+Format:
+```python
+"...",
+function
+```
+The function accepts `**kwargs`, which will contain:
+* `value` - The target value for the tag.
+* `attrname` - The tag name.
+* `queue` - The queue.
+* `authstate` - If the sender is authed.
+* `job` - The QueueObject that is being edited.
+* `masterindex` - The master index of the job.
+* `priority` - The priority of the job.
+* `index` - The index of the job.
+
 ## `ActionFramework.SocketCommand`
 SocketCommand accepts these arguments:  
 actionname, method, arglist
