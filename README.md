@@ -15,8 +15,8 @@ To start the server, run `start.sh` or `start.py` or `start.bat` if you're on Wi
 To change the admin login password, run the script with `--new-password`.
 
 ### Flags:
-| Short flag | Long flag | Description |
-|------------|-----------|-------------|
+| Short flag | Full flag name | Description |
+|------------|----------------|-------------|
 |`-h`|`--help`|Display a list of these flags. Does not start the backend.|
 |`-p`|`--port`|Set the port for the website to be hosted.|
 |`-l`|`--local`|Start the backend in local mode. You'll connect with localhost.|
