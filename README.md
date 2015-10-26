@@ -15,15 +15,16 @@ To start the server, run `start.sh` or `start.py` or `start.bat` if you're on Wi
 To change the admin login password, run the script with `--new-password`.
 
 ### Flags:
-| Short flag | Full flag name | Description |
-|------------|----------------|-------------|
+| Short flag | Flag Name | Description |
+|------------|-----------|-------------|
 |`-h`|`--help`|Display a list of these flags. Does not start the backend.|
-|`-p`|`--port`|Set the port for the website to be hosted.|
+|`-p PORT`|`--port PORT`|Set the port for the website to be hosted.|
 |`-l`|`--local`|Start the backend in local mode. You'll connect with localhost.|
 |`-v`|`--verbose`|Extra and more informative output from the backend. Doesn't apply if `-q` is used.|
 |`-q`|`--quiet`|Start without output. Only applies to start.sh. Equivalent to `>/dev/null`.|
 |`-b`|`--queue-backup`|Enable queue backups. The queue will load from the cache on start, and cache every 20 seconds.|
-|`-r`|`--regen-config`|Regenerate the config. Accepts positional arguments in the form `-r key key2 key3 ...`. If it recieves positionals, it will only regenerate those config values.|
+|`-r`|`--regen-config`|Regenerate the config.|
+|`-r [REGEN,]`|`--regen-config [REGEN,]`|Regenerate the positional arguments in the config.|
 |`-S`|`--no-install`|Does not install dependencies that are not met. Otherwise, you will be prompted unless you use `--install-all`.|
 |`-V`|`--no-version-print`|Does not print the version. Mainly used for the sudo functionality.|
 |`-U`|`--no-update`|Does not install or prompt for updates.|
