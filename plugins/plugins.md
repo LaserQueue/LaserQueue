@@ -94,7 +94,7 @@ Format:
 |`broadcast`|`bool`|Whether being in admin mode will broadcast this packet to everyone when you call it.|
 
 ### `"upkeep"`
-Every `config.refreshRate` ms, this will be run. The object to register is a function accepting `**kwargs`. These args are, at the moment:
+Every `config.refreshRate` ms, this will be run. The object to register is a function accepting `**kwargs`.
 
 |Key|Description|
 |---|-----------|
