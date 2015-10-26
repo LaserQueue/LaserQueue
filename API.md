@@ -272,6 +272,17 @@ Displays a modal based on the packet.
 }
 ```
 
+### Send data
+Sends data, which is then stored in the `extraData` object on the frontend.
+
+```
+{
+	"action": "dump_data",
+	"name": <the modal title as Str>,
+	"data": <the modal body as Str>
+}
+```
+
 ### Authed
 Called when the sid gains authstate. Dependent upon `config.admin_mode_enabled`.
 

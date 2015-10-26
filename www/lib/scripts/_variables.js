@@ -1,6 +1,7 @@
 // declare all globals here
 
 var config, jsonData, socket, buttons,
+	extraData = {},
 	authed = false,
 	queueEvents = {},
 	allCuts = [],
@@ -57,6 +58,9 @@ var config, jsonData, socket, buttons,
 		}],
 		"starttour": [function tourQueue(data) {
 			if(config.allow_tour) queueTour();
+		}],
+		"dump_data": [function recieveData(data) {
+			extraData[data.name] = JSON.parse(data.data);
 		}]
 	},
 	renderDirectives = {
