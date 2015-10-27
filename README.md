@@ -4,7 +4,7 @@ A queue system for NuVu’s laser cutter and other CNC hardware. [NuVu Studio](h
 This file is an overview. Full API docs are in [api.md](./API.md) and config docs are in [config.md](./www/config.md). Info about plugins is in [plugins.md](./plugins/plugins.md).
 
 ## Getting the software
-Download the latest stable version from [github.com/yrsegal/LaserQueue/releases](https://github.com/yrsegal/LaserQueue/releases) and decompress it.
+Download the latest stable version from [github.com/LaserQueue/LaserQueue/releases](https://github.com/LaserQueue/LaserQueue/releases) and decompress it.
 
 ## Running the software
 
@@ -53,5 +53,3 @@ All dependencies should be met the first time you run the program. The program w
 - websockets (`#~ pip3 install websockets`)
 - netifaces (`#~ pip3 install netifaces`)
 - GitPython (`#~ pip3 install GitPython`)
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/yrsegal/laserqueue/trend.png)](https://bitdeli.com/free “Bitdeli Badge”)

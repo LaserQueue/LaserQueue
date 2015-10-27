@@ -43,6 +43,8 @@ queue = laserqueue.Queue()
 authed = sessions.allauth()
 queuehash = hash(str(queue.queue))
 
+initial = []
+
 @asyncio.coroutine
 def server(websocket, path):
 	"""
@@ -53,6 +55,10 @@ def server(websocket, path):
 	socks.append(websocket)
 	# Serve the latest queue to this socket
 	serve_connection(comm.generateData(queue.serialize()), websocket)
+
+	for packet in initial:
+		serve_connection(packet, websocket)
+
 	while True:
 		# Get the latest message
 		message = yield from websocket.recv()
@@ -214,7 +220,8 @@ def main():
 	"""
 	Setup and run all subroutines.
 	"""
-	global socks, reg, queue, authed, sessions, queuehash, upkeepThread, upkeeps, pluginJSFiles, pluginCSSFiles
+	global socks, reg, queue, authed, sessions, queuehash, initial
+	global upkeepThread, upkeeps, pluginJSFiles, pluginCSSFiles
 
 	reg = plugins.getPlugins()
 	pluginJSFiles = {i: os.path.getctime(i) for i in plugins.getPluginNames(".min.js")}
@@ -227,6 +234,11 @@ def main():
 	for jobid, job in upkeeps:
 		if job and hasattr(job[0], "__call__"):
 			upkeeps.append(job[0])
+	initlist = reg.events.get('initialPacket', {})
+	inits = [(i,initlist[i]) for i in initlist]
+	for initid, init in inits:
+		if init and isinstance(init[0], dict) and "action" in init[0]:
+			initial.append(init[0])
 	comm.buildCommands(reg)
 	laserqueue.buildLists(reg)
 

@@ -83,6 +83,7 @@ Two modules that have been made available you might find helpful:
 * `"attrDisable"`
 * `"attrEnable"`
 * `"attr"`
+* `"initialPacket"`
 
 ### `"egg"`
 Whenever a job is added, this will check if an easter egg is applicable.  
@@ -178,6 +179,18 @@ The function accepts `**kwargs`.
 |`masterindex`|`int`|The master index of the job.|
 |`priority`|`int`|The priority of the job.|
 |`index`|`int`|The index of the job.|
+
+### `"initialPacket"`
+Any packet registered this way will be sent to the frontend when it connects to the client.
+Format:
+```python
+{
+  "action": "...",
+  ...
+}
+```
+See [API.md](../API.md) for a list of acceptable packets. Plugins may register their own packets on the frontend.
+
 
 ## `ActionFramework.SocketCommand`
 SocketCommand accepts these arguments:  
