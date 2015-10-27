@@ -29,7 +29,7 @@ Our backend and frontend pull configuration info from a file, `www/config.json`.
 
 ## Data format
 JSON formatted as follows:
-```
+```js
 {
 	"action": action to perform
 	...
@@ -63,7 +63,7 @@ Adds the specified name, priority, etc to the list
 
 #### Sample
 
-```
+```js
 {
 	"action": "add",
 	"name": <name as Str>,
@@ -79,7 +79,7 @@ Adds the specified name, priority, etc to the list
 
 ##### Sample
 
-```
+```js
 {
 	"action": "add",
 	"name": <name as Str>,
@@ -99,7 +99,7 @@ Moves the specified job below the next job
 
 #### Sample
 
-```
+```js
 {
 	"action": "pass",
 	"uuid": <uuid of job as Str>
@@ -111,7 +111,7 @@ Removes the specified job from the list
 
 #### Sample
 
-```
+```js
 {
 	"action": "remove",
 	"uuid": <uuid of job as Str>
@@ -123,7 +123,7 @@ Moves the specified job to the target index, and the target priority
 
 #### Sample
 
-```
+```js
 {
 	"action": "move",
 	"uuid": <uuid of job as Str>,
@@ -138,7 +138,7 @@ Moves the specified job to the target index in the master index. Out of bounds w
 
 #### Sample
 
-```
+```js
 {
 	"action": "relmove",
 	"uuid": <uuid of job as Str>,
@@ -152,7 +152,7 @@ Moves the specified job up one job, or if it's at the top of its priority level,
 
 #### Sample
 
-```
+```js
 {
 	"action": "increment",
 	"uuid": <uuid of job as Str>
@@ -165,7 +165,7 @@ Moves the specified job down one job, or if it's at the bottom of its priority l
 
 #### Sample
 
-```
+```js
 {
 	"action": "decrement",
 	"uuid": <uuid of job as Str>
@@ -178,7 +178,7 @@ Sets the attribute of job uuid to value. if the config doesn't state that you ca
 
 #### Sample
 
-```
+```js
 {
 	"action": "attr",
 	"uuid": <uuid of job as Str>,
@@ -193,7 +193,7 @@ Enter admin mode if password is correct. Dependent upon `config.admin_mode_enabl
 
 #### Sample
 
-```
+```js
 {
 	"action": "auth",
 	"pass": <sha1 hash of user-entered password as Str>
@@ -206,7 +206,7 @@ Leave admin mode. Dependent upon `config.admin_mode_enabled`.
 
 #### Sample
 
-```
+```js
 {
 	"action": "deauth"
 }
@@ -219,7 +219,7 @@ Dependent upon config.allow_force_refresh.
 
 #### Sample
 
-```
+```js
 {
 	"action": "refresh"
 }
@@ -236,7 +236,7 @@ The action tag determines the data returned. The front end will receive these JS
 ### Display queue
 The frontend should render the queue based on data in here.
 
-```
+```js
 {
 	"action": "display",
 	"queue": <the queue object as List>
@@ -246,7 +246,7 @@ The frontend should render the queue based on data in here.
 ### Confirm job was added to queue
 This can be used to end a loader or just to confirm the job was added.
 
-```
+```js
 {
 	"action": "job_added"
 }
@@ -255,16 +255,16 @@ This can be used to end a loader or just to confirm the job was added.
 ### Let client know job was NOT added to the queue
 This can be used to end a loader or inform the user. The backend also sends a user-visible notification when this happens. Possible causes include duplicate job when duplicate job prevention is enabled, missing fields that are required, and invalid data.
 
-```
+```js
 {
 	"action": "add_failed"
 }
-```
+```js
 
 ### Display modal
 Displays a modal based on the packet.
 
-```
+```js
 {
 	"action": "notification",
 	"title": <the modal title as Str>,
@@ -275,7 +275,7 @@ Displays a modal based on the packet.
 ### Send data
 Sends data, which is then stored in the `extraData` object on the frontend.
 
-```
+```js
 {
 	"action": "dump_data",
 	"name": <the data title as Str>,
@@ -286,7 +286,7 @@ Sends data, which is then stored in the `extraData` object on the frontend.
 ### Authed
 Called when the sid gains authstate. Dependent upon `config.admin_mode_enabled`.
 
-```
+```js
 {
 	"action":"authed"
 }
@@ -295,7 +295,7 @@ Called when the sid gains authstate. Dependent upon `config.admin_mode_enabled`.
 ### Auth faliure
 Called when auth finds a wrong password. Dependent upon `config.admin_mode_enabled`.
 
-```
+```js
 {
 	"action":"authfailed"
 }
@@ -304,7 +304,7 @@ Called when auth finds a wrong password. Dependent upon `config.admin_mode_enabl
 ### Deauthed
 Called when the sid loses its authstate. Dependent upon `config.admin_mode_enabled`.
 
-```
+```js
 {
 	"action":"deauthed"
 }
@@ -314,7 +314,7 @@ Called when the sid loses its authstate. Dependent upon `config.admin_mode_enabl
 ### Refresh the page
 Dependent upon `config.allow_force_refresh`. The frontend should refresh itself fully. If a web interface, it should reload.
 
-```
+```js
 {
 	"action":"refresh"
 }
@@ -322,7 +322,7 @@ Dependent upon `config.allow_force_refresh`. The frontend should refresh itself 
 
 ### Rickroll everyone.
 The title says it all. Dependent upon `config.easter_eggs`.
-```
+```js
 {
 	"action":"rickroll"
 }
@@ -330,7 +330,7 @@ The title says it all. Dependent upon `config.easter_eggs`.
 
 ### And his name is
 John Cena! Dependent upon `config.easter_eggs`.
-```
+```js
 {
 	"action":"dodoododoooooo"
 }
