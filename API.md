@@ -278,8 +278,8 @@ Sends data, which is then stored in the `extraData` object on the frontend.
 ```
 {
 	"action": "dump_data",
-	"name": <the modal title as Str>,
-	"data": <the modal body as Str>
+	"name": <the data title as Str>,
+	"data": <the data as Str>
 }
 ```
 
