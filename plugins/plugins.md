@@ -71,8 +71,18 @@ Two modules that have been made available you might find helpful:
 
 `QueueConfig` is a clone of the normal `util` file, and `ActionFramework` supplies `SocketCommand`, `any_number`, and `any_type`.  
 
-## Event Registry
-`registry` is a `QueueObject.Registry` instance. If it exists in the module, it is considered to be a plugin. To register an event, you call `QueueObject.Registry.register`. It currently has the following events handled:
+## Plugin Registry
+`registry` is a `QueueObject.Registry` instance. If it exists in the module, it is considered to be a plugin. To register something, you call `QueueObject.Registry.register`. It currently has the following registrations handled:
+
+* `"egg"`
+* `"upkeep"`
+* `"socket"`
+* `"hideFromClient"`
+* `"requiredTag"`
+* `"requiredAuth"`
+* `"attrDisable"`
+* `"attrEnable"`
+* `"attr"`
 
 ### `"egg"`
 Whenever a job is added, this will check if an easter egg is applicable.  
@@ -195,10 +205,3 @@ Every method used for a SocketCommand should accept only `**kwargs`.
 |`sockets`|`backend.Sockets`|All open sessions.|
 |`queue`|`laserqueue.Queue`|The current queue.|
 |`printer`|`util.Printer`|The printer instance for the main laserqueue.|
-
-## Printing
-Unlike in a normal program, you shouldn't just edit `color_printing_config`. This will edit the process's `color_printing_config`, meaning that the `[Backend]` in the log will become your plugin's name. Instead, you use `Printer`, included in `QueueConfig`.  
-
-`Printer` can emulate any function of color_print. You may pass it an existing `color_config` when you make it. If you don't, it will be a blank one.  
-You can use `Printer.colorconfig` to change the name and color, or you can call `Printer.setname(string)` or `Printer.setcolor(string)` to do it for you.  
-To print/get input, use `Printer.color_print` and `Printer.color_input`. They function exactly like the other ones, but they aren't affected by the "colorconfig" argument.
