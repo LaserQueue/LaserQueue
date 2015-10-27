@@ -12,7 +12,7 @@ def tryImport(name):
 	try:
 		if args.loud:
 			printer.color_print("Loading {name}...", name=name)
-		imported =  __import__(name)
+		imported = __import__(name)
 		if args.loud:
 			if pluginFilter(imported):
 				printer.color_print("{name} successfully loaded.", name=name)
