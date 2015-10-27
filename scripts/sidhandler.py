@@ -120,4 +120,3 @@ class SIDCache:
 		"""
 		for sid in self.sids:
 			self.check(sid.seckey)
-

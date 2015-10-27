@@ -121,5 +121,3 @@ if not hasattr(ssl, '_create_default_https_context'): # Some operating systems d
 			                       version = config["version"], target=config["update_repo"])
 			return io.BytesIO(bytes("{}", 'utf8'))
 		urllib.request.urlopen = fakeopen
-
-
