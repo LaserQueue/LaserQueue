@@ -28,7 +28,7 @@ class SID:
 		"""
 		if os.path.exists(os.path.join(selfpath, "hashpassword")):
 			hash_object = hashlib.sha256(password.strip().encode()).hexdigest()
-			if hash_object.strip() == PASSWORD: 
+			if hash_object.strip() == PASSWORD:
 				self.authstate = True
 				return True
 		return False
@@ -70,7 +70,7 @@ class SIDCache:
 		if not csid:               return False # If the key doesn't exist, return False
 
 		# update the SID
-		csid.checkstate() 
+		csid.checkstate()
 		csid.onupdate()
 
 		if not csid.authstate:     return False # If the key isn't authed, return False
@@ -79,7 +79,7 @@ class SIDCache:
 		"""
 		Attempt to auth `sec` using `password`.
 		"""
-		if self.check(sec) or self._get(sec).auth(password): 
+		if self.check(sec) or self._get(sec).auth(password):
 			return True # If the key's already authed or the auth succeeded, return True
 		return False
 

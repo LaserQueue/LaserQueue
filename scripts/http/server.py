@@ -537,9 +537,9 @@ class BaseHTTPRequestHandler(socketserver.StreamRequestHandler):
 
 		printer.color_print("{} - {}".format(
 			self.address_string(),
-			format%args), 
-			func=sys.stderr.write, 
-			add_newline=True) 
+			format%args),
+			func=sys.stderr.write,
+			add_newline=True)
 
 	def version_string(self):
 		"""Return the server software version string."""

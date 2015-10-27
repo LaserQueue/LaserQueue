@@ -4,5 +4,5 @@ sys.path.append(
 
 from util import *
 
-CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 
+CONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
 	os.path.pardir, os.path.pardir, "www", "config.json"))

@@ -1,5 +1,5 @@
 """
-Wire Segal's utility library. 
+Wire Segal's utility library.
 
 Do whatever with it, I seriously couldn't care less.
 
@@ -34,17 +34,17 @@ def format_traceback(e, text="Traceback (most recent call last):"):
 	# Iterate through the traceback and add each iteration to the string
 	for filename,lineno,function,message in trace:
 		error += format("  File \"{name}\", line {num}, in {funcname}\n",
-			name=filename, 
-			num=lineno, 
+			name=filename,
+			num=lineno,
 			funcname=function)
-		if message: 
+		if message:
 			error += format("    {data}\n", data=message)
 
 	# Add the type and message of the error
 	error += str(type(e).__name__)
 	if str(e): error += format(": {description}", description=e)
 
-	return error 
+	return error
 
 class Registry:
 	def __init__(self):
@@ -118,12 +118,12 @@ def date_time_string(timestamp=None):
 	ss = format("0{seconds}", seconds=ss) if ss < 10 else str(ss)
 	day = format("0{day}", day=day) if day < 10 else str(day)
 	
-	s = format("{magenta}[{dd}/{mon}/{yyyy} {hh}:{mm}:{ss}]{endc} ", 
-		dd = day, 
-		mon = monthname[month], 
-		yyyy = year, 
-		hh = hh, 
-		mm = mm, 
+	s = format("{magenta}[{dd}/{mon}/{yyyy} {hh}:{mm}:{ss}]{endc} ",
+		dd = day,
+		mon = monthname[month],
+		yyyy = year,
+		hh = hh,
+		mm = mm,
 		ss = ss)
 	return s
 
@@ -261,7 +261,7 @@ else:
 def rainbonify(string):
 	if not color_supported: return string
 	else:
-		colors = [ansi_colors.RED, ansi_colors.ORANGE, ansi_colors.YELLOW, ansi_colors.GREEN, 
+		colors = [ansi_colors.RED, ansi_colors.ORANGE, ansi_colors.YELLOW, ansi_colors.GREEN,
 				ansi_colors.BLUE, ansi_colors.PURPLE, ansi_colors.DARKPURPLE]
 		nstring = ""
 		cind = 0
@@ -283,7 +283,7 @@ class color_config:
 		Return the tag for pretty printing from the config.
 		"""
 		return format("{color}[{name}] {endc}",
-			color=self.color, 
+			color=self.color,
 			name=self.name)
 	def whitespace(self):
 		"""
@@ -313,8 +313,8 @@ def color_print(text, color="", strip=False, func=print, add_newline=False, colo
 	text = format(str(text), **kwargs)
 
 	# Make sure not to print the same thing twice
-	if text == lastprinted: 
-		if not color_supported: 
+	if text == lastprinted:
+		if not color_supported:
 			print_lock.release()
 			return
 		print(ansi_colors.REMAKELINE, end="")
@@ -329,16 +329,16 @@ def color_print(text, color="", strip=False, func=print, add_newline=False, colo
 
 	originstr = colorconfig.tag()
 	func(format("{timestamp}{processtag}{color}{text}{endc}",
-		timestamp = timestamp, 
-		processtag = originstr, 
-	  color = color, 
+		timestamp = timestamp,
+		processtag = originstr,
+	  color = color,
 	  text = prints[0])) # Print the first line with a timestamp
 	if add_newline: func("\n")
 
 	for i in prints[1:]:
 			func(format("{whitespace}{color}{text}{endc}",
-				whitespace = colorconfig.whitespace(), 
-			  color = color, 
+				whitespace = colorconfig.whitespace(),
+			  color = color,
 			  text = i)) # Print all consecutive lines
 			if add_newline: func("\n")
 	print_lock.release()
@@ -371,29 +371,29 @@ def color_input(text, color="", strip=False, func=agnostic_input, colorconfig = 
 
 	originstr = colorconfig.tag()
 	# Print in order if there's more than one line
-	if len(prints) > 1: 
+	if len(prints) > 1:
 		print(format("{timestamp}{processtag}{color}{text}",
-			timestamp = timestamp, 
-			processtag = originstr, 
-		  color = color, 
+			timestamp = timestamp,
+			processtag = originstr,
+		  color = color,
 		  text = prints[0]))
 
 		for i in prints[1:-1]:
 			print(format("{whitespace}{color}{text}",
-				whitespace = colorconfig.whitespace(), 
-				color = color, 
+				whitespace = colorconfig.whitespace(),
+				color = color,
 				text = i))
 
 		inp = func(format("{whitespace}{color}{text}{endc}",
-			whitespace = colorconfig.whitespace(), 
+			whitespace = colorconfig.whitespace(),
 			color = color,
 		  text = prints[-1]))
 		print_lock.release()
 		return inp
 	else:
 		inp = func(format("{timestamp}{processtag}{color}{text}{endc}",
-			timestamp = timestamp, 
-			processtag = originstr, 
+			timestamp = timestamp,
+			processtag = originstr,
 			color = color,
 		  text = prints[0]))
 		print_lock.release()

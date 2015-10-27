@@ -14,8 +14,8 @@ def _comparetypes(obj, expected):
 	return type(obj) is expected
 
 # Type exceptions
-class any_type: pass 
-class any_number: pass 
+class any_type: pass
+class any_number: pass
 
 authactions = config["authactions"]
 
@@ -24,7 +24,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue, printer):
 	Run a command based on `jdata`, from `commandlist`.
 	"""
 	global authactions
-	if "action" not in jdata: 
+	if "action" not in jdata:
 		return "Action missing!"
 
 	# Get the objects needed to run commands
@@ -35,7 +35,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue, printer):
 	authstate = sessions.check(sec)
 
 	# Stop actions that need auth if the client isn't auth
-	if action in authactions and not authstate: 
+	if action in authactions and not authstate:
 		serve_connection({"action":"deauthed"}, ws)
 		return "This action requires auth."
 
@@ -46,7 +46,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue, printer):
 	if action in cmds and (not cmds[action].args or args):
 		return cmds[action].run(args=args, authstate=authstate, sec=sec, sessions=sessions, ws=ws, sockets=socks, queue=queue, printer=printer)
 	# If the action being bad is the problem, return that
-	elif action not in cmds: 
+	elif action not in cmds:
 		return "Bad command name."
 	# If the args missing is the problem, return that
 	elif not args:
@@ -70,14 +70,14 @@ class SocketCommand:
 				return format("Expected '{nameofarg}' argument, but didn't find it.", nameofarg=i)
 			if not _comparetypes(args[i], self.args[i]):
 				return format("Expected '{nameofarg}' argument to be an instance of '{typeexpected}', but found an instance of '{typeofarg}'.",
-					nameofarg = i, 
-					typeexpected = self.args[i].__name__, 
+					nameofarg = i,
+					typeexpected = self.args[i].__name__,
 					typeofarg = type(args[i]).__name__)
 		# Run the command if all is in order
 		return self.method(**kwargs)
 
 # Non-queue functions
-def deauth(**kwargs): 
+def deauth(**kwargs):
 	"""
 	Deauth the client.
 	"""
@@ -89,7 +89,7 @@ def deauth(**kwargs):
 	if argvs.loud:
 		printer.color_print("Client successfully deauthed.")
 
-def refresh(**kwargs): 
+def refresh(**kwargs):
 	"""
 	Refresh all clients. (if the config allows it)
 	"""
@@ -103,7 +103,7 @@ def refresh(**kwargs):
 	else:
 		printer.color_print("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=ansi_colors.YELLOW)
 
-def starttour(**kwargs): 
+def starttour(**kwargs):
 	"""
 	Start the tour. (if the config allows it)
 	"""
@@ -167,7 +167,7 @@ def buildCommands(reg):
 	commandlist = reg.events.get('socket', {})
 	cmds = [(i,commandlist[i]) for i in commandlist]
 	for cmdid, cmd in cmds:
-		if not (2 <= len(cmd) <= 3): 
+		if not (2 <= len(cmd) <= 3):
 			continue
 		if not isinstance(cmd[0], str) or not cmd[0]:
 			continue

@@ -99,7 +99,7 @@ def writeFile(path, data, printer=None):
 			gid = os.environ.get('SUDO_GID')
 			if uid:
 				os.chown(path, int(uid), int(gid))
-		except: 
+		except:
 			if printer:
 				printer.color_print(format("WARNING: {file} created as root.", file=os.path.basename(path)), color=ansi_colors.YELLOW)
 
@@ -115,9 +115,9 @@ if not hasattr(ssl, '_create_default_https_context'): # Some operating systems d
 			urlprinter.color_print("""Cannot access the internet via https.
 			                       This is due to a python bug with some operating systems.
 			                       Because of this, updates will not be performed.
-			                       To see if you need to update, go to 
+			                       To see if you need to update, go to
 			                       {blue}{line}{target}{endc}{color}.
-			                       (Current version: {endc}{version}{color})""", color=ansi_colors.RED, strip=True, 
+			                       (Current version: {endc}{version}{color})""", color=ansi_colors.RED, strip=True,
 			                       version = config["version"], target=config["update_repo"])
 			return io.BytesIO(bytes("{}", 'utf8'))
 		urllib.request.urlopen = fakeopen

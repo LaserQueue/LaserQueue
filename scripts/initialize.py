@@ -48,7 +48,7 @@ def check_version_numbers(current, master):
 def convert_version_number(version):
 	version_number = 0.0
 	is_dev = dev_tag_regex.match(version)
-	if is_dev: 
+	if is_dev:
 		version_number = -1.0
 	else:
 		float_index = 0
@@ -97,7 +97,7 @@ def getIPs(test=False):
 		addresses = [address['addr'] for address in ifaddresses(interface).get(AF_INET, [{"addr":"not found"}])]
 		if "not found" not in addresses and "127.0.0.1" not in addresses:
 			ips += addresses
-	if not ips and not test: 
+	if not ips and not test:
 		ips.append("localhost")
 		printer.color_print("WARNING: No internet connection. Using -l behavior.", color=ansi_colors.YELLOW)
 	return ips
@@ -121,7 +121,7 @@ def fetch_dependencies():
 	"""
 	Go through PACKAGES and install everything missing.
 	"""
-	if args.skip: 
+	if args.skip:
 		printer.color_print("Skipping package install.", color=ansi_colors.YELLOW)
 		return
 
@@ -180,7 +180,7 @@ def update():
 	"""
 	Try to update LaserQueue to the latest version.
 	"""
-	if args.skipupdate: 
+	if args.skipupdate:
 		printer.color_print("Skipping updating.", color=ansi_colors.YELLOW)
 		return
 
@@ -203,13 +203,13 @@ def update():
 			update_directory = os.path.join(os.path.pardir,os.path.pardir,prefix+master_config["version"]) # Directory if fetch updating
 			backup_file = os.path.join(os.path.pardir, os.path.pardir, prefix+config["version"]+".tar.gz") # Backup file if overwrite updating
 
-			prompt = format("""Do you want to get version {current} to {latest}? 
+			prompt = format("""Do you want to get version {current} to {latest}?
 				                 The fetch option will update into {update_directory}.
 				                 The overwrite option will backup to {backup_file}, and fetch master.
-				                 (fetch / overwrite / cancel) """, 
-				                 current=config["version"], 
-				                 lastest=master_config["version"], 
-				                 update_directory=os.path.abspath(update_directory), 
+				                 (fetch / overwrite / cancel) """,
+				                 current=config["version"],
+				                 lastest=master_config["version"],
+				                 update_directory=os.path.abspath(update_directory),
 				                 backup_file=os.path.abspath(backup_file))
 
 			# Check what the user wants to do
@@ -222,10 +222,10 @@ def update():
 				git.Repo.clone_from(config["update_repo"], update_directory) # Get the new repository
 
 				# Inform them about it
-				printer.color_print("""\nNew version located in: 
+				printer.color_print("""\nNew version located in:
 				            {update_directory}
-				            Run the following: 
-				            {start_script} 
+				            Run the following:
+				            {start_script}
 				            to use the new version.""",
 				            	update_directory=os.path.abspath(update_directory),
 				            	start_script=os.path.abspath(os.path.join(update_directory, "start.py")),
@@ -336,7 +336,7 @@ def main():
 	except KeyboardInterrupt: print()
 	try: update_host()
 	except KeyboardInterrupt: print()
-	try: 
+	try:
 		if update() == "restart":
 			retcode = 1
 	except KeyboardInterrupt: print()
