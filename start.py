@@ -28,14 +28,14 @@ from parseargv import args
 from util import *
 printer = Printer(ansi_colors.GREEN, "LaserQueue")
 
-def initFile(path, data=""):
+def init_file(path, data=""):
 	"""
 	Make a file if it doesn't exist.
 	"""
 	if not os.path.exists(path):
-		writeFile(path, data, printer)
+		write_file(path, data, printer)
 
-def globalSyncCommand(cmd):
+def global_sync_system(cmd):
 	"""
 	Run a blocking command with python, independent of windows vs *nix.
 	"""
@@ -66,17 +66,17 @@ def parse_version(version):
 	return format("{words}{endc}", words=" ".join(return_words))
 
 
-global backThread, frontThread
-backThread, frontThread = DummyProcess(), DummyProcess()
+global backend_thread, frontend_thread
+backend_thread, frontend_thread = DummyProcess(), DummyProcess()
 def cleanup():
-	global backThread, frontThread
-	backThread.terminate()
-	frontThread.terminate()
+	global backend_thread, frontend_thread
+	backend_thread.terminate()
+	frontend_thread.terminate()
 
 if __name__ == "__main__":
 	atexit.register(cleanup)
 	version = Config(os.path.join("www","defaultconf.json"))["version"]
-	if not args.noversionprint: 
+	if not args.no_version_print: 
 		printer.color_print("Running {version}.", version=parse_version(version))
 
 	backend_port = int(Config(os.path.join(selfpath,"www","config.json"))["port"]) # Get the port to host the backend from
@@ -85,10 +85,10 @@ if __name__ == "__main__":
 	load_frontend = (args.load_frontend or (not args.load_frontend and not args.load_backend)) and not args.load_none
 	load_backend = (args.load_backend or (not args.load_frontend and not args.load_backend)) and not args.load_none
 
-	canServeToRestricted = os.name == "nt" or not os.geteuid()
+	can_serve_to_restricted = os.name == "nt" or not os.geteuid()
 
-	useSudo = ((load_backend and not canServeToRestricted and backend_port < 1024) or
-						(load_frontend and not canServeToRestricted and args.port < 1024))
+	useSudo = ((load_backend and not can_serve_to_restricted and backend_port < 1024) or
+						(load_frontend and not can_serve_to_restricted and args.port < 1024))
 
 	if useSudo:
 		passprompt = "Password: "
@@ -102,11 +102,11 @@ if __name__ == "__main__":
 
 	printer = Printer(ansi_colors.CYAN, "Setup")
 	# Initialize all needed files
-	initFile(os.path.join(selfpath, "scripts", "cache.json"), "[]")
-	initFile(os.path.join(selfpath, "www", "config.json"), "{}")
-	initFile(os.path.join(selfpath, "www", "infotext.md"), "To view our code or report an issue, go to [our GitHub repository](https://github.com/LaserQueue/LaserQueue).")
-	initFile(os.path.join(selfpath, "www", "dist", "js", "plugins.js"))
-	initFile(os.path.join(selfpath, "www", "dist", "css", "plugins.css"))
+	init_file(os.path.join(selfpath, "scripts", "cache.json"), "[]")
+	init_file(os.path.join(selfpath, "www", "config.json"), "{}")
+	init_file(os.path.join(selfpath, "www", "infotext.md"), "To view our code or report an issue, go to [our GitHub repository](https://github.com/LaserQueue/LaserQueue).")
+	init_file(os.path.join(selfpath, "www", "dist", "js", "plugins.js"))
+	init_file(os.path.join(selfpath, "www", "dist", "css", "plugins.css"))
 
 	# Do setup
 	import initialize
@@ -115,19 +115,19 @@ if __name__ == "__main__":
 		if initcode == 1: # If the update exit code was called
 			os.chdir(selfpath)
 			printer.color_print("Update successful! Restarting...\n\n\n")
-			quit(int(globalSyncCommand("start.py "+" ".join(sys.argv[1:]))/256)) # Restart this script
+			quit(int(global_synchronous_system("start.py "+" ".join(sys.argv[1:]))/256)) # Restart this script
 	else:
 		printer.color_print("Skipping initialization.", color=ansi_colors.YELLOW)
 
 	try:
 		os.chdir(os.path.join(selfpath, "www"))
 		import scripts.backend, scripts.http.server
-		if load_backend: backThread =   multiprocessing.Process(target=scripts.backend.main)
-		if load_frontend: frontThread = multiprocessing.Process(target=scripts.http.server.main, args=(args.port,))
-		backThread.start()
-		frontThread.start()
-		backThread.join()
-		frontThread.join()
+		if load_backend: backend_thread =   multiprocessing.Process(target=scripts.backend.main)
+		if load_frontend: frontend_thread = multiprocessing.Process(target=scripts.http.server.main, args=(args.port,))
+		backend_thread.start()
+		frontend_thread.start()
+		backend_thread.join()
+		frontend_thread.join()
 	except KeyboardInterrupt:
 		# Print a cleanup message if exited manually
 		print()

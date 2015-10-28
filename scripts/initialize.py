@@ -20,10 +20,10 @@ user_config_path = os.path.join(os.path.pardir, "www", "userconf.json")
 default_config_path = os.path.join(os.path.pardir, "www", "defaultconf.json")
 
 # Utility function to test for internet connection.
-connected_to_internet = lambda: bool(getIPs(test=True))
+connected_to_internet = lambda: bool(get_IPs(test=True))
 # Open/save to the config file
 open_config = lambda: json.load(open(config_path))
-save_config = lambda data: writeFile(config_path, json.dumps(data, indent=2, sort_keys=True))
+save_config = lambda data: write_file(config_path, json.dumps(data, indent=2, sort_keys=True))
 
 
 version_regex = re.compile(r"^(dev-)?\d+\.\d+\.\d+$")
@@ -73,11 +73,11 @@ def update_config():
 					del current_data[key]
 
 		if "host" not in current_data or not current_data["host"]:
-			current_data["host"] = getIPs()[0]
+			current_data["host"] = get_IPs()[0]
 		if "version" in current_data: # Version should always be latest
 			del current_data["version"]
 	else:
-		current_data = {"host": getIPs()[0]}
+		current_data = {"host": get_IPs()[0]}
 	data = json.load(open(default_config_path))
 	if os.path.exists(user_config_path):
 		user_data = json.load(open(user_config_path))
@@ -87,7 +87,7 @@ def update_config():
 	save_config(data)
 
 
-def getIPs(test=False):
+def get_IPs(test=False):
 	"""
 	Get the IPs this device controls.
 	"""
@@ -103,13 +103,13 @@ def getIPs(test=False):
 	return ips
 
 def concat_plugins():
-	js = plugins.getPluginFiletype(".min.js")
+	js = plugins.get_plugin_filetype(".min.js")
 	plugin_js = "\n".join(js)
-	writeFile(plugin_js_path, plugin_js, printer)
+	write_file(plugin_js_path, plugin_js, printer)
 
-	css = plugins.getPluginFiletype(".min.css")
+	css = plugins.get_plugin_filetype(".min.css")
 	plugin_css = "\n".join(css)
-	writeFile(plugin_css_path, plugin_css, printer)
+	write_file(plugin_css_path, plugin_css, printer)
 
 
 PACKAGES = [
@@ -180,7 +180,7 @@ def update():
 	"""
 	Try to update LaserQueue to the latest version.
 	"""
-	if args.skipupdate:
+	if args.skip_update:
 		printer.color_print("Skipping updating.", color=ansi_colors.YELLOW)
 		return
 
@@ -213,7 +213,7 @@ def update():
 				                 backup_file=os.path.abspath(backup_file))
 
 			# Check what the user wants to do
-			confirm = ("overwrite" if args.allupdate else "")
+			confirm = ("overwrite" if args.all_update else "")
 			while confirm not in ["fetch", "overwrite", "cancel"]:
 				confirm = printer.color_input(prompt, strip=True).lower().strip()
 
@@ -290,7 +290,7 @@ def update_password():
 
 		try:
 			# Write the password to the file
-			writeFile("hashpassword", hashed_final, printer)
+			write_file("hashpassword", hashed_final, printer)
 			printer.color_print("Password changed to {starredpass}.", starredpass="*"*len(hashed_final))
 		except Exception as e: # Error reporting
 			printer.color_print(format_traceback(e, "Error changing password:"), color=ansi_colors.DARKRED)
@@ -303,7 +303,7 @@ def update_host():
 	data = open_config()
 	# Regenerate the host if -n was used, or if it doesn't exist
 	if args.host or "host" not in data and args.regen != []:
-		data["host"] = getIPs()[0]
+		data["host"] = get_IPs()[0]
 	# Change the host to localhost if -l was used (overriding -n)
 	if args.local:
 		data["host"] = "localhost"
@@ -314,10 +314,10 @@ def update_host():
 			confirm = ""
 			while confirm not in ["y", "n"]:
 				confirm = printer.color_input("""Last time you ran this program, it was in local mode.
-				                    Do you want to regenerate the host? (y/n) """, strip=True).lower().strip()
+				                                 Do you want to regenerate the host? (y/n) """, strip=True).lower().strip()
 			# Reset the host if they say yes
 			if confirm == "y":
-				data["host"] = getIPs()[0]
+				data["host"] = get_IPs()[0]
 	save_config(data)
 
 

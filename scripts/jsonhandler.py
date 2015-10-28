@@ -19,7 +19,7 @@ class any_number: pass
 
 authactions = config["authactions"]
 
-def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue, printer):
+def run_socket_command(commandlist, ws, socks, sessions, jdata, queue, printer):
 	"""
 	Run a command based on `jdata`, from `commandlist`.
 	"""
@@ -54,7 +54,7 @@ def runSocketCommand(commandlist, ws, socks, sessions, jdata, queue, printer):
 
 class SocketCommand:
 	"""
-	A class used to define a socket command usable by `runSocketCommand`.
+	A class used to define a socket command usable by `run_socket_command`.
 	"""
 	def __init__(self, actionname, method, arglist):
 		self.name = actionname
@@ -199,14 +199,14 @@ def buildCommands(reg):
 			continue
 		authactions.append(required[0])
 
-def parseData(queue, ws, socks, sessions, jdata, printer):
+def parse_data(queue, ws, socks, sessions, jdata, printer):
 	"""
 	Run the socket commands using the data given.
 	"""
 	global commands
-	return runSocketCommand(commands, ws, socks, sessions, jdata, queue, printer)
+	return run_socket_command(commands, ws, socks, sessions, jdata, queue, printer)
 
-def generateData(queue):
+def generate_data(queue):
 	"""
 	Generate data for sending to clients.
 	"""

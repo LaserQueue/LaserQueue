@@ -25,7 +25,7 @@ def _concatlist(lists):
 	return masterlist
 
 # Tags which need to exist in a queue object.
-requiredtags = {
+required_tags = {
 	"priority":0,
 	"name":"DEFAULT",
 	"material":"o",
@@ -38,11 +38,11 @@ requiredtags = {
 }
 
 # Tags which will not be sent to the client.
-hideFromClient = [
+hide_from_client = [
 	"sec"
 ]
 
-easterEggs = [
+easter_eggs = [
 	{
 		"match": ["and his name is", "his name is"],
 		"serve": {"action":"dodoododoooooo"},
@@ -57,9 +57,9 @@ easterEggs = [
 	}
 ]
 
-# Use the modules from plugins to update requiredtags and hideFromClient
+# Use the modules from plugins to update required_tags and hide_from_client
 def buildLists(reg):
-	global requiredtags, hideFromClient, easterEggs, attrEditable, attrFunctions, attrBlacklist
+	global required_tags, hide_from_client, easter_eggs, attr_editable, attr_functions, attr_blacklist
 
 	requiredlist = reg.events.get('requiredTag', {})
 	requires = [(i,requiredlist[i]) for i in requiredlist]
@@ -68,7 +68,7 @@ def buildLists(reg):
 			continue
 		if not isinstance(required[0], str):
 			continue
-		requiredtags[required[0]] = required[1]
+		required_tags[required[0]] = required[1]
 
 	hiddenlist = reg.events.get('hideFromClient', {})
 	hiddens = [(i,hiddenlist[i]) for i in hiddenlist]
@@ -77,7 +77,7 @@ def buildLists(reg):
 			continue
 		if not isinstance(hidden[0], str):
 			continue
-		hideFromClient.append(hidden[0])
+		hide_from_client.append(hidden[0])
 
 	blacklistlist = reg.events.get('attrDisable', {})
 	blacklist = [(i,blacklistlist[i]) for i in blacklistlist]
@@ -86,7 +86,7 @@ def buildLists(reg):
 			continue
 		if not isinstance(blacklisted[0], str):
 			continue
-		attrBlacklist.append(blacklisted[0])
+		attr_blacklist.append(blacklisted[0])
 
 	whitelistlist = reg.events.get('attrEnable', {})
 	whitelist = [(i,whitelistlist[i]) for i in whitelistlist]
@@ -95,7 +95,7 @@ def buildLists(reg):
 			continue
 		if not isinstance(whitelisted[0], str):
 			continue
-		attrEditable.append(whitelisted[0])
+		attr_editable.append(whitelisted[0])
 
 	attrlist = reg.events.get('attr', {})
 	attrs = [(i,attrlist[i]) for i in attrlist]
@@ -106,7 +106,7 @@ def buildLists(reg):
 			continue
 		if not hasattr(attr[1], "__call__"):
 			continue
-		attrFunctions[attr[0]] = attr[1]
+		attr_functions[attr[0]] = attr[1]
 
 	egglist = reg.events.get('egg', {})
 	eggs = [(i,egglist[i]) for i in egglist]
@@ -124,20 +124,20 @@ def buildLists(reg):
 		if "broadcast" not in egg[0] or not isinstance(egg[0]["broadcast"], bool):
 			egg["broadcast"] = True
 
-		easterEggs.append(egg[0])
+		easter_eggs.append(egg[0])
 
 class QueueObject(dict):
 	"""
 	An extension to `dict` that has special methods for queue manipulation.
 	"""
 
-	def __init__(self, maindict, *args, **kwargs):
+	def __init__(self, data, *args, **kwargs):
 		"""
-		Initialize this class using requiredtags as a base.
+		Initialize this class using required_tags as a base.
 		"""
-		global requiredtags
-		kwargs = dict(maindict, **kwargs)
-		kwargs = dict(requiredtags, **kwargs)
+		global required_tags
+		kwargs = dict(data, **kwargs)
+		kwargs = dict(required_tags, **kwargs)
 		super(self.__class__, self).__init__(*args, **kwargs)
 
 	@classmethod
@@ -151,9 +151,9 @@ class QueueObject(dict):
 		"""
 		Returns a version of this object without the Sec-key, which shouldn't be sent to clients.
 		"""
-		global hideFromClient
+		global hide_from_client
 		obj = dict(self)
-		for i in hideFromClient:
+		for i in hide_from_client:
 			del obj[i]
 		return obj
 
@@ -301,7 +301,7 @@ class Queue:
 
 		if config["easter_eggs"]:
 			strippedname = re.sub(r"[^\w ]", "", name.lower().strip())
-			for egg in easterEggs:
+			for egg in easter_eggs:
 				matches = False
 				for match in egg["match"]:
 					if match == strippedname:
@@ -396,13 +396,13 @@ class Queue:
 					"title": "Duplicate job",
 					"text": "You may not create two jobs with the same name and material."
 					}, ws)
-				serve_connection({"action": "add_failed"}, ws)
 			else:
 				serve_connection({
 					"action": "notification",
 					"title": "Duplicate job",
 					"text": "You may not create two jobs with the same name."
 					}, ws)
+			serve_connection({"action": "add_failed"}, ws)
 
 			if argvs.loud: # If -v, report failures
 				printer.color_print("Cannot add {name} to the queue.", name=name, color=ansi_colors.YELLOW)
@@ -603,15 +603,15 @@ class Queue:
 				color=color)
 
 	def attr(self, **kwargs):
-		global attrEditable, attrFunctions, attrBlacklist
+		global attr_editable, attr_functions, attr_blacklist
 		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid, attrname, value = args["uuid"], args["key"], args["new"]
 
 		# Make sure `attrname` is allowed to be changed (no changing timestamps, etc)
-		if attrname not in requiredtags or attrname in attrBlacklist:
+		if attrname not in required_tags or attrname in attr_blacklist:
 			return format("Cannot change the `{attribute}` value of a job.", attribute=attrname)
 		# Make sure the user is allowed to edit `attrname`.
-		if attrname not in attrEditable and not authstate:
+		if attrname not in attr_editable and not authstate:
 			return format("Changing a job's `{attribute}` value requires auth.", attribute=attrname)
 
 		# Fetch the job and cache the old value of `attrname`
@@ -619,11 +619,11 @@ class Queue:
 		oldval = job[attrname]
 
 		# Add coachmodified tag if you're not setting it with `attrname`
-		if attrname not in attrEditable and attrname != "coachmodified":
+		if attrname not in attr_editable and attrname != "coachmodified":
 			job["coachmodified"] = True
 
-		if attrname in attrFunctions:
-			attrFunctions[attrname](
+		if attrname in attr_functions:
+			attr_functions[attrname](
 				value=value,
 				attrname=attrname,
 				queue=self,
@@ -650,14 +650,14 @@ class Queue:
 
 
 
-def attrName(**kwargs):
+def attr_name(**kwargs):
 	kwargs["job"]["name"] = str(kwargs["value"]).strip()
-def attrMaterial(**kwargs):
+def attr_material(**kwargs):
 	if kwargs["value"] in config["materials"]:
 		kwargs["job"]["material"] = kwargs["value"]
-def attrCoachmod(**kwargs):
+def attr_coachmodified(**kwargs):
 	job["coachmodified"] = bool(value)
-def attrEsttime(**kwargs):
+def attr_esttime(**kwargs):
 	value, job, authstate, queue, priority, index = (
 		kwargs["value"], kwargs["job"], kwargs["authstate"], kwargs["queue"], kwargs["priority"], kwargs["index"]
 	)
@@ -693,11 +693,11 @@ def attrEsttime(**kwargs):
 	elif authstate and config["recalc_priority"]: # If auth was needed to bypass the recalc, then add the gear.
 		job["coachmodified"] = True
 
-attrEditable = config["attr_edit_perms"]
-attrBlacklist = ["uuid", "sec", "time", "totaldiff", "priority"]
-attrFunctions = {
-	"name": attrName,
-	"material": attrMaterial,
-	"coachmodified": attrCoachmod,
-	"esttime": attrEsttime
+attr_editable = config["attr_edit_perms"]
+attr_blacklist = ["uuid", "sec", "time", "totaldiff", "priority"]
+attr_functions = {
+	"name": attr_name,
+	"material": attr_material,
+	"coachmodified": attr_coachmodified,
+	"esttime": attr_esttime
 }

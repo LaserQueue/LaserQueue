@@ -54,7 +54,7 @@ def server(websocket, path):
 	# Allow all processes to serve to this
 	socks.append(websocket)
 	# Serve the latest queue to this socket
-	serve_connection(comm.generateData(queue.serialize()), websocket)
+	serve_connection(comm.generate_data(queue.serialize()), websocket)
 
 	for packet in initial:
 		serve_connection(packet, websocket)
@@ -103,11 +103,11 @@ def process(data, ws):
 	global queue, sessions, socks, queuehash
 	if data:
 		# Parse the data through the socket command handler
-		x = comm.parseData(queue, ws, socks, sessions, data, printer)
+		x = comm.parse_data(queue, ws, socks, sessions, data, printer)
 		# Back up the queue
 		if args.backup:
 			out = json.dumps(queue.queue, indent=2, sort_keys=True)
-			writeFile("cache.json", out, printer)
+			write_file("cache.json", out, printer)
 		# If the socket handler had an error, report it to the socket
 		if x and type(x) is str:
 			serve_connection({
@@ -119,7 +119,7 @@ def process(data, ws):
 		# If the queue changed, serve it
 		if queuehash != hash(str(queue.queue)):
 			queuehash = hash(str(queue.queue))
-			serve_connections(comm.generateData(queue.serialize()), socks)
+			serve_connections(comm.generate_data(queue.serialize()), socks)
 
 def upkeep():
 	"""
@@ -128,15 +128,15 @@ def upkeep():
 	global socks, queue, sessions, upkeeps
 	while True:
 		try:
-			upkeepsDupe = upkeeps[:]
-			for upkeepf in upkeepsDupe:
+			upkeep_dupe = upkeeps[:]
+			for upkeep_function in upkeep_dupe:
 				try:
 					regdupe = Registry()
 					regdupe.events = dict(reg.events)
-					upkeepf(queue=queue, sessions=sessions, sockets=socks, registry=regdupe)
+					upkeep_function(queue=queue, sessions=sessions, sockets=socks, registry=regdupe)
 				except Exception as e:
 					printer.color_print(format_traceback(e, "Error while processing upkeep:"), color=ansi_colors.YELLOW)
-					upkeeps.remove(upkeepf)
+					upkeeps.remove(upkeep_function)
 
 			time.sleep(config["refreshRate"]/1000)
 		except Exception as e: # Error reporting
@@ -166,12 +166,12 @@ def watchQueue(**kwargs):
 	kwargs["queue"].metapriority()
 	if queuehash != hash(str(kwargs["queue"].queue)):
 		queuehash = hash(str(kwargs["queue"].queue))
-		serve_connections(comm.generateData(kwargs["queue"].serialize()), kwargs["sockets"])
+		serve_connections(comm.generate_data(kwargs["queue"].serialize()), kwargs["sockets"])
 
 def reloadplugins(filetype, plugin_path):
-	pl = plugins.getPluginFiletype(filetype)
+	pl = plugins.get_plugin_filetype(filetype)
 	plugins = "\n".join(pl)
-	writeFile(plugin_path, plugins, printer)
+	write_file(plugin_path, plugins, printer)
 
 plugin_js_path = os.path.join(selfpath, os.path.pardir, "www", "dist", "js", "plugins.js")
 plugin_css_path = os.path.join(selfpath, os.path.pardir, "www", "dist", "css", "plugins.css")
@@ -247,7 +247,7 @@ def main():
 		if os.path.exists("cache.json"):
 			queue = laserqueue.Queue.load(open("cache.json"))
 		else:
-			writeFile("cache.json", "{}", printer)
+			write_file("cache.json", "{}", printer)
 
 	printer.color_print("Serving WebSockets on 0.0.0.0 port {port} ...", port=config["port"])
 

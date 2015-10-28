@@ -23,7 +23,7 @@ class MergerConfig(Config):
 				self.new = True
 			self.data = dict(defdata, **data)
 			out = json.dumps(self.data, sort_keys=True, indent=2)
-			writeFile(path, out)
+			write_file(path, out)
 			self.lastmodtime = os.path.getctime(path) # get the last modified time of the target file
 
 class Printer:
@@ -84,7 +84,7 @@ def serve_connection_generator(jdata, ws):
 serve_connections = lambda jdata, socks: list(serve_connections_generator(jdata, socks))
 serve_connection = lambda jdata, ws: list(serve_connection_generator(jdata, ws))
 
-def writeFile(path, data, printer=None):
+def write_file(path, data, printer=None):
 	"""
 	Write to a file, being careful to respect sudo.
 	"""

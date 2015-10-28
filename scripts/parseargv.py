@@ -15,11 +15,11 @@ parser.add_argument("-r", "--regen-config", help="Regenerate config.json", dest=
 	action="store", required=False, default=False, nargs="*", metavar="KEY")
 parser.add_argument("-S", "--no-install", help="Skip package installation", dest="skip",
 	action="store_true")
-parser.add_argument("-V", "--no-version-print", help="Don't print version", dest="noversionprint",
+parser.add_argument("-V", "--no-version-print", help="Don't print version", dest="no_version_print",
 	action="store_true")
-parser.add_argument("-U", "--no-update", help="Skip update", dest="skipupdate",
+parser.add_argument("-U", "--no-update", help="Skip update", dest="skip_update",
 	action="store_true")
-parser.add_argument("-P", "--no-plugins", help="Don't load plugins", dest="noPlugins",
+parser.add_argument("-P", "--no-plugins", help="Don't load plugins", dest="no_plugins",
 	action="store_true")
 parser.add_argument("-H", "--no-regen-host", help="Do not regenerate host in config", dest="host",
 	action="store_false")
@@ -35,7 +35,7 @@ parser.add_argument("--no-init", help="Doesn't run setup", dest="no_init",
 	action="store_true")
 parser.add_argument("--install-all", help="Don't ask for confirmation on install", dest="all",
 	action="store_true")
-parser.add_argument("--install-update", help="Don't ask for confirmation on update", dest="allupdate",
+parser.add_argument("--install-update", help="Don't ask for confirmation on update", dest="all_update",
 	action="store_true")
 parser.add_argument("-h", "--help", help="Show this help message and exit", action="help")
 args = parser.parse_args()
