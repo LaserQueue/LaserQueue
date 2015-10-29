@@ -84,6 +84,7 @@ Two modules that have been made available you might find helpful:
 * `"attrEnable"`
 * `"attr"`
 * `"initialPacket"`
+* `"socketType"`
 
 ### `"egg"`
 Whenever a job is added, this will check if an easter egg is applicable.  
@@ -191,6 +192,14 @@ Format:
 ```
 See [API.md](../API.md) for a list of acceptable packets. Plugins may register their own packets on the frontend.
 
+### `"socketType"`
+You can override a class in a socket's argument list with your own special behavior, similar to `any_type` and `any_number`.
+Format:
+```python
+class,
+function
+```
+`function` should accept an object and return an object which can be interpreted as a boolean.
 
 ## `ActionFramework.SocketCommand`
 SocketCommand accepts these arguments:  

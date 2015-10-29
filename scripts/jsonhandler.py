@@ -6,16 +6,19 @@ def _comparetypes(obj, expected):
 	"""
 	Compare types, allowing exceptions.
 	"""
-	if expected is any_type:
-		return True
-	elif expected is any_number:
-		if type(obj) is int or type(obj) is float:
-			return True
+	global exceptions
+	for exception in exceptions:
+		if expected == exception:
+			return exceptions[exception](obj)
 	return type(obj) is expected
 
 # Type exceptions
 class any_type: pass
 class any_number: pass
+exceptions = {
+	any_type: lambda obj: True,
+	any_number: lambda obj: type(obj) is int or type(obj) is float
+}
 
 authactions = config["authactions"]
 
@@ -163,7 +166,7 @@ def buildCommands(reg):
 	"""
 	Build the list of commands.
 	"""
-	global commands, authactions
+	global commands, authactions, exceptions
 	commandlist = reg.events.get('socket', {})
 	cmds = [(i,commandlist[i]) for i in commandlist]
 	for cmdid, cmd in cmds:
@@ -189,6 +192,18 @@ def buildCommands(reg):
 			commands.remove(oldcmd)
 
 		commands.append(SocketCommand(cmd[0], cmd[1], cmdargs))
+
+	typelist = reg.events.get('socketType', {})
+	types = [(i,typelist[i]) for i in typelist]
+	for typeid, t in cmds:
+		if len(t) != 2:
+			continue
+		if not isinstance(t[0], type):
+			continue
+		if not hasattr(t[1], "__call__"):
+			continue
+
+		exceptions[t[0]] = t[1]
 
 	requireslist = reg.events.get('requiresAuth', {})
 	requires = [(i,requireslist[i]) for i in requireslist]
