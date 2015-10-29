@@ -17,7 +17,7 @@ class any_type: pass
 class any_number: pass
 exceptions = {
 	any_type: lambda obj: True,
-	any_number: lambda obj: type(obj) is int or type(obj) is float
+	any_number: lambda obj: isinstance(obj, int) or isinstance(obj, float)
 }
 
 authactions = config["authactions"]
