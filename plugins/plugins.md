@@ -23,6 +23,8 @@ $(queueEvents).on('auth.success', function alertAuth() {
 |`config.parsed`|Config file has been applied|
 |`actions.populated`|Action buttons have been populated|
 |`form.reset`|Built-in form elements have been cleared|
+|`form.render`|Form render has been called. Fires at start of form render.|
+|`form.rendered`|Form render has completed. Fires at end of form render.|
 |`add.succeed`|Job was successfully added|
 |`add.fail`|Job was not added|
 

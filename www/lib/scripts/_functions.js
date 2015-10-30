@@ -268,6 +268,7 @@ function socketSend(jdata) {
 
 // render the job submission form
 function renderForm() {
+	$(queueEvents).trigger('form.render');
 	if(formOptions === {}) {
 		logText('renderForm() called but formOptions is blank. Not rendering.');
 	} else if(JSON.stringify(formOptions) === JSON.stringify(oldFormOptions)) {
@@ -444,6 +445,7 @@ function renderForm() {
 		// cache current formOptions
 		oldFormOptions = $.extend(true, formOptions);
 	}
+	$(queueEvents).trigger('form.rendered');
 }
 
 // wrapper for socketSend that changes an item's attribute
