@@ -16,7 +16,7 @@ def _comparetypes(obj, expected):
 class any_type: pass
 class any_number: pass
 exceptions = {
-	any_type: lambda obj: True,
+	any_type:   lambda obj: True,
 	any_number: lambda obj: isinstance(obj, int) or isinstance(obj, float)
 }
 
