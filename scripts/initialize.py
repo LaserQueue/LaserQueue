@@ -222,7 +222,8 @@ def update():
 				git.Repo.clone_from(config["update_repo"], update_directory) # Get the new repository
 
 				# Inform them about it
-				printer.color_print("""\nNew version located in:
+				printer.color_print("""
+				            New version located in:
 				            {update_directory}
 				            Run the following:
 				            {start_script}
@@ -301,12 +302,12 @@ def update_host():
 	Make sure the config's "host" flag is correct
 	"""
 	data = open_config()
-	# Regenerate the host if -n was used, or if it doesn't exist
-	if args.host or "host" not in data and args.regen != []:
-		data["host"] = get_IPs()[0]
 	# Change the host to localhost if -l was used (overriding -n)
 	if args.local:
 		data["host"] = "localhost"
+	# Regenerate the host if -n was used, or if it doesn't exist
+	elif args.host or "host" not in data and args.regen != []:
+		data["host"] = get_IPs()[0]
 	# Otherwise, reset the host from localhost (ignored by definition if -n is used)
 	else:
 		if "host" in data and data["host"] == "localhost":
@@ -338,7 +339,7 @@ def main():
 	except KeyboardInterrupt: print()
 	try:
 		if update() == "restart":
-			retcode = 1
+			retcode += 0x1
 	except KeyboardInterrupt: print()
 	try: concat_plugins()
 	except KeyboardInterrupt: print()
