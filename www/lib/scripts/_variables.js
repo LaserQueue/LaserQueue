@@ -59,7 +59,7 @@ var config, jsonData, socket, buttons,
 		"starttour": [function tourQueue(data) {
 			if(config.allowTour) queueTour();
 		}],
-		"dumpData": [function receiveData(data) {
+		"dump_data": [function receiveData(data) {
 			extraData[data.name] = JSON.parse(data.data);
 		}]
 	},
