@@ -53,11 +53,11 @@
 	"recapitalize":true,
 	"authactions": [
 		"move",
-		"relmove",
+		"relative_move",
 		"increment",
 		"decrement",
 		"refresh",
-		"starttour"
+		"start_tour"
 	],
 	"attrEditPerms": [
 		"name",

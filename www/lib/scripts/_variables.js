@@ -36,7 +36,7 @@ var config, jsonData, socket, buttons,
 		"authed": [function authUser(data) {
 			if (config.adminModeEnabled && !authed) onAuth();
 		}],
-		"authfailed": [function deauthUser(data) {
+		"auth_failed": [function deauthUser(data) {
 			if (config.adminModeEnabled && !authed) onFailedauth();
 		}],
 		"deauthed": [function userFailedAuth(data) {
@@ -56,7 +56,7 @@ var config, jsonData, socket, buttons,
 		"notification": [function displayNotification(data) {
 			modalMessage(data.title, data.text);
 		}],
-		"starttour": [function tourQueue(data) {
+		"start_tour": [function tourQueue(data) {
 			if(config.allowTour) queueTour();
 		}],
 		"dump_data": [function receiveData(data) {

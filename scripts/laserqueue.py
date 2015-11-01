@@ -423,7 +423,7 @@ class Queue:
 
 	def passoff(self, **kwargs):
 		"""
-		Move the job down one. Equivalent to relmove with an index shift of 1.
+		Move the job down one. Equivalent to relative_move with an index shift of 1.
 		"""
 		args, authstate, printer = kwargs["args"], kwargs["authstate"], kwargs["printer"]
 		job_uuid = args["uuid"]
@@ -456,7 +456,7 @@ class Queue:
 			printer.color_print("Passed {name} down the queue.\n({uuid})", name=job["name"], uuid=job["uuid"], color=color)
 
 
-	def relmove(self, **kwargs):
+	def relative_move(self, **kwargs):
 		"""
 		Move an object with pass logic, using masterqueue indexes.
 		"""

@@ -106,13 +106,13 @@ def refresh(**kwargs):
 	else:
 		printer.color_print("Force refresh isn't enabled. (config.json, allow_force_refresh)", color=ansi_colors.YELLOW)
 
-def starttour(**kwargs):
+def start_tour(**kwargs):
 	"""
 	Start the tour. (if the config allows it)
 	"""
 	socks, authstate, printer = kwargs["sockets"], kwargs["authstate"], kwargs["printer"]
 	if config["allowTour"]:
-		serve_connections({"action":"starttour"}, socks)
+		serve_connections({"action":"start_tour"}, socks)
 
 		if argvs.loud: # If the verbose flag is used, print report
 			color = ansi_colors.MAGENTA if authstate else ""
@@ -132,7 +132,7 @@ def auth(**kwargs):
 			if argvs.loud: # If the verbose flag is used, print report
 				printer.color_print("Auth succeeded.", color=ansi_colors.MAGENTA)
 		else:
-			serve_connection({"action":"authfailed"}, ws)
+			serve_connection({"action":"auth_failed"}, ws)
 			if argvs.loud: # If the verbose flag is used, print report
 				printer.color_print("Auth failed.")
 
@@ -142,7 +142,7 @@ append = lambda **kwargs: kwargs["queue"].append(**kwargs)
 passoff = lambda **kwargs: kwargs["queue"].passoff(**kwargs)
 remove = lambda **kwargs: kwargs["queue"].remove(**kwargs)
 move = lambda **kwargs: kwargs["queue"].move(**kwargs)
-relmove = lambda **kwargs: kwargs["queue"].relmove(**kwargs)
+relative_move = lambda **kwargs: kwargs["queue"].relative_move(**kwargs)
 increment = lambda **kwargs: kwargs["queue"].increment(**kwargs)
 decrement = lambda **kwargs: kwargs["queue"].decrement(**kwargs)
 attr = lambda **kwargs: kwargs["queue"].attr(**kwargs)
@@ -150,13 +150,13 @@ attr = lambda **kwargs: kwargs["queue"].attr(**kwargs)
 commands = [
 	SocketCommand("deauth", deauth, {}),
 	SocketCommand("refresh", refresh, {}),
-	SocketCommand("starttour", starttour, {}),
+	SocketCommand("start_tour", start_tour, {}),
 	SocketCommand("auth", auth, {"pass": str}),
 	SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str}),
 	SocketCommand("pass", passoff, {"uuid": str}),
 	SocketCommand("remove", remove, {"uuid": str}),
 	SocketCommand("move", move, {"uuid": str, "target_priority": int, "target_index": int}),
-	SocketCommand("relmove", relmove, {"uuid": str, "target_index": int}),
+	SocketCommand("relative_move", relative_move, {"uuid": str, "target_index": int}),
 	SocketCommand("increment", increment, {"uuid": str}),
 	SocketCommand("decrement", decrement, {"uuid": str}),
 	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type})

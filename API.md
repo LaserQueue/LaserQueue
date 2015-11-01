@@ -133,14 +133,14 @@ Moves the specified job to the target index, and the target priority
 ```
 
 
-### relmove *
+### relative_move *
 Moves the specified job to the target index in the master index. Out of bounds will default to the bounds.
 
 #### Sample
 
 ```js
 {
-	"action": "relmove",
+	"action": "relative_move",
 	"uuid": <uuid of job as Str>,
 	"target_index": <target index as Int>
 }
@@ -297,7 +297,7 @@ Called when auth finds a wrong password. Dependent upon `config.admin_mode_enabl
 
 ```js
 {
-	"action":"authfailed"
+	"action":"auth_failed"
 }
 ```
 

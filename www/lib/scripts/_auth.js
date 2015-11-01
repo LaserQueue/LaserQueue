@@ -35,7 +35,7 @@ function onDeauth() {
 	$('.disabled').prop('disabled', true);
 	$('.authorize').attr('data-original-title', config.login);
 	$('.nuvu-logo').attr('src', '/dist/img/logo.svg');
-	if (config.authactions.indexOf('relmove') != -1) {
+	if (config.authactions.indexOf('relative_move') != -1) {
 		$(draggable).draggabilly('disable');
 	}
 	if (config.authactions.indexOf('add') != -1) {

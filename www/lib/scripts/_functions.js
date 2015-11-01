@@ -185,7 +185,7 @@ function populateActions() {
 		});
 	});
 
-	if (authed || config.authactions.indexOf('relmove') == -1) {
+	if (authed || config.authactions.indexOf('relative_move') == -1) {
 		$('.jobs-table-template tr').each(function makeRowsDraggable(index, el) {
 			draggable[index] = this;
 			$(this).draggabilly({
@@ -200,7 +200,7 @@ function populateActions() {
 			$(this).on('dragEnd', function handleDragEnd(event, pointer) {
 				$('.jobs-table-template tr:not(.is-dragging) td:nth-child(1) a.fa').removeClass('animate-hide');
 				socketSend({
-					'action': 'relmove',
+					'action': 'relative_move',
 					'uuid': $(this).attr('data-uuid'),
 					'targetIndex': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / $(this).height()))
 				});
