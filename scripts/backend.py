@@ -87,7 +87,7 @@ def server(websocket, path):
 				process(messagedata, websocket)
 		except Exception as e: # Error reporting
 			printer.color_print(format_traceback(e, "Error while serving WebSockets:"), color=ansi_colors.YELLOW)
-			if config["send_notifications"]:
+			if config["sendNotifications"]:
 				serve_connection({ # Tell the socket about it
 						"action": "notification",
 						"title": type(e).__name__,

@@ -44,7 +44,7 @@ class SID:
 		Check this session's state, making sure that nothing has timed out yet.
 		"""
 		timestamp = time.time()
-		if timestamp-self.stamp > config["auth_timeout"] and config["auth_timeout"]:
+		if timestamp-self.stamp > config["authTimeout"] and config["authTimeout"]:
 			self.deauth()
 
 	def onupdate(self):

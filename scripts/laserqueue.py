@@ -9,7 +9,7 @@ def _calcpriority(priority, time):
 	"""
 	Recalculate priority values from `time`.
 	"""
-	for i in config["priority_thresh"]:
+	for i in config["priorityThresh"]:
 		if time >= i:
 			priority -= 1
 	return max(priority, 0)
@@ -299,7 +299,7 @@ class Queue:
 		extra_objects = args.get("extras", {}) # Get the extras and make sure it's the right format
 		if not isinstance(extra_objects, dict): extra_objects = {}
 
-		if config["easter_eggs"]:
+		if config["easterEggs"]:
 			strippedname = re.sub(r"[^\w ]", "", name.lower().strip())
 			for egg in easter_eggs:
 				matches = False
@@ -331,18 +331,18 @@ class Queue:
 			return
 
 		# Contain the length of time within the configurable bounds.
-		bounds = config["length_bounds"]
+		bounds = config["lengthBounds"]
 		if bounds[0] >= 0:
 			esttime = max(bounds[0], esttime)
 		if bounds[1] >= 0:
 			esttime = min(bounds[1], esttime)
 
 		# lock the priority down to the max if the user isn't authed.
-		if not config["priority_allow"] and not authstate:
-			priority = min(config["highest_priority_allowed"], priority)
+		if not config["priorityAllow"] and not authstate:
+			priority = min(config["highestPriorityAllowed"], priority)
 
 		# Recalculate priority if applicable.
-		if config["recalc_priority"]:
+		if config["recalcPriority"]:
 			priority = _calcpriority(priority, esttime)
 
 		# Strip whitespace from the name and recapitalize it
@@ -355,14 +355,14 @@ class Queue:
 		for i in self.queue:
 			for j in i:
 				if name.lower() == j["name"].lower() and (
-						material == j["material"] or (not config["allow_multiple_materials"])):
+						material == j["material"] or (not config["allowMultipleMaterials"])):
 					inqueue = True
 					break
 
 		# Make the uuid of the job
 		job_uuid = str(uuid.uuid1())
 
-		if not inqueue or config["allow_multiples"]: # If the job is allowed to be created
+		if not inqueue or config["allowMultiples"]: # If the job is allowed to be created
 			# Add it to the queue
 			newJob = QueueObject({
 				"priority": priority,
@@ -390,7 +390,7 @@ class Queue:
 				printer.color_print("Added {name} to the queue.\n({uuid})", name=name, uuid=job_uuid, color=color)
 
 		else:
-			if config["allow_multiple_materials"]:
+			if config["allowMultipleMaterials"]:
 				serve_connection({
 					"action": "notification",
 					"title": "Duplicate job",
@@ -432,11 +432,11 @@ class Queue:
 
 		masterqueue = self.masterqueue()
 		# Get the maximum depth for passing
-		pass_depth = min(len(masterqueue)-1, config["pass_depth"])
+		pass_depth = min(len(masterqueue)-1, config["passDepth"])
 
 		# If the pass can't happen, return
 		if masterindex >= len(masterqueue)-1: return
-		if masterindex >= config["pass_depth"] and not authstate:
+		if masterindex >= config["passDepth"] and not authstate:
 			printer.color_print("Passing at depth {masterindex} requires auth.", masterindex=masterindex, color=ansi_colors.YELLOW)
 			return
 
@@ -662,7 +662,7 @@ def attr_esttime(**kwargs):
 		kwargs["value"], kwargs["job"], kwargs["authstate"], kwargs["queue"], kwargs["priority"], kwargs["index"]
 	)
 	# Cap the length using the configurable bounds
-	bounds = config["length_bounds"]
+	bounds = config["lengthBounds"]
 	if bounds[0] >= 0:
 		value = max(bounds[0], value)
 	if bounds[1] >= 0:
@@ -671,13 +671,13 @@ def attr_esttime(**kwargs):
 	prevtime = job["esttime"]
 	job["esttime"] = value
 	# If priority is recalculated with time and you're not auth, recalc priority
-	if config["recalc_priority"] and not authstate:
+	if config["recalcPriority"] and not authstate:
 		newpriority = priority*1 # Make sure editing priority doesn't change newpriority
 		job["totaldiff"] += value-prevtime # Add the difference between the times to the job's total difference.
 		job["totaldiff"] = max(job["totaldiff"], 0) # Make sure total difference doesn't drop below 0.
 
 		highestremoved = 0
-		for i in config["priority_thresh"]: # A modified version of _calcpriority, to take out from the totaldiff.
+		for i in config["priorityThresh"]: # A modified version of _calcpriority, to take out from the totaldiff.
 			if job["totaldiff"] >= i and i < value:
 				newpriority -= 1 # Lower priority for each thresh it passes.
 				highestremoved = max(highestremoved, i)
@@ -690,10 +690,10 @@ def attr_esttime(**kwargs):
 			queue[priority].pop(index)
 			queue[newpriority].append(job)
 
-	elif authstate and config["recalc_priority"]: # If auth was needed to bypass the recalc, then add the gear.
+	elif authstate and config["recalcPriority"]: # If auth was needed to bypass the recalc, then add the gear.
 		job["coachmodified"] = True
 
-attr_editable = config["attr_edit_perms"]
+attr_editable = config["attrEditPerms"]
 attr_blacklist = ["uuid", "sec", "time", "totaldiff", "priority"]
 attr_functions = {
 	"name": attr_name,

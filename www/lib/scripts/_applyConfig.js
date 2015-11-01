@@ -4,7 +4,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	// config.thing returns thing in the config file
 	config = getConfigFile.responseJSON;
 
-	if(!config.dev_log) {
+	if(!config.devLog) {
 		$('[for=log-checkbox]').remove();
 	} else {
 		console.log('Recommended: use the in-page log. Most info goes there.');
@@ -19,8 +19,8 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	host = 'ws://{host}:{port}'.format({host: config.host, port: config.port});
 
 	// set page title
-	if (config.page_title) {
-		$('title').text(config.page_title);
+	if (config.pageTitle) {
+		$('title').text(config.pageTitle);
 	}
 
 	// hide task add form if auth is required to add
@@ -32,27 +32,27 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	formOptions = {
 		"name": {
 			"type": "string",
-			"placeholder": config.name_input,
-			"tooltip": config.name_hover,
+			"placeholder": config.nameInput,
+			"tooltip": config.nameHover,
 			"classes": ["job-human-name"]
 		},
 		"time": {
 			"type": "string",
-			"placeholder": config.time_input,
-			"tooltip": config.time_hover,
+			"placeholder": config.timeInput,
+			"tooltip": config.timeHover,
 			"classes": ["job-time-estimate"]
 		},
 		"material": {
 			"type": "select",
-			"tooltip": config.material_hover,
-			"header": config.material_input,
+			"tooltip": config.materialHover,
+			"header": config.materialInput,
 			"options": config.materials,
 			"classes": ["job-material"]
 		},
 		"priority": {
 			"type": "select",
-			"tooltip": config.priority_hover,
-			"header": config.priority_input,
+			"tooltip": config.priorityHover,
+			"header": config.priorityInput,
 			"options": config.priorities,
 			"classes": ["job-priority"]
 		}
@@ -62,23 +62,23 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	renderForm();
 
 	// set table headers from config
-	$('.action-header').text(config.action_header);
-	$('.name-header').text(config.name_header);
-	$('.material-header').text(config.material_header);
-	$('.time-header').text(config.time_header);
-	$('.priority-header').text(config.priority_header);
+	$('.action-header').text(config.actionHeader);
+	$('.name-header').text(config.nameHeader);
+	$('.material-header').text(config.materialHeader);
+	$('.time-header').text(config.timeHeader);
+	$('.priority-header').text(config.priorityHeader);
 
 	// set up action buttons from config
 	buttons = {
-		'remove': '\n<a role="button" tabindex="0" class="fa fa-remove remove-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.remove_hover}),
-		'increment': '\n<a role="button" tabindex="0" class="fa fa-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.incr_hover}),
-		'decrement': '\n<a role="button" tabindex="0" class="fa fa-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.decr_hover}),
-		'pass': '\n<a role="button" tabindex="0" class="fa fa-chevron-down lower-priority" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.pass_hover}),
-		'relmove': '\n<a role="button" tabindex="0" class="fa fa-bars move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.drag_hover})
+		'remove': '\n<a role="button" tabindex="0" class="fa fa-remove remove-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.removeHover}),
+		'increment': '\n<a role="button" tabindex="0" class="fa fa-chevron-up increment-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.incrHover}),
+		'decrement': '\n<a role="button" tabindex="0" class="fa fa-chevron-down decrement-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.decrHover}),
+		'pass': '\n<a role="button" tabindex="0" class="fa fa-chevron-down lower-priority" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.passHover}),
+		'relmove': '\n<a role="button" tabindex="0" class="fa fa-bars move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.dragHover})
 	};
 
 	// set up admin mode if enabled
-	if (config.admin_mode_enabled) {
+	if (config.adminModeEnabled) {
 		$('.authorize').click(function handleAuthToggle() {
 			// if already authorized, deauth
 			if (authed) {
@@ -121,10 +121,10 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	}
 
 	// enable Google Analytics if config says so
-	if(!config.google_analytics_key) {
+	if(!config.googleAnalyticsKey) {
 		logText('Google Analytics tracking is not enabled.');
 	} else {
-		logText('Google Analytics tracking is enabled with key ' + config.google_analytics_key);
+		logText('Google Analytics tracking is enabled with key ' + config.googleAnalyticsKey);
 
 		/* jshint ignore:start */
 		(function GAisogram(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function googleAnalyticsFunction(){
@@ -133,7 +133,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 		/* jshint ignore:end */
 
-		googleAnalytics('create', config.google_analytics_key, {
+		googleAnalytics('create', config.googleAnalyticsKey, {
 			'cookieDomain': 'none'
 		});
 		googleAnalytics('send', 'pageview');

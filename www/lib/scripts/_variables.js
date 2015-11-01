@@ -34,32 +34,32 @@ var config, jsonData, socket, buttons,
 			$(queueEvents).trigger('add.fail');
 		}],
 		"authed": [function authUser(data) {
-			if (config.admin_mode_enabled && !authed) onAuth();
+			if (config.adminModeEnabled && !authed) onAuth();
 		}],
 		"authfailed": [function deauthUser(data) {
-			if (config.admin_mode_enabled && !authed) onFailedauth();
+			if (config.adminModeEnabled && !authed) onFailedauth();
 		}],
 		"deauthed": [function userFailedAuth(data) {
-			if(config.admin_mode_enabled && authed) onDeauth();
+			if(config.adminModeEnabled && authed) onDeauth();
 		}],
 		"rickroll": [function rickRollUser(data) {
 			NProgress.done();
-			if(config.easter_eggs) rickRoll();
+			if(config.easterEggs) rickRoll();
 		}],
 		"dodoododoooooo": [function dodoododoooooo(data) {
 			NProgress.done();
-			if(config.easter_eggs) johnCena();
+			if(config.easterEggs) johnCena();
 		}],
 		"refresh": [function refreshPage(data) {
-			if(config.allow_force_refresh) window.location.reload();
+			if(config.allowForceRefresh) window.location.reload();
 		}],
 		"notification": [function displayNotification(data) {
 			modalMessage(data.title, data.text);
 		}],
 		"starttour": [function tourQueue(data) {
-			if(config.allow_tour) queueTour();
+			if(config.allowTour) queueTour();
 		}],
-		"dump_data": [function receiveData(data) {
+		"dumpData": [function receiveData(data) {
 			extraData[data.name] = JSON.parse(data.data);
 		}]
 	},
@@ -68,7 +68,7 @@ var config, jsonData, socket, buttons,
 			html: function drawCoachMode(params) {
 				return this.priority + (
 					this.coachmodified ?
-						' <span class="fa fa-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="{title}"></span>'.format({title: config.modified_hover})
+						' <span class="fa fa-cog coach-modified" data-toggle="tooltip" data-placement="bottom" title="{title}"></span>'.format({title: config.modifiedHover})
 						: ''
 				);
 			},
@@ -79,7 +79,7 @@ var config, jsonData, socket, buttons,
 				for (var i = 0; i < Object.keys(buttons).length; i++) {
 					var button = Object.keys(buttons)[i];
 					if (config.authactions.indexOf(button) == -1 || authed) {
-						if (button != "pass" || !(params.index >= config.pass_depth && config.pass_depth || authed)) {
+						if (button != "pass" || !(params.index >= config.passDepth && config.passDepth || authed)) {
 							data += buttons[button];
 						}
 					}

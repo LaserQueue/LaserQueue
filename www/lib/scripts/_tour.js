@@ -97,7 +97,7 @@ tour.on('cancel', function bringBackTooltips() {
 });
 
 function queueTour() {
-	if (config.allow_tour) {
+	if (config.allowTour) {
 		$('body').addClass('hide-tooltips');
 		tour.start();
 	} else {

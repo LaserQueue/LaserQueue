@@ -97,7 +97,7 @@ def refresh(**kwargs):
 	Refresh all clients. (if the config allows it)
 	"""
 	socks, authstate, printer = kwargs["sockets"], kwargs["authstate"], kwargs["printer"]
-	if config["allow_force_refresh"]:
+	if config["allowForceRefresh"]:
 		serve_connections({"action":"refresh"}, socks)
 
 		if argvs.loud: # If the verbose flag is used, print report
@@ -111,7 +111,7 @@ def starttour(**kwargs):
 	Start the tour. (if the config allows it)
 	"""
 	socks, authstate, printer = kwargs["sockets"], kwargs["authstate"], kwargs["printer"]
-	if config["allow_tour"]:
+	if config["allowTour"]:
 		serve_connections({"action":"starttour"}, socks)
 
 		if argvs.loud: # If the verbose flag is used, print report
@@ -126,7 +126,7 @@ def auth(**kwargs):
 	"""
 	args, sec, sessions, ws, printer = kwargs["args"], kwargs["sec"], kwargs["sessions"], kwargs["ws"], kwargs["printer"]
 
-	if config["admin_mode_enabled"]:
+	if config["adminModeEnabled"]:
 		if sessions.auth(sec, args["pass"]):
 			serve_connection({"action":"authed"}, ws)
 			if argvs.loud: # If the verbose flag is used, print report

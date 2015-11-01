@@ -118,6 +118,6 @@ if not hasattr(ssl, '_create_default_https_context'): # Some operating systems d
 			                       To see if you need to update, go to
 			                       {blue}{line}{target}{endc}{color}.
 			                       (Current version: {endc}{version}{color})""", color=ansi_colors.RED, strip=True,
-			                       version = config["version"], target=config["update_repo"])
+			                       version = config["version"], target=config["updateRepo"])
 			return io.BytesIO(bytes("{}", 'utf8'))
 		urllib.request.urlopen = fakeopen

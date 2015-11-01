@@ -192,7 +192,7 @@ def update():
 	config = json.load(open(default_config_path))
 
 	try:
-		config_page = urllib.request.urlopen(config["update_target"]).read().decode('utf8')
+		config_page = urllib.request.urlopen(config["updateTarget"]).read().decode('utf8')
 		master_config = json.loads(config_page) # Get the current up-to-date config
 
 		if "version" in master_config and check_version_numbers(config["version"], master_config["version"]): # If the remote version is greater than the one here
@@ -219,7 +219,7 @@ def update():
 
 			# If they want to fetch the new repository
 			if confirm == "fetch":
-				git.Repo.clone_from(config["update_repo"], update_directory) # Get the new repository
+				git.Repo.clone_from(config["updateRepo"], update_directory) # Get the new repository
 
 				# Inform them about it
 				printer.color_print("""
@@ -242,7 +242,7 @@ def update():
 
 				# If the repo doesn't have a connection to the remote, make one
 				if "origin" not in [i.name for i in repo.remotes]:
-					origin = repo.create_remote("origin", config["update_repo"])
+					origin = repo.create_remote("origin", config["updateRepo"])
 					origin.fetch()
 
 				# Make a backup file

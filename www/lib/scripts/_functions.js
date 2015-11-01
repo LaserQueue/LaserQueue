@@ -65,7 +65,7 @@ function ensureNumberStringLength(number, len) {
 
 // logs text to devlog on page
 function logText(text) {
-	if(config.dev_log) {
+	if(config.devLog) {
 		var currentTime = new Date();
 		var currentDay = ensureNumberStringLength(currentTime.getDate(), 2);
 		var currentMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][currentTime.getMonth()];
@@ -202,7 +202,7 @@ function populateActions() {
 				socketSend({
 					'action': 'relmove',
 					'uuid': $(this).attr('data-uuid'),
-					'target_index': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / $(this).height()))
+					'targetIndex': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / $(this).height()))
 				});
 			});
 		});
@@ -352,20 +352,20 @@ function renderForm() {
 		}
 
 		// if there is a default material set
-		if(config.default_material) {
+		if(config.defaultMaterial) {
 			// select it
 			$('.job-material').prop(
 				'selectedIndex',
-				$('.job-material').children('[value={material}]'.format({material: config.default_material})).index()
+				$('.job-material').children('[value={material}]'.format({material: config.defaultMaterial})).index()
 			);
 		}
 
 		// if there is a default priority set
-		if(typeof config.default_priority === 'number') {
+		if(typeof config.defaultPriority === 'number') {
 			// select it
 			$('.job-priority').prop(
 				'selectedIndex',
-				$('.job-priority').children('[value={priority}]'.format({priority: config.default_priority})).index()
+				$('.job-priority').children('[value={priority}]'.format({priority: config.defaultPriority})).index()
 			);
 		}
 
@@ -373,7 +373,7 @@ function renderForm() {
 		if(!authed) {
 			var priorityOptions = $('.job-priority').children(':not([disabled])');
 			for(var p = 0; p < priorityOptions.length; p++) {
-				if($(priorityOptions[p]).val() > config.highest_priority_allowed && !config.priority_allow) {
+				if($(priorityOptions[p]).val() > config.highestPriorityAllowed && !config.priorityAllow) {
 					$(priorityOptions[p]).prop('disabled', true);
 				}
 			}
@@ -468,7 +468,7 @@ function changeAttr(taskid, attrKey, attrVal) {
 
 // read the function name, it says it all
 function rickRoll() {
-	if (config.easter_eggs) {
+	if (config.easterEggs) {
 		modalMessage('Never gonna give you up', '<iframe width="420" height="315" src="http://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&disablekb=1&controls=0&loop=1&showinfo=0&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>');
 		$('html').addClass('lol');
 	}
@@ -479,7 +479,7 @@ function rickRoll() {
 
 // and his name is
 function johnCena() {
-	if (config.easter_eggs) {
+	if (config.easterEggs) {
 		modalMessage('And his name is', '<iframe width="420" height="315" src="https://www.youtube.com/embed/weBnn5fzcHg?autoplay=1&disablekb=1&controls=0&loop=1&showinfo=0&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>');
 	}
 	else {
@@ -494,7 +494,7 @@ function isTouchDevice(){
 
 // ga() if Google Analytics is enabled
 function googleAnalytics(i, s, o, g, r, a, m){
-	if (typeof config.google_analytics_key !== 'string' && config.google_analytics_key !== '') {
+	if (typeof config.googleAnalyticsKey !== 'string' && config.googleAnalyticsKey !== '') {
 		ga(i, s, o, g, r, a, m);
 	}
 }
