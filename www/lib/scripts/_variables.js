@@ -50,6 +50,10 @@ var config, jsonData, socket, buttons,
 			NProgress.done();
 			if(config.easterEggs) johnCena();
 		}],
+		"truly_an_inspiration": [function quiteSo(data) {
+			NProgress.done();
+			if(config.easterEggs) justDoIt();
+		}],
 		"refresh": [function refreshPage(data) {
 			if(config.allowForceRefresh) window.location.reload();
 		}],

@@ -335,3 +335,12 @@ John Cena! Dependent upon `config.easter_eggs`.
 	"action":"dodoododoooooo"
 }
 ```
+
+### Truly an inspiration
+Why did I do this  
+Dependent upon `config.easter_eggs`.
+```js
+{
+	"action":"truly_an_inspiration"
+}
+```

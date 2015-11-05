@@ -50,9 +50,15 @@ easter_eggs = [
 		"broadcast": True
 	},
 	{
-		"match": ["uuddlrlrba"],
+		"match": ["uuddlrlrba", "never gonna give you up"],
 		"serve": {"action":"rickroll"},
 		"loud": rainbonify("Never gonna give you up,\nnever gonna let you down.\nNever gonna run around and desert you."),
+		"broadcast": True
+	},
+	{
+		"match": ["just do it"],
+		"serve": {"action":"truly_an_inspiration"},
+		"loud": rainbonify("Just... do it!"),
 		"broadcast": True
 	}
 ]
