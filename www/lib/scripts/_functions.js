@@ -202,7 +202,7 @@ function populateActions() {
 				socketSend({
 					'action': 'relative_move',
 					'uuid': $(this).attr('data-uuid'),
-					'targetIndex': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / $(this).height()))
+					'target_index': parseInt($(this).attr('data-pos')) + parseInt(Math.round($(this).data('draggabilly').position.y / $(this).height()))
 				});
 			});
 		});
