@@ -37,20 +37,24 @@ var config, jsonData, socket, buttons,
 			if (config.adminModeEnabled && !authed) onAuth();
 		}],
 		"auth_failed": [function deauthUser(data) {
+			oldJsonData = {};
 			if (config.adminModeEnabled && !authed) onFailedauth();
 		}],
 		"deauthed": [function userFailedAuth(data) {
 			if(config.adminModeEnabled && authed) onDeauth();
 		}],
 		"rickroll": [function rickRollUser(data) {
+			oldJsonData = {};
 			NProgress.done();
 			if(config.easterEggs) rickRoll();
 		}],
 		"dodoododoooooo": [function dodoododoooooo(data) {
+			oldJsonData = {};
 			NProgress.done();
 			if(config.easterEggs) johnCena();
 		}],
 		"truly_an_inspiration": [function quiteSo(data) {
+			oldJsonData = {};
 			NProgress.done();
 			if(config.easterEggs) justDoIt();
 		}],
@@ -61,6 +65,7 @@ var config, jsonData, socket, buttons,
 			modalMessage(data.title, data.text);
 		}],
 		"start_tour": [function tourQueue(data) {
+			oldJsonData = {};
 			if(config.allowTour) queueTour();
 		}],
 		"dump_data": [function receiveData(data) {

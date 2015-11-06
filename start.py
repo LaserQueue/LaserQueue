@@ -79,7 +79,13 @@ if __name__ == "__main__":
 	if not args.no_version_print: 
 		printer.color_print("Running {version}.", version=parse_version(version))
 
-	backend_port = int(Config(os.path.join(selfpath,"www","config.json"))["port"]) # Get the port to host the backend from
+	if args.regen != [] or "port" not in args.regen:
+		try:
+			backend_port = int(Config(os.path.join(selfpath,"www","config.json"))["port"]) # Get the port to host the backend from
+		except:
+			backend_port = int(Config(os.path.join("www","defaultconf.json"))["port"])
+	else:
+		backend_port = int(Config(os.path.join("www","defaultconf.json"))["port"])
 
 	# Based on the args, load frontend, backend, or neither.
 	load_frontend = (args.load_frontend or (not args.load_frontend and not args.load_backend)) and not args.load_none
