@@ -6,10 +6,10 @@ Registry.register = Registry.on
 
 if color_supported: 
 	ansi_colors.RANDOM = "\033[3%dm" % random.randint(1,8)
-	ansi_colors.MAKERANDOM = lambda significant: "\033[%s%dm" % significant, random.randint(1,8)
+	ansi_colors.MAKERANDOM = lambda significant=3: "\033[%s%dm" % str(significant), random.randint(1,8)
 else:
 	ansi_colors.RANDOM = ''
-	ansi_colors.MAKERANDOM = lambda _: ''
+	ansi_colors.MAKERANDOM = lambda _=None: ''
 ansi_colors.COLORS["random"] = ansi_colors.RANDOM
 
 DEFAULTCONFIGDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "www", "defaultconf.json"))
