@@ -200,6 +200,19 @@ Enter admin mode if password is correct. Dependent upon `config.admin_mode_enabl
 }
 ```
 
+### elevate
+Run command as admin if password is correct. Dependent upon `config.admin_mode_enabled`.
+
+#### Sample
+
+```js
+{
+	"action": "elevate",
+	"pass": <sha1 hash of user-entered password as Str>,
+	"trigger": <packet as Object>
+}
+```
+
 
 ### deauth
 Leave admin mode. Dependent upon `config.admin_mode_enabled`.

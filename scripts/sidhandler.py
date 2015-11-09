@@ -12,6 +12,15 @@ selfpath = os.path.dirname(__file__)
 
 if os.path.exists(os.path.join(selfpath, "hashpassword")):
 	PASSWORD = open(os.path.join(selfpath, "hashpassword")).read().strip()
+else:
+	PASSWORD = None
+
+def checkpassword(password):
+	global PASSWORD
+	if PASSWORD is not None and password is not None:
+		hash_object = hashlib.sha256(password.strip().encode()).hexdigest()
+		return hash_object.strip() == PASSWORD
+	return False
 
 class SID:
 	"""
@@ -26,12 +35,10 @@ class SID:
 		"""
 		Attempt to auth using `password`, by checking it against PASSWORD.
 		"""
-		if os.path.exists(os.path.join(selfpath, "hashpassword")):
-			hash_object = hashlib.sha256(password.strip().encode()).hexdigest()
-			if hash_object.strip() == PASSWORD:
-				self.authstate = True
-				return True
-		return False
+		success = checkpassword(password)
+		if success:
+			self.authstate = True
+		return success
 
 	def deauth(self):
 		"""

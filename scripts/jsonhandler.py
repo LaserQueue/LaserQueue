@@ -1,6 +1,7 @@
 from parseargv import args as argvs
 from util import *
 from laserqueue import trigger_egg
+from sidhandler import checkpassword
 config = Config(CONFIGDIR)
 
 def _comparetypes(obj, expected):
@@ -8,10 +9,13 @@ def _comparetypes(obj, expected):
 	Compare types, allowing exceptions.
 	"""
 	global exceptions
+	if isinstance(expected, list) and len(expected) == 1:
+		return _comparetypes(obj, expected[0])
+
 	for exception in exceptions:
 		if expected == exception:
 			return exceptions[exception](obj)
-	return type(obj) is expected
+	return isinstance(obj, expected)
 
 # Type exceptions
 class any_type: pass
@@ -23,7 +27,7 @@ exceptions = {
 
 authactions = config["authactions"]
 
-def run_socket_command(commandlist, ws, socks, sessions, jdata, queue, printer):
+def run_socket_command(commandlist, ws, socks, sessions, jdata, queue, printer, authstate=None):
 	"""
 	Run a command based on `jdata`, from `commandlist`.
 	"""
@@ -36,7 +40,8 @@ def run_socket_command(commandlist, ws, socks, sessions, jdata, queue, printer):
 	sec = get_sec_key(ws)
 	args = dict(jdata)
 	del args["action"]
-	authstate = sessions.check(sec)
+	if authstate is None:
+		authstate = sessions.check(sec)
 
 	# Stop actions that need auth if the client isn't auth
 	if action in authactions and not authstate:
@@ -55,6 +60,12 @@ def run_socket_command(commandlist, ws, socks, sessions, jdata, queue, printer):
 	# If the args missing is the problem, return that
 	elif not args:
 		return "Args missing!"
+
+def typename(obj):
+	if isinstance(obj, type):
+		return obj.__name__
+	elif isinstance(obj, list) and len(obj) == 1:
+		return format("[{name}]", name=obj[0].__name__)
 
 class SocketCommand:
 	"""
@@ -76,13 +87,13 @@ class SocketCommand:
 				else:
 					return format("Expected '{nameofarg}' argument, but didn't find it.", nameofarg=i)
 			if not _comparetypes(args[i], self.args[i]):
-				if isinstance(self.args[i], list):
+				if isinstance(self.args[i], list) and len(self.args[i]) == 1:
 					args[i] = None
 				else:
 					return format("Expected '{nameofarg}' argument to be an instance of '{typeexpected}', but found an instance of '{typeofarg}'.",
 						nameofarg = i,
-						typeexpected = self.args[i].__name__,
-						typeofarg = type(args[i]).__name__)
+						typeexpected = typename(self.args[i]),
+						typeofarg = typename(type(args[i])))
 
 		# Run the command if all is in order
 		return self.method(**kwargs)
@@ -150,9 +161,43 @@ def egg(**kwargs):
 	"""
 	args, socks, ws, authstate, printer = kwargs["args"], kwargs["sockets"], kwargs["ws"], kwargs["authstate"], kwargs["printer"]
 	if config["easterEggs"]:
-		trigger_egg(args["trigger"], socks, ws, authstate, printer, args["override"])
+		if not trigger_egg(args["trigger"], socks, ws, authstate, printer, args["override"]):
+			printer.color_print("No egg triggered.")
 	else:
 		printer.color_print("This code has a humor level of -1.")
+
+def elevate(**kwargs):
+	"""
+	Run a packet with admin permissions.
+	"""
+	args, authstate, sec, ws, printer = kwargs["args"], kwargs["authstate"], kwargs["sec"], kwargs["ws"], kwargs["printer"]
+	if config["adminModeEnabled"]:
+		if authstate or checkpassword(args["pass"]):
+			if not authstate and args["trigger"] is None:
+				return auth(**kwargs)
+
+			displaymessage = dict(args["trigger"])
+			if "pass" in args["trigger"]:
+				# Replace the password with asterisks
+				displaymessage["pass"] = "*"*len(displaymessage["pass"])
+			for key in args["trigger"]:
+				if isinstance(args["trigger"][key], str):
+					displaymessage[key] = displaymessage[key].replace("\n", "\\n").replace("\t", "\\t").replace("\r", "\\r")
+					if len(args["trigger"][key]) > 64:
+						displaymessage[key] = displaymessage[key][:61] + "{bold}{darkgray}...{endc}"
+
+			printer.color_print("{magenta}{authcolor}Elevating {endc}{magenta}permissions:{endc}\n{data}",
+				data=json.dumps(displaymessage, sort_keys=True),
+				authcolor=ansi_colors.BOLD if not authstate else "")
+			return parse_data(kwargs["queue"], ws, kwargs["sockets"], kwargs["sessions"], args["trigger"], printer, True)
+		else:
+			printer.color_print("Incorrect password.")
+			serve_connection({
+				"action": "notification",
+				"title": "Wrong password",
+				"text": "Failed to authenticate with the given password."
+			}, ws)
+
 
 
 # Relative wrappers for queue actions
@@ -178,7 +223,8 @@ commands = [
 	SocketCommand("relative_move", relative_move, {"uuid": str, "target_index": int}),
 	SocketCommand("increment", increment, {"uuid": str}),
 	SocketCommand("decrement", decrement, {"uuid": str}),
-	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type})
+	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type}),
+	SocketCommand("elevate", elevate, {"trigger": [dict], "pass": [str]})
 ]
 
 def buildCommands(reg):
@@ -233,12 +279,12 @@ def buildCommands(reg):
 			continue
 		authactions.append(required[0])
 
-def parse_data(queue, ws, socks, sessions, jdata, printer):
+def parse_data(queue, ws, socks, sessions, jdata, printer, authstate=None):
 	"""
 	Run the socket commands using the data given.
 	"""
 	global commands
-	return run_socket_command(commands, ws, socks, sessions, jdata, queue, printer)
+	return run_socket_command(commands, ws, socks, sessions, jdata, queue, printer, authstate)
 
 def generate_data(queue):
 	"""
