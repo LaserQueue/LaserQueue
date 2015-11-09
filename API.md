@@ -220,8 +220,8 @@ Trigger an easter egg. Dependent upon `config.easter_eggs`.
 ```js
 {
 	"action": "egg",
-	"trigger": <matched easter egg code as Str>
-	"override": [OPTIONAL] <override the broadcast parameter>
+	"trigger": <matched easter egg code as Str>,
+	"override": [OPTIONAL] <whether to override the broadcast parameter as Bool>
 }
 ```
 
