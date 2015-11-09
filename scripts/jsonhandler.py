@@ -70,12 +70,19 @@ class SocketCommand:
 		# Check that each argument is correct
 		for i in self.args:
 			if i not in args:
-				return format("Expected '{nameofarg}' argument, but didn't find it.", nameofarg=i)
+				if isinstance(self.args[i], list):
+					args[i] = None
+				else:
+					return format("Expected '{nameofarg}' argument, but didn't find it.", nameofarg=i)
 			if not _comparetypes(args[i], self.args[i]):
-				return format("Expected '{nameofarg}' argument to be an instance of '{typeexpected}', but found an instance of '{typeofarg}'.",
-					nameofarg = i,
-					typeexpected = self.args[i].__name__,
-					typeofarg = type(args[i]).__name__)
+				if isinstance(self.args[i], list):
+					args[i] = None
+				else:
+					return format("Expected '{nameofarg}' argument to be an instance of '{typeexpected}', but found an instance of '{typeofarg}'.",
+						nameofarg = i,
+						typeexpected = self.args[i].__name__,
+						typeofarg = type(args[i]).__name__)
+
 		# Run the command if all is in order
 		return self.method(**kwargs)
 
