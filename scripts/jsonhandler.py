@@ -1,5 +1,6 @@
 from parseargv import args as argvs
 from util import *
+from laserqueue import trigger_egg
 config = Config(CONFIGDIR)
 
 def _comparetypes(obj, expected):
@@ -143,6 +144,13 @@ def auth(**kwargs):
 			if argvs.loud: # If the verbose flag is used, print report
 				printer.color_print("Auth failed.")
 
+def egg(**kwargs):
+	"""
+	Attempt to trigger an easter egg.
+	"""
+	args, socks, ws, authstate, printer = kwargs["args"], kwargs["sockets"], kwargs["ws"], kwargs["authstate"], kwargs["printer"]
+	trigger_egg(args["trigger"], socks, ws, authstate, printer)
+
 
 # Relative wrappers for queue actions
 append = lambda **kwargs: kwargs["queue"].append(**kwargs)
@@ -159,6 +167,7 @@ commands = [
 	SocketCommand("refresh", refresh, {}),
 	SocketCommand("start_tour", start_tour, {}),
 	SocketCommand("auth", auth, {"pass": str}),
+	SocketCommand("egg", egg, {"trigger": str, "override": [bool]}),
 	SocketCommand("add", append, {"name": str, "priority": int, "time": any_number, "material": str}),
 	SocketCommand("pass", passoff, {"uuid": str}),
 	SocketCommand("remove", remove, {"uuid": str}),

@@ -171,6 +171,28 @@ class QueueObject(dict):
 		self["priority"] = priority
 		if authstate: self["coachmodified"] = True
 
+def trigger_egg(inp, socks, ws, authstate, printer, override=None):
+	global easter_eggs
+	strippedname = re.sub(r"[^\w ]", "", inp.lower().strip())
+	for egg in easter_eggs:
+		matches = False
+		for match in egg["match"]:
+			if match == strippedname:
+				matches = True
+				break
+		if matches:
+			broadcast = egg["broadcast"]
+			if isinstance(override, bool):
+				broadcast = override
+			if authstate and broadcast:
+				serve_connections(egg["serve"], socks)
+			else:
+				serve_connection(egg["serve"], ws)
+			if argvs.loud:
+				printer.color_print(egg["loud"])
+			return True
+	return False
+
 class Queue:
 	"""
 	A queue class that stores a 2 dimensional array of jobs.
@@ -306,21 +328,8 @@ class Queue:
 		if not isinstance(extra_objects, dict): extra_objects = {}
 
 		if config["easterEggs"]:
-			strippedname = re.sub(r"[^\w ]", "", name.lower().strip())
-			for egg in easter_eggs:
-				matches = False
-				for match in egg["match"]:
-					if match == strippedname:
-						matches = True
-						break
-				if matches:
-					if authstate and egg["broadcast"]:
-						serve_connections(egg["serve"], socks)
-					else:
-						serve_connection(egg["serve"], ws)
-					if argvs.loud:
-						printer.color_print(egg["loud"])
-					return
+			if trigger_egg(name, socks, ws, authstate, printer):
+				return
 
 		# If the priority or the material aren't set up, or the name isn't defined
 		if not name or material == "N/A" or priority == -1 or esttime <= 0:
