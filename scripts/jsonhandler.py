@@ -150,7 +150,7 @@ def egg(**kwargs):
 	"""
 	args, socks, ws, authstate, printer = kwargs["args"], kwargs["sockets"], kwargs["ws"], kwargs["authstate"], kwargs["printer"]
 	if config["easterEggs"]:
-		trigger_egg(args["trigger"], socks, ws, authstate, printer)
+		trigger_egg(args["trigger"], socks, ws, authstate, printer, args["override"])
 	else:
 		printer.color_print("This code has a humor level of -1.")
 
