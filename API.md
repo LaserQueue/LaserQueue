@@ -212,6 +212,19 @@ Leave admin mode. Dependent upon `config.admin_mode_enabled`.
 }
 ```
 
+### egg
+Trigger an easter egg. Dependent upon `config.easter_eggs`.
+
+#### Sample
+
+```js
+{
+	"action": "egg",
+	"trigger": <matched easter egg code as Str>
+	"override": [OPTIONAL] <override the broadcast parameter>
+}
+```
+
 
 ### refresh *
 Refresh all users. Useful for pushing changes.  
@@ -320,27 +333,11 @@ Dependent upon `config.allow_force_refresh`. The frontend should refresh itself 
 }
 ```
 
-### Rickroll everyone.
-The title says it all. Dependent upon `config.easter_eggs`.
+### Easter eggs
+Trigger an easter egg. Dependent upon `config.easter_eggs`.
 ```js
 {
-	"action":"rickroll"
-}
-```
-
-### And his name is
-John Cena! Dependent upon `config.easter_eggs`.
-```js
-{
-	"action":"dodoododoooooo"
-}
-```
-
-### Truly an inspiration
-Why did I do this  
-Dependent upon `config.easter_eggs`.
-```js
-{
-	"action":"truly_an_inspiration"
+	"action":"egg",
+	"trigger": <the egg to trigger as Str>
 }
 ```

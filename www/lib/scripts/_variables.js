@@ -43,20 +43,10 @@ var config, jsonData, socket, buttons,
 		"deauthed": [function userFailedAuth(data) {
 			if(config.adminModeEnabled && authed) onDeauth();
 		}],
-		"rickroll": [function rickRollUser(data) {
+		"egg": [function triggerEgg(data) {
 			oldJsonData = {};
 			NProgress.done();
-			if(config.easterEggs) rickRoll();
-		}],
-		"dodoododoooooo": [function dodoododoooooo(data) {
-			oldJsonData = {};
-			NProgress.done();
-			if(config.easterEggs) johnCena();
-		}],
-		"truly_an_inspiration": [function quiteSo(data) {
-			oldJsonData = {};
-			NProgress.done();
-			if(config.easterEggs) justDoIt();
+			if(config.easterEggs) easterEggs[data.trigger]();
 		}],
 		"refresh": [function refreshPage(data) {
 			if(config.allowForceRefresh) window.location.reload();
@@ -71,6 +61,11 @@ var config, jsonData, socket, buttons,
 		"dump_data": [function receiveData(data) {
 			extraData[data.name] = JSON.parse(data.data);
 		}]
+	},
+	easterEggs = {
+		"rick": rickRoll,
+		"cena": johnCena,
+		"shia": justDoIt
 	},
 	renderDirectives = {
 		priority: {

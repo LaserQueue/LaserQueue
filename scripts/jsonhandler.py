@@ -149,7 +149,10 @@ def egg(**kwargs):
 	Attempt to trigger an easter egg.
 	"""
 	args, socks, ws, authstate, printer = kwargs["args"], kwargs["sockets"], kwargs["ws"], kwargs["authstate"], kwargs["printer"]
-	trigger_egg(args["trigger"], socks, ws, authstate, printer)
+	if config["easterEggs"]:
+		trigger_egg(args["trigger"], socks, ws, authstate, printer)
+	else:
+		printer.color_print("This code has a humor level of -1.")
 
 
 # Relative wrappers for queue actions

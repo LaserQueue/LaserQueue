@@ -45,19 +45,19 @@ hide_from_client = [
 easter_eggs = [
 	{
 		"match": ["and his name is", "his name is"],
-		"serve": {"action":"dodoododoooooo"},
+		"serve": {"action":"egg","trigger":"cena"},
 		"loud": rainbonify("And his name is John Cena!"),
 		"broadcast": True
 	},
 	{
 		"match": ["uuddlrlrba", "never gonna give you up"],
-		"serve": {"action":"rickroll"},
+		"serve": {"action":"egg","trigger":"rick"},
 		"loud": rainbonify("Never gonna give you up,\nnever gonna let you down.\nNever gonna run around and desert you."),
 		"broadcast": True
 	},
 	{
 		"match": ["just do it"],
-		"serve": {"action":"truly_an_inspiration"},
+		"serve": {"action":"egg","trigger":"shia"},
 		"loud": rainbonify("Just... do it!"),
 		"broadcast": True
 	}
