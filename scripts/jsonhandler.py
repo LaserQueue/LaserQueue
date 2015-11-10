@@ -2,6 +2,7 @@ from parseargv import args as argvs
 from util import *
 from laserqueue import trigger_egg
 from sidhandler import checkpassword
+from datetime import datetime
 config = Config(CONFIGDIR)
 
 def _comparetypes(obj, expected):
@@ -198,6 +199,17 @@ def elevate(**kwargs):
 				"text": "Failed to authenticate with the given password."
 			}, ws)
 
+def ping(**kwargs):
+	"""
+	Return the timestamp the message was received at.
+	"""
+	received_time = str(datetime.now())
+	serve_connection({
+		"action": "ping_return",
+		"got_ping_at": received_time
+	}, kwargs["ws"])
+	kwargs["printer"].color_print("Ping received at {datetime}", datetime=received_time)
+
 
 
 # Relative wrappers for queue actions
@@ -224,7 +236,8 @@ commands = [
 	SocketCommand("increment", increment, {"uuid": str}),
 	SocketCommand("decrement", decrement, {"uuid": str}),
 	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type}),
-	SocketCommand("elevate", elevate, {"trigger": [dict], "pass": [str]})
+	SocketCommand("elevate", elevate, {"trigger": [dict], "pass": [str]}),
+	SocketCommand("ping", ping, {})
 ]
 
 def buildCommands(reg):
