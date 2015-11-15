@@ -53,3 +53,6 @@ $(document).ready(function loadKonami() {
 	};
 	easterEgg.load();
 });
+
+// if ?dev is in the URL, show devlog
+if(window.location.search.includes('dev')) $('#log-checkbox').prop('checked', 'true');
