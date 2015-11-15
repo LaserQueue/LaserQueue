@@ -33,6 +33,13 @@ label[for=log-checkbox] {
 	color: #ff7cfd;
 }
 
+.close-log {
+	position: fixed;
+	right: 5px;
+	bottom: 0;
+	z-index: 99;
+}
+
 .command-line {
 	$bg: rgb(29, 30, 26);
 	position: fixed;
