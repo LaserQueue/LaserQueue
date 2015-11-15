@@ -17,10 +17,30 @@ label[for=log-checkbox] {
 	&:active { transform: scale(0.9); }
 }
 
-.log {
-	margin-bottom: 20px;
+.log-pre {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 250px;
+	// the !importants are to override strict rules
+	margin-bottom: 0px !important;
+	margin-top: 0px !important;
+	border-radius: 0 !important;
 }
 
 .log-time {
 	color: #ff7cfd;
+}
+
+.command-line {
+	$bg: rgb(29, 30, 26);
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	background: lighten($bg, 10%);
+	border: none;
+	border-top: 1px solid lighten($bg, 20%);
 }
