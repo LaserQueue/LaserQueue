@@ -52,8 +52,9 @@ label[for=log-checkbox] {
 	right: 0;
 	height: $initial-log-height;
 	// the !importants are to override strict rules
-	margin-bottom: 0px !important;
-	margin-top: 0px !important;
+	margin-bottom: 0 !important;
+	margin-top: 0 !important;
+	padding-top: 0 !important;
 	border-radius: 0 !important;
 	background: $log-bg !important;
 }
