@@ -42,5 +42,9 @@ label[for=log-checkbox] {
 	width: 100%;
 	background: lighten($bg, 10%);
 	border: none;
-	border-top: 1px solid lighten($bg, 20%);
+	border-top: 3px solid lighten($bg, 20%);
+	&:focus {
+		border-color: $nuvu-pink;
+		outline: none;
+	}
 }
