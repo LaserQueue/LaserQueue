@@ -1,4 +1,5 @@
 $initial-log-height: 250px;
+$log-bg: rgb(50, 50, 50);
 
 @mixin bottom-fixed {
 	position: fixed;
@@ -29,13 +30,20 @@ label[for=log-checkbox] {
 }
 
 .log-resize {
+	cursor: ns-resize;
 	position: fixed;
 	left: 0;
 	bottom: $initial-log-height;
 	z-index: 99;
 	width: 100%;
-	height: 20px;
-	background: #000;
+	height: 10px;
+	background: $log-bg;
+	&:hover {
+		background: lighten($log-bg, 10%);
+	}
+	&:active {
+		background: darken($log-bg, 5%);
+	}
 }
 
 .log-pre {
@@ -47,10 +55,11 @@ label[for=log-checkbox] {
 	margin-bottom: 0px !important;
 	margin-top: 0px !important;
 	border-radius: 0 !important;
+	background: $log-bg !important;
 }
 
 .log-time {
-	color: #ff7cfd;
+	color: $nuvu-pink;
 }
 
 .close-log {
@@ -61,13 +70,13 @@ label[for=log-checkbox] {
 
 .command-line {
 	@include bottom-fixed;
-	$bg: rgb(29, 30, 26);
 	left: 0;
 	right: 0;
 	width: 100%;
-	background: lighten($bg, 10%);
+	height: 35px;
+	background: lighten($log-bg, 5%);
 	border: none;
-	border-top: 3px solid lighten($bg, 20%);
+	border-top: 3px solid lighten($log-bg, 15%);
 	&:focus {
 		border-color: $nuvu-pink;
 		outline: none;

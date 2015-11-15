@@ -3,6 +3,7 @@
 
 @import "shepherd";
 @import "nprogress";
+@import "prism";
 @import "a";
 @import "header";
 @import "table";
@@ -33,5 +34,3 @@
 .hide-tooltips .tooltip {
 	display: none;
 }
-
-@import "prism";
