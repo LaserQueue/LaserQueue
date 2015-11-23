@@ -1,10 +1,10 @@
 function Command(match, execute) {
-	if (!isCommandDefinition(match)) throw "Invalid command. ({match})".format(match)
+	if (!isCommandDefinition(match)) throw "Invalid command. ({match})".format(match);
 	this.match = match;
-	var cmdname = match.match(/^[\$#]\s*\w+\b/)[0];
-	this.name = cmdname.match(/\w+/)[0];
-	this.level = ;
-
+	var definition = parseCommandDefinition(match);
+	this.name = definition.name;
+	this.level = definition.level;
+	this.args = definition.args;
 	this.docstr = "Usage: "+match;
 	this.execute = execute;
 }
@@ -28,11 +28,11 @@ function isCommandDefinition(string) {
 	if (name === -1) return false;
 
 	string = string.replace(/^[\$#]\s*\w+\b/, "");
-	var keys = string.trim().split(/\s+/);
+	var keys = string.trim().split(/\s/);
 	var optflag = false;
 	var captureflag = false;
 	for (index in keys) {
-		key = keys[index];
+		var key = keys[index];
 		if (key.search(/^\[\*?\w+\]$/) !== -1) {
 			optflag = true;
 			if (captureflag) return false;
@@ -62,7 +62,7 @@ function parseCommandDefinition(string) {
 	var keys = string.trim().split(/\s+/);
 
 	for (index in keys) {
-		key = keys[index];
+		var key = keys[index];
 		if (key.search(/^\[\w+\]$/) !== -1) {
 			ret.args.push({
 				name: key.match(/\w+/)[0],
@@ -88,6 +88,62 @@ function parseCommandDefinition(string) {
 				name: key.match(/\w+/)[0],
 				type: 'lit'
 			});
+		}
+	}
+	return ret;
+}
+
+function extractCommand(string) {
+	var inString = false;
+	var currentString = "";
+	var stringArgs = [];
+	var keys = string.split(/\s+/);
+	for (index in keys) {
+		var key = keys[index];
+		if (!inString && key.search(/^(\\\\)*\"[^((\\\\)*\")]/) !== -1) {
+			inString = true;
+			currentString += key.replace(/^\\?\"/, "") + " ";
+		} else if (inString) {
+			if (key.search(/[^((\\\\)*\")](\\\\)*\"/) !== -1) {
+				inString = false;
+				stringArgs.push((currentString + key.replace(/\\?\"$/, "")).replace(/\\\"/, '"'));
+				currentString = "";
+			} else {
+				currentString += key + " ";
+			}
+		} else {
+			stringArgs.push(key.replace(/\\\"/, '"'));
+		}
+	}
+	if (inString) return "error.inString";
+	return stringArgs;
+}
+
+function matchArguments(command, args) {
+	var ret = {};
+	for (argindex in command.args) {
+		var arg = command.args[argindex];
+		var inparg = args[argindex];
+		if (!argindex) {
+			if (command.name != inparg) {
+				return "error.incorrectName";
+			}
+		} else if (arg.type === 'lit') {
+			if (inparg != arg.name) {
+				return "error.missingLiteral";
+			}
+		} else if (arg.type === 'req' || arg.type === 'opt') {
+			ret[arg.name] = inparg;
+		} else if (arg.type === 'optlit') {
+			if (inparg != arg.name && inparg != null) {
+				ret[arg.name] = null;
+			} else {
+				return "error.badLiteral";
+			}
+		} else if (arg.type == 'splat') {
+			ret[arg.name] = args.slice(argindex).join(" ");
+		} else {
+			return "error.badAction";
 		}
 	}
 	return ret;
