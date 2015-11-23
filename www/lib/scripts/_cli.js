@@ -25,7 +25,7 @@ function Command(match, execute) {
 function isCommandDefinition(string) {
 	string = string.trim();
 	var name = string.search(/^[\$#]\s*\w+\b/);
-	if (name === -1) return false;
+	if (name === -1) return "error.badName";
 
 	string = string.replace(/^[\$#]\s*\w+\b/, "");
 	var keys = string.trim().split(/\s/);
@@ -35,21 +35,21 @@ function isCommandDefinition(string) {
 		var key = keys[index];
 		if (key.search(/^\[\*?\w+\]$/) !== -1) {
 			optflag = true;
-			if (captureflag) return false;
+			if (captureflag) return "error.argAfterSplat";
 		} else if (key.search(/^\.\.\.$/) !== -1) {
 			captureflag = true;
-			if (captureflag) return false;
+			if (captureflag) return "error.argAfterSplat";
 		} else if (key.search(/^(\w+|<\w+>)$/) !== -1) {
-			if (captureflag || optflag) return false;
+			if (captureflag || optflag) return "error.posAfterOpt";
 		} else if (key) {
-			return false;
+			return "error.badKey";
 		}
 	}
-	return true;
+	return "";
 }
 
 function parseCommandDefinition(string) {
-	if (!isCommandDefinition(string)) return null;
+	if (isNotCommandDefinition(string)) return isCommandDefinition(string);
 
 	var ret = {level: 0, name: '', args: []};
 
@@ -97,7 +97,7 @@ function extractCommand(string) {
 	var inString = false;
 	var currentString = "";
 	var stringArgs = [];
-	var keys = string.split(/\s+/);
+	var keys = string.trim().split(/\s+/);
 	for (index in keys) {
 		var key = keys[index];
 		if (!inString && key.search(/^(\\\\)*\"[^((\\\\)*\")]/) !== -1) {
@@ -141,7 +141,7 @@ function matchArguments(command, args) {
 				return "error.badLiteral";
 			}
 		} else if (arg.type == 'splat') {
-			ret[arg.name] = args.slice(argindex).join(" ");
+			ret[arg.name] = args.slice(argindex+1).join(" ");
 		} else {
 			return "error.badAction";
 		}
