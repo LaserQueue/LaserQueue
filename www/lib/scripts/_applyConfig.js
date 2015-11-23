@@ -156,4 +156,6 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 
 	$(queueEvents).trigger('config.parsed');
 
+	commands = new CommandExecutor(commands);
+	commands.push(new Command('$ test ...', function test(args) {console.log(args.remaining);}));
 });

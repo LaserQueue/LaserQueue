@@ -33,9 +33,30 @@ Command.prototype.matches = function matches(inp) {
 };
 
 Command.prototype.run = function run(inp) {
-	if (this.level > 0 && !authed) return false;
+	if (this.command.level > 0 && !authed) return false;
 	if (this.matches(inp)) {
 		return this.execute(this.parse(inp));
+	}
+	return false;
+};
+
+function CommandExecutor(commands) {
+	if (typeof commands == 'undefined') this.commands = [];
+	else this.commands = commands;
+}
+
+CommandExecutor.prototype.push = function push(cmd) {
+	this.commands.push(cmd);
+};
+
+CommandExecutor.prototype.run = function run(inp) {
+	var shallowCommands = this.commands.slice();
+	shallowCommands.reverse();
+	for (var commandindex in shallowCommands) {
+		var command = shallowCommands[commandindex];
+		if (command.run(inp)) {
+			return true;
+		}
 	}
 	return false;
 };

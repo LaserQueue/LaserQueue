@@ -9,6 +9,7 @@ var config, jsonData, socket, buttons,
 	displayEl = {},
 	formOptions = {},
 	oldFormOptions = {"renderFormCalled": false},
+	commands = [],
 	acceptedAPIs = {
 		"display": [function displayData(data) {
 			// reinitialize full list of cuts
