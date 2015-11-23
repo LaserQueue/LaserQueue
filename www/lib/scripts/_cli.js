@@ -33,6 +33,7 @@ Command.prototype.matches = function matches(inp) {
 };
 
 Command.prototype.run = function run(inp) {
+	if (this.level > 0 && !authed) return false;
 	if (this.matches(inp)) {
 		return this.execute(this.parse(inp));
 	}
