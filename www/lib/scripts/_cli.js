@@ -19,24 +19,27 @@ Command.prototype.setDocstr = function setDocstr(string) {
 
 Command.prototype.parse = function parse(inp) {
 	var inpParsed = extractCommand(inp);
-	if (typeof inpParsed === 'string') inpParsed = [];
-	var args = matchArguments(this.command, inpParsed);
-	if (typeof args === 'string') args = {};
+	if (typeof inpParsed === 'string') return inpParsed;
+	var args = matchArguments(this.command, inpParsed, true);
 	return args;
 };
 
-Command.prototype.matches = function matches(inp) {
-	var inpParsed = extractCommand(inp);
-	if (typeof inpParsed === 'string') inpParsed = [];
-	var args = matchArguments(this.command, inpParsed);
-	return typeof args !== 'string';
+var localize = {
+	"error.badName": "Invalid function definition.",
+	"error.argAfterSplat": "Argument found after ... was used.",
+	"error.posAfterOpt": "Found a positional argument after an optional one was used.",
+	"error.inString": "Unbalanced strings.",
+	"error.missingLiteral": "Missing a literal in the command call.",
+	"error.badLiteral": "Invalid argument for optional literal.",
+	"error.badAction": "Bad command definition.",
+	"error.extraneousArguments": "Too many arguments."
 };
 
 Command.prototype.run = function run(inp) {
-	if (this.command.level > 0 && !authed) return false;
-	if (this.matches(inp)) {
-		return this.execute(this.parse(inp));
-	}
+	var parsed = this.parse(inp);
+	if (typeof parsed === 'string') logText("[ERROR] "+localize[parsed]);
+	else if (parsed === null) return false;
+	else if (typeof parsed === 'object') return this.execute(parsed);
 	return false;
 };
 
@@ -171,10 +174,11 @@ function extractCommand(string) {
 	return stringArgs;
 }
 
-function matchArguments(command, args) {
+function matchArguments(command, args, safe) {
 	var ret = {};
 	if (command.name !== args[0]) {
-		return "error.incorrectName";
+		if (!safe) return "error.incorrectName";
+		else return null;
 	}
 	var splatted = false;
 	var argindex;
@@ -183,7 +187,8 @@ function matchArguments(command, args) {
 		var inparg = args[+argindex+1];
 		if (arg.type === 'lit') {
 			if (inparg !== arg.name) {
-				return "error.missingLiteral";
+				if (!safe) return "error.missingLiteral";
+				else return null;
 			}
 		} else if (arg.type === 'req' || arg.type === 'opt') {
 			ret[arg.name] = inparg;
@@ -191,15 +196,20 @@ function matchArguments(command, args) {
 			if (inparg !== arg.name && inparg !== null) {
 				ret[arg.name] = null;
 			} else {
-				return "error.badLiteral";
+				if (!safe) return "error.badLiteral";
+				else return null;
 			}
 		} else if (arg.type === 'splat') {
 			splatted = true;
 			ret[arg.name] = args.slice(+argindex+1).join(" ");
 		} else {
-			return "error.badAction";
+			if (!safe) return "error.badAction";
+			else return null;
 		}
 	}
-	if (argindex < args.length-2 && !splatted) return "error.extraneousArguments";
+	if (argindex < args.length-2 && !splatted) {
+		if (!safe) return "error.extraneousArguments";
+		else return null;
+	}
 	return ret;
 }
