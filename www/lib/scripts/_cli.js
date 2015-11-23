@@ -1,5 +1,5 @@
 function Command(match, execute) {
-	if (!isCommandDefinition(match)) throw "Invalid command. ({match})".format(match);
+	if (isNotCommandDefinition(match)) throw "Invalid command. ({match})".format({match: match});
 	this.match = match;
 	var definition = parseCommandDefinition(match);
 	if (typeof definition === 'string') definition = {};
@@ -52,7 +52,7 @@ Command.prototype.run = function run(inp) {
 // commands not prepended with # must be prepended with $
 // names must only be comprised of characters that match /\w/
  
-function isCommandDefinition(string) {
+function isNotCommandDefinition(string) {
 	string = string.trim();
 	var name = string.search(/^[\$#]\s*\w+\b/);
 	if (name === -1) return "error.badName";
@@ -67,8 +67,8 @@ function isCommandDefinition(string) {
 			optflag = true;
 			if (captureflag) return "error.argAfterSplat";
 		} else if (key.search(/^\.\.\.$/) !== -1) {
-			captureflag = true;
 			if (captureflag) return "error.argAfterSplat";
+			captureflag = true;
 		} else if (key.search(/^(\w+|<\w+>)$/) !== -1) {
 			if (captureflag || optflag) return "error.posAfterOpt";
 		} else if (key) {
@@ -79,7 +79,7 @@ function isCommandDefinition(string) {
 }
 
 function parseCommandDefinition(string) {
-	if (isNotCommandDefinition(string)) return isCommandDefinition(string);
+	if (isNotCommandDefinition(string)) return isNotCommandDefinition(string);
 
 	var ret = {level: 0, name: '', args: []};
 
@@ -151,14 +151,15 @@ function extractCommand(string) {
 
 function matchArguments(command, args) {
 	var ret = {};
-	for (var argindex in command.args) {
+	if (command.name !== args[0]) {
+		return "error.incorrectName";
+	}
+	var splatted = false;
+	var argindex;
+	for (argindex in command.args) {
 		var arg = command.args[argindex];
-		var inparg = args[argindex];
-		if (!argindex) {
-			if (command.name !== inparg) {
-				return "error.incorrectName";
-			}
-		} else if (arg.type === 'lit') {
+		var inparg = args[+argindex+1];
+		if (arg.type === 'lit') {
 			if (inparg !== arg.name) {
 				return "error.missingLiteral";
 			}
@@ -171,10 +172,12 @@ function matchArguments(command, args) {
 				return "error.badLiteral";
 			}
 		} else if (arg.type === 'splat') {
-			ret[arg.name] = args.slice(argindex+1).join(" ");
+			splatted = true;
+			ret[arg.name] = args.slice(+argindex+1).join(" ");
 		} else {
 			return "error.badAction";
 		}
 	}
+	if (argindex < args.length-2 && !splatted) return "error.extraneousArguments";
 	return ret;
 }
