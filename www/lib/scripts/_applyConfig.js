@@ -162,7 +162,7 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	$('.command-line').keydown(function onKeyPress(event) {
 		if (event.which == 13) {
 			event.preventDefault();
-			if (!commands.run($('.command-line').val())) logText("[ERROR] Invalid command.")
+			if (!commands.run($('.command-line').val())) logText("[ERROR] Invalid command.");
 			$('.command-line').val("");
 		}
 	});
