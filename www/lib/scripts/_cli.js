@@ -216,3 +216,14 @@ function matchArguments(command, args, safe) {
 	}
 	return ret;
 }
+
+$('.command-line').keydown(function onKeyPress(event) {
+	if (event.which == 13) {
+		event.preventDefault();
+		var text = $('.command-line').val();
+		if (text) {
+			if (!commands.run(text)) logText("[ERROR] Invalid command.");
+			$('.command-line').val("");
+		}
+	}
+});
