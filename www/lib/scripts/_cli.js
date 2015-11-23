@@ -39,7 +39,10 @@ Command.prototype.run = function run(inp) {
 	var parsed = this.parse(inp);
 	if (typeof parsed === 'string') logText("[ERROR] "+localize[parsed]);
 	else if (parsed === null) return false;
-	else if (typeof parsed === 'object') return this.execute(parsed);
+	else if (typeof parsed === 'object') {
+		this.execute(parsed);
+		return true;
+	}
 	return false;
 };
 

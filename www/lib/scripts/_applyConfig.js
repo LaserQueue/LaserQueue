@@ -157,5 +157,14 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 	$(queueEvents).trigger('config.parsed');
 
 	commands = new CommandExecutor(commands);
-	commands.push(new Command('$ test ...', function test(args) {console.log(args.remaining);}));
+	commands.push(new Command('$ test ...', function test(args) {logText(args.remaining);}));
+
+	$('.command-line').keydown(function onKeyPress(event) {
+		if (event.which == 13) {
+			event.preventDefault();
+			if (!commands.run($('.command-line').val())) logText("[ERROR] Invalid command.")
+			$('.command-line').val("");
+		}
+	});
+
 });
