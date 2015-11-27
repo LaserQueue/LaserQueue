@@ -34,10 +34,14 @@ var localize = {
 	"error.badAction": "Bad command definition.",
 	"error.extraneousArguments": "Too many arguments."
 };
+function translate(inp) {
+	if (localize.hasOwnProperty(inp)) return localize[inp];
+	else return inp;
+}
 
 Command.prototype.run = function run(inp) {
 	var parsed = this.parse(inp);
-	if (typeof parsed === 'string') logText("[ERROR] "+localize[parsed]);
+	if (typeof parsed === 'string') logText("[ERROR] "+translate(parsed));
 	else if (parsed === null) return false;
 	else if (typeof parsed === 'object') {
 		var output = this.execute(parsed);
