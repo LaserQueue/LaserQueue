@@ -13,7 +13,7 @@ var uglify       = require('gulp-uglify');
 var UglifyJS     = require('uglify-js');
 var rename       = require('gulp-rename');
 var concat       = require('gulp-concat');
-var fileinclude  = require('gulp-file-include');
+var include      = require('gulp-include');
 var livereload   = require('gulp-livereload');
 var watch        = require('gulp-watch');
 var sourcemaps   = require('gulp-sourcemaps');
@@ -42,10 +42,10 @@ gulp.task('js-dev', function() {
 		.pipe(jscs())
 		.pipe(jscsStylish.combineWithHintResults())
 		.pipe(jshint.reporter('jshint-stylish'));
-	gulp.src(['./www/lib/scripts/libraries.js', './www/lib/scripts/_*.js'])
+	gulp.src('./www/lib/scripts/scripts.js')
 		.pipe(sourcemaps.init())
-		.pipe(fileinclude())
-			.on('error', noop)
+		.pipe(include())
+			.on('error', console.log)
 			.pipe(concat('scripts.min.js'))
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/js/'))
@@ -55,10 +55,10 @@ gulp.task('js-dev', function() {
 
 // compile js for production
 gulp.task('js-prod', function() {
-	gulp.src(['./www/lib/scripts/libraries.js', './www/lib/scripts/_*.js'])
+	gulp.src('./www/lib/scripts/scripts.js')
 		.pipe(sourcemaps.init())
-		.pipe(fileinclude())
-			.on('error', noop)
+		.pipe(include())
+			.on('error', console.log)
 			.pipe(concat('scripts.min.js'))
 			.pipe(uglify())
 		.pipe(sourcemaps.write('.'))
