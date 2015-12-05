@@ -7,15 +7,23 @@
       },
       {
         "type": "script",
+        "src": "./dist/js/tether.js"
+      },
+      {
+        "type": "script",
         "src": "./dist/js/shepherd.js"
       },
       {
         "type": "script",
         "src": "./dist/eager/installHelper.js"
-      },
+      }
+    ]
+  },
+  "preview": {
+    "handlers": [
       {
-        "type": "script",
-        "contents": "ShepherdInstallHelper.init(INSTALL_OPTIONS)"
+        "options": ["*"],
+        "execute": "ShepherdInstallHelper.setOptions(INSTALL_OPTIONS)"
       }
     ]
   },

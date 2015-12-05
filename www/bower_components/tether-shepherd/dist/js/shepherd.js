@@ -1,4 +1,4 @@
-/*! tether-shepherd 1.2.0 */
+/*! tether-shepherd 1.2.2 */
 
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -16,7 +16,7 @@
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x5, _x6, _x7) { var _again = true; _function: while (_again) { var object = _x5, property = _x6, receiver = _x7; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x5 = parent; _x6 = property; _x7 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x5, _x6, _x7) { var _again = true; _function: while (_again) { var object = _x5, property = _x6, receiver = _x7; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x5 = parent; _x6 = property; _x7 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -106,7 +106,7 @@ var Step = (function (_Evented) {
     value: function bindMethods() {
       var _this = this;
 
-      var methods = ['_show', 'show', 'hide', 'isOpen', 'cancel', 'complete', 'scrollTo', 'destroy'];
+      var methods = ['_show', 'show', 'hide', 'isOpen', 'cancel', 'complete', 'scrollTo', 'destroy', 'render'];
       methods.map(function (method) {
         _this[method] = _this[method].bind(_this);
       });
@@ -285,7 +285,7 @@ var Step = (function (_Evented) {
   }, {
     key: 'isOpen',
     value: function isOpen() {
-      return hasClass(this.el, 'shepherd-open');
+      return this.el && hasClass(this.el, 'shepherd-open');
     }
   }, {
     key: 'cancel',
@@ -315,8 +315,8 @@ var Step = (function (_Evented) {
   }, {
     key: 'destroy',
     value: function destroy() {
-      if (typeof this.el !== 'undefined') {
-        document.body.removeChild(this.el);
+      if (typeof this.el !== 'undefined' && this.el.parentNode) {
+        this.el.parentNode.removeChild(this.el);
         delete this.el;
       }
 
@@ -521,6 +521,27 @@ var Tour = (function (_Evented2) {
       return this;
     }
   }, {
+    key: 'removeStep',
+    value: function removeStep(name) {
+      var current = this.getCurrentStep();
+
+      for (var i = 0; i < this.steps.length; ++i) {
+        var step = this.steps[i];
+        if (step.id === name) {
+          step.hide();
+          step.destroy();
+          this.steps.splice(i, 1);
+          break;
+        }
+      }
+
+      if (current && current.id === name) {
+        this.currentStep = undefined;
+
+        if (this.steps.length) this.show(0);else this.hide();
+      }
+    }
+  }, {
     key: 'getById',
     value: function getById(id) {
       for (var i = 0; i < this.steps.length; ++i) {
@@ -557,7 +578,7 @@ var Tour = (function (_Evented2) {
   }, {
     key: 'cancel',
     value: function cancel() {
-      if (typeof this.currentStep !== 'undefined') {
+      if (this.currentStep) {
         this.currentStep.hide();
       }
       this.trigger('cancel');
@@ -566,7 +587,7 @@ var Tour = (function (_Evented2) {
   }, {
     key: 'complete',
     value: function complete() {
-      if (typeof this.currentStep !== 'undefined') {
+      if (this.currentStep) {
         this.currentStep.hide();
       }
       this.trigger('complete');
@@ -575,7 +596,7 @@ var Tour = (function (_Evented2) {
   }, {
     key: 'hide',
     value: function hide() {
-      if (typeof this.currentStep !== 'undefined') {
+      if (this.currentStep) {
         this.currentStep.hide();
       }
       this.trigger('hide');
@@ -621,6 +642,10 @@ var Tour = (function (_Evented2) {
             step: next,
             previous: this.currentStep
           });
+
+          if (this.currentStep) {
+            this.currentStep.hide();
+          }
 
           this.currentStep = next;
           next.show();

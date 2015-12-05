@@ -49,7 +49,6 @@ gulp.task('js', function() {
     .pipe(gulp.dest(distDir + '/js'));
 });
 
-
 // CSS
 gulp.task('css', function() {
   gulp.src('./src/css/**/*.sass')
@@ -67,6 +66,11 @@ gulp.task('css:docs', function() {
     .pipe(gulp.dest('./docs/welcome/css'));
 });
 
+// Make a copy of tether available to those not using bundling
+gulp.task('copy-tether', function() {
+  gulp.src('./bower_components/tether/tether.js')
+    .pipe(gulp.dest(distDir + '/js'));
+});
 
 // Eager
 gulp.task('eager', function() {
@@ -90,13 +94,14 @@ for (var i = 0; i < VERSIONS.length; ++i){
 
 
 // Watch
-gulp.task('watch', ['js', 'css'], function() {
+gulp.task('watch', ['js', 'css', 'eager'], function() {
   gulp.watch('./src/js/**/*', ['js']);
   gulp.watch('./src/css/**/*', ['css']);
+  gulp.watch('./src/eager/**/*', ['eager']);
 });
 
 
 // Defaults
-gulp.task('build', ['js', 'css', 'eager']);
+gulp.task('build', ['js', 'css', 'eager', 'copy-tether']);
 gulp.task('default', ['build']);
 

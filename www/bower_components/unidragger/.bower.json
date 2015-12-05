@@ -1,7 +1,7 @@
 {
   "name": "unidragger",
   "main": "unidragger.js",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "dependencies": {
     "eventie": "~1.0.6",
     "unipointer": "~1.1.0"
@@ -30,11 +30,11 @@
     "package.json"
   ],
   "homepage": "https://github.com/metafizzy/unidragger",
-  "_release": "1.1.5",
+  "_release": "1.1.6",
   "_resolution": {
     "type": "version",
-    "tag": "v1.1.5",
-    "commit": "ccaa58015eef1acaedc1c3c76140424a4f41d480"
+    "tag": "v1.1.6",
+    "commit": "99e958de3d5fe0a07c739ad3b6298ac5d077aadc"
   },
   "_source": "git://github.com/metafizzy/unidragger.git",
   "_target": "~1.1.0",
