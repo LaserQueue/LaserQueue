@@ -1,6 +1,10 @@
 $initial-log-height: 250px;
 $log-bg: rgb(50, 50, 50);
 
+body.is-resizing-log {
+	user-select: none;
+}
+
 @mixin bottom-fixed {
 	position: fixed;
 	bottom: 0;
