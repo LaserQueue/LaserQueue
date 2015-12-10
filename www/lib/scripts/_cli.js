@@ -2,12 +2,14 @@
 
 var isResizingLog = false,
 	initialLogResizePoint,
+	initialScrollPoint,
 	initialLogBottom;
 
 $('.log-resize').mousedown(function resizeLog(event) {
 	$('body').addClass('is-resizing-log');
 	isResizingLog = true;
 	initialLogResizePoint = event.clientY;
+	initialScrollPoint = window.scrollY;
 	initialLogBottom = Number($('.log-resize').css('bottom').slice(0, -2));
 });
 
@@ -21,6 +23,7 @@ $(document).mousemove(function maybeDrag(event) {
 		var distDragged = initialLogResizePoint - event.clientY;
 		var newLogBottom = initialLogBottom + distDragged;
 		var windowHeight = $(window).height();
+		window.scrollTo(0, initialScrollPoint + distDragged);
 		if (newLogBottom < 100) newLogBottom = 100;
 		if(newLogBottom > windowHeight - 100) newLogBottom = windowHeight - 100;
 		$('.log-resize').css('bottom', newLogBottom);
