@@ -28,7 +28,7 @@ $(document).mousemove(function maybeDrag(event) {
 	}
 });
 
-// commands:
+// commands API:
 function Command(match, execute) {
 	if (isNotCommandDefinition(match)) throw "Invalid command. ({match})".format({match: match});
 	this.match = match;
@@ -277,4 +277,41 @@ $('.command-line').keydown(function onKeyPress(event) {
 			$('.command-line').val("");
 		}
 	}
+});
+
+commands = new CommandExecutor(commands);
+
+// built-in commands:
+$(queueEvents).on('config.parsed', function builtInCommands() {
+
+
+	commands.push(new Command('$ test ...', function test(args) {logText(args.remaining);}));
+	commands.push(new Command('$ add ...', function addJob(args) {
+		var params = args.remaining.split(' ');
+		if(params.length !== 4) {
+			logText('Expected 4 args, got ' + params.length);
+		} else {
+			var packet = {
+				"action": "add",
+				"name": params[0],
+				"material": params[1],
+				"priority": +params[2],
+				"time": +params[3],
+				"extras": {}
+			};
+			var format = 'Use format $ add <name> <material code> <priority> <time>';
+			if(typeof packet.name !== 'string') {
+				logText('Name was not a string. ' + format);
+			} else if (packet.material in config.materials) {
+				logText('Material code not recognized. ' + format);
+			} else if (packet.priority !== NaN) {
+				logText('Priority invalid. ' + format);
+			} else if (packet.time !== NaN) {
+				logText('Time invalid. ' + format);
+			} else socketSend(packet);
+
+		}
+	}));
+
+
 });
