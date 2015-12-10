@@ -1,5 +1,6 @@
 // libraries
 /*=include ../../bower_components/jquery/dist/jquery.min.js */
+/*=include ../../bower_components/underscore/underscore-min.js */
 /*=include ../../bower_components/nprogress/nprogress.js */
 /*=include ../../bower_components/tether/dist/js/tether.min.js */
 /*=include ../../bower_components/tether-shepherd/dist/js/shepherd.min.js */
