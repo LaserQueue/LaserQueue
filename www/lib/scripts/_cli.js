@@ -302,11 +302,12 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 			var format = 'Use format $ add <name> <material code> <priority> <time>';
 			if(typeof packet.name !== 'string') {
 				logText('Name was not a string. ' + format);
-			} else if (packet.material in config.materials) {
+			} else if (!packet.material in config.materials) {
 				logText('Material code not recognized. ' + format);
-			} else if (packet.priority !== NaN) {
+			} else if (isNaN(packet.priority)) {
+				console.log(packet.priority);
 				logText('Priority invalid. ' + format);
-			} else if (packet.time !== NaN) {
+			} else if (isNaN(packet.time)) {
 				logText('Time invalid. ' + format);
 			} else socketSend(packet);
 
