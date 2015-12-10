@@ -29,6 +29,17 @@ $(document).mousemove(function maybeDrag(event) {
 		$('.log-resize').css('bottom', newLogBottom);
 		$('.log-pre').css('height', newLogBottom);
 		$('.credits-footer').css('margin-bottom', newLogBottom);
+		localStorage.setItem('logHeight', newLogBottom);
+	}
+});
+
+// restore log position on reload
+$(document).ready(function() {
+	if(localStorage.getItem('logHeight')) {
+		var newLogBottom = localStorage.getItem('logHeight') + 'px';
+		$('.log-resize').css('bottom', newLogBottom);
+		$('.log-pre').css('height', newLogBottom);
+		$('.credits-footer').css('margin-bottom', newLogBottom);
 	}
 });
 
