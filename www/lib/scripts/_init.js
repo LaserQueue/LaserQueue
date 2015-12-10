@@ -55,4 +55,4 @@ $(document).ready(function loadKonami() {
 });
 
 // if ?dev is in the URL, show devlog
-if(window.location.search.includes('dev')) $('#log-checkbox').prop('checked', 'true');
+if(window.location.search.match(/\?dev\b/) !== null) $('#log-checkbox').prop('checked', 'true');

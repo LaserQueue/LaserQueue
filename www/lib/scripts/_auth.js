@@ -1,7 +1,7 @@
 // functions for auth
 
 // set up admin mode if enabled
-$(queueEvents).on('config.parsed', function() {
+$(queueEvents).on('config.parsed', function setupAuth() {
 	if (config.adminModeEnabled) {
 		$('.authorize').click(function handleAuthToggle() {
 			// if already authorized, deauth

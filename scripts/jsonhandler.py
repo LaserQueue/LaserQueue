@@ -208,7 +208,17 @@ def ping(**kwargs):
 		"action": "ping_return",
 		"got_ping_at": received_time
 	}, kwargs["ws"])
-	kwargs["printer"].color_print("Ping received at {datetime}", datetime=received_time)
+	if argvs.loud: kwargs["printer"].color_print("Ping received at {datetime}.", datetime=received_time)
+
+def request_sec(**kwargs):
+	"""
+	Return the sec key of the current connection.
+	"""
+	serve_connection({
+		"action": "log",
+		"body": format("Sec key: {key}", key=kwargs["sec"])
+	}, kwargs["ws"])
+	if argvs.loud: kwargs["printer"].color_print("Session {key} requested their sec key.", key=kwargs["sec"])
 
 
 
@@ -237,7 +247,8 @@ commands = [
 	SocketCommand("decrement", decrement, {"uuid": str}),
 	SocketCommand("attr", attr, {"uuid": str, "key": str, "new": any_type}),
 	SocketCommand("elevate", elevate, {"trigger": [dict], "pass": [str]}),
-	SocketCommand("ping", ping, {})
+	SocketCommand("ping", ping, {}),
+	SocketCommand("request_sec", request_sec, {})
 ]
 
 def buildCommands(reg):

@@ -187,6 +187,17 @@ Sets the attribute of job uuid to value. if the config doesn't state that you ca
 }
 ```
 
+### request_sec
+Request the user's sec key.  
+
+#### Sample
+
+```js
+{
+	"action": "request_sec"
+}
+```
+
 
 ### auth
 Enter admin mode if password is correct. Dependent upon `config.admin_mode_enabled`.
@@ -306,6 +317,16 @@ Sends data, which is then stored in the `extraData` object on the frontend.
 	"action": "dump_data",
 	"name": <the data title as Str>,
 	"data": <the data as Str>
+}
+```
+
+### Log
+Log something on the frontend dev log.
+
+```js
+{
+	"action":"log",
+	"body": <the text to log as Str>
 }
 ```
 

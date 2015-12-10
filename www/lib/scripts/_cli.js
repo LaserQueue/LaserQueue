@@ -4,11 +4,11 @@ var isResizingLog = false,
 	initialLogResizePoint,
 	initialLogBottom;
 
-$('.log-resize').mousedown(function(event) {
+$('.log-resize').mousedown(function resizeLog(event) {
 	$('body').addClass('is-resizing-log');
 	isResizingLog = true;
 	initialLogResizePoint = event.clientY;
-	initialLogBottom = Number($('.log-resize').css('bottom').slice(0, -2))
+	initialLogBottom = Number($('.log-resize').css('bottom').slice(0, -2));
 });
 
 $(document).mouseup(function endDragWatch(event) {
@@ -25,7 +25,7 @@ $(document).mousemove(function maybeDrag(event) {
 		if(newLogBottom > windowHeight - 100) newLogBottom = windowHeight - 100;
 		$('.log-resize').css('bottom', newLogBottom);
 		$('.log-pre').css('height', newLogBottom);
-		$('.credits-footer').css('margin-bottom', newLogBottom)
+		$('.credits-footer').css('margin-bottom', newLogBottom);
 	}
 });
 
@@ -285,34 +285,29 @@ commands = new CommandExecutor(commands);
 // built-in commands:
 $(queueEvents).on('config.parsed', function builtInCommands() {
 
+	commands.push(new Command('$ add <name> <material> <priority> <time>', function addJob(args) {
+		var packet = {
+			"action": "add",
+			"name": args.name,
+			"material": args.material,
+			"priority": +args.priority,
+			"time": +args.time,
+			"extras": {}
+		};
+		if(typeof packet.name !== 'string') {
+			logText('Name was not a string.');
+		} else if (!(packet.material in config.materials)) {
+			logText('Material code not recognized.');
+		} else if (isNaN(packet.priority)) {
+			console.log(packet.priority);
+			logText('Priority not a number.');
+		} else if (isNaN(packet.time)) {
+			logText('Time not a number.');
+		} else socketSend(packet);
 
-	commands.push(new Command('$ test ...', function test(args) {logText(args.remaining);}));
-	commands.push(new Command('$ add ...', function addJob(args) {
-		var params = args.remaining.split(' ');
-		if(params.length !== 4) {
-			logText('Expected 4 args, got ' + params.length);
-		} else {
-			var packet = {
-				"action": "add",
-				"name": params[0],
-				"material": params[1],
-				"priority": +params[2],
-				"time": +params[3],
-				"extras": {}
-			};
-			var format = 'Use format $ add <name> <material code> <priority> <time>';
-			if(typeof packet.name !== 'string') {
-				logText('Name was not a string. ' + format);
-			} else if (!packet.material in config.materials) {
-				logText('Material code not recognized. ' + format);
-			} else if (isNaN(packet.priority)) {
-				console.log(packet.priority);
-				logText('Priority invalid. ' + format);
-			} else if (isNaN(packet.time)) {
-				logText('Time invalid. ' + format);
-			} else socketSend(packet);
-
-		}
+	}));
+	commands.push(new Command('$ seckey', function requestSec(args) {
+		socketSend({"action":"request_sec"});
 	}));
 
 

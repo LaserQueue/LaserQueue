@@ -61,6 +61,9 @@ var config, jsonData, socket, buttons,
 		}],
 		"dump_data": [function receiveData(data) {
 			extraData[data.name] = JSON.parse(data.data);
+		}],
+		"log": [function logData(data) {
+			logText(data.body);
 		}]
 	},
 	easterEggs = {
