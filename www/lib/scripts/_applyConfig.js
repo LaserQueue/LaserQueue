@@ -77,49 +77,6 @@ var getConfigFile = $.getJSON('/config.json', function getConfigFileFunction() {
 		'relative_move': '\n<a role="button" tabindex="0" class="fa fa-bars move-job" data-toggle="tooltip" data-placement="right" title="{title}"></a>'.format({title: config.dragHover})
 	};
 
-	// set up admin mode if enabled
-	if (config.adminModeEnabled) {
-		$('.authorize').click(function handleAuthToggle() {
-			// if already authorized, deauth
-			if (authed) {
-				socketSend({'action': 'deauth'});
-				$('.authorize').tooltip('hide');
-			} else {
-
-				// if not authorized, present auth UI
-				modalMessage('Authenticate',
-					'<form class="login-form">' +
-						'<div class="form-group">' +
-							'<label for="password">Password</label>' +
-							'<input type="password" class="form-control coach-password" id="password" placeholder="Password">' +
-						'</div>' +
-						'<button type="submit" class="btn btn-pink auth-button">Sign in</button>' +
-					'</form>'
-				);
-				$('.authorize').tooltip('hide');
-
-				// once modal is up, focus password
-				setTimeout(function focusPasswordField() {
-					$(".coach-password").focus();
-				}, 500);
-
-				// authenticate password when asked
-				$('.auth-button').click(function authenticatePassword(event) {
-					event.preventDefault();
-					NProgress.start();
-					if($('#password').val()) {
-						logText('Password entered. Attempting auth.');
-						socketSend({
-							'action': 'auth',
-							'pass': sha256($('#password').val())
-						});
-					}
-				});
-			}
-		});
-		$('.authorize').attr('data-original-title', config.login);
-	}
-
 	// enable Google Analytics if config says so
 	if(!config.googleAnalyticsKey) {
 		logText('Google Analytics tracking is not enabled.');
