@@ -40,7 +40,7 @@ label[for=log-checkbox] {
 	bottom: $initial-log-height;
 	width: 100%;
 	height: 10px;
-	background: $log-bg;
+	background: lighten($log-bg, 5%);
 	&:hover {
 		background: lighten($log-bg, 10%);
 	}
