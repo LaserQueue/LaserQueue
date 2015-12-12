@@ -228,4 +228,3 @@ Repository to update from
 Software's current version
 #### Default: `dev-0.0.7`
 ---
-
