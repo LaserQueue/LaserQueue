@@ -2,7 +2,8 @@
 	"apps": [
 		{
 			"name": "LaserQueue",
-			"script": "./start.sh --install-all -v -b",
+			"script": "./start.sh",
+			"args": [" --install-all", "-v", "-b"],
 			"log_date_format": "YYYY-MM-DD",
 			"exec_mode": "fork_mode",
 			"env": {
