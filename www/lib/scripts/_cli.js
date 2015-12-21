@@ -87,7 +87,7 @@ function translate(inp) {
 
 Command.prototype.run = function run(inp) {
 	var parsed = this.parse(inp);
-	if (typeof parsed === 'string') logText("[ERROR] "+translate(parsed));
+	if (typeof parsed === 'string') logText('<span style="color: #c00000">[ERROR]</span>[ERROR]</span> '+translate(parsed));
 	else if (parsed === null) return false;
 	else if (typeof parsed === 'object') {
 		var output = this.execute(parsed);
@@ -304,7 +304,7 @@ $('.command-line').keydown(function onKeyPress(event) {
 		event.preventDefault();
 		var text = $('.command-line').val();
 		if (text) {
-			if (!commands.run(text)) logText("[ERROR] Invalid command.");
+			if (!commands.run(text)) logText("<span style='color: #c00000'>[ERROR]</span> Invalid command.");
 			$('.command-line').val("");
 		}
 	}
@@ -333,12 +333,12 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 			logText('Priority not a number.');
 		} else if (isNaN(packet.time)) {
 			logText('Time not a number.');
-		} else socketSend(packet);
+		} else return packet;
 
 	}));
 
 	commands.push(new Command('$ seckey', function requestSec(args) {
-		socketSend({"action":"request_sec"});
+		return {"action":"request_sec"};
 	}));
 
 	commands.push(new Command('$ help [command]', function help(args) {
@@ -346,7 +346,7 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 			if (commands.getCommandByName(args.command)) {
 				logText(commands.getCommandByName(args.command).docstr);
 			} else {
-				logText('No command {commandNotFound} found.'.format({commandNotFound: args.command}));
+				logText('<span style="color: #c00000">[ERROR]</span> No command {commandNotFound} found.'.format({commandNotFound: args.command}));
 			}
 		} else {
 			var allCommands = '';
@@ -363,5 +363,16 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 		return {'action': 'deauth'};
 	}));
 
+	commands.push(new Command('$ sudo ...', function elevate(args) {
+		logText('<span style="color: #c00000">[ERROR]</span> sudo is NYI');
+		getPassword(function elevateWithPassword(pass) {
+			var elevated = commands.runIntercept(args.remaining, true);
+			socketSend({
+				'action': 'elevate', 
+				'pass': pass,
+				'trigger': elevated
+			});
+		});
+	}));
 
 });

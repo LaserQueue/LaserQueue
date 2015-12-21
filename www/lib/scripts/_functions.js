@@ -84,12 +84,12 @@ function logText(text) {
 		for (var i = textArray.length - 1; i > 0; i--) {
 			$('.log-pre').prepend('<span class="log-time">{whitespace}</span>{text}\n'.format({
 				whitespace: ' '.repeat(24),
-				text: _.escape(textArray[i])
+				text: textArray[i]
 			}));
 		}
 		$('.log-pre').prepend('<span class="log-time">{stamp}</span>{text}\n'.format({
 			stamp: timestamp,
-			text: _.escape(textArray[0])
+			text: textArray[0]
 		}));
 	} else {
 		window.console.log(text);
@@ -525,4 +525,9 @@ function prettifyTime(mins) {
 	prettyTime += String(seconds ? seconds + 's' : '');
 
 	return prettyTime;
+}
+
+function getPassword(callback) {
+	// this should wait until it gets a password, hash it, and pass the hash to callback, then return callback's output.
+	// sam I do not know how to do this with our password modal. Please do.
 }
