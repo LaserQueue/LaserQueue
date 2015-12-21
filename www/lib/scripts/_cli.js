@@ -332,8 +332,26 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 		} else socketSend(packet);
 
 	}));
+
 	commands.push(new Command('$ seckey', function requestSec(args) {
 		socketSend({"action":"request_sec"});
+	}));
+
+	commands.push(new Command('$ help [command]', function help(args) {
+		if(args.command) {
+			if (commands.getCommandByName(args.command)) {
+				logText(commands.getCommandByName(args.command).docstr);
+			} else {
+				logText('No command {commandNotFound} found.'.format({commandNotFound: args.command}));
+			}
+		} else {
+			var allCommands = '';
+			for(var i in commands.commands) {
+				allCommands += commands.commands[i].name + ' ';
+			}
+			logText('LaserQueue accepted commands: ' + allCommands);
+			logText('For info on a command, use $ help <commandName>');
+		}
 	}));
 
 
