@@ -67,6 +67,16 @@ formOptions.test = {
 };
 ```
 
+### Custom CLI commands
+LaserQueue has an on-page CLI, meant as place to add functionality that should not be exposed to the average user and for developer testing purposes. It may be hidden based on the config. You can add custom commands like this:
+```js
+commands.push(new Command('$ example <required> [optional] [*optionalLiteral] ...', function doThings(args) {
+	// do something cool up in here with args
+	console.log(args);
+}));
+```
+*** NOTE: Commands that require authorization should replace the `$ ` prompt before the command with `# `. They will not run without auth. ***
+
 ## Backend Plugin resources
 Two modules that have been made available you might find helpful:  
 `ActionFramework` and `QueueConfig`.
