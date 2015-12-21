@@ -106,12 +106,13 @@ CommandExecutor.prototype.push = function push(cmd) {
 	this.commands.push(cmd);
 };
 
-CommandExecutor.prototype.run = function run(inp) {
+CommandExecutor.prototype.run = function run(inp, localAuthed) {
+	if (typeof localAuthed === "undefined") localAuthed = authed;
 	var shallowCommands = this.commands.slice();
 	shallowCommands.reverse();
 	for (var commandindex in shallowCommands) {
 		var command = shallowCommands[commandindex];
-		if (command.command.level > 0 && !authed) return false;
+		if (command.command.level > 0 && !localAuthed) continue;
 		var output = command.run(inp);
 		if (typeof output === 'object') {
 			socketSend(output);
@@ -121,12 +122,13 @@ CommandExecutor.prototype.run = function run(inp) {
 	return false;
 };
 
-CommandExecutor.prototype.runIntercept = function run(inp) {
+CommandExecutor.prototype.runIntercept = function run(inp, localAuthed) {
+	if (typeof localAuthed === "undefined") localAuthed = authed;
 	var shallowCommands = this.commands.slice();
 	shallowCommands.reverse();
 	for (var commandindex in shallowCommands) {
 		var command = shallowCommands[commandindex];
-		if (command.command.level > 0 && !authed) return false;
+		if (command.command.level > 0 && !localAuthed) continue;
 		var output = command.run(inp);
 		if (typeof output === 'object') {
 			return output;
