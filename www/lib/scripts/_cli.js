@@ -133,6 +133,18 @@ CommandExecutor.prototype.runIntercept = function run(inp) {
 	return false;
 };
 
+CommandExecutor.prototype.getCommandByName = function getCommandByName(name) {
+	var commandIndex = '';
+	for (var i in commands.commands) {
+		if(commands.commands[i].name === name) commandIndex = i;
+	}
+	if (commandIndex) {
+		return commands.commands[commandIndex];
+	} else {
+		return false;
+	}
+}
+
 
 // argument types:
 // <name> -> required arg (you may not have any of these after a required arg)
