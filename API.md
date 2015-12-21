@@ -200,7 +200,7 @@ Request the user's sec key.
 
 
 ### auth
-Enter admin mode if password is correct. Dependent upon `config.admin_mode_enabled`.
+Enter admin mode if password is correct. Dependent upon `config.adminModeEnabled`.
 
 #### Sample
 
@@ -212,7 +212,7 @@ Enter admin mode if password is correct. Dependent upon `config.admin_mode_enabl
 ```
 
 ### elevate
-Run command as admin if password is correct. Dependent upon `config.admin_mode_enabled`.
+Run command as admin if password is correct. Dependent upon `config.adminModeEnabled`.
 
 #### Sample
 
@@ -226,7 +226,7 @@ Run command as admin if password is correct. Dependent upon `config.admin_mode_e
 
 
 ### deauth
-Leave admin mode. Dependent upon `config.admin_mode_enabled`.
+Leave admin mode. Dependent upon `config.adminModeEnabled`.
 
 #### Sample
 
@@ -237,7 +237,7 @@ Leave admin mode. Dependent upon `config.admin_mode_enabled`.
 ```
 
 ### egg
-Trigger an easter egg. Dependent upon `config.easter_eggs`.
+Trigger an easter egg. Dependent upon `config.easterEggs`.
 
 #### Sample
 
@@ -252,7 +252,7 @@ Trigger an easter egg. Dependent upon `config.easter_eggs`.
 
 ### refresh *
 Refresh all users. Useful for pushing changes.  
-Dependent upon config.allow_force_refresh.
+Dependent upon config.allowForceRefresh.
 
 #### Sample
 
@@ -331,7 +331,7 @@ Log something on the frontend dev log.
 ```
 
 ### Authed
-Called when the sid gains authstate. Dependent upon `config.admin_mode_enabled`.
+Called when the sid gains authstate. Dependent upon `config.adminModeEnabled`.
 
 ```js
 {
@@ -340,7 +340,7 @@ Called when the sid gains authstate. Dependent upon `config.admin_mode_enabled`.
 ```
 
 ### Auth faliure
-Called when auth finds a wrong password. Dependent upon `config.admin_mode_enabled`.
+Called when auth finds a wrong password. Dependent upon `config.adminModeEnabled`.
 
 ```js
 {
@@ -349,7 +349,7 @@ Called when auth finds a wrong password. Dependent upon `config.admin_mode_enabl
 ```
 
 ### Deauthed
-Called when the sid loses its authstate. Dependent upon `config.admin_mode_enabled`.
+Called when the sid loses its authstate. Dependent upon `config.adminModeEnabled`.
 
 ```js
 {
@@ -359,7 +359,7 @@ Called when the sid loses its authstate. Dependent upon `config.admin_mode_enabl
 
 
 ### Refresh the page
-Dependent upon `config.allow_force_refresh`. The frontend should refresh itself fully. If a web interface, it should reload.
+Dependent upon `config.allowForceRefresh`. The frontend should refresh itself fully. If a web interface, it should reload.
 
 ```js
 {
@@ -368,7 +368,7 @@ Dependent upon `config.allow_force_refresh`. The frontend should refresh itself 
 ```
 
 ### Easter eggs
-Trigger an easter egg. Dependent upon `config.easter_eggs`.
+Trigger an easter egg. Dependent upon `config.easterEggs`.
 ```js
 {
 	"action":"egg",
