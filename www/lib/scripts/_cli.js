@@ -354,5 +354,10 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 		}
 	}));
 
+	commands.push(new Command('# logout', function logOut(args) {
+		logText('Attempting deauth.');
+		socketSend({'action': 'deauth'});
+	}));
+
 
 });
