@@ -50,7 +50,7 @@ gulp.task('js-dev', function() {
 		.pipe(sourcemaps.write('.'))
 	.pipe(gulp.dest('./www/dist/js/'))
 	.pipe(livereload())
-	.pipe(notify({message: 'JS has been compiled for development'}))
+	.pipe(notify({message: 'JS has been compiled for development'}));
 });
 
 // compile js for production
