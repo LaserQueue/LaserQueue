@@ -34,7 +34,7 @@ $(document).mousemove(function maybeDrag(event) {
 });
 
 // restore log position on reload
-$(document).ready(function() {
+$(document).ready(function styleLog() {
 	if(localStorage.getItem('logHeight')) {
 		var newLogBottom = localStorage.getItem('logHeight') + 'px';
 		$('.log-resize').css('bottom', newLogBottom);
@@ -111,6 +111,7 @@ CommandExecutor.prototype.run = function run(inp) {
 	shallowCommands.reverse();
 	for (var commandindex in shallowCommands) {
 		var command = shallowCommands[commandindex];
+		if (command.command.level > 0 && !authed) return false;
 		var output = command.run(inp);
 		if (typeof output === 'object') {
 			socketSend(output);
@@ -125,6 +126,7 @@ CommandExecutor.prototype.runIntercept = function run(inp) {
 	shallowCommands.reverse();
 	for (var commandindex in shallowCommands) {
 		var command = shallowCommands[commandindex];
+		if (command.command.level > 0 && !authed) return false;
 		var output = command.run(inp);
 		if (typeof output === 'object') {
 			return output;
@@ -143,7 +145,7 @@ CommandExecutor.prototype.getCommandByName = function getCommandByName(name) {
 	} else {
 		return false;
 	}
-}
+};
 
 
 // argument types:
@@ -356,7 +358,7 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 
 	commands.push(new Command('# logout', function logOut(args) {
 		logText('Attempting deauth.');
-		socketSend({'action': 'deauth'});
+		return {'action': 'deauth'};
 	}));
 
 
