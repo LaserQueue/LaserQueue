@@ -87,7 +87,7 @@ function translate(inp) {
 
 Command.prototype.run = function run(inp) {
 	var parsed = this.parse(inp);
-	if (typeof parsed === 'string') logText('<span style="color: #c00000">[ERROR]</span>[ERROR]</span> '+translate(parsed));
+	if (typeof parsed === 'string') logText('<span style="color: #c00000">[ERROR]</span>[ERROR]</span> '+translate(parsed), {disableEscape: true});
 	else if (parsed === null) return false;
 	else if (typeof parsed === 'object') {
 		var output = this.execute(parsed);
@@ -304,7 +304,7 @@ $('.command-line').keydown(function onKeyPress(event) {
 		event.preventDefault();
 		var text = $('.command-line').val();
 		if (text) {
-			if (!commands.run(text)) logText("<span style='color: #c00000'>[ERROR]</span> Invalid command.");
+			if (!commands.run(text)) logText("<span style='color: #c00000'>[ERROR]</span> Invalid command.", {disableEscape: true});
 			$('.command-line').val("");
 		}
 	}
@@ -346,7 +346,7 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 			if (commands.getCommandByName(args.command)) {
 				logText(commands.getCommandByName(args.command).docstr);
 			} else {
-				logText('<span style="color: #c00000">[ERROR]</span> No command {commandNotFound} found.'.format({commandNotFound: args.command}));
+				logText('<span style="color: #c00000">[ERROR]</span> No command {commandNotFound} found.'.format({commandNotFound: args.command}), {disableEscape: true});
 			}
 		} else {
 			var allCommands = '';
@@ -364,11 +364,11 @@ $(queueEvents).on('config.parsed', function builtInCommands() {
 	}));
 
 	commands.push(new Command('$ sudo ...', function elevate(args) {
-		logText('<span style="color: #c00000">[ERROR]</span> sudo is NYI');
+		logText('<span style="color: #c00000">[ERROR]</span> sudo is NYI', {disableEscape: true});
 		getPassword(function elevateWithPassword(pass) {
 			var elevated = commands.runIntercept(args.remaining, true);
 			socketSend({
-				'action': 'elevate', 
+				'action': 'elevate',
 				'pass': pass,
 				'trigger': elevated
 			});

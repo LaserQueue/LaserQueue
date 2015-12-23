@@ -64,7 +64,8 @@ function ensureNumberStringLength(number, len) {
 }
 
 // logs text to devlog on page
-function logText(text) {
+function logText(text, opt) {
+	if (!opt) var opt = {};
 	if(config.devLog) {
 		var currentTime = new Date();
 		var currentDay = ensureNumberStringLength(currentTime.getDate(), 2);
@@ -80,6 +81,12 @@ function logText(text) {
 		});
 
 		var textArray = text.split('\n');
+
+		if (!opt.disableEscape) {
+			for (var i in textArray) {
+				textArray[i] = _.escape(textArray[i]);
+			}
+		}
 
 		for (var i = textArray.length - 1; i > 0; i--) {
 			$('.log-pre').prepend('<span class="log-time">{whitespace}</span>{text}\n'.format({
