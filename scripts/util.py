@@ -65,7 +65,7 @@ class Printer:
 		if not argvs.shh: color_print(*args, **kwargs)
 	def color_input(self, *args, **kwargs):
 		kwargs["colorconfig"] = self.colorconfig
-		if not argvs.shh: return color_input(*args, **kwargs)
+		return color_input(*args, **kwargs)
 
 # Functions for serving to sockets
 def get_sec_key(ws):
