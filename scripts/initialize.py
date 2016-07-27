@@ -19,6 +19,10 @@ config_path = os.path.join(os.path.pardir, "www", "config.json")
 user_config_path = os.path.join(os.path.pardir, "www", "userconf.json")
 default_config_path = os.path.join(os.path.pardir, "www", "defaultconf.json")
 
+# Cached ips for the ip function
+global cachedIPs
+cachedIPs = None
+
 # Utility function to test for internet connection.
 connected_to_internet = lambda: bool(get_IPs(test=True))
 # Open/save to the config file
@@ -86,20 +90,35 @@ def update_config():
 	data = dict(dict(data, **user_data), **current_data)
 	save_config(data)
 
-
-def get_IPs(test=False, complain=True):
+def get_IPs(test=False):
 	"""
 	Get the IPs this device controls.
 	"""
 	from netifaces import interfaces, ifaddresses, AF_INET
+	global cachedIPs
+	if cachedIPs: return cachedIPs
 	ips = []
 	for interface in interfaces():
 		addresses = [address['addr'] for address in ifaddresses(interface).get(AF_INET, [{"addr":"not found"}])]
 		if "not found" not in addresses and "127.0.0.1" not in addresses:
 			ips += addresses
 	if not ips and not test:
-		ips.append("localhost")
-		if complain: printer.color_print("WARNING: No internet connection. Using -l behavior.", color=ansi_colors.YELLOW)
+		printer.color_print("WARNING: No internet connection. Using -l behavior.", color=ansi_colors.YELLOW)
+		if args.no_local:
+			while not ips: # If it's not connected
+				ips = get_IPs(True)
+				if not ips:
+					# Pretties
+					for i in range(4):
+						print(ansi_colors.REMAKELINE, end="")
+						printer.color_print("Can't find IP. Waiting" + "." * i)
+						time.sleep(1)
+					# End pretties
+				else: 
+					printer.color_print("Found IP, continuing.")
+		else:
+			ips.append("localhost")
+	cachedIPs = ips
 	return ips
 
 def concat_plugins():
@@ -305,23 +324,8 @@ def update_host():
 	# Change the host to localhost if -l was used (overriding -n)
 	if args.local and not args.no_local:
 		data["host"] = "localhost"
-	elif args.no_local:
-		data["host"] = get_IPs()[0]
-
-		while data["host"] == "localhost": # If it's localhost, try again
-			data["host"] = get_IPs(False, False)[0]
-			if data["host"] == "localhost":
-				# Pretties
-				for i in range(4):
-					print(ansi_colors.REMAKELINE, end="")
-					printer.color_print("Can't find IP. Waiting" + "." * i)
-					time.sleep(1)
-				# End pretties
-			else: 
-				printer.color_print("Found IP, continuing.")
-
 	# Regenerate the host if -n was used, or if it doesn't exist
-	elif args.host or "host" not in data and args.regen != []:
+	elif args.no_local or args.host or "host" not in data and args.regen != []:
 		data["host"] = get_IPs()[0]
 	# Otherwise, reset the host from localhost (ignored by definition if -n is used)
 	else:
