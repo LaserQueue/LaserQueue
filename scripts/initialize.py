@@ -87,7 +87,7 @@ def update_config():
 	save_config(data)
 
 
-def get_IPs(test=False):
+def get_IPs(test=False, complain=True):
 	"""
 	Get the IPs this device controls.
 	"""
@@ -99,7 +99,7 @@ def get_IPs(test=False):
 			ips += addresses
 	if not ips and not test:
 		ips.append("localhost")
-		printer.color_print("WARNING: No internet connection. Using -l behavior.", color=ansi_colors.YELLOW)
+		if complain: printer.color_print("WARNING: No internet connection. Using -l behavior.", color=ansi_colors.YELLOW)
 	return ips
 
 def concat_plugins():
@@ -303,8 +303,23 @@ def update_host():
 	"""
 	data = open_config()
 	# Change the host to localhost if -l was used (overriding -n)
-	if args.local:
+	if args.local and not args.no_local:
 		data["host"] = "localhost"
+	elif args.no_local:
+		data["host"] = get_IPs()[0]
+
+		while data["host"] == "localhost": # If it's localhost, try again
+			data["host"] = get_IPs(False, False)[0]
+			if data["host"] == "localhost":
+				# Pretties
+				for i in range(4):
+					print(ansi_colors.REMAKELINE, end="")
+					printer.color_print("Can't find IP. Waiting" + "." * i)
+					time.sleep(1)
+				# End pretties
+			else: 
+				printer.color_print("Found IP, continuing.")
+
 	# Regenerate the host if -n was used, or if it doesn't exist
 	elif args.host or "host" not in data and args.regen != []:
 		data["host"] = get_IPs()[0]
@@ -320,8 +335,6 @@ def update_host():
 			if confirm == "y":
 				data["host"] = get_IPs()[0]
 	save_config(data)
-
-
 
 def main():
 	"""

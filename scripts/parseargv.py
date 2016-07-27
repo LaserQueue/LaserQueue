@@ -23,6 +23,8 @@ parser.add_argument("-P", "--no-plugins", help="Don't load plugins", dest="no_pl
 	action="store_true")
 parser.add_argument("-H", "--no-regen-host", help="Do not regenerate host in config", dest="host",
 	action="store_false")
+parser.add_argument("-L", "--no-local", help="Don't ever run from localhost", dest="no_local",
+	action="store_true")
 parser.add_argument("--new-password", help="Set a new password", dest="newpass",
 	action="store_true")
 parser.add_argument("--backend", help="Loads backend but not frontend", dest="load_backend",
